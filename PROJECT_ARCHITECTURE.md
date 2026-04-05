@@ -36,16 +36,17 @@ rag-project/
 │   │
 │   ├── query/                        # Pre-retrieval query processing
 │   │   ├── __init__.py
-│   │   ├── rewriter.py               # Query rewriting via Groq (spell fix, specificity, history)
-│   │   └── entity_extractor.py       # LLM-based medical NER (Llama 70B via Groq, no RE)
+│   │   ├── query_rewriter.py         # Query rewriting via Groq (spell fix, specificity, history)
+│   │   └── query_extractor.py        # LLM-based medical NER (Llama 70B via Groq, no RE)
 │   │
 │   ├── embeddings/                   # Embedding model wrappers (runtime)
 │   │   ├── __init__.py
 │   │   └── medcpt_embedder.py        # MedCPT dual encoder (Query-Encoder + Article-Encoder)
 │   │
-│   ├── ingestion/                    # Offline data processing (batch, one-time)
+│   ├── dataset_builder/              # Offline data processing (batch, one-time)
 │   │   ├── __init__.py
-│   │   ├── document_loader.py        # Load BioASQ PubMed articles
+│   │   ├── preprocess_bioasq_taskA.py # Load BioASQ PubMed articles
+│   │   ├── preprocess_bioasq_taskB.py # Preprocess Q&A for task B (test, val split)
 │   │   ├── contextual_chunker.py     # Gemini 2.5 Flash/Pro contextual chunk enrichment
 │   │   └── index_builder.py          # Build FAISS + Elasticsearch indexes
 │   │
@@ -54,7 +55,7 @@ rag-project/
 │   │   ├── vector_search.py          # FAISS vector similarity search
 │   │   ├── keyword_search.py         # Elasticsearch BM25 keyword search
 │   │   ├── kg_search.py              # Neo4j 2-hop subgraph retrieval (HGT semantic embeddings)
-│   │   ├── kg_linearizer.py          # Rule-based subgraph → text (Python templates, no LLM)
+│   │   ├── kg_linearization.py       # Rule-based subgraph → text (Python templates, no LLM)
 │   │   └── parallel_retriever.py     # Orchestrate 3 parallel retrieval streams
 │   │
 │   ├── reranking/                    # Fusion + reranking

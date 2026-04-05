@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     GROQ_API_KEY: str = Field(...)
     MODAL_TOKEN_ID: str | None = None
     MODAL_TOKEN_SECRET: str | None = None
+    HF_TOKEN: str | None = Field(default=None)
 
     # Database URLs
     NEO4J_URL: str = "bolt://localhost:7687"

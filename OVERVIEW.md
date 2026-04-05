@@ -22,13 +22,13 @@
 
 The system has **two main phases**: **Retrieval** and **Generation**.
 
-### 2.1 Retrieval Phase — 3 Parallel Streams + 2-Stage Reranking
+### 2.1 Retrieval Phase — 3 Parallel Streams + Stage-based Reranking
 
 > **IMPORTANT: Retrieval Flow**
-> 1. Run 3 retrieval streams in **parallel**
-> 2. **RRF** merges ONLY Vector Search + BM25 → produces **Text Retrieval** results (top-p)
-> 3. **Cross-Encoder** (MedCPT-Cross-Encoder) reranks the **combined pool** of Text Retrieval + KG Retrieval together into a single final ranked list
-> 4. Final context is assembled from the reranked list using head-tail placement
+> 1. Run 3 retrieval streams in **parallel**: Vector Search, Keyword Search, and KG Search.
+> 2. **RRF (Reciprocal Rank Fusion)** merges ONLY **Vector Search + BM25** → produces **Text Search** results.
+> 3. **Cross-Encoder** (MedCPT-Cross-Encoder) reranks the **combined pool** of **Text Search** (from RRF) AND **KG Search** (linearized subgraphs) together into a single final ranked list.
+> 4. Final context is assembled from the reranked list using head-tail placement.
 
 #### Stream 1: Vector Search (Semantic)
 | Setting | Value |
@@ -148,10 +148,10 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 ### 3.1 Document Corpus (for FAISS Vector DB + Elasticsearch BM25)
 | Setting | Value |
 |---|---|
-| **Source** | BioASQ PubMed Annual Baseline Corpus |
-| **Size** | ~200,000 - 300,000 articles |
+| **Source** | BioASQ PubMed Annual Baseline Corpus (`jmhb/pubmed_bioasq_2022`) |
+| **Size** | 300,000 articles |
 | **Language** | English |
-| **Selection Criteria** | **MUST** include all PMIDs from the Test Qrels set (ensures system can find answers). Remaining articles sampled randomly. |
+| **Selection Criteria** | Filtered by MeSH Tree Numbers to focus on the **Disease-Drug-Target** domain. Includes all PMIDs from the Test set. |
 
 ### 3.2 Knowledge Graph Data
 | Setting | Value |
@@ -159,19 +159,17 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 | **Source** | PrimeKG (existing structured dataset) |
 | **Filtering** | Keep only nodes/relationships related to Disease, Symptom, Drug. Discard the rest. |
 
-### 3.3 Evaluation Datasets
+### 3.3 Evaluation Datasets (BioASQ Task B)
 
-#### Retrieval Evaluation
+#### Q&A Dataset Split
+| Dataset | Split | Size |
+|---|---|---|
+| **BioASQ Task B** | **Validation** (used for hyperparameter tuning) | 500 questions |
+| **BioASQ Task B** | **Test** (final evaluation) | 500 questions |
+
+#### External Evaluation
 | Dataset | Split | Size | Phase |
 |---|---|---|---|
-| BioASQ Task B Phase A | Validation | 200 questions | Retrieval |
-| BioASQ Task B Phase A | Test | 200 questions | Retrieval |
-
-#### Generation Evaluation
-| Dataset | Split | Size | Phase |
-|---|---|---|---|
-| BioASQ Task B Phase B | Validation | 200 questions | Generation |
-| BioASQ Task B Phase B | Test | 200 questions | Generation |
 | MedQA | Validation | Full set | Generation |
 | MedQA | Test | Full set | Generation |
 
@@ -238,16 +236,17 @@ ragas                     — RAG evaluation framework
 | File / Directory | Purpose |
 |---|---|
 | `config/settings.py` | All env vars, constants, paths via Pydantic Settings |
-| `src/query/rewriter.py` | Query rewriting via Groq (spell fix, specificity, history) |
-| `src/query/entity_extractor.py` | LLM-based medical NER (Llama 70B via Groq, no RE) |
+| `src/query/query_rewriter.py` | Query rewriting via Groq (spell fix, specificity, history) |
+| `src/query/query_extractor.py` | LLM-based medical NER (Llama 70B via Groq, no RE) |
 | `src/embeddings/medcpt_embedder.py` | MedCPT dual encoder (Query-Encoder + Article-Encoder) |
-| `src/ingestion/document_loader.py` | Load BioASQ PubMed articles |
-| `src/ingestion/contextual_chunker.py` | Gemini 2.5 Flash/Pro contextual chunk enrichment |
-| `src/ingestion/index_builder.py` | Build FAISS + Elasticsearch indexes |
+| `src/dataset_builder/preprocess_bioasq_taskA.py` | Load BioASQ PubMed articles (Task A) |
+| `src/dataset_builder/preprocess_bioasq_taskB.py` | Preprocess Q&A for Task B (test, val split) |
+| `src/dataset_builder/contextual_chunker.py` | Gemini 2.5 Flash/Pro contextual chunk enrichment |
+| `src/dataset_builder/index_builder.py` | Build FAISS + Elasticsearch indexes |
 | `src/retrieval/vector_search.py` | FAISS vector search logic |
 | `src/retrieval/keyword_search.py` | Elasticsearch BM25 search logic |
 | `src/retrieval/kg_search.py` | Neo4j 2-hop subgraph retrieval (with HGT embeddings) |
-| `src/retrieval/kg_linearizer.py` | Rule-based subgraph → text linearization templates |
+| `src/retrieval/kg_linearization.py` | Rule-based subgraph → text linearization templates |
 | `src/retrieval/parallel_retriever.py` | Orchestrates 3 parallel streams |
 | `src/reranking/rrf.py` | Reciprocal Rank Fusion (Vector + BM25 only) |
 | `src/reranking/cross_encoder.py` | MedCPT-Cross-Encoder via Modal (merges text + KG) |
@@ -327,18 +326,21 @@ User Question
     ├─── LLM Entity Extraction (Llama 70B via Groq)
     │    └── Extract: disease, symptom, drug entities (NER only, no RE)
     │
-    ├─── [Parallel Retrieval] ───┐
-    │                            ├── Vector Search (FAISS + MedCPT dual encoder)
-    │                            ├── BM25 Keyword Search (Elasticsearch)
-    │                            └── KG Search (Neo4j + HGT semantic embeddings)
-    │                                         │
-    │                                         └── Rule-based Linearization
-    │                                              (Python templates → text)
-    │
-    ├─── RRF Fusion ──► Merge Vector + BM25 only → "Text Retrieval"
-    │
-    ├─── Cross-Encoder (MedCPT, Modal GPU)
-    │    └── Rerank combined pool: Text Retrieval + KG Retrieval
+    ├─── [Parallel Retrieval Streams]
+    │    │
+    │    ├── Vector Search (FAISS + MedCPT encoder) ──┐
+    │    │                                            ├─── RRF Fusion (Text Search)
+    │    ├── BM25 Keyword Search (Elasticsearch) ─────┘           │
+    │    │                                                        │
+    │    └── KG Search (Neo4j + HGT embeddings)                   │
+    │                   │                                         │
+    │                   └── Rule-based Linearization              │
+    │                        (Python templates → Text)            │
+    │                               │                             │
+    │                               └──────────────┬──────────────┘
+    │                                              ▼
+    ├─── Cross-Encoder Reranking (MedCPT, Modal GPU)
+    │    └── Rerank combined pool: Text Search + KG Search
     │        → Single unified ranked list
     │
     ├─── Head-Tail Placement ──► Build context prompt

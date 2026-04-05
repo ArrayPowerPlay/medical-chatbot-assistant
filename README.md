@@ -53,42 +53,42 @@
                     └────────┬────────┘
                              │
             ┌────────────────┼────────────────┐
-            ▼                ▼                ▼
-   ┌────────────────┐ ┌────────────┐ ┌──────────────────┐
-   │  Vector Search │ │ BM25 Search│ │  KG Subgraph     │
-   │  (FAISS +      │ │ (Keyword)  │ │  Retrieval (Neo4j)│
-   │  MedCPT-Encode)│ │            │ │  hop=2 + HGT     │
-   └───────┬────────┘ └─────┬──────┘ └────────┬─────────┘
-           │                │          ┌───────▼──────────┐
-           │                │          │ LLM Linearization│
-           │                │          │ (Subgraph → Text)│
-           │                │          └───────┬──────────┘
-           └────────────────┼──────────────────┘
-                            ▼
-                  ┌───────────────────┐
-                  │   RRF Reranking   │
-                  │   (1st pass)      │
-                  └────────┬──────────┘
-                           ▼
-                  ┌───────────────────┐
-                  │  Cross-Encoder    │
-                  │  Reranking        │
-                  │  (MedCPT, Modal)  │
-                  └────────┬──────────┘
-                           ▼
-                  ┌───────────────────┐
-                  │ Head-Tail Prompt  │
-                  │ Placement         │
-                  └────────┬──────────┘
-                           ▼
-                  ┌───────────────────┐
-                  │   Llama 70B       │
-                  │   (Modal GPU)     │
-                  └────────┬──────────┘
-                           ▼
-                  ┌───────────────────┐
-                  │   Answer          │
-                  └───────────────────┘
+            ▼                ▼                │
+   ┌────────────────┐ ┌────────────┐          │
+   │  Vector Search │ │ BM25 Search│          │
+   │  (FAISS +      │ │ (Keyword)  │          │
+   │  MedCPT-Encode)│ │            │          │
+   └───────┬────────┘ └─────┬──────┘          │ ┌──────────────────┐
+           │                │                 └─►  KG Subgraph     │
+           └───────┬────────┘                   │  Retrieval (Neo4j)│
+                   ▼                            │  hop=2 + HGT     │
+         ┌───────────────────┐                  └───────┬──────────┘
+         │   RRF (Text Search)│                         │ 
+         │    (Vector + BM25) │               ┌─────────▼──────────┐
+         └────────┬───────────┘               │ Rule-based Linear. │
+                  │                           │ (Subgraph → Text)  │
+                  │                           └────────┬───────────┘
+                  └────────────────┬───────────────────┘
+                                   ▼
+                          ┌───────────────────┐
+                          │   Cross-Encoder   │
+                          │     Reranking     │
+                          │  (Text Search + KG)│
+                          └────────┬──────────┘
+                                   ▼
+                          ┌───────────────────┐
+                          │ Head-Tail Prompt  │
+                          │ Placement         │
+                          └────────┬──────────┘
+                                   ▼
+                          ┌───────────────────┐
+                          │   Llama 70B       │
+                          │   (Groq API)      │
+                          └────────┬──────────┘
+                                   ▼
+                          ┌───────────────────┐
+                          │   Answer          │
+                          └───────────────────┘
 ```
 
 ---
@@ -125,33 +125,39 @@
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/your-username/rag-project.git
-cd rag-project
+git clone https://github.com/your-username/medical-chatbot-assistant.git
+cd medical-chatbot-assistant
 
 # 2. Create virtual environment & install dependencies
 uv sync
 
 # 3. Copy environment template
 cp .env.example .env
-# Edit .env with your API keys and database URIs
+# Edit .env with your API keys (GROQ_API_KEY, HF_TOKEN) and database URIs
 
-# 4. Start Neo4j (via Docker)
-docker-compose -f docker/docker-compose.yml up neo4j -d
+# 4. Start Infrastructure (via Docker)
+docker-compose -f docker/docker-compose.yml up -d
 
-# 5. Build Knowledge Graph
+# 5. Build Knowledge Graph (PrimeKG)
 uv run python scripts/build_kg.py
 
-# 6. Train HGT model (offline, one-time)
+# 6. Preprocess BioASQ Data (Task A & B)
+# Download 300,000 articles (Domain: Disease-Drug-Target)
+uv run python src/dataset_builder/preprocess_bioasq_taskA.py
+
+# Process QA pairs (500 Test / 500 Validation)
+uv run python src/dataset_builder/preprocess_bioasq_taskB.py
+
+# 7. Ingest documents into vector store & BM25
+uv run python src/dataset_builder/index_builder.py
+
+# 8. Train HGT model (offline, one-time)
 uv run python scripts/train_hgt.py
 
-# 7. Ingest documents into vector store
-uv run python scripts/ingest_documents.py
-
-# 8. Deploy Modal services
+# 9. Deploy Modal services
 modal deploy modal_deployments/cross_encoder_service.py
-modal deploy modal_deployments/llm_service.py
 
-# 9. Start the application
+# 10. Start the application
 uv run uvicorn api.main:app --reload --port 8000
 ```
 
@@ -161,7 +167,7 @@ Open your browser at `http://localhost:8000` to access the chatbot.
 
 ## Configuration
 
-Create a `.env` file based on `.env.example`:
+Create a `.env` file based on `.env.example`. Ensure `HF_TOKEN` is provided for streaming datasets.
 
 ```env
 # Neo4j
@@ -193,37 +199,32 @@ LLM_TEMPERATURE=0.3
 
 ## Data Pipeline
 
-### 1. Document Ingestion
+### 1. BioASQ Task A: Document Corpus
+- **Source**: `jmhb/pubmed_bioasq_2022` (Parquet)
+- **Scale**: 300,000 articles
+- **Filtering**: Strictly filtered by MeSH Tree Numbers (Categories C and D) to focus on the **Disease-Drug-Target** domain.
+- **Process**: `uv run python src/dataset_builder/preprocess_bioasq_taskA.py`
+- **Output**: Appended to `data/corpus/corpus.jsonl` with automatic deduplication.
 
-```bash
-# Place medical documents (PDF, TXT) in data/raw/
-uv run python scripts/ingest_documents.py
-```
+### 2. BioASQ Task B: Q&A Preprocessing
+- **Source**: BioASQ Professional Training Set
+- **Scale**: 1,000 valid medical QA samples.
+- **Splitting**:
+  - **Test Set**: 500 samples (`data/test/test.jsonl`)
+  - **Validation Set**: 500 samples (`data/val/val.jsonl`)
+- **Process**: `uv run python src/dataset_builder/preprocess_bioasq_taskB.py`
 
-- Loads documents from `data/raw/`
-- Splits using recursive character splitter (1200 chars, 200 overlap)
-- LLM generates contextual summaries prepended to each chunk
-- Embeds with MedCPT-Article-Encoder → stored in FAISS
+### 3. Vector & Keyword Indexing
+- **Vector Search**: FAISS index with `MedCPT-Article-Encoder`.
+- **Keyword Search**: Elasticsearch BM25 index.
+- **Chunking**: 1200 characters with 200 overlap, enhanced with Gemini 2.5 contextual summaries.
+- **Process**: `uv run python src/dataset_builder/index_builder.py`
 
-### 2. Knowledge Graph Construction
-
-```bash
-uv run python scripts/build_kg.py
-```
-
-- Parses medical data into entities (Disease, Symptom, Drug, Treatment, etc.)
-- Creates nodes and relationships in Neo4j
-- Schema: `(:Disease)-[:HAS_SYMPTOM]->(:Symptom)`, `(:Drug)-[:TREATS]->(:Disease)`, etc.
-
-### 3. HGT Training (Offline)
-
-```bash
-uv run python scripts/train_hgt.py
-```
-
-- Loads graph from Neo4j into PyG HeteroData
-- Trains Heterogeneous Graph Transformer
-- Saves model checkpoint to `models/hgt/`
+### 4. Knowledge Graph (PrimeKG)
+- **Source**: PrimeKG (Disease-Symptom-Drug subset).
+- **Storage**: Neo4j.
+- **Graph ML**: HGT model trained to provide semantic graph embeddings.
+- **Process**: `uv run python scripts/build_kg.py`
 
 ---
 
