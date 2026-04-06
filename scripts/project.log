@@ -1,0 +1,58 @@
+2026-04-06 17:11:35,781 - MedKG-RAG - INFO - Starting Phase 1: Enriching chunks
+2026-04-06 17:11:39,234 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-04-06 17:11:44,868 - MedKG-RAG - ERROR - Critical error during ingestion: 0
+Traceback (most recent call last):
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\scripts\ingest_documents.py", line 92, in main
+    run_enrichment(raw_corpus, enriched_file, args.limit)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\scripts\ingest_documents.py", line 31, in run_enrichment
+    enriched_chunks = chunker.enrich_article(article)
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\src\dataset_builder\contextual_chunker.py", line 63, in enrich_article
+    ctx = contexts[idx] if idx < len(contexts) else "Medical context"
+          ~~~~~~~~^^^^^
+KeyError: 0
+2026-04-06 17:19:29,184 - MedKG-RAG - INFO - Starting Phase 1: Enriching chunks
+2026-04-06 17:19:30,157 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-04-06 17:19:35,486 - MedKG-RAG - ERROR - Critical error during ingestion: 0
+Traceback (most recent call last):
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\scripts\ingest_documents.py", line 92, in main
+    run_enrichment(raw_corpus, enriched_file, args.limit)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\scripts\ingest_documents.py", line 31, in run_enrichment
+    enriched_chunks = chunker.enrich_article(article)
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\src\dataset_builder\contextual_chunker.py", line 63, in enrich_article
+    ctx = contexts[idx] if idx < len(contexts) else "Medical context"
+          ~~~~~~~~^^^^^
+KeyError: 0
+2026-04-06 17:29:59,877 - MedKG-RAG - INFO - Starting Phase 1: Enriching chunks
+2026-04-06 17:30:00,865 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-04-06 17:30:08,722 - MedKG-RAG - ERROR - Critical error during ingestion: 0
+Traceback (most recent call last):
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\scripts\ingest_documents.py", line 92, in main
+    run_enrichment(raw_corpus, enriched_file, args.limit)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\scripts\ingest_documents.py", line 31, in run_enrichment
+    enriched_chunks = chunker.enrich_article(article)
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\src\dataset_builder\contextual_chunker.py", line 67, in enrich_article
+    ctx = contexts[idx] if idx < len(contexts) else "Medical context"
+          ~~~~~~~~^^^^^
+KeyError: 0
+2026-04-06 20:48:28,200 - MedKG-RAG - INFO - Starting Phase 1: Enriching chunks
+2026-04-06 20:48:28,781 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-04-06 20:48:34,909 - MedKG-RAG - ERROR - Critical error during ingestion: 0
+Traceback (most recent call last):
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\scripts\ingest_documents.py", line 92, in main
+    run_enrichment(raw_corpus, enriched_file, args.limit)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\scripts\ingest_documents.py", line 31, in run_enrichment
+    enriched_chunks = chunker.enrich_article(article)
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\src\dataset_builder\contextual_chunker.py", line 69, in enrich_article
+    ctx = contexts[idx] if idx < len(contexts) else "Medical context"
+          ~~~~~~~~^^^^^
+KeyError: 0
+2026-04-06 20:56:56,174 - MedKG-RAG - INFO - Starting Phase 1: Enriching chunks
+2026-04-06 20:56:56,690 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-04-06 20:57:02,347 - MedKG-RAG - INFO - Finishing Phase 1. Output saved to D:\Program Files\VSCode\medical-chatbot-assistant\data\processed\enriched_chunks.jsonl!
+2026-04-06 21:05:12,295 - MedKG-RAG - INFO - Starting Phase 1: Enriching chunks
+2026-04-06 21:05:12,810 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
+2026-04-06 21:05:18,772 - MedKG-RAG - INFO - Finishing Phase 1. Output saved to D:\Program Files\VSCode\medical-chatbot-assistant\data\processed\enriched_chunks.jsonl!

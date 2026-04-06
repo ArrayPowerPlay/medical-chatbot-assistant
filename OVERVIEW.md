@@ -40,6 +40,7 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 | **Chunk Size** | 1200 characters |
 | **Chunk Overlap** | 200 characters |
 | **Contextual Enrichment** | LLM generates a summary/context paragraph and prepends it to the chunk BEFORE embedding |
+| **Metadata Mapping** | A mapping file (`faiss_metadata.jsonl`) is stored alongside the FAISS index to map vector indices back to PMIDs and source text for evaluation and citation. |
 
 > **Key Detail — Dual Encoder Setup**: MedCPT uses an **asymmetric** architecture. `MedCPT-Query-Encoder` encodes the user query, while `MedCPT-Article-Encoder` encodes document chunks. This is by design and yields better retrieval quality than using a single encoder for both.
 
@@ -177,6 +178,11 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 
 #### Text Retrieval (after merging vector + BM25 via RRF)
 - **Recall@K**
+- **Evaluation Method**: For a given question from BioASQ Task B:
+  1. Retrieve top-$k$ chunks from the parallel pipeline.
+  2. Map retrieved FAISS indices to their original PMIDs using `faiss_metadata.jsonl`.
+  3. Compare retrieved PMIDs with the "golden" relevant document PMIDs.
+  4. (Optional) For exact matches, compare text snippets in the query with the content of the retrieved chunk.
 
 #### Generation
 - **Exact Match / F1** (standard QA metrics)

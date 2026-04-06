@@ -126,7 +126,7 @@ def download_pubmed_corpus():
                 # Manual batching: collect up to 100 items
                 batch = []
                 try:
-                    for _ in range(100):
+                    for _ in range(1000):
                         batch.append(next(dataset_iter))
                 except StopIteration:
                     if not batch:
@@ -165,8 +165,8 @@ def download_pubmed_corpus():
                         downloaded_count += 1
                         existing_pmids.add(pmid)
                         
-                        # Log progress every 100 successful downloads
-                        if downloaded_count % 100 == 0:
+                        # Log progress every 1000 successful downloads
+                        if downloaded_count % 1000 == 0:
                             print(f"Downloaded {downloaded_count}/{target_count} samples...", end="\r")
                     
                     if downloaded_count >= target_count:

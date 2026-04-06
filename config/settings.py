@@ -8,10 +8,11 @@ class Settings(BaseSettings):
     DATA_PATH: Path = BASE_DIR / "data"
 
     # API Keys
-    GROQ_API_KEY: str = Field(...)
+    GROQ_API_KEY: str = Field(default="")
     MODAL_TOKEN_ID: str | None = None
     MODAL_TOKEN_SECRET: str | None = None
     HF_TOKEN: str | None = Field(default=None)
+    GOOGLE_API_KEY: str = Field(default="")
 
     # Database URLs
     NEO4J_URL: str = "bolt://localhost:7687"
@@ -29,6 +30,19 @@ class Settings(BaseSettings):
     LLM_MODEL: str = "meta-llama/Llama-3.3-70B-Versatile"
     EMBEDDING_MODEL: str = "ncbi/MedCPT-Article-Encoder"
     QUERY_MODEL: str = "ncbi/MedCPT-Query-Encoder"
+
+    # Persistence
+    @property
+    def FAISS_INDEX_DIR(self) -> Path:
+        return self.BASE_DIR / "vectorstore"
+
+    @property
+    def FAISS_INDEX_PATH(self) -> str:
+        return str(self.FAISS_INDEX_DIR / "faiss_index")
+
+    @property
+    def FAISS_METADATA_PATH(self) -> str:
+        return str(self.FAISS_INDEX_DIR / "faiss_metadata.jsonl")
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 

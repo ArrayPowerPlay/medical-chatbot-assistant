@@ -1,5 +1,9 @@
 {
     "editor.acceptSuggestionOnEnter": "off",
     "editor.tabCompletion": "on",
-    "editor.inlineSuggest.enabled": true
+    "editor.inlineSuggest.enabled": true,
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportOptionalMemberAccess": "none"
+    }
 }

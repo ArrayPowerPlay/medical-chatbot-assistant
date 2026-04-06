@@ -1,0 +1,22 @@
+{
+  "venvPath": ".",
+  "venv": ".venv",
+  "pythonVersion": "3.13",
+  "pythonPlatform": "Windows",
+  "include": [
+    "src",
+    "config",
+    "scripts",
+    "api"
+  ],
+  "extraPaths": [
+    ".",
+    "src",
+    "config",
+    "scripts"
+  ],
+  "typeCheckingMode": "basic",
+  "useLibraryCodeForTypes": true,
+  "reportMissingImports": "warning",
+  "reportMissingModuleSource": "warning"
+}
