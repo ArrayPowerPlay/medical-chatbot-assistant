@@ -1,20 +1,22 @@
 version: '3.8'
 
 services:
-  # Elasticsearch for BM25
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
-    container_name: es-medrag
+  # Weaviate: Vector DB + BM25   weaviate:
+  weaviate:
+    image: cr.weaviate.io/semitechnologies/weaviate:1.28.4
+    container_name: weaviate-medrag
     ports:
-      - "9200:9200" # REST API of Elastic Search
+      # host_port : container_port
+      - "8080:8080"   # REST API
+      - "50051:50051" # gRPC (another protocol, faster than REST but more complex)
     environment:
-      - node.name=es-node
-      - cluster.name=medrag-cluster
-      - discovery.type=single-node
-      - xpack.security.enabled=false
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      QUERY_DEFAULTS_LIMIT: 25
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: "true"
+      PERSISTENCE_DATA_PATH: "/var/lib/weaviate"
+      DEFAULT_VECTORIZER_MODULE: "none"
+      CLUSTER_HOSTNAME: "node1"
     volumes:
-      - es_data:/usr/share/elasticsearch/data
+      - weaviate_data:/var/lib/weaviate
 
   # Neo4j: Knowledge Graph (PrimeKG)
   neo4j:
@@ -22,7 +24,7 @@ services:
     container_name: neo4j-medrag
     ports:
       - "7474:7474" # Browser UI
-      - "7687:7687" # Bolt protocol 
+      - "7687:7687" # Bolt protocol
     environment:
       - NEO4J_AUTH=none
       - NEO4J_PLUGINS=["apoc"]
@@ -30,5 +32,5 @@ services:
       - neo4j_data:/data
 
 volumes:
-  es_data:
+  weaviate_data:
   neo4j_data:

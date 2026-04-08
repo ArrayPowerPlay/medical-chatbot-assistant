@@ -56,3 +56,64 @@ KeyError: 0
 2026-04-06 21:05:12,295 - MedKG-RAG - INFO - Starting Phase 1: Enriching chunks
 2026-04-06 21:05:12,810 - google_genai.models - INFO - AFC is enabled with max remote calls: 10.
 2026-04-06 21:05:18,772 - MedKG-RAG - INFO - Finishing Phase 1. Output saved to D:\Program Files\VSCode\medical-chatbot-assistant\data\processed\enriched_chunks.jsonl!
+2026-04-07 23:49:53,558 - MedKG-RAG - ERROR - Critical error during ingestion unable to open database file
+Traceback (most recent call last):
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\scripts\process_and_index_corpus.py", line 163, in main
+    run_ingestion(corpus_path, batch_size=args.batch_size, limit=args.limit)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\scripts\process_and_index_corpus.py", line 50, in run_ingestion
+    parent_store = ParentStore(settings.SQLITE_PARENT_DB_PATH)
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\src\storage\parent_store.py", line 9, in __init__
+    self.conn = sqlite3.connect(db_path)
+                ~~~~~~~~~~~~~~~^^^^^^^^^
+sqlite3.OperationalError: unable to open database file
+2026-04-07 23:52:04,402 - MedKG-RAG - ERROR - Critical error during ingestion unable to open database file
+Traceback (most recent call last):
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\scripts\process_and_index_corpus.py", line 163, in main
+    run_ingestion(corpus_path, batch_size=args.batch_size, limit=args.limit)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\scripts\process_and_index_corpus.py", line 50, in run_ingestion
+    parent_store = ParentStore(settings.SQLITE_PARENT_DB_PATH)
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\src\storage\parent_store.py", line 9, in __init__
+    self.conn = sqlite3.connect(db_path)
+                ~~~~~~~~~~~~~~~^^^^^^^^^
+sqlite3.OperationalError: unable to open database file
+2026-04-07 23:54:47,646 - MedKG-RAG - ERROR - Critical error during ingestion unable to open database file
+Traceback (most recent call last):
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\scripts\process_and_index_corpus.py", line 163, in main
+    run_ingestion(corpus_path, batch_size=args.batch_size, limit=args.limit)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\scripts\process_and_index_corpus.py", line 50, in run_ingestion
+    parent_store = ParentStore(settings.SQLITE_PARENT_DB_PATH)
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\src\storage\parent_store.py", line 9, in __init__
+    self.conn = sqlite3.connect(db_path)
+                ~~~~~~~~~~~~~~~^^^^^^^^^
+sqlite3.OperationalError: unable to open database file
+2026-04-07 23:56:12,102 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-04-07 23:56:12,103 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-04-07 23:56:22,140 - MedKG-RAG - INFO - Created collection 'child_chunks'!
+2026-04-07 23:56:22,140 - MedKG-RAG - INFO - Starting ingestion from D:\Program Files\VSCode\medical-chatbot-assistant\data\corpus\corpus.jsonl...
+2026-04-07 23:56:22,140 - MedKG-RAG - INFO - Batch size: 1024, Limit: 1
+2026-04-07 23:56:24,554 - MedKG-RAG - INFO - Inserted 12 child chunks into Weaviate
+2026-04-07 23:56:24,554 - MedKG-RAG - INFO - Ingestion completed.# Articles: 1, # Parents: 2, # Children: 12
+2026-04-07 23:56:24,556 - MedKG-RAG - INFO - SQLite parents: 2
+2026-04-07 23:56:24,611 - MedKG-RAG - INFO - Weaviate children: 12
+2026-04-08 00:01:56,046 - MedKG-RAG - WARNING - Reset all data...
+2026-04-08 00:01:57,185 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-04-08 00:01:57,188 - MedKG-RAG - INFO - Deleted vectorstore\parent_chunks.db
+2026-04-08 00:01:58,083 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-04-08 00:01:58,083 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-04-08 00:02:00,678 - MedKG-RAG - INFO - Created collection 'ChildChunks'!
+2026-04-08 00:02:00,678 - MedKG-RAG - INFO - Starting ingestion from D:\Program Files\VSCode\medical-chatbot-assistant\data\corpus\corpus.jsonl...
+2026-04-08 00:02:00,678 - MedKG-RAG - INFO - Batch size: 1024, Limit: None
+2026-04-08 00:03:30,800 - MedKG-RAG - INFO - Inserted 1029 child chunks into Weaviate
+2026-04-08 00:05:43,594 - MedKG-RAG - INFO - Inserted 1027 child chunks into Weaviate
+2026-04-08 00:08:13,934 - MedKG-RAG - INFO - Inserted 1025 child chunks into Weaviate
+2026-04-08 00:11:26,002 - MedKG-RAG - INFO - Inserted 1027 child chunks into Weaviate
+2026-04-08 00:15:45,870 - MedKG-RAG - INFO - Inserted 1028 child chunks into Weaviate
+2026-04-08 00:19:31,961 - MedKG-RAG - INFO - Inserted 1030 child chunks into Weaviate
+2026-04-08 00:22:27,335 - MedKG-RAG - INFO - Inserted 1033 child chunks into Weaviate
+2026-04-08 00:25:51,044 - MedKG-RAG - INFO - Inserted 1025 child chunks into Weaviate
+2026-04-08 00:29:36,503 - MedKG-RAG - INFO - Inserted 1029 child chunks into Weaviate
+2026-04-08 00:31:09,795 - MedKG-RAG - INFO - Inserted 1031 child chunks into Weaviate
+2026-04-08 00:32:57,586 - MedKG-RAG - INFO - Inserted 1027 child chunks into Weaviate

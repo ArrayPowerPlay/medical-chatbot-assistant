@@ -24,7 +24,7 @@ rag-project/
 │       └── relationships.csv         # PrimeKG edges (filtered)
 │
 ├── scripts/
-│   ├── ingest_documents.py           # Load BioASQ docs → chunk → contextual embedding → FAISS
+│   ├── ingest_documents.py           # Load BioASQ docs → parent-child chunk → MedCPT → Weaviate
 │   ├── build_kg.py                   # PrimeKG → filter → populate Neo4j KG
 │   ├── train_hgt.py                  # Train HGT model end-to-end (offline, one-time)
 │   ├── evaluate_retrieval.py         # BioASQ Phase A retrieval evaluation (Recall@K)
@@ -33,6 +33,11 @@ rag-project/
 │
 ├── src/
 │   ├── __init__.py
+│   │
+│   ├── storage/                      # NEW: Persistent storage layer
+│   │   ├── __init__.py
+│   │   ├── parent_store.py           # SQLite manager for parent chunks
+│   │   └── weaviate_client.py        # Weaviate client for child chunks (vector + BM25)
 │   │
 │   ├── query/                        # Pre-retrieval query processing
 │   │   ├── __init__.py
@@ -47,13 +52,12 @@ rag-project/
 │   │   ├── __init__.py
 │   │   ├── preprocess_bioasq_taskA.py # Load BioASQ PubMed articles
 │   │   ├── preprocess_bioasq_taskB.py # Preprocess Q&A for task B (test, val split)
-│   │   ├── contextual_chunker.py     # Gemini 2.5 Flash/Pro contextual chunk enrichment
-│   │   └── index_builder.py          # Build FAISS + Elasticsearch indexes
+│   │   └── parent_child_chunker.py    # Structural parent-child splitting (Local)
 │   │
 │   ├── retrieval/                    # 3 parallel retrieval streams
 │   │   ├── __init__.py
-│   │   ├── vector_search.py          # FAISS vector similarity search
-│   │   ├── keyword_search.py         # Elasticsearch BM25 keyword search
+│   │   ├── vector_search.py          # Weaviate vector search on Children -> map to Parents
+│   │   ├── keyword_search.py         # Weaviate BM25 search on Children -> map to Parents
 │   │   ├── kg_search.py              # Neo4j 2-hop subgraph retrieval (HGT semantic embeddings)
 │   │   ├── kg_linearization.py       # Rule-based subgraph → text (Python templates, no LLM)
 │   │   └── parallel_retriever.py     # Orchestrate 3 parallel retrieval streams
@@ -119,8 +123,7 @@ rag-project/
 │       └── .gitkeep
 │
 ├── vectorstore/
-│   └── faiss_index/                  # Persisted FAISS index files
-│       └── .gitkeep
+│   └── parent_chunks.db              # SQLite database for original parent texts
 │
 ├── tests/
 │   ├── __init__.py
@@ -139,6 +142,6 @@ rag-project/
 │
 └── docker/
     ├── Dockerfile                    # Backend + Frontend container
-    ├── docker-compose.yml            # App + Neo4j + Elasticsearch + PostgreSQL
+    ├── docker-compose.yml            # App + Neo4j + Weaviate + PostgreSQL
     └── .dockerignore
 ```

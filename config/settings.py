@@ -18,13 +18,20 @@ class Settings(BaseSettings):
     NEO4J_URL: str = "bolt://localhost:7687"
     NEO4J_USER: str = "neo4j"
     NEO4J_PASSWORD: str = ""
-    ELASTICSEARCH_URL: str = "http://localhost:9200"
+
+    # Weaviate
+    WEAVIATE_URL : str = "http://localhost:8080" # RESTful API port 8080
+    WEAVIATE_GRPC_PORT : int = 50051             # Use GRPC protocol for big data processing     
 
     # RAG hyperparameters
     RETREVAL_TOP_K: int = 20
     RERANK_TOP_K: int = 10
-    CHUNK_SIZE: int = 1200
-    CHUNK_OVERLAP: int = 200
+
+    # Parent-Child chunking
+    PARENT_CHUNK_SIZE : int = 1200
+    PARENT_CHUNK_OVERLAP : int = 200
+    CHILD_CHUNK_SIZE : int = 256
+    CHILD_CHUNK_OVERLAP : int = 64
 
     # Model names
     LLM_MODEL: str = "meta-llama/Llama-3.3-70B-Versatile"
@@ -32,17 +39,7 @@ class Settings(BaseSettings):
     QUERY_MODEL: str = "ncbi/MedCPT-Query-Encoder"
 
     # Persistence
-    @property
-    def FAISS_INDEX_DIR(self) -> Path:
-        return self.BASE_DIR / "vectorstore"
-
-    @property
-    def FAISS_INDEX_PATH(self) -> str:
-        return str(self.FAISS_INDEX_DIR / "faiss_index")
-
-    @property
-    def FAISS_METADATA_PATH(self) -> str:
-        return str(self.FAISS_INDEX_DIR / "faiss_metadata.jsonl")
+    SQLITE_PARENT_DB_PATH: str = "./vectorstore/parent_chunks.db"
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 

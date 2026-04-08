@@ -33,27 +33,27 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 #### Stream 1: Vector Search (Semantic)
 | Setting | Value |
 |---|---|
-| **Vector DB** | FAISS (local, cosine similarity) |
+| **Vector DB** | Weaviate (Local Docker, Cosine Similarity) |
 | **Embedding Model** | `ncbi/MedCPT-Article-Encoder` (for documents) |
 | **Query Model** | `ncbi/MedCPT-Query-Encoder` (for queries) |
-| **Chunking** | Recursive Character Splitting |
-| **Chunk Size** | 1200 characters |
-| **Chunk Overlap** | 200 characters |
-| **Contextual Enrichment** | LLM generates a summary/context paragraph and prepends it to the chunk BEFORE embedding |
-| **Metadata Mapping** | A mapping file (`faiss_metadata.jsonl`) is stored alongside the FAISS index to map vector indices back to PMIDs and source text for evaluation and citation. |
+| **Chunking** | **Parent-Child Chunking** (Local, non-LLM) |
+| **Parent Size** | 1200 - 1500 characters |
+| **Child Size** | 256 - 400 characters (embedded) |
+| **Contextual Strategy**| Search is performed on **Child Chunks**; context for LLM is retrieved from the corresponding **Parent Chunk**. |
+| **Metadata Mapping** | A mapping between Child `parent_id` and Parent text is stored in **SQLite** (`parent_chunks.db`) for O(log n) lookup. |
 
 > **Key Detail — Dual Encoder Setup**: MedCPT uses an **asymmetric** architecture. `MedCPT-Query-Encoder` encodes the user query, while `MedCPT-Article-Encoder` encodes document chunks. This is by design and yields better retrieval quality than using a single encoder for both.
 
-> **Key Detail — Contextual Chunking**: Each chunk is enriched with LLM-generated context placed at the HEAD of the chunk before vector indexing. This improves retrieval relevance by giving the embedding model richer semantic content. Uses **Gemini 2.5 Flash/Pro** on Kaggle GPU with **prompt caching** (batch process, run once).
+> **Key Detail — Parent-Child Strategy**: Instead of LLM-based enrichment, we use a structural approach. Small "Child" chunks provide high precision for vector/keyword matching, while their larger "Parent" chunks provide the full semantic context needed by the LLM to generate accurate answers. |,StartLine:33,TargetContent:
 
 #### Stream 2: Keyword Search (Lexical)
 | Setting | Value |
 |---|---|
-| **Engine** | Elasticsearch (Docker local) |
+| **Engine** | Weaviate (Built-in BM25) |
 | **Algorithm** | BM25 |
-| **Index** | Same chunks as FAISS vector store |
-| **Persistence** | Persisted on disk |
-| **Purpose** | Captures exact keyword matches that semantic search might miss |
+| **Index** | Same **Child Chunks** as Vector stream |
+| **Persistence** | Persisted on disk (Weaviate volumes) |
+| **Purpose** | Captures exact medical terminology that semantic embeddings might miss. |
 
 #### Stream 3: Medical Knowledge Graph
 | Setting | Value |
@@ -196,7 +196,7 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 
 | Task | Model | Platform | When |
 |---|---|---|---|
-| **Contextual Chunking** | Gemini 2.5 Flash / Pro | Kaggle GPU + Prompt Caching | Offline (batch, one-time) |
+| **Parent-Child Chunking** | Rule-based (LangChain) | Local CPU | Offline (batch, one-time) |
 | **Entity Extraction (NER)** | Llama 3.3 70B | Groq API | Inference (per query) |
 | **HGT Training** | HGT (PyG) | Local / Kaggle GPU | Offline (one-time, end-to-end) |
 | **Cross-Encoder Reranking** | MedCPT-Cross-Encoder | Modal (cloud GPU) | Inference (per query) |
@@ -211,27 +211,23 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 | Service | Purpose | Deployment |
 |---|---|---|
 | **Neo4j** | Medical Knowledge Graph (PrimeKG) | Docker container (local) |
-| **Elasticsearch** | BM25 keyword search index | Docker container (local) |
+| **Weaviate** | Vector + BM25 hybrid search | Docker container (local) |
 | **PostgreSQL** | Conversation history (multi-turn) | Docker container (local) |
+| **SQLite** | Parent chunk storage & lookup | Local file (`parent_chunks.db`) |
 | **Modal** | GPU inference (Cross-Encoder only) | Cloud (modal.com) |
-| **Groq API** | LLM inference (Llama 70B — NER, rewriting, generation) | Cloud (groq.com) |
-| **FAISS** | Local vector index | In-process (file-based persistence) |
-| **Kaggle GPU** | Contextual chunking with Gemini (offline batch) | Cloud (kaggle.com) |
+| **Groq API** | LLM inference (Llama 70B) | Cloud (groq.com) |
 
 ### Key Python Packages
 ```
-fastapi, uvicorn          — Backend API server
+uv add weaviate-client             — Weaviate Python V4 driver
 langchain, langchain-community — Document loading, text splitting
-faiss-cpu / faiss-gpu     — Vector similarity search
-elasticsearch             — BM25 keyword search via Elasticsearch
 neo4j                     — Neo4j Python driver
 torch, transformers       — MedCPT models
 torch-geometric           — HGT model (PyG)
 modal                     — Cloud GPU deployment (Cross-Encoder)
 groq                      — Groq API client (Llama 70B)
+sqlite3                   — Built-in Python DB (Parent storage)
 pydantic, pydantic-settings — Config & validation
-httpx                     — Async HTTP client
-psycopg2 / asyncpg        — PostgreSQL driver (conversation history)
 ragas                     — RAG evaluation framework
 ```
 
@@ -247,10 +243,11 @@ ragas                     — RAG evaluation framework
 | `src/embeddings/medcpt_embedder.py` | MedCPT dual encoder (Query-Encoder + Article-Encoder) |
 | `src/dataset_builder/preprocess_bioasq_taskA.py` | Load BioASQ PubMed articles (Task A) |
 | `src/dataset_builder/preprocess_bioasq_taskB.py` | Preprocess Q&A for Task B (test, val split) |
-| `src/dataset_builder/contextual_chunker.py` | Gemini 2.5 Flash/Pro contextual chunk enrichment |
-| `src/dataset_builder/index_builder.py` | Build FAISS + Elasticsearch indexes |
-| `src/retrieval/vector_search.py` | FAISS vector search logic |
-| `src/retrieval/keyword_search.py` | Elasticsearch BM25 search logic |
+| `src/dataset_builder/parent_child_chunker.py` | Parent-Child structural chunking (Local CPU) |
+| `src/storage/parent_store.py` | SQLite lookup for Parent chunks (by parent_id) |
+| `src/storage/weaviate_client.py` | Weaviate Client (Vector + BM25 on Children) |
+| `src/retrieval/vector_search.py` | Weaviate vector search (Child -> Parent mapping) |
+| `src/retrieval/keyword_search.py` | Weaviate BM25 search (Child -> Parent mapping) |
 | `src/retrieval/kg_search.py` | Neo4j 2-hop subgraph retrieval (with HGT embeddings) |
 | `src/retrieval/kg_linearization.py` | Rule-based subgraph → text linearization templates |
 | `src/retrieval/parallel_retriever.py` | Orchestrates 3 parallel streams |
@@ -334,24 +331,28 @@ User Question
     │
     ├─── [Parallel Retrieval Streams]
     │    │
-    │    ├── Vector Search (FAISS + MedCPT encoder) ──┐
-    │    │                                            ├─── RRF Fusion (Text Search)
-    │    ├── BM25 Keyword Search (Elasticsearch) ─────┘           │
-    │    │                                                        │
-    │    └── KG Search (Neo4j + HGT embeddings)                   │
-    │                   │                                         │
-    │                   └── Rule-based Linearization              │
-    │                        (Python templates → Text)            │
-    │                               │                             │
-    │                               └──────────────┬──────────────┘
-    │                                              ▼
+    │    ├── Weaviate Vector (Children) ──┐
+    │    │             │                  ├─── Parent-level aggregation
+    │    │             └── Mapping ───────┤    (max score per parent)
+    │    │                                ├─── RRF Fusion (Text Search)
+    │    ├── Weaviate BM25 (Children) ────┤           │
+    │    │             │                  │           │
+    │    │             └── Mapping ───────┘           │
+    │    │                                            │
+    │    └── KG Search (Neo4j + HGT embeddings)       │
+    │                   │                             │
+    │                   └── Rule-based Linearization  │
+    │                        (Python templates → Text)│
+    │                               │                 │
+    │                               └────────┬────────┘
+    │                                        ▼
     ├─── Cross-Encoder Reranking (MedCPT, Modal GPU)
     │    └── Rerank combined pool: Text Search + KG Search
     │        → Single unified ranked list
     │
     ├─── Head-Tail Placement ──► Build context prompt
     │
-    ├─── Llama 70B (Groq API) ──► Generate answer
+    ├─── Llama 3.3 70B (Groq API) ──► Generate answer
     │
     └─── Response ──► Return to user with sources
 ```
@@ -366,29 +367,22 @@ NEO4J_URI=bolt://localhost:7687
 NEO4J_USER=neo4j
 NEO4J_PASSWORD=
 
-# Elasticsearch
-ELASTICSEARCH_URL=http://localhost:9200
-
-# PostgreSQL (Conversation History)
-POSTGRES_URI=postgresql://user:pass@localhost:5432/medkgrag
-
-# Groq API
-GROQ_API_KEY=
-
-# Modal Cloud
-MODAL_TOKEN_ID=
-MODAL_TOKEN_SECRET=
+# Weaviate
+WEAVIATE_URL=http://localhost:8080
+WEAVIATE_GRPC_PORT=50051
 
 # Paths
-FAISS_INDEX_PATH=./vectorstore/faiss_index
+SQLITE_PARENT_DB_PATH=./vectorstore/parent_chunks.db
 HGT_MODEL_PATH=./models/hgt/
 RAW_DATA_PATH=./data/raw/
 
 # Pipeline Params
 RETRIEVAL_TOP_K=20
-RERANK_TOP_K=5
-CHUNK_SIZE=1200
-CHUNK_OVERLAP=200
+RERANK_TOP_K=10
+PARENT_CHUNK_SIZE=1200
+PARENT_CHUNK_OVERLAP=200
+CHILD_CHUNK_SIZE=256
+CHILD_CHUNK_OVERLAP=64
 KG_HOP_DEPTH=2
 RRF_K=60
 
