@@ -10,7 +10,7 @@ class ParentStore:
         db_dir.mkdir(parents=True, exist_ok=True)
 
         self.db_path = db_path
-        self.conn = sqlite3.connect(db_path)
+        self.conn = sqlite3.connect(db_path, check_same_thread=False)
         # Return sqlite3.Row object instead of tuple
         # sqlite3.Row object: can act as tuple or dict
         self.conn.row_factory = sqlite3.Row    

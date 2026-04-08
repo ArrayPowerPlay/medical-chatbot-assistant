@@ -117,3 +117,210 @@ sqlite3.OperationalError: unable to open database file
 2026-04-08 00:29:36,503 - MedKG-RAG - INFO - Inserted 1029 child chunks into Weaviate
 2026-04-08 00:31:09,795 - MedKG-RAG - INFO - Inserted 1031 child chunks into Weaviate
 2026-04-08 00:32:57,586 - MedKG-RAG - INFO - Inserted 1027 child chunks into Weaviate
+2026-04-08 13:20:28,865 - MedKG-RAG - ERROR - Critical error during ingestion Connection to Weaviate failed. Details: Error: timed out. 
+Is Weaviate running and reachable at http://localhost:8080?
+Traceback (most recent call last):
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\.venv\Lib\site-packages\httpx\_transports\default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\.venv\Lib\site-packages\httpx\_transports\default.py", line 250, in handle_request
+    resp = self._pool.handle_request(req)
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\.venv\Lib\site-packages\httpcore\_sync\connection_pool.py", line 256, in handle_request
+    raise exc from None
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\.venv\Lib\site-packages\httpcore\_sync\connection_pool.py", line 236, in handle_request
+    response = connection.handle_request(
+        pool_request.request
+    )
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\.venv\Lib\site-packages\httpcore\_sync\connection.py", line 101, in handle_request
+    raise exc
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\.venv\Lib\site-packages\httpcore\_sync\connection.py", line 78, in handle_request
+    stream = self._connect(request)
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\.venv\Lib\site-packages\httpcore\_sync\connection.py", line 124, in _connect
+    stream = self._network_backend.connect_tcp(**kwargs)
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\.venv\Lib\site-packages\httpcore\_backends\sync.py", line 207, in connect_tcp
+    with map_exceptions(exc_map):
+         ~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\ProgramData\miniconda3\Lib\contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\.venv\Lib\site-packages\httpcore\_exceptions.py", line 14, in map_exceptions
+    raise to_exc(exc) from exc
+httpcore.ConnectTimeout: timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\.venv\Lib\site-packages\weaviate\connect\v4.py", line 423, in _open_connections_rest
+    response = client.get(oidc_url, timeout=self.timeout_config.init)
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\.venv\Lib\site-packages\httpx\_client.py", line 1053, in get
+    return self.request(
+           ~~~~~~~~~~~~^
+        "GET",
+        ^^^^^^
+    ...<7 lines>...
+        extensions=extensions,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\.venv\Lib\site-packages\httpx\_client.py", line 825, in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\.venv\Lib\site-packages\httpx\_client.py", line 914, in send
+    response = self._send_handling_auth(
+        request,
+    ...<2 lines>...
+        history=[],
+    )
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\.venv\Lib\site-packages\httpx\_client.py", line 942, in _send_handling_auth
+    response = self._send_handling_redirects(
+        request,
+        follow_redirects=follow_redirects,
+        history=history,
+    )
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\.venv\Lib\site-packages\httpx\_client.py", line 979, in _send_handling_redirects
+    response = self._send_single_request(request)
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\.venv\Lib\site-packages\httpx\_client.py", line 1014, in _send_single_request
+    response = transport.handle_request(request)
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\.venv\Lib\site-packages\httpx\_transports\default.py", line 249, in handle_request
+    with map_httpcore_exceptions():
+         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\ProgramData\miniconda3\Lib\contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\.venv\Lib\site-packages\httpx\_transports\default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.ConnectTimeout: timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\scripts\process_and_index_corpus.py", line 210, in main
+    run_ingestion(corpus_path, batch_size=args.batch_size, limit=args.limit)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\scripts\process_and_index_corpus.py", line 87, in run_ingestion
+    weaviate_store = WeaviateChildStore(
+        url=settings.WEAVIATE_URL,
+        grpc_port=settings.WEAVIATE_GRPC_PORT
+    )
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\src\storage\weaviate_client.py", line 20, in __init__
+    self.client = weaviate.connect_to_local(
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        host=url.replace("http://", "").replace("https://", "").split(":")[0],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        port=int(url.split(":")[-1] if ":" in url.split("//")[-1] else 8080),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        grpc_port=grpc_port
+        ^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\.venv\Lib\site-packages\weaviate\connect\helpers.py", line 193, in connect_to_local
+    return __connect(
+        WeaviateClient(
+    ...<8 lines>...
+        )
+    )
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\.venv\Lib\site-packages\weaviate\connect\helpers.py", line 371, in __connect
+    raise e
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\.venv\Lib\site-packages\weaviate\connect\helpers.py", line 367, in __connect
+    client.connect()
+    ~~~~~~~~~~~~~~^^
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\.venv\Lib\site-packages\weaviate\client_executor.py", line 152, in connect
+    return executor.execute(
+           ~~~~~~~~~~~~~~~~^
+        response_callback=lambda _: None,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        method=self._connection.connect,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\.venv\Lib\site-packages\weaviate\connect\executor.py", line 99, in execute
+    return cast(T, exception_callback(e))
+                   ~~~~~~~~~~~~~~~~~~^^^
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\.venv\Lib\site-packages\weaviate\connect\executor.py", line 38, in raise_exception
+    raise e
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\.venv\Lib\site-packages\weaviate\connect\executor.py", line 80, in execute
+    call = method(*args, **kwargs)
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\.venv\Lib\site-packages\weaviate\connect\v4.py", line 904, in connect
+    self._open_connections_rest(self._auth, "sync")
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "D:\Program Files\VSCode\medical-chatbot-assistant\.venv\Lib\site-packages\weaviate\connect\v4.py", line 425, in _open_connections_rest
+    raise WeaviateConnectionError(
+        f"Error: {e}. \nIs Weaviate running and reachable at {self.url}?"
+    )
+weaviate.exceptions.WeaviateConnectionError: Connection to Weaviate failed. Details: Error: timed out. 
+Is Weaviate running and reachable at http://localhost:8080?
+2026-04-08 13:28:10,056 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-04-08 13:28:10,058 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-04-08 13:28:27,139 - MedKG-RAG - INFO - Collection 'ChildChunks already exists, skipping...'
+2026-04-08 13:28:27,140 - MedKG-RAG - INFO - Starting ingestion from D:\Program Files\VSCode\medical-chatbot-assistant\data\corpus\corpus.jsonl...
+2026-04-08 13:28:27,141 - MedKG-RAG - INFO - Batch size: 1024, Limit: 10
+2026-04-08 13:28:44,505 - MedKG-RAG - INFO - Inserted 49 child chunks into Weaviate
+2026-04-08 13:28:44,508 - MedKG-RAG - INFO - Ingestion completed.# Articles: 10, # Parents: 13, # Children: 49
+2026-04-08 13:28:44,515 - MedKG-RAG - INFO - SQLite parents: 2968
+2026-04-08 13:28:44,570 - MedKG-RAG - INFO - Weaviate children: 11360
+2026-04-08 13:32:02,098 - MedKG-RAG - WARNING - Reset all data...
+2026-04-08 13:32:03,187 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-04-08 13:32:03,230 - MedKG-RAG - INFO - Deleted collection 'ChildChunks'
+2026-04-08 13:32:03,233 - MedKG-RAG - INFO - Deleted vectorstore\parent_chunks.db
+2026-04-08 13:32:06,318 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-04-08 13:32:06,319 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-04-08 13:32:09,668 - MedKG-RAG - INFO - Created collection 'ChildChunks'!
+2026-04-08 13:32:09,668 - MedKG-RAG - INFO - Starting ingestion from D:\Program Files\VSCode\medical-chatbot-assistant\data\corpus\corpus.jsonl...
+2026-04-08 13:32:09,669 - MedKG-RAG - INFO - Batch size: 1024, Limit: 10
+2026-04-08 13:32:12,653 - MedKG-RAG - INFO - Inserted 49 child chunks into Weaviate
+2026-04-08 13:32:12,655 - MedKG-RAG - INFO - Ingestion completed.# Articles: 10, # Parents: 13, # Children: 49
+2026-04-08 13:32:12,656 - MedKG-RAG - INFO - SQLite parents: 13
+2026-04-08 13:32:12,709 - MedKG-RAG - INFO - Weaviate children: 49
+2026-04-08 13:34:52,426 - MedKG-RAG - WARNING - Reset all data...
+2026-04-08 13:34:53,786 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-04-08 13:34:53,806 - MedKG-RAG - INFO - Deleted collection 'ChildChunks'
+2026-04-08 13:34:53,808 - MedKG-RAG - INFO - Deleted vectorstore\parent_chunks.db
+2026-04-08 13:34:57,421 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-04-08 13:34:57,422 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-04-08 13:35:05,059 - MedKG-RAG - INFO - Created collection 'ChildChunks'!
+2026-04-08 13:35:05,060 - MedKG-RAG - INFO - Starting ingestion from D:\Program Files\VSCode\medical-chatbot-assistant\data\corpus\corpus.jsonl...
+2026-04-08 13:35:05,060 - MedKG-RAG - INFO - Batch size: 1024, Limit: None
+2026-04-08 13:36:18,863 - MedKG-RAG - INFO - Inserted 1029 child chunks into Weaviate
+2026-04-08 13:37:15,158 - MedKG-RAG - INFO - Inserted 1027 child chunks into Weaviate
+2026-04-08 13:38:30,522 - MedKG-RAG - WARNING - Reset all data...
+2026-04-08 13:38:38,555 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-04-08 13:38:38,621 - MedKG-RAG - INFO - Deleted collection 'ChildChunks'
+2026-04-08 13:38:38,625 - MedKG-RAG - INFO - Deleted vectorstore\parent_chunks.db
+2026-04-08 13:38:44,592 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-04-08 13:38:44,593 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-04-08 13:38:49,348 - MedKG-RAG - INFO - Created collection 'ChildChunks'!
+2026-04-08 13:38:49,348 - MedKG-RAG - INFO - Starting ingestion from D:\Program Files\VSCode\medical-chatbot-assistant\data\corpus\corpus.jsonl...
+2026-04-08 13:38:49,349 - MedKG-RAG - INFO - Batch size: 1024, Limit: None
+2026-04-08 13:39:39,293 - MedKG-RAG - INFO - Inserted 1029 child chunks into Weaviate
+2026-04-08 13:40:21,532 - MedKG-RAG - INFO - Inserted 1027 child chunks into Weaviate
+2026-04-08 13:41:19,584 - MedKG-RAG - INFO - Inserted 1025 child chunks into Weaviate
+2026-04-08 13:42:10,429 - MedKG-RAG - INFO - Inserted 1027 child chunks into Weaviate
+2026-04-08 13:43:08,009 - MedKG-RAG - INFO - Inserted 1028 child chunks into Weaviate
+2026-04-08 13:43:54,647 - MedKG-RAG - INFO - Inserted 1030 child chunks into Weaviate
+2026-04-08 13:44:35,211 - MedKG-RAG - INFO - Inserted 1033 child chunks into Weaviate
+2026-04-08 13:45:14,846 - MedKG-RAG - INFO - Inserted 1025 child chunks into Weaviate
+2026-04-08 13:45:55,641 - MedKG-RAG - INFO - Inserted 1029 child chunks into Weaviate
+2026-04-08 13:47:09,596 - MedKG-RAG - WARNING - Reset all data...
+2026-04-08 13:47:11,108 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-04-08 13:47:11,160 - MedKG-RAG - INFO - Deleted collection 'ChildChunks'
+2026-04-08 13:47:11,163 - MedKG-RAG - INFO - Deleted vectorstore\parent_chunks.db
+2026-04-08 13:47:12,436 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-04-08 13:47:12,437 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-04-08 13:47:16,785 - MedKG-RAG - INFO - Created collection 'ChildChunks'!
+2026-04-08 13:47:16,786 - MedKG-RAG - INFO - Starting ingestion from D:\Program Files\VSCode\medical-chatbot-assistant\data\corpus\corpus.jsonl...
+2026-04-08 13:47:16,786 - MedKG-RAG - INFO - Batch size: 1024, Limit: 0
+2026-04-08 13:47:18,466 - MedKG-RAG - INFO - Inserted 12 child chunks into Weaviate
+2026-04-08 13:47:18,468 - MedKG-RAG - INFO - Ingestion completed.# Articles: 1, # Parents: 2, # Children: 12
+2026-04-08 13:47:18,469 - MedKG-RAG - INFO - SQLite parents: 2
+2026-04-08 13:47:18,521 - MedKG-RAG - INFO - Weaviate children: 12
+2026-04-08 13:50:15,836 - MedKG-RAG - WARNING - Reset all data...
+2026-04-08 13:50:19,230 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-04-08 13:50:19,270 - MedKG-RAG - INFO - Deleted collection 'ChildChunks'
+2026-04-08 13:50:19,272 - MedKG-RAG - INFO - Deleted vectorstore\parent_chunks.db
+2026-04-08 13:50:23,016 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-04-08 13:50:23,017 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-04-08 13:50:27,035 - MedKG-RAG - INFO - Created collection 'ChildChunks'!
+2026-04-08 13:50:27,035 - MedKG-RAG - INFO - Starting ingestion from D:\Program Files\VSCode\medical-chatbot-assistant\data\corpus\corpus.jsonl...
+2026-04-08 13:50:27,036 - MedKG-RAG - INFO - Batch size: 1024, Limit: 0
+2026-04-08 13:50:27,042 - MedKG-RAG - INFO - Ingestion completed.# Articles: 0, # Parents: 0, # Children: 0
+2026-04-08 13:50:27,044 - MedKG-RAG - INFO - SQLite parents: 0
+2026-04-08 13:50:27,060 - MedKG-RAG - INFO - Weaviate children: 0

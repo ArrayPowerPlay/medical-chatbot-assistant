@@ -36,6 +36,7 @@ dependencies = [
     "langchain-google-genai>=4.2.1",
     "weaviate>=0.1.2",
     "weaviate-client>=4.20.4",
+    "litai>=0.0.10",
 ]
 
 [tool.uv]

@@ -31,6 +31,11 @@ def count_lines(file_path: Path) -> int:
 
 def producer_worker(corpus_path: Path, chunk_queue: queue.Queue, limit: Optional[int] = None):
     """Worker read articles from disk, chunking articles and push them into 'chunk_queue'"""
+    # Stop process immediately if 'limit' = 0
+    if limit == 0:
+        chunk_queue.put(None)
+        return
+
     chunker = ParentChildChunker(
         parent_chunk_size=settings.PARENT_CHUNK_SIZE,
         parent_chunk_overlap=settings.PARENT_CHUNK_OVERLAP,
@@ -46,7 +51,7 @@ def producer_worker(corpus_path: Path, chunk_queue: queue.Queue, limit: Optional
             chunk_queue.put((parents, children))
 
             article_count += 1
-            if limit and article_count >= limit:
+            if limit is not None and article_count >= limit:
                 break
 
     # Signals terminate the working process
@@ -94,10 +99,10 @@ def run_ingestion(
     weaviate_store.create_collection()
 
     logger.info(f"Starting ingestion from {corpus_path}...")
-    logger.info(f"Batch size: {batch_size}, Limit: {limit or 'None'}")
+    logger.info(f"Batch size: {batch_size}, Limit: {'None' if limit is None else limit}")
 
     # Total lines to be processed
-    total_lines = count_lines(corpus_path) if not limit else limit
+    total_lines = count_lines(corpus_path) if limit is None else limit
     
     # Create queue to regulate each process
     chunk_queue = queue.Queue(maxsize=batch_size * 2)  # Ensure data is readily available for the next batch
