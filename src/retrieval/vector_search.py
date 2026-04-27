@@ -55,8 +55,8 @@ def vector_search(
         query_vector: MedCPT query embedding
         weaviate_store: Weaviate client
         parent_store: SQLite parent store
-        top_k: number of parent results to return
-        child_fetch_limit: number of child chunks to fetch
+        top_k: Nmber of parent results to return
+        child_fetch_limit: Number of child chunks to fetch
     
     Returns:
         List of parent-level results: [{"parent_id", "pmid", "text", "title", "score"}]

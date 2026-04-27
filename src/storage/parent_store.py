@@ -1,12 +1,14 @@
 import sqlite3
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Union
 from pathlib import Path
 
 
 class ParentStore:
     """SQLite-based storage for parent chunks. Parents are only looked up by ID"""
-    def __init__(self, db_path : str):
-        db_dir = Path(db_path).parent
+    def __init__(self, db_path : Union[str, Path]):
+        # Ensure db_path is a Path object for directory creation
+        db_path_obj = Path(db_path)
+        db_dir = db_path_obj.parent
         db_dir.mkdir(parents=True, exist_ok=True)
 
         self.db_path = db_path

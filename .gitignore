@@ -2,4 +2,7 @@
 .env
 .env.*
 !.env.example
+vectorstore/
+*/vectorstore/
+*.csv
 __pycache__

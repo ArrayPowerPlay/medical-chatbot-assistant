@@ -16,7 +16,7 @@ services:
       DEFAULT_VECTORIZER_MODULE: "none"
       CLUSTER_HOSTNAME: "node1"
     volumes:
-      - weaviate_data:/var/lib/weaviate
+      - ../vectorstore/weaviate_data:/var/lib/weaviate
 
   # Neo4j: Knowledge Graph (PrimeKG)
   neo4j:
@@ -29,8 +29,6 @@ services:
       - NEO4J_AUTH=none
       - NEO4J_PLUGINS=["apoc"]
     volumes:
-      - neo4j_data:/data
+      - ../vectorstore/neo4j:/data
 
-volumes:
-  weaviate_data:
-  neo4j_data:
+

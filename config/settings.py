@@ -39,9 +39,13 @@ class Settings(BaseSettings):
     QUERY_MODEL: str = "ncbi/MedCPT-Query-Encoder"
 
     # Persistence
-    SQLITE_PARENT_DB_PATH: str = "./vectorstore/parent_chunks.db"
+    SQLITE_PARENT_DB_PATH: Path = BASE_DIR / "vectorstore" / "parent_chunks.db"
 
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
+    model_config = SettingsConfigDict(
+        env_file=".env", 
+        env_file_encoding="utf-8",
+        extra="ignore"  # Allow extra variables like PYTHONPATH in .env
+    )
 
 
 settings = Settings()
