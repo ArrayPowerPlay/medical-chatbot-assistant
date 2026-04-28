@@ -51,7 +51,7 @@ rag-project/
 │   │   ├── __init__.py
 │   │   ├── preprocess_bioasq_taskA.py # Load BioASQ PubMed articles
 │   │   ├── preprocess_bioasq_taskB.py # Preprocess Q&A for task B (test, val split)
-│   │   └── parent_child_chunker.py    # Structural parent-child splitting (Local)
+│   │   ├── parent_child_chunker.py    # Adaptive 3-tier chunking using SciSpaCy
 │   │
 │   ├── retrieval/                    # 3 parallel retrieval streams
 │   │   ├── __init__.py

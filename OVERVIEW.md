@@ -35,11 +35,16 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 | **Vector DB** | Weaviate (Local Docker, Cosine Similarity) |
 | **Embedding Model** | `ncbi/MedCPT-Article-Encoder` (for documents) |
 | **Query Model** | `ncbi/MedCPT-Query-Encoder` (for queries) |
-| **Chunking** | **Parent-Child Chunking** (Local, non-LLM) |
-| **Parent Size** | 1200 - 1500 characters |
-| **Child Size** | 256 - 400 characters (embedded) |
+| **Chunking** | **Adaptive 3-Tier Chunking** (SciSpaCy, no LLM) |
+| **Parent Size** | Tier 1/2: Full abstract. Tier 3: 1500 chars (256 overlap) |
+| **Child Size** | Tier 1: Full. Tier 2/3: ~500 chars (with Title Injection) |
 | **Contextual Strategy**| Search is performed on **Child Chunks**; context for LLM is retrieved from the corresponding **Parent Chunk**. |
 | **Metadata Mapping** | A mapping between Child `parent_id` and Parent text is stored in **SQLite** (`parent_chunks.db`) for O(log n) lookup. |
+
+> **Key Detail — Adaptive Chunking**: Uses `SciSpaCy` to safely split medical sentences without breaking acronyms.
+> - **Tier 1** (<=500 chars): Parent = Child = Full Article.
+> - **Tier 2** (<=2000 chars): Parent = Full Article. Child = ~500 chars (Title Injected).
+> - **Tier 3** (>2000 chars): Parent = 1500 chars (overlap 256). Child = ~500 chars (Title Injected).
 
 > **Key Detail — Dual Encoder Setup**: MedCPT uses an **asymmetric** architecture. `MedCPT-Query-Encoder` encodes the user query, while `MedCPT-Article-Encoder` encodes document chunks. This is by design and yields better retrieval quality than using a single encoder for both.
 
@@ -182,7 +187,8 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 
 #### Post-Rerank KG Merging (Prompt Prep)
 - **Purpose**: Prevent redundancy before feeding context to LLM.
-- **Method**: If multiple winning KG paths share the same prefix (e.g., "A TARGETS B"), they are merged into a single sentence ("A TARGETS B which is ASSOCIATED_WITH C, and D.").
+- **Method**: Group paths by `(prefix, rel2)` metadata. Merges `A targets B associated with C` and `A targets B associated with D` into `A targets B which is associated with C, and D.`
+- **Scoring**: Applies Density Bonus aggregation: `Agg_Score = MAX(scores) + 0.01 * (N - 1)` for fair Head-Tail context reordering.
 
 #### Prompt Construction: Head-Tail Placement
 - To avoid the **Lost-in-the-Middle** problem:
