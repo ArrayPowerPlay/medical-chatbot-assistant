@@ -2,6 +2,7 @@ import json
 import sys
 from pathlib import Path
 import argparse
+import torch
 import queue
 import threading
 import concurrent.futures
@@ -137,6 +138,7 @@ class CorpusIndexer:
                 embeddings = self.embedder.embed_texts(texts_to_embed, batch_size=16)
 
                 embed_queue.put((parents, children, embeddings))
+                torch.cuda.empty_cache()
                 chunk_queue.task_done()       # Signals that the item has been processed successfully
         finally:
             embed_queue.put(_SENTINEL)
