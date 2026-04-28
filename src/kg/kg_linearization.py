@@ -1,4 +1,5 @@
 from typing import Dict, List
+from collections import defaultdict
 
 
 class PathLinearizer:
@@ -20,44 +21,49 @@ class PathLinearizer:
             List of independent string paths
         """
         paths = []
+        
+        # Create mapping from hop-1 target node to the full hop-1 triple, this allows us to join hop-2 back
+        # to its anchor node
+        hop1_map = defaultdict(list)
+        for t in hop1_triples:
+            hop1_map[t["n2"]].append(t)
 
-        # Create a mapping from hop1 nodes to its outgoing hop2 triples
-        hop2_map = {}
+        # Nodes that can be developed into hop-2
+        nodes_with_hop2 = {t2["n1"] for t2 in hop2_triples}
+
+        # Linearize 1-hop triples (only keep dead-ends, with no hop-2 extension)
+        for t in hop1_triples:
+            if t["n2"] not in nodes_with_hop2:
+                rel1 = t["r1"].replace("_", " ").lower()
+                text = f"[{t.get('n1_type', 'Entity')}] {t['n1']} {rel1} [{t.get('n2_type', 'Entity')}] {t['n2']}."
+                paths.append({
+                    "text": text,
+                    "metadata": {
+                        "prefix": text,  # 1-hop has no suffix, so the whole string is the prefix
+                        "rel2": None,
+                        "target": None
+                    }
+                })
+
+        # Linearize 2-hop (join hop-1 with hop-2)
         for t2 in hop2_triples:
-            n1 = t2.get("n1")
-            if n1 not in hop2_map:
-                hop2_map[n1] = []
-            hop2_map[n1].append(t2)
+            middle_node = t2["n1"]
+            rel2 = t2["r1"].replace("_", " ").lower()
+            target_node = f"[{t2.get('n2_type', 'Entity')}] {t2['n2']}"
 
-        # Tranverse hop1 triples to build the base path
-        for t1 in hop1_triples:
-            # Fall back to generic 'Entity'
-            anchor_type = t1.get("n1_type", "Entity")
-            anchor_name = t1.get("n1")
-            rel1 = t1.get("r1")
-            hop1_type = t1.get("n2_type", "Entity")
-            hop1_node = t1.get("n2")
+            # Find all hop-1 paths that connects to this middle node
+            for t1 in hop1_map.get(middle_node, []):
+                rel1 = t1["r1"].replace("_", " ").lower()
+                prefix = f"[{t1.get('n1_type', 'Entity')}] {t1['n1']} {rel1} [{t1.get('n2_type', 'Entity')}] {t1['n2']}"
 
-            if not anchor_name or not rel1 or not hop1_node:
-                continue
+                text = f"{prefix} which is {rel2} {target_node}"
 
-            base_sentence = f"{anchor_type} {anchor_name} {rel1} {hop1_type} {hop1_node}"
-
-            # Check if this hop1 node has any hop2 outgoing triples
-            outgoing_hop2 = hop2_map.get(hop1_node, [])
-
-            if not outgoing_hop2:
-                paths.append(base_sentence)
-            else:
-                # Extend into 2-hop paths
-                for t2 in outgoing_hop2:
-                    rel2 = t2.get("r1")
-                    hop2_type = t2.get("n2_type", "Entity")
-                    hop2_node = t2.get("n2")
-                    if rel2 and hop2_node:
-                        # Combine 1-hop and 2-hop path into a complete multi-hop relation
-                        full_path = f"{base_sentence} which is {rel2} {hop2_type} {hop2_node}"
-                        paths.append(full_path)
-
-        # Remove any exact duplicates
-        return list(set(full_path))
+                paths.append({
+                    "text": text,
+                    "metadata": {
+                        "prefix": prefix,
+                        "rel2": rel2,
+                        "target": target_node
+                    }
+                })
+        return paths

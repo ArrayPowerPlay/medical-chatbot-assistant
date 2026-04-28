@@ -6,12 +6,12 @@ class RRFManager:
     """
     Manages Reciprocal Rank Fusion (RRF) to merge multiple retrieval streams
     """
-    def __init__(self, k: int = 60):
+    def __init__(self, k: int = settings.TOP_K_RRF):
         self.k = k
 
     def rank_fusion(
         self,
-        vector_results: List[Dict],
+        vector_results: List[Dict], 
         bm25_results: List[Dict],
         top_k: int = 50
     ) -> List[Dict]:

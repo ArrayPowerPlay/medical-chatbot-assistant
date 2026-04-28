@@ -1,223 +1,272 @@
+import json
 import sys
 from pathlib import Path
-import json
 import argparse
-import threading
-from tqdm import tqdm
-from typing import Optional
 import queue
+import threading
+import concurrent.futures
+from typing import List, Tuple
+from tqdm import tqdm
 
-# Configure project root
-project_root = Path(__file__).resolve().parent.parent
-if str(project_root) not in sys.path:
-    sys.path.append(str(project_root))
+parent_root = Path(__file__).resolve().parent.parent
+if str(parent_root) not in sys.path:
+    sys.path.append(str(parent_root))
 
 from config.settings import settings
 from config.logging_config import logger, setup_logging
-from src.dataset_builder.parent_child_chunker import ParentChildChunker
+from src.dataset_builder.parent_child_chunker import AdaptiveChunker
 from src.storage.parent_store import ParentStore
 from src.storage.weaviate_client import WeaviateChildStore
 from src.embeddings.medcpt_embedder import MedCPTEmbedder
 
 
-def count_lines(file_path: Path) -> int:
-    """Count total lines for progress bar"""
-    count = 0
-    with open(file_path, 'r', encoding='utf-8') as f:
-        for _ in f:
-            count += 1
-    return count
+# Sentinel value to signal downstream stages that the upstream stage is done
+_SENTINEL = None
 
+class CorpusIndexer:
+    """Class used for loading, chunking, embedding and saving data in batches."""
+    def __init__(self, data_path: str, db_path: str):
+        self.data_path = data_path
+        self.weaviate = WeaviateChildStore()
+        self.parent_store = ParentStore(db_path)
 
-def producer_worker(corpus_path: Path, chunk_queue: queue.Queue, limit: Optional[int] = None):
-    """Worker read articles from disk, chunking articles and push them into 'chunk_queue'"""
-    # Stop process immediately if 'limit' = 0
-    if limit == 0:
-        chunk_queue.put(None)
-        return
+        logger.info("Loading MedCPT-Article-Encoder...")
+        self.embedder = MedCPTEmbedder(mode='article')
 
-    chunker = ParentChildChunker(
-        parent_chunk_size=settings.PARENT_CHUNK_SIZE,
-        parent_chunk_overlap=settings.PARENT_CHUNK_OVERLAP,
-        child_chunk_size=settings.CHILD_CHUNK_SIZE,
-        child_chunk_overlap=settings.CHILD_CHUNK_OVERLAP
-    )
+    def reset_databases(self):
+        """Drop existing Weaviate collection and recreate them. Reset SQlite table."""
+        logger.info("Resetting Weaviate child collection...")
+        self.weaviate.delete_collection()
+        self.weaviate.create_collection()
 
-    article_count = 0
-    with open(corpus_path, 'r', encoding='utf-8') as f:
-        for line in f:
-            article = json.loads(line)
-            parents, children = chunker.chunk_article(article)
-            chunk_queue.put((parents, children))
+        logger.info("Resetting parent store (SQLite)...")
+        self.parent_store.conn.execute("DROP TABLE IF EXISTS parent_chunks")
+        self.parent_store._create_table()
+        logger.info("All databases reset successfully!")
 
-            article_count += 1
-            if limit is not None and article_count >= limit:
-                break
+    ### STAGE 1: READ JSONL IN BATCHES (CPU - BOUND)
+    def _stage_reader_chunker(
+        self,
+        chunk_queue: queue.Queue,
+        batch_size: int,
+        limit: int | None,
+        max_workers: int,
+        pbar: tqdm
+    ):
+        """Read JSONL line by line, chunk each batch concurrently and push into chunk_queue"""
+        batch: List[Tuple[str, str, str]] = []
+        processed_count = 0
 
-    # Signals terminate the working process
-    chunk_queue.put(None)
-
-
-def storage_worker(storage_queue: queue.Queue, parent_store: ParentStore, weaviate_store: WeaviateChildStore):
-    """"Worker handles implicit writing to SQLite and Weaviate (gRPC)"""
-    while True:
-        item = storage_queue.get()
-        if item is None:
-            # Confirm that a data unit has been processed
-            storage_queue.task_done()
-            break
-
-        parents, children, vectors = item
-        parent_store.insert_parents(parents)
-        weaviate_store.insert_children(children, vectors)
-        storage_queue.task_done()
-
-
-def run_ingestion(
-    corpus_path: Path,
-    batch_size: int = 1024,
-    limit: int | None = None
-):
-    """Stream articles from corpus → chunk → embed → store.
-    Everything is processed in batches. 
-    
-    Flow per batch:
-        1. Read batch of articles from corpus.jsonl (streaming)
-        2. ParentChildChunker → parent_chunks + child_chunks
-        3. Parents → SQLite (ParentStore)
-        4. Children → MedCPT embedding → Weaviate
-    """
-    # Initialize components
-    parent_store = ParentStore(settings.SQLITE_PARENT_DB_PATH)
-    weaviate_store = WeaviateChildStore(
-        url=settings.WEAVIATE_URL,
-        grpc_port=settings.WEAVIATE_GRPC_PORT
-    )
-    embedder = MedCPTEmbedder('article')
-
-    # Create Weaviate collections
-    weaviate_store.create_collection()
-
-    logger.info(f"Starting ingestion from {corpus_path}...")
-    logger.info(f"Batch size: {batch_size}, Limit: {'None' if limit is None else limit}")
-
-    # Total lines to be processed
-    total_lines = count_lines(corpus_path) if limit is None else limit
-    
-    # Create queue to regulate each process
-    chunk_queue = queue.Queue(maxsize=batch_size * 2)  # Ensure data is readily available for the next batch
-    storage_queue = queue.Queue(maxsize=10)
-    
-    # Initialize worker threads
-    producer = threading.Thread(target=producer_worker, args=(corpus_path, chunk_queue, limit))
-    storer = threading.Thread(target=storage_worker, args=(storage_queue, parent_store, weaviate_store))
-
-    # Start process, specifically 'producer_worker' and 'storage_worker' process
-    producer.start()
-    storer.start()
-
-    article_count, total_parents, total_children = 0, 0, 0
-    # Accumulators for current batch
-    batch_parents, batch_children = [], []
-    progress_bar = tqdm(total=total_lines, desc="Ingesting articles")
-
-    while True:
         try:
-            item = chunk_queue.get(timeout=30)
-            if item is None: break   # Reach the end of file
+            with open(self.data_path, 'r', encoding='utf-8') as f:
+                for line in f:
+                    if limit is not None and processed_count >= limit:
+                        break
+                    try:
+                        doc = json.loads(line)
+                        pmid = doc.get("pmid", "")
+                        if not pmid: continue
+                        title = doc.get("title", "")
+                        abstract = doc.get("abstractText", "")
+                        batch.append((pmid, title, abstract))
+                        
+                        processed_count += 1
+                        pbar.update(1)
 
-            parents, children = item
-            batch_parents.extend(parents)
-            batch_children.extend(children)
-            article_count += 1
-            progress_bar.update(1)
+                        if len(batch) >= batch_size:
+                            parents, children = self._chunk_batch(batch, max_workers)
+                            chunk_queue.put((parents, children))
+                            batch = []
+                    except json.JSONDecodeError:
+                        continue
+            
+            # Flush remaining articles in the last incomplete batch
+            if batch:
+                parents, children = self._chunk_batch(batch, max_workers)
+                chunk_queue.put((parents, children))
+        finally:
+            # Signal the next stage that no more data is coming
+            chunk_queue.put(_SENTINEL)
+            logger.info(f"Reading and chunking data completed. Read {processed_count} articles.")
 
-            if len(batch_children) >= batch_size:
-                # Embed chunks into vectors and put into 'storage_queue' for storaging data into database
-                child_texts = [c['text'] for c in batch_children]
-                vector_embeddings = embedder.embed_texts(child_texts)
+    def _chunk_batch(
+        self,
+        batch: List[Tuple[str, str, str]],
+        max_workers: int
+    ) -> Tuple[list, list]:
+        """Run AdaptiveChunker (for embedding articles) on a batch using a thread pool"""
+        batch_parents = []
+        batch_children = []
 
-                storage_queue.put((list(batch_parents), list(batch_children), vector_embeddings))
+        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+            futures = [
+                executor.submit(AdaptiveChunker.process_article, pmid, title, abs_text)
+                for pmid, title, abs_text in batch
+            ]
+            for future in concurrent.futures.as_completed(futures):   # Process completed futures
+                res = future.result()
+                batch_parents.extend(res["parents"])
+                for p_id, child_texts in res["children"].items():
+                    pmid = p_id.split("_p")[0]
+                    for c_text in child_texts:
+                        batch_children.append(
+                            {"parent_id": p_id, "pmid": pmid, "text": c_text}
+                        )
 
-                total_parents += len(batch_parents)
-                total_children += len(batch_children)
-                
-                # Reset after processing a batch
-                batch_parents, batch_children = [], []
+        return batch_parents, batch_children
+    
+    ### STAGE 2: EMBEDDING (GPU - BOUND)
+    def _stage_embedder(
+        self,
+        chunk_queue: queue.Queue,
+        embed_queue: queue.Queue
+    ):
+        """Take chunked batches from chunk_queue, embed them and then push them to embed_queue."""
+        try:
+            while True:
+                item = chunk_queue.get()
+                if item is _SENTINEL:
+                    break
 
-        except queue.Empty: continue
+                parents, children = item
+                if not children:
+                    chunk_queue.task_done()
+                    continue
 
-    # Flush remaining articles
-    if batch_children:
-        child_texts = [c['text'] for c in batch_children]
-        vector_embeddings = embedder.embed_texts(child_texts)
+                texts_to_embed = [c["text"] for c in children]
+                embeddings = self.embedder.embed_texts(texts_to_embed, batch_size=1024)
 
-        storage_queue.put((list(batch_parents), list(batch_children), vector_embeddings))
+                embed_queue.put((parents, children, embeddings))
+                chunk_queue.task_done()       # Signals that the item has been processed successfully
+        finally:
+            embed_queue.put(_SENTINEL)
+            logger.info("Embedding child chunks completed!")
 
-        total_parents += len(batch_parents)
-        total_children += len(batch_children)
+    ### STAGE 3: WRITE DATA TO DATABASE (I/O BOUND)
+    def _stage_writer(self, embed_queue: queue.Queue):
+        """Take embedded batches from embed_queue and persist to Weaviate and SQLite."""
+        total_parents = 0
+        total_children = 0
+
+        try:
+            while True:
+                item = embed_queue.get()
+                if item is _SENTINEL:
+                    break
+
+                parents, children, embeddings = item
+                self.parent_store.insert_parents(parents)
+                self.weaviate.insert_children(children, embeddings)
+
+                total_parents += len(parents)
+                total_children += len(children)
+                embed_queue.task_done()
+        finally:
+            logger.info(
+                "Storing data into database completed! "
+                f"Stored {total_parents} parents, {total_children} children."
+            )
+
+    ### ORCHESTRATOR
+    def process_and_index(
+        self,
+        max_workers: int = 6,
+        batch_size: int = 1024,
+        limit: int | None = None
+    ):
+        """Launch 3-stage pipeline: Read + Chunk + Embed + Store."""
+        if limit == 0:
+            logger.info("Limit is 0. Exiting ingestion immediately!")
+            return
         
-    # The main thread waits for all other threads to finish work
-    producer.join()
-    storage_queue.put(None)
-    storer.join()
-    progress_bar.close()
+        # Create collection for child chunks in Weaviate 
+        self.weaviate.create_collection()
 
-    logger.info(
-        f"Ingestion completed."
-        f"# Articles: {article_count}, # Parents: {total_parents}, # Children: {total_children}"
-    )
-    logger.info(f'SQLite parents: {parent_store.count()}')
-    logger.info(f'Weaviate children: {weaviate_store.count()}')
+        chunk_queue = queue.Queue(maxsize=3)   # Max 3 batches per queue
+        embed_queue = queue.Queue(maxsize=3)
 
-    # Close connection
-    parent_store.close()
-    weaviate_store.close()
+        pbar = tqdm(desc="Reading articles", unit=" docs")
+
+        # Each stage runs in its own thread
+        t1 = threading.Thread(
+            target=self._stage_reader_chunker,
+            args=(chunk_queue, batch_size, limit, max_workers, pbar),
+            name="[Stage 1]: Reader-Chunker Process"
+        )
+        t2 = threading.Thread(
+            target=self._stage_embedder,
+            args=(chunk_queue, embed_queue),
+            name="[Stage 2]: Embedder Process"
+        )
+        t3 = threading.Thread(
+            target=self._stage_writer,
+            args=(embed_queue,),       # Always parse a tuple
+            name="[Stage 3]: Writer Process"
+        )
+
+        # Start to run 3 threads
+        t1.start()
+        t2.start()
+        t3.start()
+
+        # Wait for 3 threads to finish running
+        t1.join()
+        t2.join()
+        t3.join()
+
+        # Close progress bar
+        pbar.close()
+        logger.info("Pipeline completed successfully!")
+
+    def close(self):
+        """Clean up resources"""
+        self.embedder.close()
+        self.weaviate.close()
+        self.parent_store.close()
 
 
 def main():
-    setup_logging()
-    parser = argparse.ArgumentParser(description="MedKG-RAG Data Ingestion Pipeline")
-    parser.add_argument(
-        "--limit", type=int, help="Limit number of articles (for testing)"
+    parser = argparse.ArgumentParser(
+        description="Process and index BioASQ PudMed articles into Weaviate and SQLite."
     )
     parser.add_argument(
-        "--batch-size", type=int, default=1024, help="Batch size for processing" 
+        "--limit", type=int, default=None,
+        help="Limit number of articles to be processed. Set to 0 to only reset."
     )
     parser.add_argument(
-        "--reset", action="store_true", help="Delete existing data and re-ingest"
+        "--batch_size", type=int, default=1024,
+        help="Batch size for pipeline streaming"
     )
+    parser.add_argument(
+        "--reset", action="store_true",
+        help="Delete existing data and re-ingest"
+    )
+    parser.add_argument(
+        "--workers", type=int, default=6,
+        help="Max thread workers for chunking"
+    )
+
+    # Read paramaters from terminal
     args = parser.parse_args()
 
-    corpus_path = settings.DATA_PATH / "corpus" / "corpus.jsonl"
+    indexer = CorpusIndexer(
+        data_path="data/raw/corpus.jsonl",
+        db_path="vectorstore/parent_chunks.db"
+    )
 
-    if not corpus_path.exists():
-        logger.error(f"Corpus file {corpus_path} not found!")
-        return
-    
     if args.reset:
-        logger.warning("Reset all data...")
-        # Delete Weaviate database
-        weaviate_store = WeaviateChildStore(
-            url=settings.WEAVIATE_URL,
-            grpc_port=settings.WEAVIATE_GRPC_PORT
+        indexer.reset_databases()
+
+    if args.limit != 0:
+        indexer.process_and_index(
+            max_workers=args.workers,
+            batch_size=args.batch_size,
+            limit=args.limit
         )
-        weaviate_store.delete_collection()
-        weaviate_store.close()
 
-        # Delete SQLite database
-        db_path = Path(settings.SQLITE_PARENT_DB_PATH)
-        if db_path.exists():
-            db_path.unlink()     # Delete file SQLite which contains parent chunks 
-            logger.info(f"Deleted {db_path}")
-
-    try: 
-        run_ingestion(corpus_path, batch_size=args.batch_size, limit=args.limit)
-    except KeyboardInterrupt:
-        logger.warning("Ingestion interrupted by user!")
-    except Exception as e:
-        logger.exception(f"Critical error during ingestion {e}")
+    indexer.close()
 
 
 if __name__ == "__main__":
+    setup_logging()
     main()

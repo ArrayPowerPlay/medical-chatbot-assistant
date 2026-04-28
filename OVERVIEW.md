@@ -298,42 +298,7 @@ ragas                     — RAG evaluation framework
 
 ---
 
-## 6. Key File Mapping
 
-| File / Directory | Purpose |
-|---|---|
-| `config/settings.py` | All env vars, constants, paths via Pydantic Settings |
-| `src/query/query_rewriter.py` | Query rewriting via Groq (spell fix, specificity, history) |
-| `src/query/query_extractor.py` | LLM-based medical NER (Llama 70B via Groq, no RE) |
-| `src/embeddings/medcpt_embedder.py` | MedCPT dual encoder (Query-Encoder + Article-Encoder) |
-| `src/dataset_builder/preprocess_bioasq_taskA.py` | Load BioASQ PubMed articles (Task A) |
-| `src/dataset_builder/preprocess_bioasq_taskB.py` | Preprocess Q&A for Task B (test, val split) |
-| `src/dataset_builder/parent_child_chunker.py` | Parent-Child structural chunking (Local CPU) |
-| `src/storage/parent_store.py` | SQLite lookup for Parent chunks (by parent_id) |
-| `src/storage/weaviate_client.py` | Weaviate Client (Vector + BM25 on Children) |
-| `src/retrieval/vector_search.py` | Weaviate vector search (Child -> Parent mapping) |
-| `src/retrieval/keyword_search.py` | Weaviate BM25 search (Child -> Parent mapping) |
-| `src/kg/kg_search.py` | KG retrieval: per-entity anchor search (A-E) → 2-hop Cypher (Q-E ranking) → linearized context |
-| `src/kg/kg_linearization.py` | Path-based linearization with Node Types (creates independent paths) |
-| `src/kg/neo4j_client.py` | Stage 1: medcpt_node_embeddings anchor search (A-E vs A-E) + Stage 2: 2-hop Cypher (Q-E rewritten_query_vec ranking) |
-| `src/kg/schema.py` | KG node/relationship type definitions and Neo4j label mappings |
-| `src/retrieval/parallel_retriever.py` | Orchestrates 3 parallel streams (TODO: wire entities → Article-Encoder → KGSearch) |
-| `src/reranking/rrf.py` | Reciprocal Rank Fusion (Vector + BM25 only) |
-| `src/reranking/cross_encoder.py` | MedCPT-Cross-Encoder via Modal (Applies Top-M/N quotas and <0 filtering) |
-| `src/generation/kg_merger.py` | Merges KG paths post-reranking to remove redundancy (Group-by Prefix) |
-| `src/generation/prompt_builder.py` | Head-tail context placement |
-| `src/generation/llm_generator.py` | Llama 70B generation via Groq API |
-| `src/pipeline/rag_pipeline.py` | End-to-end: query → retrieval → rerank → merge → generate |
-| `api/main.py` | FastAPI app entry point (includes CORS config) |
-| `api/routes/chat.py` | POST /chat endpoint |
-| `modal_deployments/cross_encoder_service.py` | Modal Cross-Encoder endpoint |
-| `frontend/index.html` | Chat UI |
-| `scripts/ingest_documents.py` | Document ingestion pipeline |
-| `scripts/build_kg.py` | PrimeKG → Neo4j import + enriched MedCPT node embedding pipeline |
-| `scripts/evaluate_retrieval.py` | BioASQ Phase A retrieval evaluation |
-| `scripts/evaluate_generation.py` | BioASQ Phase B + MedQA generation evaluation |
-
----
 
 ## 7. API Endpoints
 

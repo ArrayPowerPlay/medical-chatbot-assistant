@@ -28,10 +28,18 @@ class Settings(BaseSettings):
     RERANK_TOP_K: int = 10
 
     # Parent-Child chunking
-    PARENT_CHUNK_SIZE : int = 1200
-    PARENT_CHUNK_OVERLAP : int = 200
-    CHILD_CHUNK_SIZE : int = 256
-    CHILD_CHUNK_OVERLAP : int = 64
+    TIER1_MAX_LEN: int = 500            # Threshold of article's title + abstract length to be chunked or not
+    TIER2_MAX_LEN: int = 2000           # Threshold of article's title + abstract length to be chunked or not
+    PARENT_CHUNK_SIZE : int = 1500
+    PARENT_CHUNK_OVERLAP : int = 256
+    CHILD_CHUNK_SIZE : int = 500
+
+    # Reranking configuration
+    RERANK_TEXT_TOP_M: int = 5
+    RERANK_KG_TOP_N: int = 20
+
+    # RRF top_k configuration
+    TOP_K_RRF: int = 60
 
     # Model names
     LLM_MODEL: str = "meta-llama/Llama-3.3-70B-Versatile"

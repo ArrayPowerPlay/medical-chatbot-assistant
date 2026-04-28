@@ -3,7 +3,7 @@ name = "rag-project"
 version = "0.1.0"
 description = "Medical Knowledge Graph RAG Chatbot"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.11"
 dependencies = [
     # Backend & API
     "fastapi>=0.110.0",
@@ -37,6 +37,9 @@ dependencies = [
     "weaviate>=0.1.2",
     "weaviate-client>=4.20.4",
     "goatools>=1.6.4",
+    "matplotlib>=3.10.8",
+    "spacy>=3.8.14",
+    "scispacy>=0.2.4",
 ]
 
 [tool.uv]
