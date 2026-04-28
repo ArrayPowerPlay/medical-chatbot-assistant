@@ -250,7 +250,7 @@ def main():
     args = parser.parse_args()
 
     indexer = CorpusIndexer(
-        data_path="data/raw/corpus.jsonl",
+        data_path="data/corpus/corpus.jsonl",
         db_path="vectorstore/parent_chunks.db"
     )
 

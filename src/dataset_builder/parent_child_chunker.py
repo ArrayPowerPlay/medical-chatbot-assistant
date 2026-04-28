@@ -65,11 +65,17 @@ class AdaptiveChunker:
             if len(current_chunk) + len(sentence) <= chunk_size or current_chunk == "":
                 current_chunk += (" " if current_chunk else "") + sentence
             else:
-                chunks.append(f"Title: {title}. {current_chunk}")
+                if current_chunk.startswith(f"Title: {title}"):
+                    chunks.append(current_chunk)
+                else:
+                    chunks.append(f"Title: {title}.\nContent: {current_chunk}")
                 current_chunk = sentence
 
         if current_chunk:
-            chunks.append(f"Title: {title}. {current_chunk}")
+            if current_chunk.startswith(f"Title: {title}"):
+                chunks.append(current_chunk)
+            else:
+                chunks.append(f"Title: {title}.\nContent: {current_chunk}")
         return chunks
     
     @staticmethod

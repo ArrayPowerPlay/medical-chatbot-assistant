@@ -930,3 +930,70 @@
 2026-04-26 21:27:53,990 - MedKG-RAG - INFO - ---Step 5: Creating vector index---
 2026-04-26 21:27:54,657 - MedKG-RAG - INFO - Create vector index 'medcpt_node_embeddings' successfully!
 2026-04-26 21:27:54,697 - MedKG-RAG - INFO - Pipeline completed!
+2026-04-28 21:36:27,880 - MedKG-RAG - INFO - Connected to Weaviate False
+2026-04-28 21:36:27,894 - MedKG-RAG - INFO - Loading MedCPT-Article-Encoder...
+2026-04-28 21:36:27,895 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-04-28 21:41:10,744 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (1/10)
+2026-04-28 21:41:11,780 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (2/10)
+2026-04-28 21:41:12,786 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (3/10)
+2026-04-28 21:41:13,789 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (4/10)
+2026-04-28 21:41:14,798 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (5/10)
+2026-04-28 21:41:15,799 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (6/10)
+2026-04-28 21:41:16,805 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (7/10)
+2026-04-28 21:41:17,811 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (8/10)
+2026-04-28 21:41:18,817 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (9/10)
+2026-04-28 21:41:19,822 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (10/10)
+2026-04-28 21:41:20,827 - MedKG-RAG - INFO - Connected to Weaviate False
+2026-04-28 21:41:20,861 - MedKG-RAG - INFO - Loading MedCPT-Article-Encoder...
+2026-04-28 21:41:20,861 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-04-28 21:41:53,511 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (1/10)
+2026-04-28 21:41:55,513 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (2/10)
+2026-04-28 21:41:57,518 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (3/10)
+2026-04-28 21:41:59,527 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (4/10)
+2026-04-28 21:42:01,529 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (5/10)
+2026-04-28 21:42:03,537 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (6/10)
+2026-04-28 21:42:05,539 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (7/10)
+2026-04-28 21:42:07,552 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (8/10)
+2026-04-28 21:42:09,556 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (9/10)
+2026-04-28 21:42:11,562 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (10/10)
+2026-04-28 21:42:13,564 - MedKG-RAG - INFO - Connected to Weaviate False
+2026-04-28 21:42:13,564 - MedKG-RAG - INFO - Loading MedCPT-Article-Encoder...
+2026-04-28 21:42:13,564 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-04-28 21:43:52,990 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (1/10)
+2026-04-28 21:43:54,994 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (2/10)
+2026-04-28 21:43:57,003 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (3/10)
+2026-04-28 21:43:59,009 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (4/10)
+2026-04-28 21:44:01,011 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (5/10)
+2026-04-28 21:44:03,014 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (6/10)
+2026-04-28 21:44:05,019 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (7/10)
+2026-04-28 21:44:07,020 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (8/10)
+2026-04-28 21:44:09,026 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (9/10)
+2026-04-28 21:44:11,029 - MedKG-RAG - INFO - Waiting for Weaviate to be ready... (10/10)
+2026-04-28 21:44:13,038 - MedKG-RAG - INFO - Connected to Weaviate False
+2026-04-28 21:44:13,042 - MedKG-RAG - INFO - Loading MedCPT-Article-Encoder...
+2026-04-28 21:44:13,042 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-04-28 21:45:00,491 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-04-28 21:45:00,495 - MedKG-RAG - INFO - Loading MedCPT-Article-Encoder...
+2026-04-28 21:45:00,495 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-04-28 21:45:03,474 - MedKG-RAG - INFO - Created collection 'ChildChunks'!
+2026-04-28 21:45:03,480 - MedKG-RAG - INFO - Reading and chunking data completed. Read 0 articles.
+2026-04-28 21:45:03,480 - MedKG-RAG - INFO - Embedding child chunks completed!
+2026-04-28 21:45:03,480 - MedKG-RAG - INFO - Storing data into database completed! Stored 0 parents, 0 children.
+2026-04-28 21:45:03,490 - MedKG-RAG - INFO - Pipeline completed successfully!
+2026-04-28 21:46:16,857 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-04-28 21:46:16,867 - MedKG-RAG - INFO - Loading MedCPT-Article-Encoder...
+2026-04-28 21:46:16,869 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-04-28 21:46:19,850 - MedKG-RAG - INFO - Collection 'ChildChunks already exists, skipping...'
+2026-04-28 21:46:20,109 - MedKG-RAG - INFO - Reading and chunking data completed. Read 10 articles.
+2026-04-28 21:46:34,778 - MedKG-RAG - INFO - Embedding child chunks completed!
+2026-04-28 21:46:36,019 - MedKG-RAG - INFO - Inserted 25 child chunks into Weaviate
+2026-04-28 21:46:36,019 - MedKG-RAG - INFO - Storing data into database completed! Stored 11 parents, 25 children.
+2026-04-28 21:46:36,019 - MedKG-RAG - INFO - Pipeline completed successfully!
+2026-04-28 21:48:16,920 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-04-28 21:48:16,920 - MedKG-RAG - INFO - Loading MedCPT-Article-Encoder...
+2026-04-28 21:48:16,920 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-04-28 21:48:19,309 - MedKG-RAG - INFO - Resetting Weaviate child collection...
+2026-04-28 21:48:19,663 - MedKG-RAG - INFO - Deleted collection 'ChildChunks'
+2026-04-28 21:48:19,916 - MedKG-RAG - INFO - Created collection 'ChildChunks'!
+2026-04-28 21:48:19,916 - MedKG-RAG - INFO - Resetting parent store (SQLite)...
+2026-04-28 21:48:24,237 - MedKG-RAG - INFO - All databases reset successfully!

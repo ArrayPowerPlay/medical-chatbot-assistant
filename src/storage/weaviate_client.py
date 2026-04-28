@@ -3,6 +3,7 @@ from weaviate.classes.config import Configure, Property, DataType
 from weaviate.classes.query import MetadataQuery
 import numpy as np
 from typing import List, Dict
+import time
 from config.logging_config import logger
 
 CHILD_COLLECTION = "ChildChunks"
@@ -22,6 +23,13 @@ class WeaviateChildStore:
             port=int(url.split(":")[-1] if ":" in url.split("//")[-1] else 8080),
             grpc_port=grpc_port
         )
+
+        for attempt in range(10):
+            if self.client.is_ready():
+                break
+            logger.info(f"Waiting for Weaviate to be ready... ({attempt + 1}/10)")
+            time.sleep(2)
+
         logger.info(f"Connected to Weaviate {self.client.is_ready()}")
 
     def create_collection(self):
