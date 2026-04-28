@@ -135,7 +135,7 @@ class CorpusIndexer:
                     continue
 
                 texts_to_embed = [c["text"] for c in children]
-                embeddings = self.embedder.embed_texts(texts_to_embed, batch_size=16)
+                embeddings = self.embedder.embed_texts(texts_to_embed, batch_size=512)
 
                 embed_queue.put((parents, children, embeddings))
                 torch.cuda.empty_cache()
