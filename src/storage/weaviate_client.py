@@ -5,6 +5,7 @@ import numpy as np
 from typing import List, Dict
 import time
 from config.logging_config import logger
+from config.settings import settings
 
 CHILD_COLLECTION = "ChildChunks"
 
@@ -14,9 +15,12 @@ class WeaviateChildStore:
     """
     def __init__(
             self, 
-            url: str = "http://localhost:8080", 
-            grpc_port: int = 50051
+            url: str = None, 
+            grpc_port: int = None
         ):
+        url = url or settings.WEAVIATE_URL
+        grpc_port = grpc_port or settings.WEAVIATE_GRPC_PORT
+        
         # connect_to_local: use when database is local
         self.client = weaviate.connect_to_local(
             host=url.replace("http://", "").replace("https://", "").split(":")[0],
