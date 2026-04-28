@@ -92,7 +92,8 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 >    - Filter: intent-allowed edge types
 >    - Rank: `cosine_sim(rewritten_query_vec, neighbour.embedding_medcpt)`
 >    - Keep: top-N=5 per 1-hop node — hard cap 50 triples total
-> 7. **Rule-based linearization**: Python templates convert triples → natural language text
+> 7. **Rule-based linearization**: Python templates convert triples → natural language text.
+>    - *Dead-end Optimization*: 1-hop paths are only emitted if they do not extend into 2-hop paths, preventing duplicate prefixes from consuming Cross-Encoder top-N slots.
 
 > **One embedding vector per node stored in Neo4j**:
 > - `embedding_medcpt` — `Article-Encoder("{NodeType}: {name}")`, stored offline by `build_kg.py`.
@@ -260,7 +261,7 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 
 | Task | Model | Platform | When |
 |---|---|---|---|
-| **Parent-Child Chunking** | Rule-based (LangChain) | Local CPU | Offline (batch, one-time) |
+| **Parent-Child Chunking** | Adaptive 3-Tier (SciSpaCy) | Local CPU | Offline (batch, one-time) |
 | **KG Node Embedding** | MedCPT-Article-Encoder | Local CPU/GPU | Offline (one-time, inductive) |
 | **Entity Extraction (NER)** | Llama 3.3 70B | Groq API | Inference (per query) |
 | **KG Anchor Search** | MedCPT-Article-Encoder | Local CPU/GPU | Inference (per entity) |
@@ -432,7 +433,7 @@ CROSS_ENCODER_MODEL=ncbi/MedCPT-Cross-Encoder
 
 ## 11. Development Notes
 
-- **Existing code**: `chatbot.py` contains early prototype code with MedCPT embedding + FAISS setup. This will be refactored into the modular structure.
+- **Data Ingestion Pipeline**: Uses a Producer-Consumer architecture (Streaming Batch Processing) via `threading.Thread` and `queue.Queue`. This separates Chunking (CPU), Embedding (GPU), and DB Storage (I/O) into independent non-blocking streams, achieving O(1) memory complexity and preventing OOM errors on large corpora.
 - **Papers reference**: `papers/` directory contains reference papers (GraphRAG - Microsoft, MedRAG - Reasoning with KG).
 - **HGT removed**: HGT was evaluated and removed. KG now uses MedCPT-Article-Encoder for node embeddings (offline, inductive) and MedCPT-Query-Encoder for neighbour ranking at inference. See §2.1 Stream 3 for full design rationale.
 - **Two-vector KG inference**: `entity_article_embeddings` (A-E, per entity) for Stage 1 anchor lookup; `rewritten_query_vec` (Q-E, per query) for Stage 2 neighbour ranking.
