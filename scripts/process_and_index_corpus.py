@@ -134,7 +134,7 @@ class CorpusIndexer:
                     continue
 
                 texts_to_embed = [c["text"] for c in children]
-                embeddings = self.embedder.embed_texts(texts_to_embed, batch_size=1024)
+                embeddings = self.embedder.embed_texts(texts_to_embed, batch_size=16)
 
                 embed_queue.put((parents, children, embeddings))
                 chunk_queue.task_done()       # Signals that the item has been processed successfully
