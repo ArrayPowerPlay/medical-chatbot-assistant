@@ -12,9 +12,8 @@
 - **Type**: Academic/Research project
 - **Language (Code)**: Python 3.13+ (backend), Vanilla HTML/CSS/JS (frontend)
 - **Language (Data/UI)**: English only
-- **Package Manager**: uv
+- **Package Manager**: conda
 - **Backend Framework**: FastAPI
-- **Project Root**: `d:\Program Files\VSCode\rag-project`
 
 ---
 
@@ -30,75 +29,129 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 > 3. **Cross-Encoder** (MedCPT-Cross-Encoder) reranks the **combined pool** of **Text Search** (from RRF) AND **KG Search** (linearized subgraphs) together into a single final ranked list.
 > 4. Final context is assembled from the reranked list using head-tail placement.
 
+> **Implementation Note**: The core RAG orchestration remains synchronous. `ParallelRetriever` uses a thread pool to run the three retrieval streams in parallel, and FastAPI can wrap the pipeline in a threadpool later without changing the retrieval or generation clients.
+
 #### Stream 1: Vector Search (Semantic)
 | Setting | Value |
 |---|---|
-| **Vector DB** | FAISS (local, cosine similarity) |
+| **Vector DB** | Weaviate (Local Docker, Cosine Similarity) |
 | **Embedding Model** | `ncbi/MedCPT-Article-Encoder` (for documents) |
 | **Query Model** | `ncbi/MedCPT-Query-Encoder` (for queries) |
-| **Chunking** | Recursive Character Splitting |
-| **Chunk Size** | 1200 characters |
-| **Chunk Overlap** | 200 characters |
-| **Contextual Enrichment** | LLM generates a summary/context paragraph and prepends it to the chunk BEFORE embedding |
-| **Metadata Mapping** | A mapping file (`faiss_metadata.jsonl`) is stored alongside the FAISS index to map vector indices back to PMIDs and source text for evaluation and citation. |
+| **Chunking** | **Adaptive 3-Tier Chunking** (SciSpaCy, no LLM) |
+| **Parent Size** | Tier 1/2: Full abstract. Tier 3: 1500 chars (256 overlap) |
+| **Child Size** | Tier 1: Full. Tier 2/3: ~500 chars (with Title Injection) |
+| **Contextual Strategy**| Search is performed on **Child Chunks**; context for LLM is retrieved from the corresponding **Parent Chunk**. |
+| **Metadata Mapping** | A mapping between Child `parent_id` and Parent text is stored in **SQLite** (`parent_chunks.db`) for O(log n) lookup. |
 
-> **Key Detail — Dual Encoder Setup**: MedCPT uses an **asymmetric** architecture. `MedCPT-Query-Encoder` encodes the user query, while `MedCPT-Article-Encoder` encodes document chunks. This is by design and yields better retrieval quality than using a single encoder for both.
+> **Key Detail — Adaptive Chunking**: Uses `SciSpaCy` to safely split medical sentences without breaking acronyms.
+> - **Tier 1** (<=500 chars): Parent = Child = Full Article.
+> - **Tier 2** (<=2000 chars): Parent = Full Article. Child = ~500 chars (Title Injected).
+> - **Tier 3** (>2000 chars): Parent = 1500 chars (overlap 256). Child = ~500 chars (Title Injected).
 
-> **Key Detail — Contextual Chunking**: Each chunk is enriched with LLM-generated context placed at the HEAD of the chunk before vector indexing. This improves retrieval relevance by giving the embedding model richer semantic content. Uses **Gemini 2.5 Flash/Pro** on Kaggle GPU with **prompt caching** (batch process, run once).
+> **Key Detail — Dual Encoder Setup**: MedCPT uses an **asymmetric** architecture. `MedCPT-Query-Encoder` encodes the user query, while `MedCPT-Article-Encoder` encodes document chunks.
+
+> **Key Detail — Parent-Child Chunking Strategy**: Small "Child" chunks provide high precision for vector/keyword matching, while their larger "Parent" chunks provide the full semantic context needed by the LLM to generate accurate answers.
 
 #### Stream 2: Keyword Search (Lexical)
 | Setting | Value |
 |---|---|
-| **Engine** | Elasticsearch (Docker local) |
+| **Engine** | Weaviate (Built-in BM25) |
 | **Algorithm** | BM25 |
-| **Index** | Same chunks as FAISS vector store |
-| **Persistence** | Persisted on disk |
-| **Purpose** | Captures exact keyword matches that semantic search might miss |
+| **Index** | Same **Child Chunks** as Vector stream |
+| **Persistence** | Persisted on disk (Weaviate volumes) |
+| **Purpose** | Captures exact medical terminology that semantic embeddings might miss. |
 
 #### Stream 3: Medical Knowledge Graph
 | Setting | Value |
 |---|---|
 | **Database** | Neo4j |
 | **Query Depth** | 2-hop subgraph retrieval |
-| **Graph ML** | HGT (Heterogeneous Graph Transformers) trained end-to-end for downstream tasks |
-| **Entity Extraction** | Llama 3.3 70B via Groq API (LLM-based NER, no RE needed) |
-| **Linearization** | Rule-based Python templates (no LLM needed) |
+| **Node Embedding** | `ncbi/MedCPT-Article-Encoder` on enriched text `"{NodeType}: {name}"` for every Disease, Drug, GeneProtein, EffectPhenotype node |
+| **Graph ML** | None |
+| **Entity Extraction** | Llama 3.3 70B via Groq API |
+| **Linearization** | Rule-based Python templates |
 
-> **KG Query Flow**:
-> 1. User query → **LLM-based NER** (Llama 70B via Groq) → Extract medical entities (disease, symptom, drug)
-> 2. No Relation Extraction needed — KG already contains structured relationships
-> 3. Use extracted entities to query Neo4j via **HGT semantic embeddings** (semantic similarity, not keyword matching)
-> 4. Retrieve 2-hop subgraph around matched entities
-> 5. **Rule-based linearization**: Python templates convert subgraph → natural language text
+> **KG Query Flow (Inference)**:
+> 1. User query → **LLM-based NER + Intent Classification** (Llama 70B via Groq, single API call)
+>    - Extracts entity strings: `entities = ["Type 2 Diabetes", "Metformin", ...]`
+>    - Classifies query **Intent** into one of 8 categories: `symptom_lookup`, `treatment_lookup`,
+>      `mechanism_lookup`, `side_effect_lookup`, `contraindication_lookup`, `disease_relation`,
+>      `genetic_association`, `drug_target_lookup`, `general`
+> 2. Encode **rewritten query** with **MedCPT-Query-Encoder** → `rewritten_query_vec`
+>    - Shared with Weaviate vector search stream
+>    - Used for **Stage 2** neighbour ranking in KG (Q-E vs A-E cross-space, MedCPT asymmetric design)
+> 3. Encode **each entity string** with **MedCPT-Article-Encoder** → `entity_article_embeddings`
+>    - Same encoder space as stored node embeddings → reliable same-space cosine comparison
+>    - Used for **Stage 1** anchor search only
+> 4. **Stage 1 — Anchor search** (same-space: A-E vs A-E):
+>    - For each `entity_article_emb`, query Neo4j vector index `medcpt_node_embeddings` → top-k=3 anchors
+>    - Union and deduplicate anchors across all entities
+> 5. **Stage 2a — 1-hop traversal** from anchors (cross-space: Q-E vs A-E):
+>    - Filter: only edge types allowed by Intent (from `INTENT_EDGE_FILTER` in schema.py)
+>    - Rank: `cosine_sim(rewritten_query_vec, neighbour.embedding_medcpt)`
+>    - Keep: top-M=10 per anchor node
+> 6. **Stage 2b — 2-hop traversal** from filtered 1-hop nodes (cross-space: Q-E vs A-E):
+>    - Filter: intent-allowed edge types
+>    - Rank: `cosine_sim(rewritten_query_vec, neighbour.embedding_medcpt)`
+>    - Keep: top-N=5 per 1-hop node — hard cap 50 triples total
+> 7. **Rule-based linearization**: Python templates convert triples → natural language text.
+>    - *Dead-end Optimization*: 1-hop paths are only emitted if they do not extend into 2-hop paths, preventing duplicate prefixes from consuming Cross-Encoder top-N slots.
 
-> **KG Schema** (core node types — filtered from PrimeKG):
-> - `Disease`, `Symptom`, `Drug` (primary focus)
-> - Other PrimeKG node types are excluded
+> **One embedding vector per node stored in Neo4j**:
+> - `embedding_medcpt` — `Article-Encoder("{NodeType}: {name}")`, stored offline by `build_kg.py`.
+>   Used for **both** Stage 1 index (`medcpt_node_embeddings`) and Stage 2 neighbour ranking.
 
-> **KG Relationships** (examples from PrimeKG):
-> - `(:Disease)-[:HAS_SYMPTOM]->(:Symptom)`
-> - `(:Drug)-[:TREATS]->(:Disease)`
-> - `(:Disease)-[:AFFECTS]->(:BodyPart)`
-> - `(:Disease)-[:DIAGNOSED_BY]->(:LabTest)`
-> - `(:Disease)-[:HAS_RISK_FACTOR]->(:RiskFactor)`
+> **Two-Encoder Inference Strategy**:
+> - **Stage 1**: `Article-Encoder(entity)` enables reliable same-space lookup against the node index.
+> - **Stage 2**: `Query-Encoder(rewritten_query)` ranks neighbours by relevance to full question intent (cross-space comparison).
 
-> **HGT Training Pipeline** (offline, one-time):
-> - **Paper**: [Heterogeneous Graph Transformer (Hu et al., 2020)](https://arxiv.org/abs/2003.01332)
-> - **Architecture**: Node- and edge-type dependent attention parameters for heterogeneous graphs
-> - **Training approach**: **End-to-end** for downstream tasks — NOT self-supervised
-> - HGT layers learn graph representations that are directly optimized for the specific downstream task (e.g., node classification, link prediction)
-> - The learned embeddings capture semantic relationships between different entity types (Disease, Symptom, Drug)
-> - **Pipeline**:
->   1. Export Neo4j graph → PyTorch Geometric `HeteroData`
->   2. Train HGT model end-to-end for downstream task
->   3. Save checkpoint to `models/hgt/`
->   4. At inference: Use trained HGT embeddings for **semantic similarity** querying on graph (instead of keyword-based Cypher queries)
+> **Node text enrichment** (applied in `build_kg.py`):
+> Bare entity names produce underspecified embeddings. Prepending the node type grounds the
+> embedding in the right semantic region:
+> - L1 (current): `"Disease: Type 2 Diabetes"`, `"Drug: Metformin"`, etc.
+> - L2 (future): `"Disease: Type 2 Diabetes. {node_definition}"` if PrimeKG description is available
 
-> **Subgraph Linearization** (Rule-Based):
-> After retrieving a 2-hop subgraph from Neo4j, **Python rule-based templates** convert the graph structure into natural language text. Example template:
-> - `"Drug X treats Disease Y"` from `(:Drug {name: X})-[:TREATS]->(:Disease {name: Y})`
-> - `"Disease Y has symptom Z"` from `(:Disease {name: Y})-[:HAS_SYMPTOM]->(:Symptom {name: Z})`
-> This linearized text is then pooled with text retrieval results for cross-encoder reranking.
+> **KG Schema** (node types — filtered from PrimeKG):
+> - `Disease`, `Drug`, `GeneProtein`, `EffectPhenotype` (covers Symptom/Side-effect)
+> - All nodes also carry the secondary label `:KGNode` (enables a single vector index spanning all types)
+> - Other PrimeKG node types (anatomy, pathway, biological_process, exposure, etc.) are excluded
+
+> **KG Relationships** (final subset from PrimeKG, mapped to Neo4j labels):
+>
+> | PrimeKG `display_relation` | Neo4j label | Edge | Count in kg.csv |
+> |---|---|---|---|
+> | `indication` | `TREATS` | Drug → Disease | 18,776 |
+> | `contraindication` | `CONTRAINDICATES` | Drug → Disease | 61,350 |
+> | `off-label use` | `OFF_LABEL_USE` | Drug → Disease | 5,136 |
+> | `target` | `TARGETS` | Drug → GeneProtein | 32,760 |
+> | `enzyme` | `METABOLIZED_BY` | Drug → GeneProtein | 10,634 |
+> | `transporter` | `TRANSPORTED_BY` | Drug → GeneProtein | 6,184 |
+> | `carrier` | `CARRIED_BY` | Drug → GeneProtein | 1,728 |
+> | `side effect` | `HAS_SIDE_EFFECT` | Drug → EffectPhenotype | 129,568 |
+> | `phenotype present` | `PRESENTS` | Disease → EffectPhenotype | 300,634 |
+> | `phenotype absent` | `PHENOTYPE_ABSENT` | Disease → EffectPhenotype | 2,386 |
+> | `associated with` | `ASSOCIATED_WITH` | GeneProtein → Disease | 167,482 |
+> | `parent-child` | `SUBTYPE_OF` | Disease → Disease | ~subset of 281,744 |
+>
+> **Excluded relations**: `ppi`, `synergistic interaction`, `expression present/absent`, `comorbidity`, `interacts with`, `linked to` (Out of scope).
+
+
+> **Node Embedding Pipeline** (offline, one-time, `build_kg.py`):
+> 1. For each node, build enriched text: `"{NodeType}: {name}"` (L1 enrichment)
+> 2. Batch encode with **MedCPT-Article-Encoder** → 768-dim L2-normalised vectors
+> 3. Store as `embedding_medcpt` property on each Neo4j node
+> 4. Create vector index `medcpt_node_embeddings` (cosine, 768 dims) on `:KGNode` label
+> Fully inductive — new nodes can be embedded and added without rebuilding the whole graph.
+
+
+> **Subgraph Linearization (Path-based with Node Types)**:
+> After retrieving a 2-hop subgraph from Neo4j, **Python templates** in `src/kg/kg_linearization.py`
+> convert graph triples into independent path sentences. Examples:
+> - 1-hop: `"[Drug] [X] TREATS [Disease] [Y]"`
+> - 2-hop: `"[Drug] [X] TARGETS [GeneProtein] [P] which is ASSOCIATED_WITH [Disease] [Y]"`
+> This Path-based approach explicitly preserves multi-hop reasoning. The paths are pooled with Text Retrieval and jointly reranked by the Cross-Encoder.
+
+
 
 ### 2.2 Reranking Phase — 2 Stages
 
@@ -112,19 +165,30 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 |---|---|
 | **Model** | `ncbi/MedCPT-Cross-Encoder` |
 | **Deployment** | Modal (cloud GPU) |
-| **Input** | (query, passage) pairs from BOTH Text Retrieval (RRF output) AND KG Retrieval (linearized subgraph) |
-| **Function** | Reranks the **combined pool** of text + KG results into a single final ranked list |
-| **Output** | Top-K re-scored passages (unified from both streams) |
+| **Input** | (query, passage) pairs from BOTH Text Retrieval (RRF output) AND KG Retrieval (independent path sentences) |
+| **Function** | Reranks the **combined pool** of text + KG results. Applies a **Quota System (Top-M Text, Top-N KG)** to guarantee diversity, and filters out passages with score < 0. |
+| **Output** | Unified top-k list of Text chunks and KG paths |
+
+> **Normalization Detail**: Text passages are normalized into a canonical dict schema with `type="text_retrieval"`, `parent_id`, `pmid`, `title`, `rrf_score`, and `cross_encoder_score`. KG passages are tagged with `type="kg_retrieval"` and a `text` field. The generation layer then builds prompts from this unified structure.
 
 ### 2.3 Generation Phase
 
-#### Query Rewriting (Pre-Retrieval)
+#### Query Analyzer (Pre-Retrieval)
 - **Model**: Llama 3.3 70B via **Groq API**
 - **Purpose**:
-  - Fix spelling errors in user query
-  - Rewrite query to be more specific/retrievable
+  - Fix spelling errors and rewrite query for retrieval
   - Connect with conversation history (multi-turn context)
-- Runs BEFORE the 3 parallel retrieval streams
+  - Extract entities (Disease, Symptom, Drug) and intent
+- Runs as a single LLM call BEFORE the 3 parallel retrieval streams
+
+> **History Handling**: Conversation history is persisted separately from the prompt window. Only the latest turns are injected into query analysis and answer generation, which keeps prompts bounded while preserving long-term conversation state in storage.
+
+#### Post-Rerank KG Merging (Prompt Prep)
+- **Purpose**: Prevent redundancy before feeding context to LLM.
+- **Method**: Group paths by `(prefix, rel2)` metadata. Merges `A targets B associated with C` and `A targets B associated with D` into `A targets B which is associated with C, and D.`
+- **Scoring**: Applies Density Bonus aggregation: `Agg_Score = MAX(scores) + 0.01 * (N - 1)` for fair Head-Tail context reordering.
+
+> **Fallback Behavior**: If KG metadata is unavailable at runtime, the pipeline still preserves the reranked KG text and skips path condensation instead of failing the request.
 
 #### Prompt Construction: Head-Tail Placement
 - To avoid the **Lost-in-the-Middle** problem:
@@ -196,11 +260,9 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 
 | Task | Model | Platform | When |
 |---|---|---|---|
-| **Contextual Chunking** | Gemini 2.5 Flash / Pro | Kaggle GPU + Prompt Caching | Offline (batch, one-time) |
-| **Entity Extraction (NER)** | Llama 3.3 70B | Groq API | Inference (per query) |
-| **HGT Training** | HGT (PyG) | Local / Kaggle GPU | Offline (one-time, end-to-end) |
-| **Cross-Encoder Reranking** | MedCPT-Cross-Encoder | Modal (cloud GPU) | Inference (per query) |
-| **Query Rewriting** | Llama 3.3 70B Versatile | Groq API | Inference (per query) |
+| **Parent-Child Chunking** | Adaptive 3-Tier (SciSpaCy) | Local CPU | Offline (batch, one-time) |
+| **KG Node Embedding** | MedCPT-Article-Encoder | Local CPU/GPU | Offline (one-time, inductive) |
+| **Query Analysis (Rewrite + NER)** | Llama 3.3 70B Versatile | Groq API | Inference (per query) |
 | **KG Linearization** | Rule-based Python templates | Local (no LLM) | Inference (per query) |
 | **Answer Generation** | Llama 3.3 70B Versatile | Groq API | Inference (per query) |
 
@@ -211,68 +273,28 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 | Service | Purpose | Deployment |
 |---|---|---|
 | **Neo4j** | Medical Knowledge Graph (PrimeKG) | Docker container (local) |
-| **Elasticsearch** | BM25 keyword search index | Docker container (local) |
+| **Weaviate** | Vector + BM25 hybrid search | Docker container (local) |
 | **PostgreSQL** | Conversation history (multi-turn) | Docker container (local) |
+| **SQLite** | Parent chunk storage & lookup | Local file (`parent_chunks.db`) |
 | **Modal** | GPU inference (Cross-Encoder only) | Cloud (modal.com) |
-| **Groq API** | LLM inference (Llama 70B — NER, rewriting, generation) | Cloud (groq.com) |
-| **FAISS** | Local vector index | In-process (file-based persistence) |
-| **Kaggle GPU** | Contextual chunking with Gemini (offline batch) | Cloud (kaggle.com) |
+| **Groq API** | LLM inference (Llama 70B) | Cloud (groq.com) |
 
 ### Key Python Packages
 ```
-fastapi, uvicorn          — Backend API server
+conda install weaviate-client             — Weaviate Python V4 driver
 langchain, langchain-community — Document loading, text splitting
-faiss-cpu / faiss-gpu     — Vector similarity search
-elasticsearch             — BM25 keyword search via Elasticsearch
 neo4j                     — Neo4j Python driver
-torch, transformers       — MedCPT models
-torch-geometric           — HGT model (PyG)
+torch, transformers       — MedCPT models (Article-Encoder, Query-Encoder, Cross-Encoder)
 modal                     — Cloud GPU deployment (Cross-Encoder)
 groq                      — Groq API client (Llama 70B)
+sqlite3                   — Built-in Python DB (Parent storage)
 pydantic, pydantic-settings — Config & validation
-httpx                     — Async HTTP client
-psycopg2 / asyncpg        — PostgreSQL driver (conversation history)
 ragas                     — RAG evaluation framework
 ```
 
 ---
 
-## 6. Key File Mapping
 
-| File / Directory | Purpose |
-|---|---|
-| `config/settings.py` | All env vars, constants, paths via Pydantic Settings |
-| `src/query/query_rewriter.py` | Query rewriting via Groq (spell fix, specificity, history) |
-| `src/query/query_extractor.py` | LLM-based medical NER (Llama 70B via Groq, no RE) |
-| `src/embeddings/medcpt_embedder.py` | MedCPT dual encoder (Query-Encoder + Article-Encoder) |
-| `src/dataset_builder/preprocess_bioasq_taskA.py` | Load BioASQ PubMed articles (Task A) |
-| `src/dataset_builder/preprocess_bioasq_taskB.py` | Preprocess Q&A for Task B (test, val split) |
-| `src/dataset_builder/contextual_chunker.py` | Gemini 2.5 Flash/Pro contextual chunk enrichment |
-| `src/dataset_builder/index_builder.py` | Build FAISS + Elasticsearch indexes |
-| `src/retrieval/vector_search.py` | FAISS vector search logic |
-| `src/retrieval/keyword_search.py` | Elasticsearch BM25 search logic |
-| `src/retrieval/kg_search.py` | Neo4j 2-hop subgraph retrieval (with HGT embeddings) |
-| `src/retrieval/kg_linearization.py` | Rule-based subgraph → text linearization templates |
-| `src/retrieval/parallel_retriever.py` | Orchestrates 3 parallel streams |
-| `src/reranking/rrf.py` | Reciprocal Rank Fusion (Vector + BM25 only) |
-| `src/reranking/cross_encoder.py` | MedCPT-Cross-Encoder via Modal (merges text + KG) |
-| `src/generation/prompt_builder.py` | Head-tail context placement |
-| `src/generation/llm_generator.py` | Llama 70B generation via Groq API |
-| `src/kg/neo4j_client.py` | Neo4j connection & Cypher queries |
-| `src/kg/hgt/model.py` | HGT model definition (arxiv:2003.01332) |
-| `src/kg/hgt/trainer.py` | HGT end-to-end training for downstream tasks |
-| `src/pipeline/rag_pipeline.py` | End-to-end: query → retrieval → rerank → generate |
-| `api/main.py` | FastAPI app entry point (includes CORS config) |
-| `api/routes/chat.py` | POST /chat endpoint |
-| `modal_deployments/cross_encoder_service.py` | Modal Cross-Encoder endpoint |
-| `frontend/index.html` | Chat UI |
-| `scripts/ingest_documents.py` | Document ingestion pipeline |
-| `scripts/build_kg.py` | PrimeKG → Neo4j construction script |
-| `scripts/train_hgt.py` | HGT training script |
-| `scripts/evaluate_retrieval.py` | BioASQ Phase A retrieval evaluation |
-| `scripts/evaluate_generation.py` | BioASQ Phase B + MedQA generation evaluation |
-
----
 
 ## 7. API Endpoints
 
@@ -324,34 +346,37 @@ ragas                     — RAG evaluation framework
 ```
 User Question
     │
-    ├─── Query Rewriting (Llama 70B via Groq)
-    │    ├── Fix spelling errors
-    │    ├── Make query more specific/retrievable
-    │    └── Connect with conversation history
-    │
-    ├─── LLM Entity Extraction (Llama 70B via Groq)
-    │    └── Extract: disease, symptom, drug entities (NER only, no RE)
+    ├─── Query Analyzer (Llama 70B via Groq)
+    │    ├── Rewrite query for retrieval
+    │    └── Extract: disease, symptom, drug entities & intent
     │
     ├─── [Parallel Retrieval Streams]
     │    │
-    │    ├── Vector Search (FAISS + MedCPT encoder) ──┐
-    │    │                                            ├─── RRF Fusion (Text Search)
-    │    ├── BM25 Keyword Search (Elasticsearch) ─────┘           │
-    │    │                                                        │
-    │    └── KG Search (Neo4j + HGT embeddings)                   │
-    │                   │                                         │
-    │                   └── Rule-based Linearization              │
-    │                        (Python templates → Text)            │
-    │                               │                             │
-    │                               └──────────────┬──────────────┘
-    │                                              ▼
+    │    ├── Weaviate Vector (Children) ──┐
+    │    │             │                  ├─── Parent-level aggregation
+    │    │             └── Mapping ───────┤    (max score per parent)
+    │    │                                ├─── RRF Fusion (Text Search)
+    │    ├── Weaviate BM25 (Children) ────┤           │
+    │    │             │                  │           │
+    │    │             └── Mapping ───────┘           │
+    │    │                                            │
+    │    └── KG Search (Neo4j)                        │
+    │                   │                             │
+    │                   └── Path-based Linearization  │
+    │                        (A -> B -> C paths)      │
+    │                               │                 │
+    │                               └────────┬────────┘
+    │                                        ▼
     ├─── Cross-Encoder Reranking (MedCPT, Modal GPU)
-    │    └── Rerank combined pool: Text Search + KG Search
-    │        → Single unified ranked list
+    │    ├── Rerank combined pool: Text Search + KG Paths
+    │    ├── Filter scores < 0
+    │    └── Apply Quota: Top-M Text + Top-N KG
+    │
+    ├─── Post-Rerank KG Merging ──► Merge duplicate prefixes
     │
     ├─── Head-Tail Placement ──► Build context prompt
     │
-    ├─── Llama 70B (Groq API) ──► Generate answer
+    ├─── Llama 3.3 70B (Groq API) ──► Generate answer
     │
     └─── Response ──► Return to user with sources
 ```
@@ -366,29 +391,21 @@ NEO4J_URI=bolt://localhost:7687
 NEO4J_USER=neo4j
 NEO4J_PASSWORD=
 
-# Elasticsearch
-ELASTICSEARCH_URL=http://localhost:9200
-
-# PostgreSQL (Conversation History)
-POSTGRES_URI=postgresql://user:pass@localhost:5432/medkgrag
-
-# Groq API
-GROQ_API_KEY=
-
-# Modal Cloud
-MODAL_TOKEN_ID=
-MODAL_TOKEN_SECRET=
+# Weaviate
+WEAVIATE_URL=http://localhost:8080
+WEAVIATE_GRPC_PORT=50051
 
 # Paths
-FAISS_INDEX_PATH=./vectorstore/faiss_index
-HGT_MODEL_PATH=./models/hgt/
+SQLITE_PARENT_DB_PATH=./vectorstore/parent_chunks.db
 RAW_DATA_PATH=./data/raw/
 
 # Pipeline Params
 RETRIEVAL_TOP_K=20
-RERANK_TOP_K=5
-CHUNK_SIZE=1200
-CHUNK_OVERLAP=200
+RERANK_TOP_K=10
+PARENT_CHUNK_SIZE=1200
+PARENT_CHUNK_OVERLAP=200
+CHILD_CHUNK_SIZE=256
+CHILD_CHUNK_OVERLAP=64
 KG_HOP_DEPTH=2
 RRF_K=60
 
@@ -407,15 +424,12 @@ CROSS_ENCODER_MODEL=ncbi/MedCPT-Cross-Encoder
 
 ## 11. Development Notes
 
-- **Existing code**: `chatbot.py` contains early prototype code with MedCPT embedding + FAISS setup. This will be refactored into the modular structure.
-- **Papers reference**: `papers/` directory contains reference papers (GraphRAG - Microsoft, MedRAG - Reasoning with KG).
-- **HGT reference**: [Heterogeneous Graph Transformer (Hu et al., 2020)](https://arxiv.org/abs/2003.01332)
-- **Offline vs Online**: HGT training + Contextual chunking are done OFFLINE (one-time). All inference components run ONLINE.
-- **Cloud GPU Strategy**:
-  - **Modal**: Used ONLY for Cross-Encoder reranking
-  - **Groq API**: Used for Llama 70B (NER, query rewriting, answer generation)
-  - **Kaggle GPU**: Used for offline contextual chunking with Gemini
+- **Data Ingestion Pipeline**: Uses Producer-Consumer architecture (Streaming Batch Processing) via `threading.Thread` and `queue.Queue` to separate Chunking, Embedding, and DB Storage into independent streams.
+- **Papers reference**: `papers/` directory contains reference papers.
+- **Two-vector KG inference**: `entity_article_embeddings` for Stage 1 anchor lookup; `rewritten_query_vec` for Stage 2 neighbour ranking.
+- **Offline vs Online**: Node embedding (`build_kg.py`) is done OFFLINE. Inference components run ONLINE.
+- **Cloud GPU Strategy**: Modal for Cross-Encoder reranking, Groq API for Llama 70B inference.
 - **Language**: English only for all data and queries.
-- **Conversation**: Multi-turn support with PostgreSQL-backed conversation history.
-- **KG Linearization**: Rule-based Python templates — no LLM overhead at inference time.
-- **Entity Extraction**: LLM-based (Llama 70B via Groq) instead of BioBERT. Simpler pipeline, no separate NER model to maintain. No relation extraction needed since KG already has structured relationships.
+- **Conversation**: Multi-turn support with PostgreSQL.
+- **KG Linearization**: Rule-based Python templates.
+- **Entity Extraction**: Handled by `query_analyzer.py` via Llama 70B.

@@ -6,7 +6,7 @@ rag-project/
 ├── .env                              # API keys, DB URIs, Groq/Modal tokens
 ├── .env.example                      # Template env file
 ├── .gitignore
-├── pyproject.toml                    # Project dependencies (uv)
+├── pyproject.toml                    # Project dependencies
 ├── README.md
 ├── OVERVIEW.md                       # Full project context for AI assistants
 ├── PROJECT_ARCHITECTURE.md           # This file
@@ -24,9 +24,8 @@ rag-project/
 │       └── relationships.csv         # PrimeKG edges (filtered)
 │
 ├── scripts/
-│   ├── ingest_documents.py           # Load BioASQ docs → chunk → contextual embedding → FAISS
-│   ├── build_kg.py                   # PrimeKG → filter → populate Neo4j KG
-│   ├── train_hgt.py                  # Train HGT model end-to-end (offline, one-time)
+│   ├── ingest_documents.py           # Load BioASQ docs → parent-child chunk → MedCPT → Weaviate
+│   ├── build_kg.py                   # PrimeKG → filter → Neo4j import + MedCPT node embeddings
 │   ├── evaluate_retrieval.py         # BioASQ Phase A retrieval evaluation (Recall@K)
 │   ├── evaluate_generation.py        # BioASQ Phase B + MedQA generation eval (EM/F1, RAGAS)
 │   └── seed_demo_data.py            # Optional: seed sample data for dev
@@ -34,10 +33,14 @@ rag-project/
 ├── src/
 │   ├── __init__.py
 │   │
+│   ├── storage/                      # NEW: Persistent storage layer
+│   │   ├── __init__.py
+│   │   ├── parent_store.py           # SQLite manager for parent chunks
+│   │   └── weaviate_client.py        # Weaviate client for child chunks (vector + BM25)
+│   │
 │   ├── query/                        # Pre-retrieval query processing
 │   │   ├── __init__.py
-│   │   ├── query_rewriter.py         # Query rewriting via Groq (spell fix, specificity, history)
-│   │   └── query_extractor.py        # LLM-based medical NER (Llama 70B via Groq, no RE)
+│   │   └── query_analyzer.py         # Query rewriting + Medical NER + Intent extraction via Groq
 │   │
 │   ├── embeddings/                   # Embedding model wrappers (runtime)
 │   │   ├── __init__.py
@@ -47,36 +50,31 @@ rag-project/
 │   │   ├── __init__.py
 │   │   ├── preprocess_bioasq_taskA.py # Load BioASQ PubMed articles
 │   │   ├── preprocess_bioasq_taskB.py # Preprocess Q&A for task B (test, val split)
-│   │   ├── contextual_chunker.py     # Gemini 2.5 Flash/Pro contextual chunk enrichment
-│   │   └── index_builder.py          # Build FAISS + Elasticsearch indexes
+│   │   ├── parent_child_chunker.py    # Adaptive 3-tier chunking using SciSpaCy
 │   │
 │   ├── retrieval/                    # 3 parallel retrieval streams
 │   │   ├── __init__.py
-│   │   ├── vector_search.py          # FAISS vector similarity search
-│   │   ├── keyword_search.py         # Elasticsearch BM25 keyword search
-│   │   ├── kg_search.py              # Neo4j 2-hop subgraph retrieval (HGT semantic embeddings)
-│   │   ├── kg_linearization.py       # Rule-based subgraph → text (Python templates, no LLM)
-│   │   └── parallel_retriever.py     # Orchestrate 3 parallel retrieval streams
+│   │   ├── vector_search.py          # Weaviate vector search on Children -> map to Parents
+│   │   ├── keyword_search.py         # Weaviate BM25 search on Children -> map to Parents
+│   │   └── parallel_retriever.py     # Orchestrate 3 parallel streams (wire entities → Article-Encoder → KGSearch)
 │   │
 │   ├── reranking/                    # Fusion + reranking
 │   │   ├── __init__.py
 │   │   ├── rrf.py                    # Reciprocal Rank Fusion (Vector + BM25 only → Text Retrieval)
-│   │   └── cross_encoder.py          # MedCPT-Cross-Encoder (Modal GPU) — merges Text + KG
+│   │   └── cross_encoder.py          # MedCPT-Cross-Encoder (Modal GPU) — Dynamic Quota Top-M/N, filters score < 0
 │   │
 │   ├── generation/                   # Post-retrieval: prompt building + LLM generation
 │   │   ├── __init__.py
+│   │   ├── kg_merger.py              # Post-rerank KG prefix merging (A->B->C, A->B->D)
 │   │   ├── prompt_builder.py         # Head-tail placement prompt construction
 │   │   └── llm_generator.py          # Llama 70B answer generation via Groq API
 │   │
 │   ├── kg/                           # Knowledge Graph infrastructure
 │   │   ├── __init__.py
-│   │   ├── neo4j_client.py           # Neo4j driver & query helpers
-│   │   ├── schema.py                 # KG node/relationship type definitions (PrimeKG subset)
-│   │   └── hgt/
-│   │       ├── __init__.py
-│   │       ├── model.py              # HGT model definition (arxiv:2003.01332)
-│   │       ├── dataset.py            # PyG HeteroData loader from Neo4j
-│   │       └── trainer.py            # End-to-end training for downstream tasks
+│   │   ├── neo4j_client.py           # Stage 1: medcpt_node_embeddings anchor search (A-E) + Stage 2: 2-hop Cypher (Q-E ranking)
+│   │   ├── kg_search.py              # KG retrieval module (called by parallel_retriever)
+│   │   ├── kg_linearization.py       # Path-based Linearization with Node Types (A -> B -> C)
+│   │   └── schema.py                 # KG node/relationship type definitions (PrimeKG subset)
 │   │
 │   ├── pipeline/                     # End-to-end orchestration
 │   │   ├── __init__.py
@@ -115,12 +113,10 @@ rag-project/
 │       └── images/                   # Logo, illustrations
 │
 ├── models/
-│   └── hgt/                          # Saved HGT model checkpoints
-│       └── .gitkeep
+│   └── .gitkeep
 │
 ├── vectorstore/
-│   └── faiss_index/                  # Persisted FAISS index files
-│       └── .gitkeep
+│   └── parent_chunks.db              # SQLite database for original parent texts
 │
 ├── tests/
 │   ├── __init__.py
@@ -139,6 +135,6 @@ rag-project/
 │
 └── docker/
     ├── Dockerfile                    # Backend + Frontend container
-    ├── docker-compose.yml            # App + Neo4j + Elasticsearch + PostgreSQL
+    ├── docker-compose.yml            # App + Neo4j + Weaviate + PostgreSQL
     └── .dockerignore
 ```
