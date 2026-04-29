@@ -6,7 +6,7 @@ rag-project/
 ├── .env                              # API keys, DB URIs, Groq/Modal tokens
 ├── .env.example                      # Template env file
 ├── .gitignore
-├── pyproject.toml                    # Project dependencies (uv)
+├── pyproject.toml                    # Project dependencies
 ├── README.md
 ├── OVERVIEW.md                       # Full project context for AI assistants
 ├── PROJECT_ARCHITECTURE.md           # This file
@@ -40,8 +40,7 @@ rag-project/
 │   │
 │   ├── query/                        # Pre-retrieval query processing
 │   │   ├── __init__.py
-│   │   ├── query_rewriter.py         # Query rewriting via Groq (spell fix, specificity, history)
-│   │   └── query_extractor.py        # LLM-based medical NER (Llama 70B via Groq, no RE)
+│   │   └── query_analyzer.py         # Query rewriting + Medical NER + Intent extraction via Groq
 │   │
 │   ├── embeddings/                   # Embedding model wrappers (runtime)
 │   │   ├── __init__.py

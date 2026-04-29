@@ -12,7 +12,7 @@
 - **Type**: Academic/Research project
 - **Language (Code)**: Python 3.13+ (backend), Vanilla HTML/CSS/JS (frontend)
 - **Language (Data/UI)**: English only
-- **Package Manager**: uv
+- **Package Manager**: conda
 - **Backend Framework**: FastAPI
 
 ---
@@ -46,9 +46,9 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 > - **Tier 2** (<=2000 chars): Parent = Full Article. Child = ~500 chars (Title Injected).
 > - **Tier 3** (>2000 chars): Parent = 1500 chars (overlap 256). Child = ~500 chars (Title Injected).
 
-> **Key Detail — Dual Encoder Setup**: MedCPT uses an **asymmetric** architecture. `MedCPT-Query-Encoder` encodes the user query, while `MedCPT-Article-Encoder` encodes document chunks. This is by design and yields better retrieval quality than using a single encoder for both.
+> **Key Detail — Dual Encoder Setup**: MedCPT uses an **asymmetric** architecture. `MedCPT-Query-Encoder` encodes the user query, while `MedCPT-Article-Encoder` encodes document chunks.
 
-> **Key Detail — Parent-Child Strategy**: Instead of LLM-based enrichment, we use a structural approach. Small "Child" chunks provide high precision for vector/keyword matching, while their larger "Parent" chunks provide the full semantic context needed by the LLM to generate accurate answers. |,StartLine:33,TargetContent:
+> **Key Detail — Parent-Child Chunking Strategy**: Small "Child" chunks provide high precision for vector/keyword matching, while their larger "Parent" chunks provide the full semantic context needed by the LLM to generate accurate answers.
 
 #### Stream 2: Keyword Search (Lexical)
 | Setting | Value |
@@ -65,9 +65,9 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 | **Database** | Neo4j |
 | **Query Depth** | 2-hop subgraph retrieval |
 | **Node Embedding** | `ncbi/MedCPT-Article-Encoder` on enriched text `"{NodeType}: {name}"` for every Disease, Drug, GeneProtein, EffectPhenotype node |
-| **Graph ML** | None (HGT removed — MedCPT embeddings are sufficient and inductive) |
-| **Entity Extraction** | Llama 3.3 70B via Groq API (LLM-based NER, no RE needed) |
-| **Linearization** | Rule-based Python templates (Path-based with Node Types, e.g., "Drug Metformin TARGETS GeneProtein AMPK") |
+| **Graph ML** | None |
+| **Entity Extraction** | Llama 3.3 70B via Groq API |
+| **Linearization** | Rule-based Python templates |
 
 > **KG Query Flow (Inference)**:
 > 1. User query → **LLM-based NER + Intent Classification** (Llama 70B via Groq, single API call)
@@ -99,13 +99,9 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 > - `embedding_medcpt` — `Article-Encoder("{NodeType}: {name}")`, stored offline by `build_kg.py`.
 >   Used for **both** Stage 1 index (`medcpt_node_embeddings`) and Stage 2 neighbour ranking.
 
-> **Why two different encoders at inference?**
-> - **Stage 1** uses `Article-Encoder(entity)` → same space as node index → reliable same-space lookup
-> - **Stage 2** uses `Query-Encoder(rewritten_query)` → standard MedCPT asymmetric design:
->   Q-E encodes "what the user wants", A-E encodes "what the node represents".
->   This ranks neighbours by relevance to the full question intent, not just entity proximity.
-> - MedCPT training explicitly aligns Q-E and A-E spaces for this cross-space comparison.
-> - No Relation Extraction needed — KG already contains structured typed relationships.
+> **Two-Encoder Inference Strategy**:
+> - **Stage 1**: `Article-Encoder(entity)` enables reliable same-space lookup against the node index.
+> - **Stage 2**: `Query-Encoder(rewritten_query)` ranks neighbours by relevance to full question intent (cross-space comparison).
 
 > **Node text enrichment** (applied in `build_kg.py`):
 > Bare entity names produce underspecified embeddings. Prepending the node type grounds the
@@ -135,12 +131,7 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 > | `associated with` | `ASSOCIATED_WITH` | GeneProtein → Disease | 167,482 |
 > | `parent-child` | `SUBTYPE_OF` | Disease → Disease | ~subset of 281,744 |
 >
-> **Excluded relations and rationale:**
-> - `ppi` (642k) — protein-protein interactions, out of Drug-Disease-Target scope
-> - `synergistic interaction` (2.67M) — drug-drug interactions, not needed for Q&A use cases
-> - `expression present/absent` (3M+) — gene-anatomy edges, out of scope
-> - `comorbidity` — not found in the filtered node-type subset of kg.csv
-> - `interacts with` / `linked to` — exposure-based edges, node types excluded
+> **Excluded relations**: `ppi`, `synergistic interaction`, `expression present/absent`, `comorbidity`, `interacts with`, `linked to` (Out of scope).
 
 
 > **Node Embedding Pipeline** (offline, one-time, `build_kg.py`):
@@ -178,13 +169,13 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 
 ### 2.3 Generation Phase
 
-#### Query Rewriting (Pre-Retrieval)
+#### Query Analyzer (Pre-Retrieval)
 - **Model**: Llama 3.3 70B via **Groq API**
 - **Purpose**:
-  - Fix spelling errors in user query
-  - Rewrite query to be more specific/retrievable
+  - Fix spelling errors and rewrite query for retrieval
   - Connect with conversation history (multi-turn context)
-- Runs BEFORE the 3 parallel retrieval streams
+  - Extract entities (Disease, Symptom, Drug) and intent
+- Runs as a single LLM call BEFORE the 3 parallel retrieval streams
 
 #### Post-Rerank KG Merging (Prompt Prep)
 - **Purpose**: Prevent redundancy before feeding context to LLM.
@@ -263,11 +254,7 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 |---|---|---|---|
 | **Parent-Child Chunking** | Adaptive 3-Tier (SciSpaCy) | Local CPU | Offline (batch, one-time) |
 | **KG Node Embedding** | MedCPT-Article-Encoder | Local CPU/GPU | Offline (one-time, inductive) |
-| **Entity Extraction (NER)** | Llama 3.3 70B | Groq API | Inference (per query) |
-| **KG Anchor Search** | MedCPT-Article-Encoder | Local CPU/GPU | Inference (per entity) |
-| **KG Neighbour Ranking** | MedCPT-Query-Encoder | Local CPU/GPU | Inference (per query) |
-| **Cross-Encoder Reranking** | MedCPT-Cross-Encoder | Modal (cloud GPU) | Inference (per query) |
-| **Query Rewriting** | Llama 3.3 70B Versatile | Groq API | Inference (per query) |
+| **Query Analysis (Rewrite + NER)** | Llama 3.3 70B Versatile | Groq API | Inference (per query) |
 | **KG Linearization** | Rule-based Python templates | Local (no LLM) | Inference (per query) |
 | **Answer Generation** | Llama 3.3 70B Versatile | Groq API | Inference (per query) |
 
@@ -286,7 +273,7 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 
 ### Key Python Packages
 ```
-uv add weaviate-client             — Weaviate Python V4 driver
+conda install weaviate-client             — Weaviate Python V4 driver
 langchain, langchain-community — Document loading, text splitting
 neo4j                     — Neo4j Python driver
 torch, transformers       — MedCPT models (Article-Encoder, Query-Encoder, Cross-Encoder)
@@ -351,13 +338,9 @@ ragas                     — RAG evaluation framework
 ```
 User Question
     │
-    ├─── Query Rewriting (Llama 70B via Groq)
-    │    ├── Fix spelling errors
-    │    ├── Make query more specific/retrievable
-    │    └── Connect with conversation history
-    │
-    ├─── LLM Entity Extraction (Llama 70B via Groq)
-    │    └── Extract: disease, symptom, drug entities (NER only, no RE)
+    ├─── Query Analyzer (Llama 70B via Groq)
+    │    ├── Rewrite query for retrieval
+    │    └── Extract: disease, symptom, drug entities & intent
     │
     ├─── [Parallel Retrieval Streams]
     │    │
@@ -433,15 +416,12 @@ CROSS_ENCODER_MODEL=ncbi/MedCPT-Cross-Encoder
 
 ## 11. Development Notes
 
-- **Data Ingestion Pipeline**: Uses a Producer-Consumer architecture (Streaming Batch Processing) via `threading.Thread` and `queue.Queue`. This separates Chunking (CPU), Embedding (GPU), and DB Storage (I/O) into independent non-blocking streams, achieving O(1) memory complexity and preventing OOM errors on large corpora.
-- **Papers reference**: `papers/` directory contains reference papers (GraphRAG - Microsoft, MedRAG - Reasoning with KG).
-- **HGT removed**: HGT was evaluated and removed. KG now uses MedCPT-Article-Encoder for node embeddings (offline, inductive) and MedCPT-Query-Encoder for neighbour ranking at inference. See §2.1 Stream 3 for full design rationale.
-- **Two-vector KG inference**: `entity_article_embeddings` (A-E, per entity) for Stage 1 anchor lookup; `rewritten_query_vec` (Q-E, per query) for Stage 2 neighbour ranking.
-- **Offline vs Online**: Node embedding (`build_kg.py`) is done OFFLINE. All inference components run ONLINE.
-- **Cloud GPU Strategy**:
-  - **Modal**: Used ONLY for Cross-Encoder reranking
-  - **Groq API**: Used for Llama 70B (NER, query rewriting, answer generation)
+- **Data Ingestion Pipeline**: Uses Producer-Consumer architecture (Streaming Batch Processing) via `threading.Thread` and `queue.Queue` to separate Chunking, Embedding, and DB Storage into independent streams.
+- **Papers reference**: `papers/` directory contains reference papers.
+- **Two-vector KG inference**: `entity_article_embeddings` for Stage 1 anchor lookup; `rewritten_query_vec` for Stage 2 neighbour ranking.
+- **Offline vs Online**: Node embedding (`build_kg.py`) is done OFFLINE. Inference components run ONLINE.
+- **Cloud GPU Strategy**: Modal for Cross-Encoder reranking, Groq API for Llama 70B inference.
 - **Language**: English only for all data and queries.
-- **Conversation**: Multi-turn support with PostgreSQL-backed conversation history.
-- **KG Linearization**: Rule-based Python templates — no LLM overhead at inference time.
-- **Entity Extraction**: LLM-based (Llama 70B via Groq) instead of BioBERT. Simpler pipeline, no separate NER model to maintain. No relation extraction needed since KG already has structured relationships.
+- **Conversation**: Multi-turn support with PostgreSQL.
+- **KG Linearization**: Rule-based Python templates.
+- **Entity Extraction**: Handled by `query_analyzer.py` via Llama 70B.
