@@ -29,6 +29,8 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 > 3. **Cross-Encoder** (MedCPT-Cross-Encoder) reranks the **combined pool** of **Text Search** (from RRF) AND **KG Search** (linearized subgraphs) together into a single final ranked list.
 > 4. Final context is assembled from the reranked list using head-tail placement.
 
+> **Implementation Note**: The core RAG orchestration remains synchronous. `ParallelRetriever` uses a thread pool to run the three retrieval streams in parallel, and FastAPI can wrap the pipeline in a threadpool later without changing the retrieval or generation clients.
+
 #### Stream 1: Vector Search (Semantic)
 | Setting | Value |
 |---|---|
@@ -167,6 +169,8 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 | **Function** | Reranks the **combined pool** of text + KG results. Applies a **Quota System (Top-M Text, Top-N KG)** to guarantee diversity, and filters out passages with score < 0. |
 | **Output** | Unified top-k list of Text chunks and KG paths |
 
+> **Normalization Detail**: Text passages are normalized into a canonical dict schema with `type="text_retrieval"`, `parent_id`, `pmid`, `title`, `rrf_score`, and `cross_encoder_score`. KG passages are tagged with `type="kg_retrieval"` and a `text` field. The generation layer then builds prompts from this unified structure.
+
 ### 2.3 Generation Phase
 
 #### Query Analyzer (Pre-Retrieval)
@@ -177,10 +181,14 @@ The system has **two main phases**: **Retrieval** and **Generation**.
   - Extract entities (Disease, Symptom, Drug) and intent
 - Runs as a single LLM call BEFORE the 3 parallel retrieval streams
 
+> **History Handling**: Conversation history is persisted separately from the prompt window. Only the latest turns are injected into query analysis and answer generation, which keeps prompts bounded while preserving long-term conversation state in storage.
+
 #### Post-Rerank KG Merging (Prompt Prep)
 - **Purpose**: Prevent redundancy before feeding context to LLM.
 - **Method**: Group paths by `(prefix, rel2)` metadata. Merges `A targets B associated with C` and `A targets B associated with D` into `A targets B which is associated with C, and D.`
 - **Scoring**: Applies Density Bonus aggregation: `Agg_Score = MAX(scores) + 0.01 * (N - 1)` for fair Head-Tail context reordering.
+
+> **Fallback Behavior**: If KG metadata is unavailable at runtime, the pipeline still preserves the reranked KG text and skips path condensation instead of failing the request.
 
 #### Prompt Construction: Head-Tail Placement
 - To avoid the **Lost-in-the-Middle** problem:

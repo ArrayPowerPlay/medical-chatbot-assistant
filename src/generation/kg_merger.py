@@ -25,14 +25,15 @@ class KGPathMerger:
         kg_groups = {}
 
         for doc in ranked_results:
-            if doc["source_type"] != "kg_retrieval":
+            source_type = doc.get("source_type", "unknown")
+            if source_type != "kg_retrieval":
                 merged_results.append(doc)
                 continue
 
-            meta = doc["metadata"]
+            meta = doc.get("metadata") or {}
 
             # 1-hop paths 
-            if meta.get("rel2") is None:
+            if not meta or meta.get("rel2") is None or meta.get("prefix") is None or meta.get("target") is None:
                 merged_results.append(doc)
                 continue
 
@@ -66,6 +67,7 @@ class KGPathMerger:
             merged_doc = group["base_doc"].copy()
             merged_doc["text"] = merged_text
             merged_doc["cross_encoder_score"] = agg_score
+            merged_doc["source_type"] = "kg_retrieval"
             merged_results.append(merged_doc)
 
         merged_results.sort(key=lambda x: x.get("cross_encoder_score", 0.0), reverse=True)

@@ -51,6 +51,7 @@ class RRFManager:
         for parent_id, rrf_score in scores.items():
             item = metadata_storage[parent_id]
             item['rrf_score'] = rrf_score
+            item['source_type'] = 'text_retrieval'
             if 'score' in item:
                 del item['score']
             fused_results.append(item)

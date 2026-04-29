@@ -39,9 +39,28 @@ class CrossEncoderReranker:
         Returns:
             A unified list of dictionaries sorted by 'cross_encoder_score'
         """
+        def _normalize_text_doc(doc: Dict, score: float) -> Dict:
+            normalized = doc.copy()
+            normalized['cross_encoder_score'] = score
+            normalized['source_type'] = 'text_retrieval'
+            return normalized
+
+        def _normalize_kg_doc(text: str, score: float) -> Dict:
+            return {
+                'text': text,
+                'cross_encoder_score': score,
+                'source_type': 'kg_retrieval',
+                'metadata': {},
+            }
+
         if not self.is_available:
             logger.warning("Cannot connect to Modal App, return random ranking results.")
-            return rrf_results[:(top_m + top_n)]
+            normalized_fallback = []
+            for item in rrf_results[:(top_m + top_n)]:
+                fallback_item = item.copy()
+                fallback_item['source_type'] = 'text_retrieval'
+                normalized_fallback.append(fallback_item)
+            return normalized_fallback
         
         passages = []
         mapping = []
@@ -76,17 +95,9 @@ class CrossEncoderReranker:
             
             mapped_item = mapping[i]
             if mapped_item["type"] == "text":
-                doc = mapped_item["data"].copy()
-                doc["cross_encoder_score"] = score
-                doc["source_type"] = "text_retrieval"
-                scored_text.append(doc)
+                scored_text.append(_normalize_text_doc(mapped_item["data"], score))
             else:
-                doc = {
-                    "text": mapped_item["data"],
-                    "cross_encoder_score": score,
-                    "source_type": "kg_retrieval"
-                }
-                scored_kg.append(doc)
+                scored_kg.append(_normalize_kg_doc(mapped_item["data"], score))
 
         # Sort each modality and apply top_m/top_n filters
         scored_text.sort(key=lambda x: x["cross_encoder_score"], reverse=True)

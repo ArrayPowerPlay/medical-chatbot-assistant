@@ -33,8 +33,8 @@ def build_context_string(items: List[Dict[str, Any]]) -> str:
     context_parts = []
 
     for idx, item in enumerate(items, 1):
-        item_type = item.get("type", "unknown")
-        content = item.get("text", "")
+        item_type = item.get("source_type", "unknown")
+        content = item.get("text", item.get("content", ""))
         
         if item_type == "text_retrieval":
             context_parts.append(f"[Document {idx}]: {content}")
