@@ -2,7 +2,7 @@ import weaviate
 from weaviate.classes.config import Configure, Property, DataType
 from weaviate.classes.query import MetadataQuery
 import numpy as np
-from typing import List, Dict
+from typing import List, Dict, Optional
 import time
 from config.logging_config import logger
 from config.settings import settings
@@ -15,8 +15,8 @@ class WeaviateChildStore:
     """
     def __init__(
             self, 
-            url: str = None, 
-            grpc_port: int = None
+            url: Optional[str] = None, 
+            grpc_port: Optional[int] = None
         ):
         url = url or settings.WEAVIATE_URL
         grpc_port = grpc_port or settings.WEAVIATE_GRPC_PORT

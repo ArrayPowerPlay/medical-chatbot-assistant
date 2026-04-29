@@ -42,7 +42,7 @@ class Settings(BaseSettings):
     TOP_K_RRF: int = 60
 
     # Model names
-    LLM_MODEL: str = "meta-llama/Llama-3.3-70B-Versatile"
+    LLM_MODEL: str = "llama-3.1-8b-instant"
     EMBEDDING_MODEL: str = "ncbi/MedCPT-Article-Encoder"
     QUERY_MODEL: str = "ncbi/MedCPT-Query-Encoder"
 
