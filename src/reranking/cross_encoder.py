@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, Tuple
 import modal
 from config.settings import settings
 from config.logging_config import logger
@@ -25,7 +25,7 @@ class CrossEncoderReranker:
         kg_results: List[Dict],
         top_m: int = settings.RERANK_TEXT_TOP_M,
         top_n: int = settings.RERANK_KG_TOP_N
-    ) -> List[Dict]:   # type: ignore
+    ) -> Tuple[List[Dict], List[Dict]]:   # type: ignore
         """
         Reranks both text and KG passages.
 
@@ -37,7 +37,7 @@ class CrossEncoderReranker:
             top_n: Number of KG results to return
         
         Returns:
-            A unified list of dictionaries sorted by 'cross_encoder_score'
+            A tuple of (ranked_text, ranked_kg), where each list is sorted independently.
         """
         def _normalize_text_doc(doc: Dict, score: float) -> Dict:
             normalized = doc.copy()
@@ -55,12 +55,19 @@ class CrossEncoderReranker:
 
         if not self.is_available:
             logger.warning("Cannot connect to Modal App, return random ranking results.")
-            normalized_fallback = []
-            for item in rrf_results[:(top_m + top_n)]:
+            normalized_fallback_text = []
+            for item in rrf_results[:top_m]:
                 fallback_item = item.copy()
                 fallback_item['source_type'] = 'text_retrieval'
-                normalized_fallback.append(fallback_item)
-            return normalized_fallback
+                normalized_fallback_text.append(fallback_item)
+                
+            normalized_fallback_kg = []
+            if kg_results:
+                for item in kg_results[:top_n]:
+                    fallback_item = _normalize_kg_doc(item, 0.0)
+                    normalized_fallback_kg.append(fallback_item)
+                    
+            return normalized_fallback_text, normalized_fallback_kg
         
         passages = []
         mapping = []
@@ -77,20 +84,20 @@ class CrossEncoderReranker:
                 mapping.append({"type": "kg", "data": item})
 
         if not passages:
-            return []
+            return [], []
         
         try:
             scores = self.model.rerank.remote(query, passages)
         except Exception as e:
             logger.error(f"[Cross Encoder]: Rerank failed: {e}")
-            return rrf_results[:(top_m + top_n)]
+            return rrf_results[:(top_m + top_n)], []
         
-        # Filter scores >= 0
+        # Filter scores > 0
         scored_text = []
         scored_kg = []
 
         for i, score in enumerate(scores):
-            if score < 0: continue
+            if score <= 0: continue
             
             mapped_item = mapping[i]
             if mapped_item["type"] == "text":
@@ -101,10 +108,6 @@ class CrossEncoderReranker:
         # Sort each modality and apply top_m/top_n filters
         scored_text.sort(key=lambda x: x["cross_encoder_score"], reverse=True)
         scored_kg.sort(key=lambda x: x["cross_encoder_score"], reverse=True)
-
-        final_results = scored_text[:top_m] + scored_kg[:top_n]
-
-        # Sort unified list
-        final_results.sort(key=lambda x: x["cross_encoder_score"], reverse=True)
-        return final_results
+        
+        return scored_text[:top_m], scored_kg[:top_n]
         

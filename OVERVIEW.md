@@ -26,8 +26,8 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 > **IMPORTANT: Retrieval Flow**
 > 1. Run 3 retrieval streams in **parallel**: Vector Search, Keyword Search, and KG Search.
 > 2. **RRF (Reciprocal Rank Fusion)** merges ONLY **Vector Search + BM25** → produces **Text Search** results.
-> 3. **Cross-Encoder** (MedCPT-Cross-Encoder) reranks the **combined pool** of **Text Search** (from RRF) AND **KG Search** (linearized subgraphs) together into a single final ranked list.
-> 4. Final context is assembled from the reranked list using head-tail placement.
+> 3. **Cross-Encoder** (MedCPT-Cross-Encoder) reranks **Text Search** (from RRF) and **KG Search** (linearized subgraphs) independently to prevent out-of-distribution (OOD) score bias against structured KG paths.
+> 4. **Post-Rerank Interleaving**: The Top-M text and Top-N KG results are merged via 1-by-1 interleaving before final Head-Tail placement.
 
 > **Implementation Note**: The core RAG orchestration remains synchronous. `ParallelRetriever` uses a thread pool to run the three retrieval streams in parallel, and FastAPI can wrap the pipeline in a threadpool later without changing the retrieval or generation clients.
 
@@ -166,10 +166,10 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 | **Model** | `ncbi/MedCPT-Cross-Encoder` |
 | **Deployment** | Modal (cloud GPU) |
 | **Input** | (query, passage) pairs from BOTH Text Retrieval (RRF output) AND KG Retrieval (independent path sentences) |
-| **Function** | Reranks the **combined pool** of text + KG results. Applies a **Quota System (Top-M Text, Top-N KG)** to guarantee diversity, and filters out passages with score < 0. |
-| **Output** | Unified top-k list of Text chunks and KG paths |
+| **Function** | Reranks Text and KG passages in a single API batch for efficiency, but **separates and sorts them independently** to prevent Text from unfairly dominating KG paths (OOD bias). |
+| **Output** | Two separate lists: Top-M ranked Text and Top-N ranked KG paths. |
 
-> **Normalization Detail**: Text passages are normalized into a canonical dict schema with `type="text_retrieval"`, `parent_id`, `pmid`, `title`, `rrf_score`, and `cross_encoder_score`. KG passages are tagged with `type="kg_retrieval"` and a `text` field. The generation layer then builds prompts from this unified structure.
+> **Normalization Detail**: Text passages are normalized with `source_type="text_retrieval"`, `parent_id`, `pmid`, etc. KG passages retain their `metadata` dictionary and are tagged with `source_type="kg_retrieval"`.
 
 ### 2.3 Generation Phase
 
@@ -178,17 +178,15 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 - **Purpose**:
   - Fix spelling errors and rewrite query for retrieval
   - Connect with conversation history (multi-turn context)
-  - Extract entities (Disease, Symptom, Drug) and intent
+  - Extract entities (Disease, EffectPhenotype, Drug, GeneProtein) and intent
 - Runs as a single LLM call BEFORE the 3 parallel retrieval streams
 
 > **History Handling**: Conversation history is persisted separately from the prompt window. Only the latest turns are injected into query analysis and answer generation, which keeps prompts bounded while preserving long-term conversation state in storage.
 
-#### Post-Rerank KG Merging (Prompt Prep)
-- **Purpose**: Prevent redundancy before feeding context to LLM.
-- **Method**: Group paths by `(prefix, rel2)` metadata. Merges `A targets B associated with C` and `A targets B associated with D` into `A targets B which is associated with C, and D.`
-- **Scoring**: Applies Density Bonus aggregation: `Agg_Score = MAX(scores) + 0.01 * (N - 1)` for fair Head-Tail context reordering.
-
-> **Fallback Behavior**: If KG metadata is unavailable at runtime, the pipeline still preserves the reranked KG text and skips path condensation instead of failing the request.
+#### Post-Rerank KG Merging & Interleaving (Prompt Prep)
+- **KG Merging**: Groups paths by `(prefix, rel2)` metadata. Merges `A targets B associated with C` and `D` into `A targets B which is associated with C, and D.`
+- **Density Bonus**: `Agg_Score = MAX(scores) + 0.05 * (N - 1)`.
+- **Manual Interleaving**: Since Text and KG are sorted independently, they are interleaved 1-by-1 (`Text 1, KG 1, Text 2, KG 2`) to ensure both modalities get equal placement opportunity in the final prompt.
 
 #### Prompt Construction: Head-Tail Placement
 - To avoid the **Lost-in-the-Middle** problem:
@@ -368,11 +366,12 @@ User Question
     │                               └────────┬────────┘
     │                                        ▼
     ├─── Cross-Encoder Reranking (MedCPT, Modal GPU)
-    │    ├── Rerank combined pool: Text Search + KG Paths
-    │    ├── Filter scores < 0
-    │    └── Apply Quota: Top-M Text + Top-N KG
+    │    ├── Batch inference for all Text + KG paths
+    │    └── Separate into 2 independently sorted lists (Top-M Text, Top-N KG)
     │
-    ├─── Post-Rerank KG Merging ──► Merge duplicate prefixes
+    ├─── Post-Rerank KG Merging ──► Condense Top-N KG prefixes + Density Bonus
+    │
+    ├─── Manual Interleaving ──► Trộn 1-by-1 (Text 1, KG 1, Text 2, KG 2)
     │
     ├─── Head-Tail Placement ──► Build context prompt
     │

@@ -103,9 +103,102 @@ class RAGPipeline:
 
         for gp in analysis.get("gene_proteins", []):
             if isinstance(gp, str) and gp.strip():
-                entity_texts.append(f"GeneProtein": gp.strip())
+                entity_texts.append(f"GeneProtein: {gp.strip()}")
 
         return entity_texts
     
-    def _build_canonical_terms(self, ranked_results: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """Convert reranked output into the canonical prompt schema."""
+    def run(
+        self,
+        query: str,
+        history: Optional[List[Dict[str, str]]] = None,
+        conversation_id: Optional[str] = None,
+        top_k: int = settings.RETREVAL_TOP_K
+    ) -> Dict[str, Any]:
+        """
+        Run the full synchronous RAG pipeline.
+        
+        Args:
+            query: Raw user question.
+            history: Optional conversation history for query rewriting and answer generation.
+            conversation_id: Optional conversation identifier to carry through the response.
+            top_k: Retrieval depth for vector and BM25 stages.
+
+        Returns:
+            A dictionary with the answer, sources, rewritten query, entities, intents, and
+            conversation_id.
+        """
+        normalized_history = self._normalize_history(history)
+        logger.info("[RAG Pipeline]: Starting query analysis...")
+        
+        analysis = self.query_analyzer.analyze(query=query, history=normalized_history)
+        rewritten_query = analysis.get("rewritten_query", query)
+        intents = analysis.get("intents", ["general"])
+
+        query_vector = self.query_embedder.embed_texts(rewritten_query)[0].tolist()
+        entity_texts = self._build_entity_texts(analysis)
+        entity_artical_embeddings: List[List[float]] = []
+        if entity_texts:
+            entity_artical_embeddings = self.entity_embedder.embed_texts(entity_texts).tolist()
+
+        logger.info("[RAG Pipeline]: Starting parallel retrieval...")
+        vector_results, bm25_results, kg_results = self.parallel_retriever.retrieve(
+            query_text=rewritten_query,
+            query_vector=query_vector,
+            entity_article_embeddings=entity_artical_embeddings,
+            intents=intents,
+            top_k=top_k,
+        )
+
+        logger.info(f"[RAG Pipeline]: Parallel retrieval completed! "
+                    f"{len(vector_results)} vectors, {len(bm25_results)} bm25, "
+                    f"{len(kg_results) if kg_results else 0} KG paths.")
+
+        logger.info(f"[RAG Pipeline] Running RRF on text retrieval stream...")
+        rrf_results = self.rrf_manager.rank_fusion(
+            vector_results=vector_results,
+            bm25_results=bm25_results
+        )
+        logger.info(f"[RAG Pipeline]: RRF produced {len(rrf_results)} fused candidates.")
+
+        logger.info(f"[RAG Pipeline]: Cross-Encoder reranking...")
+        ranked_text, ranked_kg = self.cross_encoder_reranker.rerank(
+            query=rewritten_query,
+            rrf_results=rrf_results,
+            kg_results=kg_results
+        )
+        logger.info(f"[RAG Pipeline]: Cross-Encoder returned {len(ranked_text)} texts and {len(ranked_kg)} KG paths.")
+        logger.info(f"[RAG Pipeline]: Merging KG paths and preparing prompt context...")
+        merged_kg = self.kg_merger.merge_top_paths(kg_results)
+
+        # Manual interleaving
+        interleaved_items = []
+        max_len = max(len(ranked_kg), len(ranked_text))
+        
+        for i in range(max_len):
+            if i < len(ranked_text):
+                interleaved_items.append(ranked_text[i])
+            if i < len(ranked_kg):
+                interleaved_items.append(ranked_kg[i])
+
+        if not interleaved_items:
+            logger.warning("[RAG Pipeline]: Pipeline returned empty context!")
+        
+        system_prompt, user_prompt = build_prompts(
+            query=rewritten_query,
+            retrieved_items=interleaved_items
+        )
+
+        logger.info("[RAG Pipeline]: Generating final answer...")
+        answer = self.llm_generator.generate_answer(
+            system_prompt=system_prompt,
+            user_prompt=user_prompt,
+            history=normalized_history
+        )
+
+        return {
+            "answer": answer,
+            "conversation_id": conversation_id,
+            "sources": interleaved_items,
+            "rewritten_query": rewritten_query,
+            "analysis": analysis
+        }
