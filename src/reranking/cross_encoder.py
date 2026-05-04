@@ -22,7 +22,7 @@ class CrossEncoderReranker:
         self,
         query: str,
         rrf_results: List[Dict],
-        kg_text: str,
+        kg_results: List[Dict],
         top_m: int = settings.RERANK_TEXT_TOP_M,
         top_n: int = settings.RERANK_KG_TOP_N
     ) -> List[Dict]:   # type: ignore
@@ -32,7 +32,7 @@ class CrossEncoderReranker:
         Args:
             query: The rewritten query of the user
             rrf_results: List of dicts from RRF
-            kg_text: The linearized string from KG search (joined by newline)
+            kg_results: List of dictionary paths from KG search with metadata
             top_m: Number of text results to return
             top_n: Number of KG results to return
         
@@ -45,12 +45,12 @@ class CrossEncoderReranker:
             normalized['source_type'] = 'text_retrieval'
             return normalized
 
-        def _normalize_kg_doc(text: str, score: float) -> Dict:
+        def _normalize_kg_doc(kg_doc: Dict, score: float) -> Dict:
             return {
-                'text': text,
+                'text': kg_doc['text'],
                 'cross_encoder_score': score,
                 'source_type': 'kg_retrieval',
-                'metadata': {},
+                'metadata': kg_doc.get('metadata', {}),
             }
 
         if not self.is_available:
@@ -71,11 +71,10 @@ class CrossEncoderReranker:
             mapping.append({"type": "text", "data": item})
 
         # Append KG passages
-        if kg_text:
-            lines = [line.strip() for line in kg_text.split("\n") if line.strip()]
-            for line in lines:
-                passages.append(line)
-                mapping.append({"type": "kg", "data": line})
+        if kg_results:
+            for item in kg_results:
+                passages.append(item["text"])
+                mapping.append({"type": "kg", "data": item})
 
         if not passages:
             return []

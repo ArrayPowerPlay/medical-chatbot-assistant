@@ -57,6 +57,8 @@ class RAGPipeline:
 
 		self.weaviate_store = WeaviateChildStore()
 		self.parent_store = ParentStore(settings.SQLITE_PARENT_DB_PATH)
+		# KGSearch handles Stage 1 anchor search, Stage 2 2-hop traversal,
+		# AND linearization internally — returns a ready-to-use str.
 		self.kg_searcher = KGSearch()
 
 		self.parallel_retriever = ParallelRetriever(
@@ -82,7 +84,7 @@ class RAGPipeline:
 		Returns:
 			A cleaned list of role/content dictionaries limited to the latest
 			turns that the model should see.
-		"""
+		 """
 		if not history:
 			return []
 
@@ -101,25 +103,34 @@ class RAGPipeline:
 	def _build_entity_texts(self, analysis: Dict[str, Any]) -> List[str]:
 		"""Build entity texts for MedCPT Article-Encoder embedding.
 
+		The prefix format (e.g. "Disease: X") matches the L1 enrichment used when
+		storing node embeddings in Neo4j via build_kg.py, ensuring same-space cosine
+		comparison during Stage 1 anchor search.
+
 		Args:
 			analysis: Result dictionary from QueryAnalyzer.
 
 		Returns:
-			A list of entity strings enriched with their coarse type labels.
-		"""
+			A list of entity strings enriched with their KG node type labels.
+		 """
 		entity_texts: List[str] = []
 
 		for disease in analysis.get("diseases", []):
 			if isinstance(disease, str) and disease.strip():
 				entity_texts.append(f"Disease: {disease.strip()}")
 
-		for symptom in analysis.get("symptoms", []):
-			if isinstance(symptom, str) and symptom.strip():
-				entity_texts.append(f"EffectPhenotype: {symptom.strip()}")
+		# EffectPhenotype covers both disease symptoms and drug side effects in PrimeKG
+		for ep in analysis.get("effect_phenotypes", []):
+			if isinstance(ep, str) and ep.strip():
+				entity_texts.append(f"EffectPhenotype: {ep.strip()}")
 
 		for drug in analysis.get("drugs", []):
 			if isinstance(drug, str) and drug.strip():
 				entity_texts.append(f"Drug: {drug.strip()}")
+
+		for gp in analysis.get("gene_proteins", []):
+			if isinstance(gp, str) and gp.strip():
+				entity_texts.append(f"GeneProtein: {gp.strip()}")
 
 		return entity_texts
 
@@ -131,12 +142,13 @@ class RAGPipeline:
 
 		Returns:
 			A list of prompt items with `source_type`, `text`, and scores.
-		"""
+		 """
 		canonical: List[Dict[str, Any]] = []
 
 		for item in ranked_results:
 			source_type = item.get("source_type", "text_retrieval")
-			text = item.get("text", "")
+			# Fallback to "content" key in case upstream returns a different field name
+			text = item.get("text") or item.get("content", "")
 			if not isinstance(text, str) or not text.strip():
 				continue
 
@@ -178,7 +190,7 @@ class RAGPipeline:
 		Returns:
 			A dictionary with the answer, sources, rewritten query, entities,
 			intents, and conversation_id.
-		"""
+		 """
 		normalized_history = self._normalize_history(history)
 
 		logger.info("[RAGPipeline] Starting query analysis")
@@ -200,6 +212,12 @@ class RAGPipeline:
 			intents=intents,
 			top_k=top_k,
 		)
+		logger.info(
+			f"[RAGPipeline] Parallel retrieval complete: "
+			f"{len(vector_results)} vector, {len(bm25_results)} bm25, "
+			f"KG paths={len(kg_results) if kg_results else 0}"
+		)
+		# kg_results is a list of dictionary paths from KGSearch
 
 		logger.info("[RAGPipeline] Running RRF on text retrieval streams")
 		rrf_results = self.rrf_manager.rank_fusion(
@@ -207,15 +225,17 @@ class RAGPipeline:
 			bm25_results=bm25_results,
 			top_k=top_k,
 		)
+		logger.info(f"[RAGPipeline] RRF produced {len(rrf_results)} fused candidates")
 
 		logger.info("[RAGPipeline] Running cross-encoder reranking")
 		ranked_results = self.cross_encoder_reranker.rerank(
 			query=rewritten_query,
 			rrf_results=rrf_results,
-			kg_text=kg_results,
+			kg_results=kg_results,   # List of dicts with text and metadata from KGSearch
 			top_m=settings.RERANK_TEXT_TOP_M,
 			top_n=settings.RERANK_KG_TOP_N,
 		)
+		logger.info(f"[RAGPipeline] Cross-encoder returned {len(ranked_results)} reranked results")
 
 		logger.info("[RAGPipeline] Merging KG paths and preparing prompt context")
 		merged_results = self.kg_merger.merge_top_paths(ranked_results)
@@ -223,7 +243,10 @@ class RAGPipeline:
 		canonical_items = self._build_canonical_items(merged_results)
 
 		if not canonical_items:
+			logger.warning("[RAGPipeline] KG merger returned empty list, falling back to raw ranked results")
 			canonical_items = self._build_canonical_items(ranked_results)
+
+		logger.info(f"[RAGPipeline] Final context: {len(canonical_items)} canonical items for prompt")
 
 		system_prompt, user_prompt = build_prompts(
 			query=rewritten_query,

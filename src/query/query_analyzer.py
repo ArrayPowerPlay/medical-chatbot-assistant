@@ -43,7 +43,12 @@ class QueryAnalyzer:
             "- Strip conversational filler.\n"
             "- Fix typographical errors.\n\n"
             "### TASK 2: ENTITY EXTRACTION\n"
-            "Extract medical entities from the REWRITTEN query into exactly three categories: \"diseases\", \"symptoms\", \"drugs\".\n"
+            "Extract medical entities from the REWRITTEN query into exactly four categories:\n"
+            "- \"diseases\": disease or disorder names (e.g. \"Type 2 Diabetes\", \"Hypertension\")\n"
+            "- \"effect_phenotypes\": symptoms, clinical findings, OR drug side effects "
+            "(e.g. \"fever\", \"nausea\", \"chest pain\")\n"
+            "- \"drugs\": drug, medication, or compound names (e.g. \"Metformin\", \"Aspirin\")\n"
+            "- \"gene_proteins\": gene or protein names (e.g. \"BRCA1\", \"TP53\", \"insulin receptor\")\n"
             "If no entity belongs to a category, use an empty array [].\n\n"
             "### TASK 3: INTENT CLASSIFICATION\n"
             "Classify the REWRITTEN query into exactly one or many of these intent categories:\n"
@@ -55,8 +60,9 @@ class QueryAnalyzer:
             "{\n"
             "  \"rewritten_query\": \"The optimized query string\",\n"
             "  \"diseases\": [\"name1\"],\n"
-            "  \"symptoms\": [\"name1\"],\n"
+            "  \"effect_phenotypes\": [\"name1\"],\n"
             "  \"drugs\": [],\n"
+            "  \"gene_proteins\": [],\n"
             "  \"intents\": [\"treatment_lookup\"]\n"
             "}"
         )
@@ -91,8 +97,9 @@ class QueryAnalyzer:
             return {
                 "rewritten_query": data.get("rewritten_query", query),
                 "diseases": data.get("diseases", []),
-                "symptoms": data.get("symptoms", []),
+                "effect_phenotypes": data.get("effect_phenotypes", []),
                 "drugs": data.get("drugs", []),
+                "gene_proteins": data.get("gene_proteins", []),
                 "intents": valid_intents
             }
         
@@ -105,8 +112,9 @@ class QueryAnalyzer:
         return {
             "rewritten_query": query,
             "diseases": [],
-            "symptoms": [],
+            "effect_phenotypes": [],
             "drugs": [],
+            "gene_proteins": [],
             "intents": ["general"]
         }
 

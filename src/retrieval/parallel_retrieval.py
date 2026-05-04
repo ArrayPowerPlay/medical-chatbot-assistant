@@ -39,7 +39,7 @@ class ParallelRetriever:
         intents: List[str] = ["general"],
         top_k: int = 20,
         child_fetch_limit: int = 60
-    ) -> Tuple[List[Dict], List[Dict], str]:
+    ) -> Tuple[List[Dict], List[Dict], List[Dict]]:
         """
         Runs the 3 retrieval streams in parallel.
         
@@ -55,7 +55,7 @@ class ParallelRetriever:
             Tuple containing:
             - List of parent results from Vector Search.
             - List of parent results from Keyword Search.
-            - Linearized subgraph text from Knowledge Graph.
+            - List of linearized paths with metadata from Knowledge Graph.
         """
         logger.info(f"[Parallel Retrieval]: Starting streams for query: '{query_text}'...")
 
@@ -108,10 +108,10 @@ class ParallelRetriever:
                 
             try:
                 kg_results = future_kg.result()
-                logger.info(f"[Parallel Retrieval]: KG Search returned text length {len(kg_results)}.")
+                logger.info(f"[Parallel Retrieval]: KG Search returned {len(kg_results)} paths.")
             except Exception as e:
                 logger.error(f"[Parallel Retrieval]: Error in KG Search: {e}")
-                kg_results = ""
+                kg_results = []
         
         logger.info("[Parallel Retrieval]: Completed all 3 streams!")
         return vector_results, keyword_results, kg_results
