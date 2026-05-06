@@ -41,6 +41,13 @@ class Settings(BaseSettings):
     # RRF top_k configuration
     TOP_K_RRF: int = 60
 
+    # PostgreSQL configuraion
+    POSTGRE_HOST: str = "localhost"
+    POSTGRE_PORT: int = 5432
+    POSTGRE_USER: str = ""
+    POSTGRE_PASSWORD: str = ""
+    POSTGRE_DB: str = ""
+
     # Model names
     LLM_MODEL: str = "llama-3.1-8b-instant"
     EMBEDDING_MODEL: str = "ncbi/MedCPT-Article-Encoder"

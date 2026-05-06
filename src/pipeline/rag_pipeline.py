@@ -130,6 +130,7 @@ class RAGPipeline:
         normalized_history = self._normalize_history(history)
         logger.info("[RAG Pipeline]: Starting query analysis...")
         
+        ### 1. Extract entities and intents from user's question
         analysis = self.query_analyzer.analyze(query=query, history=normalized_history)
         rewritten_query = analysis.get("rewritten_query", query)
         intents = analysis.get("intents", ["general"])
@@ -140,6 +141,7 @@ class RAGPipeline:
         if entity_texts:
             entity_artical_embeddings = self.entity_embedder.embed_texts(entity_texts).tolist()
 
+        ### 2. Start parallel retrieval
         logger.info("[RAG Pipeline]: Starting parallel retrieval...")
         vector_results, bm25_results, kg_results = self.parallel_retriever.retrieve(
             query_text=rewritten_query,
@@ -153,6 +155,7 @@ class RAGPipeline:
                     f"{len(vector_results)} vectors, {len(bm25_results)} bm25, "
                     f"{len(kg_results) if kg_results else 0} KG paths.")
 
+        ### 3. RRF on text sources
         logger.info(f"[RAG Pipeline] Running RRF on text retrieval stream...")
         rrf_results = self.rrf_manager.rank_fusion(
             vector_results=vector_results,
@@ -160,6 +163,7 @@ class RAGPipeline:
         )
         logger.info(f"[RAG Pipeline]: RRF produced {len(rrf_results)} fused candidates.")
 
+        ### 4. Reranking on RRF results and KG results (linearized triples)
         logger.info(f"[RAG Pipeline]: Cross-Encoder reranking...")
         ranked_text, ranked_kg = self.cross_encoder_reranker.rerank(
             query=rewritten_query,
@@ -168,17 +172,18 @@ class RAGPipeline:
         )
         logger.info(f"[RAG Pipeline]: Cross-Encoder returned {len(ranked_text)} texts and {len(ranked_kg)} KG paths.")
         logger.info(f"[RAG Pipeline]: Merging KG paths and preparing prompt context...")
-        merged_kg = self.kg_merger.merge_top_paths(kg_results)
+        merged_kg = self.kg_merger.merge_top_paths(ranked_kg)      
 
+        ### 5. Context re-ordering on text results and KG merged results
         # Manual interleaving
         interleaved_items = []
-        max_len = max(len(ranked_kg), len(ranked_text))
+        max_len = max(len(merged_kg), len(ranked_text))
         
         for i in range(max_len):
             if i < len(ranked_text):
                 interleaved_items.append(ranked_text[i])
-            if i < len(ranked_kg):
-                interleaved_items.append(ranked_kg[i])
+            if i < len(merged_kg):
+                interleaved_items.append(merged_kg[i])
 
         if not interleaved_items:
             logger.warning("[RAG Pipeline]: Pipeline returned empty context!")
@@ -188,6 +193,7 @@ class RAGPipeline:
             retrieved_items=interleaved_items
         )
 
+        ### 6. Generate the final answer
         logger.info("[RAG Pipeline]: Generating final answer...")
         answer = self.llm_generator.generate_answer(
             system_prompt=system_prompt,

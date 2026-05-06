@@ -272,7 +272,7 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 |---|---|---|
 | **Neo4j** | Medical Knowledge Graph (PrimeKG) | Docker container (local) |
 | **Weaviate** | Vector + BM25 hybrid search | Docker container (local) |
-| **PostgreSQL** | Conversation history (multi-turn) | Docker container (local) |
+| **PostgreSQL** | Conversation history (multi-turn). DB: `chat_history`, persisted via Docker named volume `postgres_data`. | Docker container (local, `postgres:15`) |
 | **SQLite** | Parent chunk storage & lookup | Local file (`parent_chunks.db`) |
 | **Modal** | GPU inference (Cross-Encoder only) | Cloud (modal.com) |
 | **Groq API** | LLM inference (Llama 70B) | Cloud (groq.com) |
@@ -287,6 +287,7 @@ modal                     — Cloud GPU deployment (Cross-Encoder)
 groq                      — Groq API client (Llama 70B)
 sqlite3                   — Built-in Python DB (Parent storage)
 pydantic, pydantic-settings — Config & validation
+psycopg2-binary           — PostgreSQL driver (conversation history)
 ragas                     — RAG evaluation framework
 ```
 
@@ -299,6 +300,8 @@ ragas                     — RAG evaluation framework
 | Method | Path | Description |
 |---|---|---|
 | `POST` | `/api/chat` | Send user question, receive AI answer |
+| `GET` | `/api/conversations` | List all conversations (most recent first) |
+| `DELETE` | `/api/conversations/{id}` | Delete a conversation and its messages |
 | `GET` | `/api/health` | Health check |
 | `GET` | `/` | Serve frontend (static files) |
 
@@ -320,6 +323,16 @@ ragas                     — RAG evaluation framework
     {"type": "kg", "content": "...", "subgraph": "..."}
   ],
   "conversation_id": "uuid"
+}
+```
+
+### GET /api/conversations — Response
+```json
+{
+  "conversations": [
+    {"id": "uuid-1", "title": "What are symptoms of diabetes?", "created_at": "...", "updated_at": "..."},
+    {"id": "uuid-2", "title": "Treatment for hypertension", "created_at": "...", "updated_at": "..."}
+  ]
 }
 ```
 
@@ -417,6 +430,13 @@ LLM_TEMPERATURE=0.3
 EMBEDDING_MODEL=ncbi/MedCPT-Article-Encoder
 QUERY_MODEL=ncbi/MedCPT-Query-Encoder
 CROSS_ENCODER_MODEL=ncbi/MedCPT-Cross-Encoder
+
+# PostgreSQL (Conversation History)
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_USER=medrag
+POSTGRES_PASSWORD=medrag_secret
+POSTGRES_DB=chat_history
 ```
 
 ---
@@ -432,3 +452,7 @@ CROSS_ENCODER_MODEL=ncbi/MedCPT-Cross-Encoder
 - **Conversation**: Multi-turn support with PostgreSQL.
 - **KG Linearization**: Rule-based Python templates.
 - **Entity Extraction**: Handled by `query_analyzer.py` via Llama 70B.
+- **Generation Phase**: Completed — `kg_merger.py`, `prompt_builder.py`, `llm_generator.py` are implemented.
+- **End-to-End Pipeline**: `rag_pipeline.py` orchestrates the full flow from query analysis to answer generation.
+- **Conversation History**: `ConversationStore` (PostgreSQL, `psycopg2`) persists multi-turn sessions. Data stored in Docker named volume `postgres_data` for durability. Auto-titles conversations with the first user question.
+- **API Layer**: FastAPI app (`api/main.py`) with `/api/chat`, `/api/conversations`, and `/api/health` endpoints. Static frontend served at `/`.

@@ -36,6 +36,7 @@ rag-project/
 │   ├── storage/                      # NEW: Persistent storage layer
 │   │   ├── __init__.py
 │   │   ├── parent_store.py           # SQLite manager for parent chunks
+│   │   ├── conversation_store.py     # PostgreSQL manager for chat history (multi-turn)
 │   │   └── weaviate_client.py        # Weaviate client for child chunks (vector + BM25)
 │   │
 │   ├── query/                        # Pre-retrieval query processing
