@@ -23,7 +23,7 @@ class LLMGenerator:
             
             # Inject native conversation history to save tokens and improve model comprehension
             if history:
-                messages.extend(history[-5:])
+                messages.extend(history)
                 
             messages.append({"role": "user", "content": user_prompt})
             

@@ -58,7 +58,8 @@ class RAGPipeline:
 
     def _normalize_history(
         self,
-        history: Optional[List[Dict[str, str]]]
+        history: Optional[List[Dict[str, str]]],
+        max_messages: Optional[int] = None
     ) -> List[Dict[str, str]]:
         """Normalize conversation history into the message schema used by Groq.
         Return a cleaned list of role/content messages limited to the lastest
@@ -75,7 +76,10 @@ class RAGPipeline:
             if not isinstance(content, str) or not content.strip():
                 continue
             normalized.append({"role": role, "content": content.strip()})
-        return normalized[-5:]
+
+        if max_messages is not None: 
+            return history[-max_messages:]
+        return normalized
     
     def _build_entity_texts(self, analysis: Dict[str, Any]) -> List[str]:
         """
@@ -112,6 +116,7 @@ class RAGPipeline:
         query: str,
         history: Optional[List[Dict[str, str]]] = None,
         conversation_id: Optional[str] = None,
+        history_turns: int = settings.HISTORY_TURNS_FOR_LLM,
         top_k: int = settings.RETREVAL_TOP_K
     ) -> Dict[str, Any]:
         """
@@ -127,7 +132,8 @@ class RAGPipeline:
             A dictionary with the answer, sources, rewritten query, entities, intents, and
             conversation_id.
         """
-        normalized_history = self._normalize_history(history)
+        max_messages = history_turns * 2
+        normalized_history = self._normalize_history(history, max_messages)
         logger.info("[RAG Pipeline]: Starting query analysis...")
         
         ### 1. Extract entities and intents from user's question

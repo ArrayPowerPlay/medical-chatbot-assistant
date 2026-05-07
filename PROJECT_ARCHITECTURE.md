@@ -94,11 +94,12 @@ rag-project/
 │   ├── routes/
 │   │   ├── __init__.py
 │   │   ├── chat.py                   # POST /chat - main Q&A endpoint
-│   │   └── health.py                # GET /health - health check
+│   │   └── health.py                 # GET /health - health check
+│   │   └── conversation.py           # POST /conversation - save conversation
 │   └── schemas/
 │       ├── __init__.py
 │       ├── request.py                # Pydantic request models
-│       └── response.py              # Pydantic response models
+│       └── response.py               # Pydantic response models
 │
 ├── frontend/
 │   ├── index.html                    # Main SPA entry
@@ -128,7 +129,7 @@ rag-project/
 │   ├── test_kg.py
 │   └── test_api.py
 │
-├── notebooks/
+├── notebooks/                        # Use for development testing
 │   ├── 01_data_exploration.ipynb
 │   ├── 02_embedding_analysis.ipynb
 │   ├── 03_kg_visualization.ipynb

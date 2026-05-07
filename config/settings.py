@@ -53,6 +53,11 @@ class Settings(BaseSettings):
     EMBEDDING_MODEL: str = "ncbi/MedCPT-Article-Encoder"
     QUERY_MODEL: str = "ncbi/MedCPT-Query-Encoder"
 
+    # LLM History Configuration
+    HISTORY_TURNS_FOR_LLM: int = 5    # 1 turn = user + assistant. 5 turns = 10 messages
+    # Chat History Pagination
+    MESSAGE_PAGE_SIZE: int = 20        # Messages per page for cursor-based pagination
+
     # Persistence
     SQLITE_PARENT_DB_PATH: Path = BASE_DIR / "vectorstore" / "parent_chunks.db"
 

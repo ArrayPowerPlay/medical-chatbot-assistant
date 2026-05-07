@@ -3,7 +3,7 @@ identified by an UUID and contains an ordered sequence of messages."""
 import uuid
 import psycopg2
 import psycopg2.extras
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Any
 
 from config.settings import settings
 from config.logging_config import logger
@@ -163,6 +163,68 @@ class ConversationStore:
         with self.conn.cursor() as cur:
             cur.execute("DELETE FROM conversations WHERE id = %s;", (conversation_id,))
             return cur.rowcount > 0    # Number of rows affected by the SQL query
+        
+    def get_message_page(
+        self,
+        conversation_id: str,
+        limit: int = settings.MESSAGE_PAGE_SIZE,
+        before_id: Optional[int] = None
+    ) -> Dict[str, Any]:
+        """
+        Retrieve a page of messages for display for user, using cursor-based pagination.
+        
+        Args:
+            conversation_id: UUID of the conversation.
+            limit: max messages to return.
+            before_id: If provided, return messages with id < before_id.
+
+        Returns:
+            Dict with:
+                - 'messages': List[Dict] each having id, role, content, created_at.
+                - 'has_more': bool - True if there are still older messages beyond this page.
+        """
+        with self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
+            # Fetch limit + 1 to check if older messages exist
+            fetch_count = limit + 1
+
+            if before_id is not None:
+                # Scroll-up: load messages older than the cursor
+                query = """
+                    SELECT id, role, content, created_at FROM messages
+                    WHERE conversation_id = %s AND id < %s
+                    ORDER BY id DESC
+                    LIMIT %s
+                """
+                cur.execute(query, (conversation_id, before_id, fetch_count))
+            else: 
+                # First load: get the newest messages
+                query = """
+                    SELECT id, role, content, created_at FROM messages
+                    WHERE conversation_id = %s 
+                    ORDER BY id DESC
+                    LIMIT %s
+                """
+                cur.execute(query, (conversation_id, fetch_count))
+
+            rows = cur.fetchall()
+
+            # Older messages exist if 'rows' has more rows than the configure limit constant
+            has_more = len(rows) > limit
+            rows = rows[:limit]
+
+            # Reverse to chronological order for user experience
+            messages = [
+                {
+                    "id": r["id"],
+                    "role": r["role"],
+                    "content": r["content"],
+                    "created_at": r["created_at"]
+                }
+                for r in reversed(rows)
+            ]
+
+            return {"messages": messages, "has_more": has_more}
+
         
     def close(self) -> None:
         """Close the PostgreSQL connection."""

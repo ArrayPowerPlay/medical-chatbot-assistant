@@ -29,6 +29,20 @@ class ConversationListResponse(BaseModel):
     conversations: List[ConversationResponse] = Field(default_factory=list)
 
 
+class MessageItem(BaseModel):
+    """The pydantic model for a message (of user or LLM)."""
+    id: int
+    role: str
+    content: str
+    created_at: str
+
+
+class MessagePageResponse(BaseModel):
+    """The pydantic model for a load of messages returned for the user UI when scrolling."""
+    messages: List[MessageItem]
+    has_more: bool               # has_more = True if history still has older messages
+
+
 class HealthResponse(BaseModel):
     """Schema for the GET /api/health response body."""
     status: str = Field(description="Overall health status.")

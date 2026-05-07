@@ -182,6 +182,8 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 - Runs as a single LLM call BEFORE the 3 parallel retrieval streams
 
 > **History Handling**: Conversation history is persisted separately from the prompt window. Only the latest turns are injected into query analysis and answer generation, which keeps prompts bounded while preserving long-term conversation state in storage.
+>
+> The number of turns sent to the LLM is controlled by the server-side setting `HISTORY_TURNS_FOR_LLM` (default: **5 turns** = 10 messages). One **turn** = 1 user message + 1 assistant response. This setting is a global constant configured in `config/settings.py` and `.env`, applying uniformly to all users. It governs both **QueryAnalyzer** (query rewriting / entity extraction) and **LLMGenerator** (answer generation).
 
 #### Post-Rerank KG Merging & Interleaving (Prompt Prep)
 - **KG Merging**: Groups paths by `(prefix, rel2)` metadata. Merges `A targets B associated with C` and `D` into `A targets B which is associated with C, and D.`
@@ -301,6 +303,7 @@ ragas                     — RAG evaluation framework
 |---|---|---|
 | `POST` | `/api/chat` | Send user question, receive AI answer |
 | `GET` | `/api/conversations` | List all conversations (most recent first) |
+| `GET` | `/api/conversations/{id}/messages` | Paginated message history (cursor-based) |
 | `DELETE` | `/api/conversations/{id}` | Delete a conversation and its messages |
 | `GET` | `/api/health` | Health check |
 | `GET` | `/` | Serve frontend (static files) |
@@ -326,6 +329,26 @@ ragas                     — RAG evaluation framework
 }
 ```
 
+### GET /api/conversations/{id}/messages — Paginated Messages
+> **Cursor-based pagination** for loading chat history. The frontend first loads the newest messages, then fetches older pages as the user scrolls up (reverse-chronological infinite scroll, like ChatGPT/Gemini).
+
+**Query Parameters**:
+| Param | Type | Default | Description |
+|---|---|---|---|
+| `limit` | int | `MESSAGE_PAGE_SIZE` (20) | Number of messages per page |
+| `before_id` | int | `None` | Cursor: return messages older than this message ID |
+
+**Response**:
+```json
+{
+  "messages": [
+    {"id": 42, "role": "user", "content": "What is metformin?", "created_at": "..."},
+    {"id": 43, "role": "assistant", "content": "Metformin is...", "created_at": "..."}
+  ],
+  "has_more": true
+}
+```
+
 ### GET /api/conversations — Response
 ```json
 {
@@ -340,15 +363,19 @@ ragas                     — RAG evaluation framework
 
 ## 8. Frontend Design
 
+> **Status**: Frontend files (`index.html`, `app.js`, `chat.js`, `style.css`, `markdown.js`, `theme.js`) exist but are **not yet implemented**. The backend API is built first; frontend will be developed in a subsequent phase.
+
 - **Type**: Single Page Application (Vanilla HTML/CSS/JS)
 - **Theme**: Dark/Light toggle, medical-themed color palette
 - **Layout**: Chat-centric with message bubbles (user vs. bot)
+- **Chat History UX**: Reverse-scroll infinite loading — newest messages displayed first, scrolling up loads older messages via cursor-based pagination (`GET /api/conversations/{id}/messages?before_id=X`), matching the UX of ChatGPT/Gemini.
 - **Features**:
   - Markdown rendering for bot responses
   - Source citation display (expandable)
   - Loading animation during generation
   - Responsive design (mobile-friendly)
   - Suggested starter questions
+  - Settings panel for configurable parameters
 
 ---
 
@@ -425,6 +452,10 @@ RRF_K=60
 LLM_MODEL=meta-llama/Llama-3.3-70B-Versatile
 LLM_MAX_TOKENS=2048
 LLM_TEMPERATURE=0.3
+HISTORY_TURNS_FOR_LLM=5           # Number of recent turns (1 turn = user + assistant) fed to LLM
+
+# Chat History Pagination
+MESSAGE_PAGE_SIZE=20               # Messages per page for infinite scroll loading
 
 # Embedding
 EMBEDDING_MODEL=ncbi/MedCPT-Article-Encoder
@@ -455,4 +486,8 @@ POSTGRES_DB=chat_history
 - **Generation Phase**: Completed — `kg_merger.py`, `prompt_builder.py`, `llm_generator.py` are implemented.
 - **End-to-End Pipeline**: `rag_pipeline.py` orchestrates the full flow from query analysis to answer generation.
 - **Conversation History**: `ConversationStore` (PostgreSQL, `psycopg2`) persists multi-turn sessions. Data stored in Docker named volume `postgres_data` for durability. Auto-titles conversations with the first user question.
-- **API Layer**: FastAPI app (`api/main.py`) with `/api/chat`, `/api/conversations`, and `/api/health` endpoints. Static frontend served at `/`.
+- **API Layer**: FastAPI app (`api/main.py`) with `/api/chat`, `/api/conversations`, `/api/conversations/{id}/messages`, and `/api/health` endpoints. Static frontend served at `/`.
+- **LLM History Window**: Controlled by `HISTORY_TURNS_FOR_LLM` (default 5 turns = 10 messages). This is a global server-side constant, not per-user. Applied uniformly in `QueryAnalyzer` and `LLMGenerator`.
+- **Chat Pagination**: `MESSAGE_PAGE_SIZE` (default 20) controls the number of messages loaded per scroll batch in the frontend. Cursor-based pagination using message `id` as cursor.
+- **Frontend Status**: Frontend files exist but are **not yet implemented**. Backend API is developed first.
+- **Future: User Authentication**: The system is designed to support per-user authentication in a future phase. Current settings like `HISTORY_TURNS_FOR_LLM` are global constants; once auth is implemented, some settings may become per-user configurable.

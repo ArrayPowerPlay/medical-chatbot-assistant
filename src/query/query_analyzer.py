@@ -70,7 +70,7 @@ class QueryAnalyzer:
         messages = [{"role": "system", "content": system_prompt}]
 
         if history:
-            messages.extend(history[-5:])
+            messages.extend(history)
 
         messages.append({"role": "user", "content": f"Analyze this query: {query}"})
 
