@@ -13,7 +13,7 @@ class LLMGenerator:
         
         self.client = Groq(api_key=api_key)
         self.model_name = settings.LLM_MODEL
-        self.temperature = 0.1
+        self.temperature = 0.0
         self.max_tokens = 1024
     
     def generate_answer(self, system_prompt: str, user_prompt: str, history: Optional[List[Dict[str, str]]] = None) -> str:

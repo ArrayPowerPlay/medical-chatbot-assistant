@@ -117,7 +117,7 @@ class RAGPipeline:
         history: Optional[List[Dict[str, str]]] = None,
         conversation_id: Optional[str] = None,
         history_turns: int = settings.HISTORY_TURNS_FOR_LLM,
-        top_k: int = settings.RETREVAL_TOP_K
+        top_k: int = settings.RETRIEVAL_TOP_K
     ) -> Dict[str, Any]:
         """
         Run the full synchronous RAG pipeline.

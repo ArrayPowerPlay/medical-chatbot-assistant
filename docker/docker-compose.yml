@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # Weaviate: Vector DB + BM25   weaviate:
+  # Weaviate: Vector DB + BM25 weaviate:
   weaviate:
     image: cr.weaviate.io/semitechnologies/weaviate:1.28.4
     container_name: weaviate-medrag
@@ -31,19 +31,17 @@ services:
     volumes:
       - ../vectorstore/neo4j:/data
 
-    # PostgreSQL: Conversation History
-    postgres:
-      image: postgres:15
-      container_name: postgres-medrag
-      ports:
-        - "5432:5432"
-      environment:
-        POSTGRES_USER: ${POSTGRES_USER}
-        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-        POSTGRES_DB: ${POSTGRES_DB}
-      volumes:
-        - postgres_data:/var/lib/postgresql/data
-      restart: unless-stopped
+  # PostgreSQL: Conversation History
+  postgres:
+    image: postgres:15
+    container_name: postgres-medrag
+    ports:
+      - "5432:5432"
+    env_file:
+      - ../.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
 
 volumes:
   postgres_data:

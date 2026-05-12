@@ -11,6 +11,20 @@ project_root = Path(__file__).resolve().parent.parent.parent
 sys.path.append(str(project_root))
 
 
+def _has_full_snippet_coverage(sample: Dict) -> bool:
+    """Check if every relevant PMID in a question has at least one corresponding snippet.
+
+    Args:
+        sample: A single QA sample dict with 'relevant_pmid' and 'snippets' fields.
+
+    Returns:
+        True if all relevant PMIDs are covered by at least one snippet.
+    """
+    snippet_pmids = {s["pmid"] for s in sample.get("snippets", [])}
+    relevant_pmids = set(sample.get("relevant_pmid", []))
+    return relevant_pmids.issubset(snippet_pmids)
+
+
 def setup_directories():
     """Create data folder structure"""
     dirs = {
@@ -148,6 +162,10 @@ def preprocess_bioasq_taskB(input_file: str):
                 "ideal_answer": ideal_answer
             }
             
+            # Apply snippet coverage filter here, BEFORE saving to valid_qa_samples
+            if not _has_full_snippet_coverage(sample):
+                continue
+            
             valid_qa_samples.append(sample)
             all_pmids_needed.update(pmids)
             for cs in clean_snippets:
@@ -162,51 +180,59 @@ def preprocess_bioasq_taskB(input_file: str):
     pubmed_data = fetch_pubmed_data(list(all_pmids_needed))
     
     # Phase 3: Save corpus.jsonl - used for chunking
-    corpus_path = dirs["corpus"] / "corpus.jsonl"
-    with open(corpus_path, 'w', encoding='utf-8') as f:
-        for pmid_data in pubmed_data.values():
-            f.write(json.dumps(pmid_data, ensure_ascii=False) + "\n")
+    # corpus_path = dirs["corpus"] / "corpus.jsonl"
+    # with open(corpus_path, 'w', encoding='utf-8') as f:
+    #     for pmid_data in pubmed_data.values():
+    #         f.write(json.dumps(pmid_data, ensure_ascii=False) + "\n")
             
     # Phase 4: Save corpus_QA.jsonl - used for evaluation
-    qa_path = dirs["corpus"] / "corpus_QA.jsonl"
+    qa_path = dirs["corpus"] / "bioasq_QA.jsonl"
     with open(qa_path, 'w', encoding='utf-8') as f:
         for sample in valid_qa_samples:
             f.write(json.dumps(sample, ensure_ascii=False) + "\n")
             
-    print(f"Preprocessing complete. Saved {len(pubmed_data)} articles to {corpus_path} and 1000 questions to {qa_path}")
+    # print(f"Preprocessing complete. Saved {len(pubmed_data)} articles to {corpus_path} and 1000 questions to {qa_path}")
 
 
 def split_bioasq_taskB():
-    """Split corpus_QA.jsonl into validation set (used for tuning hyperparameters) and test set"""
+    """Split corpus_QA.jsonl into validation and test sets.
+
+    Only keeps questions where every relevant PMID has at least one
+    corresponding snippet, ensuring snippet-level evaluation is valid.
+    Outputs are saved as val_bioasq.jsonl and test_bioasq.jsonl.
+    """
     dirs = setup_directories()
-    qa_path = dirs["corpus"] / "corpus_QA.jsonl"
-    
+    qa_path = dirs["corpus"] / "bioasq_QA.jsonl"
+
     if not qa_path.exists():
         print(f"Error: {qa_path} not found.")
         return
-        
+
     samples = []
     with open(qa_path, 'r', encoding='utf-8') as f:
         for line in f:
             samples.append(json.loads(line))
-            
+
     if len(samples) < 1000:
         print(f"Warning: Only found {len(samples)} samples. Expected 1000.")
-        
+
+    # Split directly since all samples are already filtered
     test_samples = samples[:500]
     val_samples = samples[500:1000]
-    
-    test_path = dirs["test"] / "test.jsonl"
+
+    test_path = dirs["test"] / "test_bioasq.jsonl"
     with open(test_path, 'w', encoding='utf-8') as f:
         for s in test_samples:
+            # ensure_ascii = False -> Ensure Vietnamese won't be encoded into Unicode escape
             f.write(json.dumps(s, ensure_ascii=False) + "\n")
-            
-    val_path = dirs["val"] / "val.jsonl"
+
+    val_path = dirs["val"] / "val_bioasq.jsonl"
     with open(val_path, 'w', encoding='utf-8') as f:
         for s in val_samples:
             f.write(json.dumps(s, ensure_ascii=False) + "\n")
-            
-    print(f"Split complete. Saved 500 samples to {test_path} and {len(val_samples)} samples to {val_path}")
+
+    print(f"Split complete. Saved {len(test_samples)} to {test_path} "
+          f"and {len(val_samples)} to {val_path}")
 
 
 if __name__ == "__main__":

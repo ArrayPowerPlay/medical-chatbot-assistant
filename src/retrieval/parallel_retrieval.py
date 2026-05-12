@@ -4,7 +4,6 @@ Orchestrates 3 parallel retrieval streams:
 2. Keyword Search 
 3. Knowledge Graph Search
 """
-
 import concurrent.futures
 from typing import Dict, List, Tuple
 import numpy as np

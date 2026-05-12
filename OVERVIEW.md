@@ -2,6 +2,7 @@
 
 > **Purpose**: This file contains ALL essential context for the project.
 > Reading this single file should be sufficient to fully understand the project's scope, architecture, and implementation details when starting a new session.
+> Auto-update this file when appying a new change that need to be documented.
 
 ---
 
@@ -210,7 +211,7 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 
 ## 3. Data Sources & Evaluation
 
-### 3.1 Document Corpus (for FAISS Vector DB + Elasticsearch BM25)
+### 3.1 Document Corpus (for Weaviate Vector DB + BM25)
 | Setting | Value |
 |---|---|
 | **Source** | BioASQ PubMed Annual Baseline Corpus (`jmhb/pubmed_bioasq_2022`) |
@@ -227,10 +228,23 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 ### 3.3 Evaluation Datasets (BioASQ Task B)
 
 #### Q&A Dataset Split
-| Dataset | Split | Size |
-|---|---|---|
-| **BioASQ Task B** | **Validation** (used for hyperparameter tuning) | 500 questions |
-| **BioASQ Task B** | **Test** (final evaluation) | 500 questions |
+| Dataset | Split | File | Size | Notes |
+|---|---|---|---|---|
+| **BioASQ Task B** | **Validation** | `data/val/val_bioasq.jsonl` | ~277 questions | Hyperparameter tuning |
+| **BioASQ Task B** | **Test** | `data/test/test_bioasq.jsonl` | ~283 questions | Final evaluation |
+
+> **Snippet Coverage Filter**: Only questions where **every** relevant PMID has at least one corresponding gold snippet are retained. This ensures snippet-level evaluation is valid. Filtered by `_has_full_snippet_coverage()` in `preprocess_bioasq_taskB.py`.
+
+#### Gold Data Schema (per question in JSONL)
+```json
+{
+  "id": "question_id",
+  "body": "Original question text",
+  "relevant_pmid": ["12345", "67890"],
+  "snippets": [{"text": "relevant passage...", "pmid": "12345"}],
+  "ideal_answer": ["Gold reference answer"]
+}
+```
 
 #### External Evaluation
 | Dataset | Split | Size | Phase |
@@ -240,13 +254,36 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 
 ### 3.4 Evaluation Metrics
 
-#### Text Retrieval (after merging vector + BM25 via RRF)
-- **Recall@K**
-- **Evaluation Method**: For a given question from BioASQ Task B:
-  1. Retrieve top-$k$ chunks from the parallel pipeline.
-  2. Map retrieved FAISS indices to their original PMIDs using `faiss_metadata.jsonl`.
-  3. Compare retrieved PMIDs with the "golden" relevant document PMIDs.
-  4. (Optional) For exact matches, compare text snippets in the query with the content of the retrieved chunk.
+#### Text Retrieval (`scripts/evaluate_retrieval.py`)
+
+Pipeline evaluated: QueryAnalyzer (temp=0) → Vector + BM25 → RRF → Cross-Encoder.
+Evaluation is **deterministic** (single run, temperature=0 for QueryAnalyzer).
+
+##### Document-Level Metrics (PMID matching)
+| Metric | K Values | Description |
+|---|---|---|
+| **Precision@K** | 5, 10, 20 | Fraction of retrieved PMIDs that are relevant |
+| **Recall@K** | 5, 10, 20 | Fraction of gold PMIDs retrieved in top-K |
+| **F1@K** | 5, 10, 20 | Harmonic mean of P@K and R@K |
+| **MAP@K** | 5, 10, 20 | Mean Average Precision truncated at K |
+| **MRR** | — | Mean Reciprocal Rank of first relevant document |
+
+> **MAP@K**: `MAP@K = mean(AP@K)` across all queries.
+> `AP@K = (1/|gold|) * Σᵢ₌₁ᴷ P(i) × rel(i)` — considers ranking quality up to position K.
+
+##### Snippet-Level Metrics (text containment)
+| Metric | K Values | Description |
+|---|---|---|
+| **Snippet Recall@K** | 5, 10, 20 | Fraction of gold snippets whose text appears as a substring in a retrieved parent chunk with the same PMID |
+| **Snippet Precision@K** | 5, 10, 20 | Fraction of top-K retrieved items that contain at least one gold snippet |
+
+> **Matching Logic**: A gold snippet is "covered" if `gold_snippet_text in retrieved_parent_text` for a parent chunk sharing the same PMID.
+
+##### Output
+| File | Path | Content |
+|---|---|---|
+| **Detail** | `data/eval_results/bioasq/detail.jsonl` | Per-question: retrieved items, relevance labels, all metrics |
+| **Summary** | `data/eval_results/bioasq/summary.json` | Aggregate metrics across all questions |
 
 #### Generation
 - **Exact Match / F1** (standard QA metrics)

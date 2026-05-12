@@ -23,7 +23,7 @@ class QueryAnalyzer:
         
         self.client = Groq(api_key=api_key)
         self.model_name = settings.LLM_MODEL
-        self.temperature = 0.1
+        self.temperature = 0.0
         self._valid_intents = {qi.value for qi in QueryIntent}   # Set comprehension
 
     def analyze(self, query: str, history: Optional[List[Dict[str, str]]] = None) -> Dict[str, Any]:

@@ -24,8 +24,9 @@ class Settings(BaseSettings):
     WEAVIATE_GRPC_PORT : int = 50051             # Use GRPC protocol for big data processing     
 
     # RAG hyperparameters
-    RETREVAL_TOP_K: int = 20
+    RETRIEVAL_TOP_K: int = 20 
     RERANK_TOP_K: int = 10
+    CHILD_FETCH_LIMIT: int = 60         # Number of child chunks to be fetched
 
     # Parent-Child chunking
     TIER1_MAX_LEN: int = 500            # Threshold of article's title + abstract length to be chunked or not
