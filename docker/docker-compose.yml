@@ -7,7 +7,7 @@ services:
     container_name: weaviate-medrag
     ports:
       # host_port : container_port
-      - "8080:8080"   # REST API
+      - "8081:8080"   # REST API
       - "50051:50051" # gRPC (another protocol, faster than REST but more complex)
     environment:
       QUERY_DEFAULTS_LIMIT: 25

@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     NEO4J_PASSWORD: str = ""
 
     # Weaviate
-    WEAVIATE_URL : str = "http://localhost:8080" # RESTful API port 8080
+    WEAVIATE_URL : str = "http://localhost:8081" # RESTful API port 8080
     WEAVIATE_GRPC_PORT : int = 50051             # Use GRPC protocol for big data processing     
 
     # RAG hyperparameters
