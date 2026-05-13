@@ -8,15 +8,15 @@ from typing import List, Dict
 
 class KGPathMerger:
     @staticmethod
-    def merge_top_paths(ranked_results: List[Dict]) -> List[Dict]:
+    def merge_top_paths(kg_results: List[Dict]) -> List[Dict]:
         """
-        Takes the final results (unified text and KG retrieval) from the Cross-Encoder.
+        Takes the ranked KG retrieval results from the Cross-Encoder.
         Detects KG paths that share the same multi-hop prefix and condenses their suffixes
         into a single, natural-sounding English sentence.
         
         Args:
-            ranked_results: List of dictionaries containing 'text', 'source_type', 
-                            and 'cross_encoder_score'.
+            kg_results: List of dictionaries containing 'text', 'source_type', 
+                        and 'cross_encoder_score'.
                             
         Returns:
             A cleaned, merged list of dictionaries ready for prompt building.
@@ -24,7 +24,7 @@ class KGPathMerger:
         merged_results = []
         kg_groups = {}
 
-        for doc in ranked_results:
+        for doc in kg_results:
             source_type = doc.get("source_type", "unknown")
             if source_type != "kg_retrieval":
                 merged_results.append(doc)

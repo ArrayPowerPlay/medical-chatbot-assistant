@@ -51,6 +51,7 @@ class CorpusIndexer:
         chunk_queue: queue.Queue,
         batch_size: int,
         limit: int | None,
+        skip: int,
         max_workers: int,
         pbar: tqdm
     ):
@@ -58,9 +59,15 @@ class CorpusIndexer:
         batch: List[Tuple[str, str, str]] = []
         processed_count = 0
 
+        skipped_count = 0
+
         try:
             with open(self.data_path, 'r', encoding='utf-8') as f:
                 for line in f:
+                    if skipped_count < skip:
+                        skipped_count += 1
+                        continue
+                        
                     if limit is not None and processed_count >= limit:
                         break
                     try:
@@ -174,15 +181,18 @@ class CorpusIndexer:
         self,
         max_workers: int = 6,
         batch_size: int = 1024,
-        limit: int | None = None
+        limit: int | None = None,
+        skip: int = 0
     ):
         """Launch 3-stage pipeline: Read + Chunk + Embed + Store."""
         if limit == 0:
             logger.info("Limit is 0. Exiting ingestion immediately!")
             return
         
-        # Create collection for child chunks in Weaviate 
-        self.weaviate.create_collection()
+        # We only create collection if it doesn't exist. If appending, we rely on existing collection.
+        # Ensure we don't recreate if we are just appending new items
+        if skip == 0:
+            self.weaviate.create_collection()
 
         chunk_queue = queue.Queue(maxsize=3)   # Max 3 batches per queue
         embed_queue = queue.Queue(maxsize=3)
@@ -192,7 +202,7 @@ class CorpusIndexer:
         # Each stage runs in its own thread
         t1 = threading.Thread(
             target=self._stage_reader_chunker,
-            args=(chunk_queue, batch_size, limit, max_workers, pbar),
+            args=(chunk_queue, batch_size, limit, skip, max_workers, pbar),
             name="[Stage 1]: Reader-Chunker Process"
         )
         t2 = threading.Thread(
@@ -236,6 +246,10 @@ def main():
         help="Limit number of articles to be processed. Set to 0 to only reset."
     )
     parser.add_argument(
+        "--skip", type=int, default=0,
+        help="Skip the first N articles in the corpus file."
+    )
+    parser.add_argument(
         "--batch_size", type=int, default=1024,
         help="Batch size for pipeline streaming"
     )
@@ -263,7 +277,8 @@ def main():
         indexer.process_and_index(
             max_workers=args.workers,
             batch_size=args.batch_size,
-            limit=args.limit
+            limit=args.limit,
+            skip=args.skip
         )
 
     indexer.close()

@@ -1,13 +1,13 @@
 version: '3.8'
 
 services:
-  # Weaviate: Vector DB + BM25   weaviate:
+  # Weaviate: Vector DB + BM25 weaviate:
   weaviate:
     image: cr.weaviate.io/semitechnologies/weaviate:1.28.4
     container_name: weaviate-medrag
     ports:
       # host_port : container_port
-      - "8080:8080"   # REST API
+      - "8081:8080"   # REST API
       - "50051:50051" # gRPC (another protocol, faster than REST but more complex)
     environment:
       QUERY_DEFAULTS_LIMIT: 25
@@ -30,5 +30,20 @@ services:
       - NEO4J_PLUGINS=["apoc"]
     volumes:
       - ../vectorstore/neo4j:/data
+
+  # PostgreSQL: Conversation History
+  postgres:
+    image: postgres:15
+    container_name: postgres-medrag
+    ports:
+      - "5432:5432"
+    env_file:
+      - ../.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
 
 

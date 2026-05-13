@@ -9,7 +9,7 @@ class PathLinearizer:
     Format: [Type1] [Name1] [REL] [Type2] [Name2]
     """
     @staticmethod
-    def linearize(hop1_triples: List[Dict], hop2_triples: List[Dict]) -> List[str]:
+    def linearize(hop1_triples: List[Dict], hop2_triples: List[Dict]) -> List[Dict]:
         """
         Create individual path sentences: Anchor -> Hop1 -> Hop2
 
@@ -18,7 +18,7 @@ class PathLinearizer:
             hop2_triples: List of dicts representing hop2 edges
 
         Returns:
-            List of independent string paths
+            List of dictionaries containing 'text' (the path string) and 'metadata'
         """
         paths = []
         

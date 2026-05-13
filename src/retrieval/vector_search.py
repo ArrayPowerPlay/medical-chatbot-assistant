@@ -2,6 +2,7 @@ from typing import Dict, List
 import numpy as np
 from src.storage.weaviate_client import WeaviateChildStore
 from src.storage.parent_store import ParentStore
+from config.settings import settings
 
 def _aggregate_to_parents(
     child_results: List[Dict],
@@ -46,8 +47,8 @@ def vector_search(
     query_vector: np.ndarray,
     weaviate_store: WeaviateChildStore,
     parent_store: ParentStore,
-    top_k: int = 20,
-    child_fetch_limit: int = 60
+    top_k: int = settings.RETRIEVAL_TOP_K,
+    child_fetch_limit: int = settings.CHILD_CHUNK_SIZE
 ) -> List[Dict]:
     """Semantic vector search: search child chunks, then aggregate to parent chunks.
     

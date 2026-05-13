@@ -20,12 +20,13 @@ class Settings(BaseSettings):
     NEO4J_PASSWORD: str = ""
 
     # Weaviate
-    WEAVIATE_URL : str = "http://localhost:8080" # RESTful API port 8080
+    WEAVIATE_URL : str = "http://localhost:8081" # RESTful API port 8080
     WEAVIATE_GRPC_PORT : int = 50051             # Use GRPC protocol for big data processing     
 
     # RAG hyperparameters
-    RETREVAL_TOP_K: int = 20
+    RETRIEVAL_TOP_K: int = 20 
     RERANK_TOP_K: int = 10
+    CHILD_FETCH_LIMIT: int = 60         # Number of child chunks to be fetched
 
     # Parent-Child chunking
     TIER1_MAX_LEN: int = 500            # Threshold of article's title + abstract length to be chunked or not
@@ -41,10 +42,22 @@ class Settings(BaseSettings):
     # RRF top_k configuration
     TOP_K_RRF: int = 60
 
+    # PostgreSQL configuraion
+    POSTGRE_HOST: str = "localhost"
+    POSTGRE_PORT: int = 5432
+    POSTGRE_USER: str = ""
+    POSTGRE_PASSWORD: str = ""
+    POSTGRE_DB: str = ""
+
     # Model names
     LLM_MODEL: str = "llama-3.1-8b-instant"
     EMBEDDING_MODEL: str = "ncbi/MedCPT-Article-Encoder"
     QUERY_MODEL: str = "ncbi/MedCPT-Query-Encoder"
+
+    # LLM History Configuration
+    HISTORY_TURNS_FOR_LLM: int = 5    # 1 turn = user + assistant. 5 turns = 10 messages
+    # Chat History Pagination
+    MESSAGE_PAGE_SIZE: int = 20        # Messages per page for cursor-based pagination
 
     # Persistence
     SQLITE_PARENT_DB_PATH: Path = BASE_DIR / "vectorstore" / "parent_chunks.db"

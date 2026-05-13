@@ -2,6 +2,7 @@
 
 > **Purpose**: This file contains ALL essential context for the project.
 > Reading this single file should be sufficient to fully understand the project's scope, architecture, and implementation details when starting a new session.
+> Auto-update this file when appying a new change that need to be documented.
 
 ---
 
@@ -26,8 +27,8 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 > **IMPORTANT: Retrieval Flow**
 > 1. Run 3 retrieval streams in **parallel**: Vector Search, Keyword Search, and KG Search.
 > 2. **RRF (Reciprocal Rank Fusion)** merges ONLY **Vector Search + BM25** → produces **Text Search** results.
-> 3. **Cross-Encoder** (MedCPT-Cross-Encoder) reranks the **combined pool** of **Text Search** (from RRF) AND **KG Search** (linearized subgraphs) together into a single final ranked list.
-> 4. Final context is assembled from the reranked list using head-tail placement.
+> 3. **Cross-Encoder** (MedCPT-Cross-Encoder) reranks **Text Search** (from RRF) and **KG Search** (linearized subgraphs) independently to prevent out-of-distribution (OOD) score bias against structured KG paths.
+> 4. **Post-Rerank Interleaving**: The Top-M text and Top-N KG results are merged via 1-by-1 interleaving before final Head-Tail placement.
 
 > **Implementation Note**: The core RAG orchestration remains synchronous. `ParallelRetriever` uses a thread pool to run the three retrieval streams in parallel, and FastAPI can wrap the pipeline in a threadpool later without changing the retrieval or generation clients.
 
@@ -166,10 +167,10 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 | **Model** | `ncbi/MedCPT-Cross-Encoder` |
 | **Deployment** | Modal (cloud GPU) |
 | **Input** | (query, passage) pairs from BOTH Text Retrieval (RRF output) AND KG Retrieval (independent path sentences) |
-| **Function** | Reranks the **combined pool** of text + KG results. Applies a **Quota System (Top-M Text, Top-N KG)** to guarantee diversity, and filters out passages with score < 0. |
-| **Output** | Unified top-k list of Text chunks and KG paths |
+| **Function** | Reranks Text and KG passages in a single API batch for efficiency, but **separates and sorts them independently** to prevent Text from unfairly dominating KG paths (OOD bias). |
+| **Output** | Two separate lists: Top-M ranked Text and Top-N ranked KG paths. |
 
-> **Normalization Detail**: Text passages are normalized into a canonical dict schema with `type="text_retrieval"`, `parent_id`, `pmid`, `title`, `rrf_score`, and `cross_encoder_score`. KG passages are tagged with `type="kg_retrieval"` and a `text` field. The generation layer then builds prompts from this unified structure.
+> **Normalization Detail**: Text passages are normalized with `source_type="text_retrieval"`, `parent_id`, `pmid`, etc. KG passages retain their `metadata` dictionary and are tagged with `source_type="kg_retrieval"`.
 
 ### 2.3 Generation Phase
 
@@ -178,17 +179,17 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 - **Purpose**:
   - Fix spelling errors and rewrite query for retrieval
   - Connect with conversation history (multi-turn context)
-  - Extract entities (Disease, Symptom, Drug) and intent
+  - Extract entities (Disease, EffectPhenotype, Drug, GeneProtein) and intent
 - Runs as a single LLM call BEFORE the 3 parallel retrieval streams
 
 > **History Handling**: Conversation history is persisted separately from the prompt window. Only the latest turns are injected into query analysis and answer generation, which keeps prompts bounded while preserving long-term conversation state in storage.
+>
+> The number of turns sent to the LLM is controlled by the server-side setting `HISTORY_TURNS_FOR_LLM` (default: **5 turns** = 10 messages). One **turn** = 1 user message + 1 assistant response. This setting is a global constant configured in `config/settings.py` and `.env`, applying uniformly to all users. It governs both **QueryAnalyzer** (query rewriting / entity extraction) and **LLMGenerator** (answer generation).
 
-#### Post-Rerank KG Merging (Prompt Prep)
-- **Purpose**: Prevent redundancy before feeding context to LLM.
-- **Method**: Group paths by `(prefix, rel2)` metadata. Merges `A targets B associated with C` and `A targets B associated with D` into `A targets B which is associated with C, and D.`
-- **Scoring**: Applies Density Bonus aggregation: `Agg_Score = MAX(scores) + 0.01 * (N - 1)` for fair Head-Tail context reordering.
-
-> **Fallback Behavior**: If KG metadata is unavailable at runtime, the pipeline still preserves the reranked KG text and skips path condensation instead of failing the request.
+#### Post-Rerank KG Merging & Interleaving (Prompt Prep)
+- **KG Merging**: Groups paths by `(prefix, rel2)` metadata. Merges `A targets B associated with C` and `D` into `A targets B which is associated with C, and D.`
+- **Density Bonus**: `Agg_Score = MAX(scores) + 0.05 * (N - 1)`.
+- **Manual Interleaving**: Since Text and KG are sorted independently, they are interleaved 1-by-1 (`Text 1, KG 1, Text 2, KG 2`) to ensure both modalities get equal placement opportunity in the final prompt.
 
 #### Prompt Construction: Head-Tail Placement
 - To avoid the **Lost-in-the-Middle** problem:
@@ -210,7 +211,7 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 
 ## 3. Data Sources & Evaluation
 
-### 3.1 Document Corpus (for FAISS Vector DB + Elasticsearch BM25)
+### 3.1 Document Corpus (for Weaviate Vector DB + BM25)
 | Setting | Value |
 |---|---|
 | **Source** | BioASQ PubMed Annual Baseline Corpus (`jmhb/pubmed_bioasq_2022`) |
@@ -227,10 +228,23 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 ### 3.3 Evaluation Datasets (BioASQ Task B)
 
 #### Q&A Dataset Split
-| Dataset | Split | Size |
-|---|---|---|
-| **BioASQ Task B** | **Validation** (used for hyperparameter tuning) | 500 questions |
-| **BioASQ Task B** | **Test** (final evaluation) | 500 questions |
+| Dataset | Split | File | Size | Notes |
+|---|---|---|---|---|
+| **BioASQ Task B** | **Validation** | `data/val/val_bioasq.jsonl` | ~277 questions | Hyperparameter tuning |
+| **BioASQ Task B** | **Test** | `data/test/test_bioasq.jsonl` | ~283 questions | Final evaluation |
+
+> **Snippet Coverage Filter**: Only questions where **every** relevant PMID has at least one corresponding gold snippet are retained. This ensures snippet-level evaluation is valid. Filtered by `_has_full_snippet_coverage()` in `preprocess_bioasq_taskB.py`.
+
+#### Gold Data Schema (per question in JSONL)
+```json
+{
+  "id": "question_id",
+  "body": "Original question text",
+  "relevant_pmid": ["12345", "67890"],
+  "snippets": [{"text": "relevant passage...", "pmid": "12345"}],
+  "ideal_answer": ["Gold reference answer"]
+}
+```
 
 #### External Evaluation
 | Dataset | Split | Size | Phase |
@@ -240,13 +254,36 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 
 ### 3.4 Evaluation Metrics
 
-#### Text Retrieval (after merging vector + BM25 via RRF)
-- **Recall@K**
-- **Evaluation Method**: For a given question from BioASQ Task B:
-  1. Retrieve top-$k$ chunks from the parallel pipeline.
-  2. Map retrieved FAISS indices to their original PMIDs using `faiss_metadata.jsonl`.
-  3. Compare retrieved PMIDs with the "golden" relevant document PMIDs.
-  4. (Optional) For exact matches, compare text snippets in the query with the content of the retrieved chunk.
+#### Text Retrieval (`scripts/evaluate_retrieval.py`)
+
+Pipeline evaluated: QueryAnalyzer (temp=0) → Vector + BM25 → RRF → Cross-Encoder.
+Evaluation is **deterministic** (single run, temperature=0 for QueryAnalyzer).
+
+##### Document-Level Metrics (PMID matching)
+| Metric | K Values | Description |
+|---|---|---|
+| **Precision@K** | 5, 10, 20 | Fraction of retrieved PMIDs that are relevant |
+| **Recall@K** | 5, 10, 20 | Fraction of gold PMIDs retrieved in top-K |
+| **F1@K** | 5, 10, 20 | Harmonic mean of P@K and R@K |
+| **MAP@K** | 5, 10, 20 | Mean Average Precision truncated at K |
+| **MRR** | — | Mean Reciprocal Rank of first relevant document |
+
+> **MAP@K**: `MAP@K = mean(AP@K)` across all queries.
+> `AP@K = (1/|gold|) * Σᵢ₌₁ᴷ P(i) × rel(i)` — considers ranking quality up to position K.
+
+##### Snippet-Level Metrics (text containment)
+| Metric | K Values | Description |
+|---|---|---|
+| **Snippet Recall@K** | 5, 10, 20 | Fraction of gold snippets whose text appears as a substring in a retrieved parent chunk with the same PMID |
+| **Snippet Precision@K** | 5, 10, 20 | Fraction of top-K retrieved items that contain at least one gold snippet |
+
+> **Matching Logic**: A gold snippet is "covered" if `gold_snippet_text in retrieved_parent_text` for a parent chunk sharing the same PMID.
+
+##### Output
+| File | Path | Content |
+|---|---|---|
+| **Detail** | `data/eval_results/bioasq/detail.jsonl` | Per-question: retrieved items, relevance labels, all metrics |
+| **Summary** | `data/eval_results/bioasq/summary.json` | Aggregate metrics across all questions |
 
 #### Generation
 - **Exact Match / F1** (standard QA metrics)
@@ -274,7 +311,7 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 |---|---|---|
 | **Neo4j** | Medical Knowledge Graph (PrimeKG) | Docker container (local) |
 | **Weaviate** | Vector + BM25 hybrid search | Docker container (local) |
-| **PostgreSQL** | Conversation history (multi-turn) | Docker container (local) |
+| **PostgreSQL** | Conversation history (multi-turn). DB: `chat_history`, persisted via Docker named volume `postgres_data`. | Docker container (local, `postgres:15`) |
 | **SQLite** | Parent chunk storage & lookup | Local file (`parent_chunks.db`) |
 | **Modal** | GPU inference (Cross-Encoder only) | Cloud (modal.com) |
 | **Groq API** | LLM inference (Llama 70B) | Cloud (groq.com) |
@@ -289,6 +326,7 @@ modal                     — Cloud GPU deployment (Cross-Encoder)
 groq                      — Groq API client (Llama 70B)
 sqlite3                   — Built-in Python DB (Parent storage)
 pydantic, pydantic-settings — Config & validation
+psycopg2-binary           — PostgreSQL driver (conversation history)
 ragas                     — RAG evaluation framework
 ```
 
@@ -301,6 +339,9 @@ ragas                     — RAG evaluation framework
 | Method | Path | Description |
 |---|---|---|
 | `POST` | `/api/chat` | Send user question, receive AI answer |
+| `GET` | `/api/conversations` | List all conversations (most recent first) |
+| `GET` | `/api/conversations/{id}/messages` | Paginated message history (cursor-based) |
+| `DELETE` | `/api/conversations/{id}` | Delete a conversation and its messages |
 | `GET` | `/api/health` | Health check |
 | `GET` | `/` | Serve frontend (static files) |
 
@@ -325,19 +366,53 @@ ragas                     — RAG evaluation framework
 }
 ```
 
+### GET /api/conversations/{id}/messages — Paginated Messages
+> **Cursor-based pagination** for loading chat history. The frontend first loads the newest messages, then fetches older pages as the user scrolls up (reverse-chronological infinite scroll, like ChatGPT/Gemini).
+
+**Query Parameters**:
+| Param | Type | Default | Description |
+|---|---|---|---|
+| `limit` | int | `MESSAGE_PAGE_SIZE` (20) | Number of messages per page |
+| `before_id` | int | `None` | Cursor: return messages older than this message ID |
+
+**Response**:
+```json
+{
+  "messages": [
+    {"id": 42, "role": "user", "content": "What is metformin?", "created_at": "..."},
+    {"id": 43, "role": "assistant", "content": "Metformin is...", "created_at": "..."}
+  ],
+  "has_more": true
+}
+```
+
+### GET /api/conversations — Response
+```json
+{
+  "conversations": [
+    {"id": "uuid-1", "title": "What are symptoms of diabetes?", "created_at": "...", "updated_at": "..."},
+    {"id": "uuid-2", "title": "Treatment for hypertension", "created_at": "...", "updated_at": "..."}
+  ]
+}
+```
+
 ---
 
 ## 8. Frontend Design
 
+> **Status**: Frontend files (`index.html`, `app.js`, `chat.js`, `style.css`, `markdown.js`, `theme.js`) exist but are **not yet implemented**. The backend API is built first; frontend will be developed in a subsequent phase.
+
 - **Type**: Single Page Application (Vanilla HTML/CSS/JS)
 - **Theme**: Dark/Light toggle, medical-themed color palette
 - **Layout**: Chat-centric with message bubbles (user vs. bot)
+- **Chat History UX**: Reverse-scroll infinite loading — newest messages displayed first, scrolling up loads older messages via cursor-based pagination (`GET /api/conversations/{id}/messages?before_id=X`), matching the UX of ChatGPT/Gemini.
 - **Features**:
   - Markdown rendering for bot responses
   - Source citation display (expandable)
   - Loading animation during generation
   - Responsive design (mobile-friendly)
   - Suggested starter questions
+  - Settings panel for configurable parameters
 
 ---
 
@@ -368,11 +443,12 @@ User Question
     │                               └────────┬────────┘
     │                                        ▼
     ├─── Cross-Encoder Reranking (MedCPT, Modal GPU)
-    │    ├── Rerank combined pool: Text Search + KG Paths
-    │    ├── Filter scores < 0
-    │    └── Apply Quota: Top-M Text + Top-N KG
+    │    ├── Batch inference for all Text + KG paths
+    │    └── Separate into 2 independently sorted lists (Top-M Text, Top-N KG)
     │
-    ├─── Post-Rerank KG Merging ──► Merge duplicate prefixes
+    ├─── Post-Rerank KG Merging ──► Condense Top-N KG prefixes + Density Bonus
+    │
+    ├─── Manual Interleaving ──► Trộn 1-by-1 (Text 1, KG 1, Text 2, KG 2)
     │
     ├─── Head-Tail Placement ──► Build context prompt
     │
@@ -413,11 +489,22 @@ RRF_K=60
 LLM_MODEL=meta-llama/Llama-3.3-70B-Versatile
 LLM_MAX_TOKENS=2048
 LLM_TEMPERATURE=0.3
+HISTORY_TURNS_FOR_LLM=5           # Number of recent turns (1 turn = user + assistant) fed to LLM
+
+# Chat History Pagination
+MESSAGE_PAGE_SIZE=20               # Messages per page for infinite scroll loading
 
 # Embedding
 EMBEDDING_MODEL=ncbi/MedCPT-Article-Encoder
 QUERY_MODEL=ncbi/MedCPT-Query-Encoder
 CROSS_ENCODER_MODEL=ncbi/MedCPT-Cross-Encoder
+
+# PostgreSQL (Conversation History)
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_USER=medrag
+POSTGRES_PASSWORD=medrag_secret
+POSTGRES_DB=chat_history
 ```
 
 ---
@@ -433,3 +520,11 @@ CROSS_ENCODER_MODEL=ncbi/MedCPT-Cross-Encoder
 - **Conversation**: Multi-turn support with PostgreSQL.
 - **KG Linearization**: Rule-based Python templates.
 - **Entity Extraction**: Handled by `query_analyzer.py` via Llama 70B.
+- **Generation Phase**: Completed — `kg_merger.py`, `prompt_builder.py`, `llm_generator.py` are implemented.
+- **End-to-End Pipeline**: `rag_pipeline.py` orchestrates the full flow from query analysis to answer generation.
+- **Conversation History**: `ConversationStore` (PostgreSQL, `psycopg2`) persists multi-turn sessions. Data stored in Docker named volume `postgres_data` for durability. Auto-titles conversations with the first user question.
+- **API Layer**: FastAPI app (`api/main.py`) with `/api/chat`, `/api/conversations`, `/api/conversations/{id}/messages`, and `/api/health` endpoints. Static frontend served at `/`.
+- **LLM History Window**: Controlled by `HISTORY_TURNS_FOR_LLM` (default 5 turns = 10 messages). This is a global server-side constant, not per-user. Applied uniformly in `QueryAnalyzer` and `LLMGenerator`.
+- **Chat Pagination**: `MESSAGE_PAGE_SIZE` (default 20) controls the number of messages loaded per scroll batch in the frontend. Cursor-based pagination using message `id` as cursor.
+- **Frontend Status**: Frontend files exist but are **not yet implemented**. Backend API is developed first.
+- **Future: User Authentication**: The system is designed to support per-user authentication in a future phase. Current settings like `HISTORY_TURNS_FOR_LLM` are global constants; once auth is implemented, some settings may become per-user configurable.

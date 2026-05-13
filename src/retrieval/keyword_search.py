@@ -2,13 +2,14 @@ from typing import List, Dict
 from src.retrieval.vector_search import _aggregate_to_parents
 from src.storage.parent_store import ParentStore
 from src.storage.weaviate_client import WeaviateChildStore
+from config.settings import settings
 
 def keyword_search(
     query_text: str,
     weaviate_store: WeaviateChildStore,
     parent_store: ParentStore,
-    top_k: int = 20,
-    child_fetch_limit: int = 60
+    top_k: int = settings.RETRIEVAL_TOP_K,
+    child_fetch_limit: int = settings.CHILD_FETCH_LIMIT
 ) -> List[Dict]:
     """BM25 keyword search: search child chunks, then aggregate to parent chunks.
     

@@ -20,7 +20,7 @@ class KGSearch:
         hop1_m: int = 10,
         hop2_n: int = 5,
         hop2_cap: int = 50
-    ) -> str:
+    ) -> list[dict]:
         """Full KG retrieval pipeline: 2-stage retrieval → KG linearization.
 
         Args:
@@ -39,7 +39,7 @@ class KGSearch:
             hop2_cap: Hard cap on total 2-hop triples.
 
         Returns:
-            Newline-joined linearized triple strings, or "" if nothing found.
+            List of linearized triple dictionaries with metadata, or [] if nothing found.
         """
         result = self.client.retrieve_subgraph(
             entity_article_embeddings=entity_article_embeddings,
@@ -56,7 +56,7 @@ class KGSearch:
 
         if not hop1_triples and not hop2_triples:
             logger.info("[KG Search] No triples returned")
-            return ""
+            return []
 
         paths = PathLinearizer.linearize(hop1_triples, hop2_triples)
 
@@ -64,8 +64,8 @@ class KGSearch:
             f"[KG Search]: {len(hop1_triples)} 1-hop + {len(hop2_triples)} 2-hop "
             f"=> Generated {len(paths)} independent paths"
         )
-        # Return newline-joined paths
-        return "\n".join(paths)
+        # Return list of dictionaries directly
+        return paths
 
     def cleanup(self) -> None:
         self.client.close()

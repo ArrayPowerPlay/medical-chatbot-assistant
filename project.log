@@ -997,3 +997,13 @@
 2026-04-28 21:48:19,916 - MedKG-RAG - INFO - Created collection 'ChildChunks'!
 2026-04-28 21:48:19,916 - MedKG-RAG - INFO - Resetting parent store (SQLite)...
 2026-04-28 21:48:24,237 - MedKG-RAG - INFO - All databases reset successfully!
+2026-05-12 16:25:50,883 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-05-12 16:25:50,918 - MedKG-RAG - INFO - Loading MedCPT-Article-Encoder...
+2026-05-12 16:25:50,922 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-05-12 19:48:35,078 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-05-12 19:48:35,098 - MedKG-RAG - INFO - Loading MedCPT-Article-Encoder...
+2026-05-12 19:48:35,099 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-05-12 20:06:09,942 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-05-12 20:06:09,959 - MedKG-RAG - INFO - Loading MedCPT-Article-Encoder...
+2026-05-12 20:06:09,962 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-05-12 20:39:15,546 - MedKG-RAG - INFO - Inserted 4240 child chunks into Weaviate
