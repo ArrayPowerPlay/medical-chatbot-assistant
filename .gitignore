@@ -7,3 +7,4 @@ vectorstore/
 *.csv
 __pycache__
 __init__.py
+.log
