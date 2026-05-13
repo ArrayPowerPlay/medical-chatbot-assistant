@@ -60,12 +60,19 @@ class WeaviateChildStore:
             logger.info(f"Deleted collection '{CHILD_COLLECTION}'")
 
     def insert_children(self, children: List[Dict], vectors: np.ndarray):
-        """Batch insert child chunks with their MedCPT vectors"""
+        """Batch insert child chunks with their MedCPT vectors."""
         collection = self.client.collections.get(CHILD_COLLECTION)
+        from weaviate.util import generate_uuid5
 
         with collection.batch.dynamic() as batch:   # Use batch insertion
             for i, child in enumerate(children):
+                # Generate a deterministic UUID to prevent duplicates
+                # The combination of pmid, parent_id, and text uniquely identifies a chunk
+                unique_str = f"{child['pmid']}_{child['parent_id']}_{child['text']}"
+                obj_uuid = generate_uuid5(unique_str)
+
                 batch.add_object(
+                    uuid=obj_uuid,
                     properties={
                         "parent_id": child["parent_id"],
                         "pmid": child["pmid"],
