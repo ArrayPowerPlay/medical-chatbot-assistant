@@ -5,6 +5,7 @@ services:
   weaviate:
     image: cr.weaviate.io/semitechnologies/weaviate:1.28.4
     container_name: weaviate-medrag
+    hostname: node1
     ports:
       # host_port : container_port
       - "8081:8080"   # REST API

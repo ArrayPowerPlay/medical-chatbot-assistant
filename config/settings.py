@@ -1,6 +1,7 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import Field
 from pathlib import Path
+from typing import List
 
 class Settings(BaseSettings):
     # Project Paths
@@ -20,27 +21,30 @@ class Settings(BaseSettings):
     NEO4J_PASSWORD: str = ""
 
     # Weaviate
-    WEAVIATE_URL : str = "http://localhost:8081" # RESTful API port 8080
-    WEAVIATE_GRPC_PORT : int = 50051             # Use GRPC protocol for big data processing     
+    WEAVIATE_URL: str = "http://localhost:8081" # RESTful API port 8080
+    WEAVIATE_GRPC_PORT: int = 50051             # Use GRPC protocol for big data processing     
 
     # RAG hyperparameters
-    RETRIEVAL_TOP_K: int = 20 
-    RERANK_TOP_K: int = 10
-    CHILD_FETCH_LIMIT: int = 60         # Number of child chunks to be fetched
+    RETRIEVAL_TOP_K: int = 80
+    CHILD_FETCH_LIMIT: int = 120        # Number of child chunks to be fetched
 
     # Parent-Child chunking
     TIER1_MAX_LEN: int = 500            # Threshold of article's title + abstract length to be chunked or not
     TIER2_MAX_LEN: int = 2000           # Threshold of article's title + abstract length to be chunked or not
-    PARENT_CHUNK_SIZE : int = 1500
-    PARENT_CHUNK_OVERLAP : int = 256
-    CHILD_CHUNK_SIZE : int = 500
+    PARENT_CHUNK_SIZE: int = 1500
+    PARENT_CHUNK_OVERLAP: int = 256
+    CHILD_CHUNK_SIZE: int = 500
 
     # Reranking configuration
-    RERANK_TEXT_TOP_M: int = 5
+    RERANK_TEXT_TOP_M: int = 20
     RERANK_KG_TOP_N: int = 20
 
-    # RRF top_k configuration
-    TOP_K_RRF: int = 60
+    # RRF configuration
+    TOP_K_RRF: int = 80
+    K_RRF: int = 60
+
+    # K values used for evaluation
+    K_VALUES: List[int] = [5, 10, 20]
 
     # PostgreSQL configuraion
     POSTGRE_HOST: str = "localhost"
@@ -50,7 +54,7 @@ class Settings(BaseSettings):
     POSTGRE_DB: str = ""
 
     # Model names
-    LLM_MODEL: str = "llama-3.1-8b-instant"
+    LLM_MODEL: str = "llama-3.3-70b-versatile"
     EMBEDDING_MODEL: str = "ncbi/MedCPT-Article-Encoder"
     QUERY_MODEL: str = "ncbi/MedCPT-Query-Encoder"
 

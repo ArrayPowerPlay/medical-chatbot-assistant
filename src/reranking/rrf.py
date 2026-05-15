@@ -6,14 +6,16 @@ class RRFManager:
     """
     Manages Reciprocal Rank Fusion (RRF) to merge multiple retrieval streams
     """
-    def __init__(self, k: int = settings.TOP_K_RRF):
+    def __init__(self, k: int = settings.K_RRF):
+        if k < 0:
+            raise ValueError(f"RRF parameter k must be >= 0, got {k}")
         self.k = k
 
     def rank_fusion(
         self,
-        vector_results: List[Dict], 
+        vector_results: List[Dict],  
         bm25_results: List[Dict],
-        top_k: int = 50
+        top_k: int = settings.TOP_K_RRF
     ) -> List[Dict]:
         """
         Merge Vector and BM25 search results using Reciprocal Rank Fusion
@@ -49,7 +51,7 @@ class RRFManager:
         # Convert scores to a sorted list
         fused_results = []
         for parent_id, rrf_score in scores.items():
-            item = metadata_storage[parent_id]
+            item = metadata_storage[parent_id].copy()
             item['rrf_score'] = rrf_score
             item['source_type'] = 'text_retrieval'
             if 'score' in item:

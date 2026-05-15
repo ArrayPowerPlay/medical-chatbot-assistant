@@ -259,6 +259,14 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 Pipeline evaluated: QueryAnalyzer (temp=0) → Vector + BM25 → RRF → Cross-Encoder.
 Evaluation is **deterministic** (single run, temperature=0 for QueryAnalyzer).
 
+> **Best observed text-only eval config (May 16, 2026)**: On a 20-question BioASQ validation subset, the strongest configuration tested so far is:
+> `TOP_K_RRF=80`, `RETRIEVAL_TOP_K=80`, `CHILD_FETCH_LIMIT=120`, `RERANK_TEXT_TOP_M=20`.
+> Observed aggregate metrics:
+> - Document: `P@5=0.6700`, `R@5=0.4626`, `MAP@5=0.6488`, `MRR=0.8267`
+> - Document: `P@20=0.3200`, `R@20=0.7625`, `MAP@20=0.6174`
+> - Snippet: `Snippet_F1@5=0.4726`, `Snippet_F1@10=0.5121`, `Snippet_F1@20=0.4237`
+> Increasing `RERANK_TEXT_TOP_M` above `20` slightly reduced retrieval metrics in this setup.
+
 ##### Document-Level Metrics (PMID matching)
 | Metric | K Values | Description |
 |---|---|---|
@@ -477,13 +485,16 @@ RAW_DATA_PATH=./data/raw/
 
 # Pipeline Params
 RETRIEVAL_TOP_K=20
-RERANK_TOP_K=10
+CHILD_FETCH_LIMIT=60
+RERANK_TEXT_TOP_M=20
+RERANK_KG_TOP_N=20
+TOP_K_RRF=80
+K_RRF=60
 PARENT_CHUNK_SIZE=1200
 PARENT_CHUNK_OVERLAP=200
 CHILD_CHUNK_SIZE=256
 CHILD_CHUNK_OVERLAP=64
 KG_HOP_DEPTH=2
-RRF_K=60
 
 # LLM Config
 LLM_MODEL=meta-llama/Llama-3.3-70B-Versatile
@@ -522,9 +533,18 @@ POSTGRES_DB=chat_history
 - **Entity Extraction**: Handled by `query_analyzer.py` via Llama 70B.
 - **Generation Phase**: Completed — `kg_merger.py`, `prompt_builder.py`, `llm_generator.py` are implemented.
 - **End-to-End Pipeline**: `rag_pipeline.py` orchestrates the full flow from query analysis to answer generation.
+- **Pipeline Config Alignment**: As of May 16, 2026, `RAGPipeline.run()` forwards both `top_k` and `child_fetch_limit` into `ParallelRetriever`, so online inference can use the same retrieval-depth settings as `scripts/evaluate_retrieval.py`.
 - **Conversation History**: `ConversationStore` (PostgreSQL, `psycopg2`) persists multi-turn sessions. Data stored in Docker named volume `postgres_data` for durability. Auto-titles conversations with the first user question.
 - **API Layer**: FastAPI app (`api/main.py`) with `/api/chat`, `/api/conversations`, `/api/conversations/{id}/messages`, and `/api/health` endpoints. Static frontend served at `/`.
 - **LLM History Window**: Controlled by `HISTORY_TURNS_FOR_LLM` (default 5 turns = 10 messages). This is a global server-side constant, not per-user. Applied uniformly in `QueryAnalyzer` and `LLMGenerator`.
 - **Chat Pagination**: `MESSAGE_PAGE_SIZE` (default 20) controls the number of messages loaded per scroll batch in the frontend. Cursor-based pagination using message `id` as cursor.
 - **Frontend Status**: Frontend files exist but are **not yet implemented**. Backend API is developed first.
 - **Future: User Authentication**: The system is designed to support per-user authentication in a future phase. Current settings like `HISTORY_TURNS_FOR_LLM` are global constants; once auth is implemented, some settings may become per-user configurable.
+
+### Retrieval Implementation Notes
+
+- `K_RRF` and `TOP_K_RRF` are separate knobs: `K_RRF` is the damping constant in the RRF formula, while `TOP_K_RRF` is the number of fused text candidates kept before cross-encoder reranking.
+- `CrossEncoderReranker` keeps negative MedCPT logits and ranks all passages by score instead of dropping `score <= 0`. This preserves valid relative ordering from the classifier output.
+- `RAGPipeline.run()` keeps the rewritten query embedding as a NumPy-like vector for Weaviate vector search and separately converts it to a Python list only where KG retrieval needs JSON-serializable data.
+- `RAGPipeline._normalize_history()` now truncates the already-cleaned history, so invalid or empty messages are not reintroduced by slicing.
+- `src.pipeline.rag_pipeline` imports `KGSearch` from `src.kg.kg_search`, so the module imports cleanly from the project root.

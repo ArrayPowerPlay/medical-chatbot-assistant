@@ -31,7 +31,7 @@ from src.generation.llm_generator import LLMGenerator
 from src.generation.prompt_builder import build_prompts
 from src.storage.parent_store import ParentStore
 from src.storage.weaviate_client import WeaviateChildStore
-from kg.kg_search import KGSearch
+from src.kg.kg_search import KGSearch
 from src.embeddings.medcpt_embedder import MedCPTEmbedder
 
 
@@ -78,7 +78,7 @@ class RAGPipeline:
             normalized.append({"role": role, "content": content.strip()})
 
         if max_messages is not None: 
-            return history[-max_messages:]
+            return normalized[-max_messages:]
         return normalized
     
     def _build_entity_texts(self, analysis: Dict[str, Any]) -> List[str]:
@@ -117,7 +117,8 @@ class RAGPipeline:
         history: Optional[List[Dict[str, str]]] = None,
         conversation_id: Optional[str] = None,
         history_turns: int = settings.HISTORY_TURNS_FOR_LLM,
-        top_k: int = settings.RETRIEVAL_TOP_K
+        top_k: int = settings.RETRIEVAL_TOP_K,
+        child_fetch_limit: int = settings.CHILD_FETCH_LIMIT,
     ) -> Dict[str, Any]:
         """
         Run the full synchronous RAG pipeline.
@@ -127,6 +128,7 @@ class RAGPipeline:
             history: Optional conversation history for query rewriting and answer generation.
             conversation_id: Optional conversation identifier to carry through the response.
             top_k: Retrieval depth for vector and BM25 stages.
+            child_fetch_limit: Number of child chunks fetched per text-retrieval stream.
 
         Returns:
             A dictionary with the answer, sources, rewritten query, entities, intents, and
@@ -141,7 +143,7 @@ class RAGPipeline:
         rewritten_query = analysis.get("rewritten_query", query)
         intents = analysis.get("intents", ["general"])
 
-        query_vector = self.query_embedder.embed_texts(rewritten_query)[0].tolist()
+        query_vector = self.query_embedder.embed_texts(rewritten_query)[0]
         entity_texts = self._build_entity_texts(analysis)
         entity_artical_embeddings: List[List[float]] = []
         if entity_texts:
@@ -155,6 +157,7 @@ class RAGPipeline:
             entity_article_embeddings=entity_artical_embeddings,
             intents=intents,
             top_k=top_k,
+            child_fetch_limit=child_fetch_limit,
         )
 
         logger.info(f"[RAG Pipeline]: Parallel retrieval completed! "

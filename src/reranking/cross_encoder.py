@@ -10,9 +10,10 @@ class CrossEncoderReranker:
     Merges text search results (keyword + vector search) and KG search results, then reranks them.
     """
     def __init__(self):
+        self.model = None
         try:
             # Link to deployed App on Modal
-            self.model = modal.Cls.lookup("medcpt-cross-encoder-v1", "CrossEncoderModel")()   # type: ignore
+            self.model = modal.Cls.from_name("medcpt-cross-encoder-v1", "CrossEncoderModel")()   # type: ignore
             self.is_available = True
         except Exception as e:
             logger.error(f"[Cross Encoder Reranker]: Failed to lookup Modal App. Error: {e}")
@@ -53,21 +54,22 @@ class CrossEncoderReranker:
                 'metadata': kg_doc.get('metadata', {}),
             }
 
-        if not self.is_available:
-            logger.warning("Cannot connect to Modal App, return random ranking results.")
-            normalized_fallback_text = []
+        def _fallback_rankings() -> Tuple[List[Dict], List[Dict]]:
+            fallback_text = []
             for item in rrf_results[:top_m]:
                 fallback_item = item.copy()
-                fallback_item['source_type'] = 'text_retrieval'
-                normalized_fallback_text.append(fallback_item)
-                
-            normalized_fallback_kg = []
-            if kg_results:
-                for item in kg_results[:top_n]:
-                    fallback_item = _normalize_kg_doc(item, 0.0)
-                    normalized_fallback_kg.append(fallback_item)
-                    
-            return normalized_fallback_text, normalized_fallback_kg
+                fallback_item["source_type"] = "text_retrieval"
+                fallback_text.append(fallback_item)
+
+            fallback_kg = []
+            for item in kg_results[:top_n]:
+                fallback_kg.append(_normalize_kg_doc(item, 0.0))
+
+            return fallback_text, fallback_kg
+
+        if not self.is_available:
+            logger.warning("Cannot connect to Modal App, returning fallback ranking results.")
+            return _fallback_rankings()
         
         passages = []
         mapping = []
@@ -87,18 +89,16 @@ class CrossEncoderReranker:
             return [], []
         
         try:
-            scores = self.model.rerank.remote(query, passages)
+            scores = self.model.rerank.remote(query, passages)       # type: ignore
         except Exception as e:
             logger.error(f"[Cross Encoder]: Rerank failed: {e}")
-            return rrf_results[:(top_m + top_n)], []
+            return _fallback_rankings()
         
         # Filter scores > 0
         scored_text = []
         scored_kg = []
 
         for i, score in enumerate(scores):
-            if score <= 0: continue
-            
             mapped_item = mapping[i]
             if mapped_item["type"] == "text":
                 scored_text.append(_normalize_text_doc(mapped_item["data"], score))
@@ -110,4 +110,20 @@ class CrossEncoderReranker:
         scored_kg.sort(key=lambda x: x["cross_encoder_score"], reverse=True)
         
         return scored_text[:top_m], scored_kg[:top_n]
+
+    def close(self) -> None:
+        """Best-effort cleanup for Modal sync wrappers and their event loop."""
+        model = getattr(self, "model", None)
+        if model is None:
+            return
+
+        synchronizer = getattr(model, "_sync_synchronizer", None)
+        if synchronizer is not None and hasattr(synchronizer, "_close_loop"):
+            try:
+                synchronizer._close_loop()
+            except Exception as e:
+                logger.debug(f"[Cross Encoder]: Failed to close Modal synchronizer cleanly: {e}")
+
+        self.model = None
+        self.is_available = False
         

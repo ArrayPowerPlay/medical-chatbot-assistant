@@ -8,6 +8,7 @@ import concurrent.futures
 from typing import Dict, List, Tuple
 import numpy as np
 
+from config.settings import settings
 from config.logging_config import logger
 from src.retrieval.vector_search import vector_search
 from src.retrieval.keyword_search import keyword_search
@@ -36,8 +37,8 @@ class ParallelRetriever:
         query_vector: np.ndarray,
         entity_article_embeddings: List[List[float]],
         intents: List[str] = ["general"],
-        top_k: int = 20,
-        child_fetch_limit: int = 60
+        top_k: int = settings.RETRIEVAL_TOP_K,
+        child_fetch_limit: int = settings.CHILD_FETCH_LIMIT
     ) -> Tuple[List[Dict], List[Dict], List[Dict]]:
         """
         Runs the 3 retrieval streams in parallel.

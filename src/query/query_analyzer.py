@@ -118,4 +118,10 @@ class QueryAnalyzer:
             "intents": ["general"]
         }
 
+    def close(self) -> None:
+        """Close the underlying Groq client to avoid leaking transports."""
+        if hasattr(self.client, "is_closed") and self.client.is_closed():
+            return
+        self.client.close()
+
 

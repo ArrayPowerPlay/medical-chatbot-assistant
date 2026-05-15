@@ -1,0 +1,45 @@
+{
+  "config": {
+    "val_file": "D:\\workspace\\Repo\\medical-chatbot-assistant\\data\\val\\val_bioasq.jsonl",
+    "total_questions": 50,
+    "evaluated_questions": 50,
+    "failed_questions": 0,
+    "k_rrf": 60,
+    "top_k_rrf": 80,
+    "retrieval_top_k": 80,
+    "rerank_text_top_m": 20,
+    "child_fetch_limit": 120,
+    "k_values": [
+      5,
+      10,
+      20
+    ],
+    "timestamp": "2026-05-16T00:43:46"
+  },
+  "document_metrics": {
+    "Precision@5": 0.652,
+    "Recall@5": 0.5206,
+    "F1@5": 0.5105,
+    "MAP@5": 0.704,
+    "Precision@10": 0.514,
+    "Recall@10": 0.7289,
+    "F1@10": 0.544,
+    "MAP@10": 0.6717,
+    "Precision@20": 0.332,
+    "Recall@20": 0.8757,
+    "F1@20": 0.4471,
+    "MAP@20": 0.7113,
+    "MRR": 0.864
+  },
+  "snippet_metrics": {
+    "Snippet_Recall@5": 0.5042,
+    "Snippet_Precision@5": 0.596,
+    "Snippet_F1@5": 0.4754,
+    "Snippet_Recall@10": 0.7124,
+    "Snippet_Precision@10": 0.488,
+    "Snippet_F1@10": 0.5191,
+    "Snippet_Recall@20": 0.8593,
+    "Snippet_Precision@20": 0.323,
+    "Snippet_F1@20": 0.4348
+  }
+}
