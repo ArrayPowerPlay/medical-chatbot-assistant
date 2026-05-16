@@ -37,7 +37,8 @@ class ParallelRetriever:
         query_vector: np.ndarray,
         entity_article_embeddings: List[List[float]],
         intents: List[str] = ["general"],
-        top_k: int = settings.RETRIEVAL_TOP_K,
+        vector_top_k: int = settings.VECTOR_TOP_K,
+        keyword_top_k: int = settings.KEYWORD_TOP_K,
         child_fetch_limit: int = settings.CHILD_FETCH_LIMIT
     ) -> Tuple[List[Dict], List[Dict], List[Dict]]:
         """
@@ -69,7 +70,7 @@ class ParallelRetriever:
                 query_vector=query_vector,
                 weaviate_store=self.weaviate_store,
                 parent_store=self.parent_store,
-                top_k=top_k,
+                top_k=vector_top_k,
                 child_fetch_limit=child_fetch_limit
             )
             
@@ -79,7 +80,7 @@ class ParallelRetriever:
                 query_text=query_text,
                 weaviate_store=self.weaviate_store,
                 parent_store=self.parent_store,
-                top_k=top_k,
+                top_k=keyword_top_k,
                 child_fetch_limit=child_fetch_limit
             )
 

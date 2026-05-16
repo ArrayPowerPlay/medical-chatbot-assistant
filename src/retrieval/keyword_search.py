@@ -8,7 +8,7 @@ def keyword_search(
     query_text: str,
     weaviate_store: WeaviateChildStore,
     parent_store: ParentStore,
-    top_k: int = settings.RETRIEVAL_TOP_K,
+    top_k: int = settings.KEYWORD_TOP_K,
     child_fetch_limit: int = settings.CHILD_FETCH_LIMIT
 ) -> List[Dict]:
     """BM25 keyword search: search child chunks, then aggregate to parent chunks.

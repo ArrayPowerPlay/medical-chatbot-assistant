@@ -47,7 +47,7 @@ def vector_search(
     query_vector: np.ndarray,
     weaviate_store: WeaviateChildStore,
     parent_store: ParentStore,
-    top_k: int = settings.RETRIEVAL_TOP_K,
+    top_k: int = settings.VECTOR_TOP_K,
     child_fetch_limit: int = settings.CHILD_FETCH_LIMIT
 ) -> List[Dict]:
     """Semantic vector search: search child chunks, then aggregate to parent chunks.

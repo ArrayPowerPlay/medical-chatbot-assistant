@@ -117,7 +117,8 @@ class RAGPipeline:
         history: Optional[List[Dict[str, str]]] = None,
         conversation_id: Optional[str] = None,
         history_turns: int = settings.HISTORY_TURNS_FOR_LLM,
-        top_k: int = settings.RETRIEVAL_TOP_K,
+        vector_top_k: int = settings.VECTOR_TOP_K,
+        keyword_top_k: int = settings.KEYWORD_TOP_K,
         child_fetch_limit: int = settings.CHILD_FETCH_LIMIT,
     ) -> Dict[str, Any]:
         """
@@ -156,7 +157,8 @@ class RAGPipeline:
             query_vector=query_vector,
             entity_article_embeddings=entity_artical_embeddings,
             intents=intents,
-            top_k=top_k,
+            vector_top_k=vector_top_k,
+            keyword_top_k=keyword_top_k,
             child_fetch_limit=child_fetch_limit,
         )
 

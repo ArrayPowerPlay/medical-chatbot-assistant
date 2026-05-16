@@ -5611,3 +5611,495 @@ weaviate.exceptions.WeaviateQueryError: Query call with protocol GRPC search fai
 2026-05-16 00:43:43,646 - MedKG-RAG - INFO - [550316a6e9bde69634000029] Cross-encoder rerank starting
 2026-05-16 00:43:46,617 - MedKG-RAG - INFO - [550316a6e9bde69634000029] Cross-encoder rerank returned 20 text results
 2026-05-16 00:43:46,627 - MedKG-RAG - INFO - Results saved to D:\workspace\Repo\medical-chatbot-assistant\data\eval_results\bioasq\detail.jsonl and D:\workspace\Repo\medical-chatbot-assistant\data\eval_results\bioasq\summary.json
+2026-05-16 07:36:59,835 - MedKG-RAG - INFO - Loaded 20 questions for evaluation.
+2026-05-16 07:36:59,835 - MedKG-RAG - INFO - Runtime settings: K_RRF=60, TOP_K_RRF=80, VECTOR_TOP_K=100, KEYWORD_TOP_K=100, CHILD_FETCH_LIMIT=120, RERANK_TEXT_TOP_M=20, K_VALUES=[5, 10, 20]
+2026-05-16 07:36:59,835 - MedKG-RAG - INFO - Initializing pipeline components...
+2026-05-16 07:36:59,863 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-05-16 07:37:02,110 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-05-16 07:37:02,110 - MedKG-RAG - INFO - [1/20] Evaluating: What is the major adverse effect of adriamycin(doxorubicin)?...
+2026-05-16 07:37:02,110 - MedKG-RAG - INFO - [53551206a0726bee57000001] QueryAnalyzer starting
+2026-05-16 07:37:02,665 - MedKG-RAG - INFO - [53551206a0726bee57000001] QueryAnalyzer done. rewritten_query='What is the major adverse effect of doxorubicin?'
+2026-05-16 07:37:02,665 - MedKG-RAG - INFO - [53551206a0726bee57000001] Embedding query
+2026-05-16 07:37:02,919 - MedKG-RAG - INFO - [53551206a0726bee57000001] Vector search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:37:07,440 - MedKG-RAG - INFO - [53551206a0726bee57000001] Vector search returned 80 parent results
+2026-05-16 07:37:07,440 - MedKG-RAG - INFO - [53551206a0726bee57000001] BM25 search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:37:07,571 - MedKG-RAG - INFO - [53551206a0726bee57000001] BM25 search returned 99 parent results
+2026-05-16 07:37:07,571 - MedKG-RAG - INFO - [53551206a0726bee57000001] RRF fusion starting with k=60
+2026-05-16 07:37:07,572 - MedKG-RAG - INFO - [53551206a0726bee57000001] RRF fusion returned 80 fused results
+2026-05-16 07:37:07,572 - MedKG-RAG - INFO - [53551206a0726bee57000001] Cross-encoder rerank starting
+2026-05-16 07:37:29,596 - MedKG-RAG - INFO - [53551206a0726bee57000001] Cross-encoder rerank returned 20 text results
+2026-05-16 07:37:29,599 - MedKG-RAG - INFO - [2/20] Evaluating: Is there a mouse model for Fanconi anemia?...
+2026-05-16 07:37:29,599 - MedKG-RAG - INFO - [54edf05494afd6150400000e] QueryAnalyzer starting
+2026-05-16 07:37:29,986 - MedKG-RAG - INFO - [54edf05494afd6150400000e] QueryAnalyzer done. rewritten_query='Fanconi anemia mouse model'
+2026-05-16 07:37:30,001 - MedKG-RAG - INFO - [54edf05494afd6150400000e] Embedding query
+2026-05-16 07:37:30,028 - MedKG-RAG - INFO - [54edf05494afd6150400000e] Vector search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:37:31,413 - MedKG-RAG - INFO - [54edf05494afd6150400000e] Vector search returned 61 parent results
+2026-05-16 07:37:31,413 - MedKG-RAG - INFO - [54edf05494afd6150400000e] BM25 search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:37:31,480 - MedKG-RAG - INFO - [54edf05494afd6150400000e] BM25 search returned 87 parent results
+2026-05-16 07:37:31,480 - MedKG-RAG - INFO - [54edf05494afd6150400000e] RRF fusion starting with k=60
+2026-05-16 07:37:31,480 - MedKG-RAG - INFO - [54edf05494afd6150400000e] RRF fusion returned 80 fused results
+2026-05-16 07:37:31,480 - MedKG-RAG - INFO - [54edf05494afd6150400000e] Cross-encoder rerank starting
+2026-05-16 07:37:34,207 - MedKG-RAG - INFO - [54edf05494afd6150400000e] Cross-encoder rerank returned 20 text results
+2026-05-16 07:37:34,223 - MedKG-RAG - INFO - [3/20] Evaluating: Is Rac1 involved in cancer cell invasion?...
+2026-05-16 07:37:34,223 - MedKG-RAG - INFO - [5319abc9b166e2b80600002d] QueryAnalyzer starting
+2026-05-16 07:37:34,537 - MedKG-RAG - INFO - [5319abc9b166e2b80600002d] QueryAnalyzer done. rewritten_query='Is Rac1 involved in cancer cell invasion?'
+2026-05-16 07:37:34,537 - MedKG-RAG - INFO - [5319abc9b166e2b80600002d] Embedding query
+2026-05-16 07:37:34,563 - MedKG-RAG - INFO - [5319abc9b166e2b80600002d] Vector search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:37:37,208 - MedKG-RAG - INFO - [5319abc9b166e2b80600002d] Vector search returned 68 parent results
+2026-05-16 07:37:37,208 - MedKG-RAG - INFO - [5319abc9b166e2b80600002d] BM25 search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:37:37,472 - MedKG-RAG - INFO - [5319abc9b166e2b80600002d] BM25 search returned 75 parent results
+2026-05-16 07:37:37,472 - MedKG-RAG - INFO - [5319abc9b166e2b80600002d] RRF fusion starting with k=60
+2026-05-16 07:37:37,472 - MedKG-RAG - INFO - [5319abc9b166e2b80600002d] RRF fusion returned 80 fused results
+2026-05-16 07:37:37,472 - MedKG-RAG - INFO - [5319abc9b166e2b80600002d] Cross-encoder rerank starting
+2026-05-16 07:37:40,155 - MedKG-RAG - INFO - [5319abc9b166e2b80600002d] Cross-encoder rerank returned 20 text results
+2026-05-16 07:37:40,155 - MedKG-RAG - INFO - [4/20] Evaluating: Which are the APOBEC3 protein family members able to inhibit Vif-deficient HIV-1...
+2026-05-16 07:37:40,155 - MedKG-RAG - INFO - [54de15f91388e8454a000002] QueryAnalyzer starting
+2026-05-16 07:37:40,720 - MedKG-RAG - INFO - [54de15f91388e8454a000002] QueryAnalyzer done. rewritten_query='APOBEC3 protein family members that inhibit Vif-deficient HIV-1 replication'
+2026-05-16 07:37:40,720 - MedKG-RAG - INFO - [54de15f91388e8454a000002] Embedding query
+2026-05-16 07:37:40,754 - MedKG-RAG - INFO - [54de15f91388e8454a000002] Vector search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:37:41,856 - MedKG-RAG - INFO - [54de15f91388e8454a000002] Vector search returned 49 parent results
+2026-05-16 07:37:41,856 - MedKG-RAG - INFO - [54de15f91388e8454a000002] BM25 search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:37:41,992 - MedKG-RAG - INFO - [54de15f91388e8454a000002] BM25 search returned 53 parent results
+2026-05-16 07:37:41,992 - MedKG-RAG - INFO - [54de15f91388e8454a000002] RRF fusion starting with k=60
+2026-05-16 07:37:41,992 - MedKG-RAG - INFO - [54de15f91388e8454a000002] RRF fusion returned 63 fused results
+2026-05-16 07:37:41,992 - MedKG-RAG - INFO - [54de15f91388e8454a000002] Cross-encoder rerank starting
+2026-05-16 07:37:44,220 - MedKG-RAG - INFO - [54de15f91388e8454a000002] Cross-encoder rerank returned 20 text results
+2026-05-16 07:37:44,220 - MedKG-RAG - INFO - [5/20] Evaluating: Can we use platelet biomarkers to study Alzheimer's disease?...
+2026-05-16 07:37:44,220 - MedKG-RAG - INFO - [530b4f49970c65fa6b00000a] QueryAnalyzer starting
+2026-05-16 07:37:44,680 - MedKG-RAG - INFO - [530b4f49970c65fa6b00000a] QueryAnalyzer done. rewritten_query="Using platelet biomarkers to study Alzheimer's disease"
+2026-05-16 07:37:44,680 - MedKG-RAG - INFO - [530b4f49970c65fa6b00000a] Embedding query
+2026-05-16 07:37:44,708 - MedKG-RAG - INFO - [530b4f49970c65fa6b00000a] Vector search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:37:47,123 - MedKG-RAG - INFO - [530b4f49970c65fa6b00000a] Vector search returned 72 parent results
+2026-05-16 07:37:47,123 - MedKG-RAG - INFO - [530b4f49970c65fa6b00000a] BM25 search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:37:47,318 - MedKG-RAG - INFO - [530b4f49970c65fa6b00000a] BM25 search returned 100 parent results
+2026-05-16 07:37:47,318 - MedKG-RAG - INFO - [530b4f49970c65fa6b00000a] RRF fusion starting with k=60
+2026-05-16 07:37:47,320 - MedKG-RAG - INFO - [530b4f49970c65fa6b00000a] RRF fusion returned 80 fused results
+2026-05-16 07:37:47,320 - MedKG-RAG - INFO - [530b4f49970c65fa6b00000a] Cross-encoder rerank starting
+2026-05-16 07:37:50,133 - MedKG-RAG - INFO - [530b4f49970c65fa6b00000a] Cross-encoder rerank returned 20 text results
+2026-05-16 07:37:50,133 - MedKG-RAG - INFO - [6/20] Evaluating: Which genetic defects are observed in Prader-Willi syndrome?...
+2026-05-16 07:37:50,133 - MedKG-RAG - INFO - [5306158358348c0f52000001] QueryAnalyzer starting
+2026-05-16 07:37:50,521 - MedKG-RAG - INFO - [5306158358348c0f52000001] QueryAnalyzer done. rewritten_query='Genetic defects in Prader-Willi syndrome'
+2026-05-16 07:37:50,522 - MedKG-RAG - INFO - [5306158358348c0f52000001] Embedding query
+2026-05-16 07:37:50,548 - MedKG-RAG - INFO - [5306158358348c0f52000001] Vector search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:37:52,204 - MedKG-RAG - INFO - [5306158358348c0f52000001] Vector search returned 65 parent results
+2026-05-16 07:37:52,204 - MedKG-RAG - INFO - [5306158358348c0f52000001] BM25 search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:37:52,267 - MedKG-RAG - INFO - [5306158358348c0f52000001] BM25 search returned 68 parent results
+2026-05-16 07:37:52,267 - MedKG-RAG - INFO - [5306158358348c0f52000001] RRF fusion starting with k=60
+2026-05-16 07:37:52,267 - MedKG-RAG - INFO - [5306158358348c0f52000001] RRF fusion returned 80 fused results
+2026-05-16 07:37:52,267 - MedKG-RAG - INFO - [5306158358348c0f52000001] Cross-encoder rerank starting
+2026-05-16 07:37:55,095 - MedKG-RAG - INFO - [5306158358348c0f52000001] Cross-encoder rerank returned 20 text results
+2026-05-16 07:37:55,104 - MedKG-RAG - INFO - [7/20] Evaluating: What is the most likely age of diagnosis of Crohn's disease (CD)?...
+2026-05-16 07:37:55,104 - MedKG-RAG - INFO - [56cae3eb5795f9a73e000021] QueryAnalyzer starting
+2026-05-16 07:37:55,537 - MedKG-RAG - INFO - [56cae3eb5795f9a73e000021] QueryAnalyzer done. rewritten_query="What is the typical age of diagnosis for Crohn's disease?"
+2026-05-16 07:37:55,537 - MedKG-RAG - INFO - [56cae3eb5795f9a73e000021] Embedding query
+2026-05-16 07:37:55,573 - MedKG-RAG - INFO - [56cae3eb5795f9a73e000021] Vector search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:37:57,008 - MedKG-RAG - INFO - [56cae3eb5795f9a73e000021] Vector search returned 68 parent results
+2026-05-16 07:37:57,008 - MedKG-RAG - INFO - [56cae3eb5795f9a73e000021] BM25 search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:37:57,081 - MedKG-RAG - INFO - [56cae3eb5795f9a73e000021] BM25 search returned 83 parent results
+2026-05-16 07:37:57,081 - MedKG-RAG - INFO - [56cae3eb5795f9a73e000021] RRF fusion starting with k=60
+2026-05-16 07:37:57,081 - MedKG-RAG - INFO - [56cae3eb5795f9a73e000021] RRF fusion returned 80 fused results
+2026-05-16 07:37:57,081 - MedKG-RAG - INFO - [56cae3eb5795f9a73e000021] Cross-encoder rerank starting
+2026-05-16 07:38:00,176 - MedKG-RAG - INFO - [56cae3eb5795f9a73e000021] Cross-encoder rerank returned 20 text results
+2026-05-16 07:38:00,192 - MedKG-RAG - INFO - [8/20] Evaluating: How does thyroid hormone affect insulin resistance in the heart?...
+2026-05-16 07:38:00,192 - MedKG-RAG - INFO - [51682c52298dcd4e51000067] QueryAnalyzer starting
+2026-05-16 07:38:00,567 - MedKG-RAG - INFO - [51682c52298dcd4e51000067] QueryAnalyzer done. rewritten_query='Thyroid hormone effect on insulin resistance in the heart'
+2026-05-16 07:38:00,568 - MedKG-RAG - INFO - [51682c52298dcd4e51000067] Embedding query
+2026-05-16 07:38:00,589 - MedKG-RAG - INFO - [51682c52298dcd4e51000067] Vector search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:38:02,184 - MedKG-RAG - INFO - [51682c52298dcd4e51000067] Vector search returned 66 parent results
+2026-05-16 07:38:02,184 - MedKG-RAG - INFO - [51682c52298dcd4e51000067] BM25 search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:38:02,236 - MedKG-RAG - INFO - [51682c52298dcd4e51000067] BM25 search returned 81 parent results
+2026-05-16 07:38:02,236 - MedKG-RAG - INFO - [51682c52298dcd4e51000067] RRF fusion starting with k=60
+2026-05-16 07:38:02,236 - MedKG-RAG - INFO - [51682c52298dcd4e51000067] RRF fusion returned 80 fused results
+2026-05-16 07:38:02,237 - MedKG-RAG - INFO - [51682c52298dcd4e51000067] Cross-encoder rerank starting
+2026-05-16 07:38:05,263 - MedKG-RAG - INFO - [51682c52298dcd4e51000067] Cross-encoder rerank returned 20 text results
+2026-05-16 07:38:05,263 - MedKG-RAG - INFO - [9/20] Evaluating: Is CHEK2 involved in cell cycle control?...
+2026-05-16 07:38:05,263 - MedKG-RAG - INFO - [53175e25b166e2b806000007] QueryAnalyzer starting
+2026-05-16 07:38:05,574 - MedKG-RAG - INFO - [53175e25b166e2b806000007] QueryAnalyzer done. rewritten_query='Is CHEK2 involved in cell cycle control?'
+2026-05-16 07:38:05,574 - MedKG-RAG - INFO - [53175e25b166e2b806000007] Embedding query
+2026-05-16 07:38:05,604 - MedKG-RAG - INFO - [53175e25b166e2b806000007] Vector search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:38:06,864 - MedKG-RAG - INFO - [53175e25b166e2b806000007] Vector search returned 80 parent results
+2026-05-16 07:38:06,864 - MedKG-RAG - INFO - [53175e25b166e2b806000007] BM25 search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:38:06,941 - MedKG-RAG - INFO - [53175e25b166e2b806000007] BM25 search returned 85 parent results
+2026-05-16 07:38:06,941 - MedKG-RAG - INFO - [53175e25b166e2b806000007] RRF fusion starting with k=60
+2026-05-16 07:38:06,941 - MedKG-RAG - INFO - [53175e25b166e2b806000007] RRF fusion returned 80 fused results
+2026-05-16 07:38:06,941 - MedKG-RAG - INFO - [53175e25b166e2b806000007] Cross-encoder rerank starting
+2026-05-16 07:38:09,808 - MedKG-RAG - INFO - [53175e25b166e2b806000007] Cross-encoder rerank returned 20 text results
+2026-05-16 07:38:09,808 - MedKG-RAG - INFO - [10/20] Evaluating: Describe mechanism of action of PLX3397 drug....
+2026-05-16 07:38:09,808 - MedKG-RAG - INFO - [56c07ef5ef6e394741000023] QueryAnalyzer starting
+2026-05-16 07:38:10,457 - MedKG-RAG - INFO - [56c07ef5ef6e394741000023] QueryAnalyzer done. rewritten_query='What is the mechanism of action of PLX3397?'
+2026-05-16 07:38:10,457 - MedKG-RAG - INFO - [56c07ef5ef6e394741000023] Embedding query
+2026-05-16 07:38:10,479 - MedKG-RAG - INFO - [56c07ef5ef6e394741000023] Vector search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:38:12,885 - MedKG-RAG - INFO - [56c07ef5ef6e394741000023] Vector search returned 80 parent results
+2026-05-16 07:38:12,885 - MedKG-RAG - INFO - [56c07ef5ef6e394741000023] BM25 search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:38:12,952 - MedKG-RAG - INFO - [56c07ef5ef6e394741000023] BM25 search returned 100 parent results
+2026-05-16 07:38:12,952 - MedKG-RAG - INFO - [56c07ef5ef6e394741000023] RRF fusion starting with k=60
+2026-05-16 07:38:12,952 - MedKG-RAG - INFO - [56c07ef5ef6e394741000023] RRF fusion returned 80 fused results
+2026-05-16 07:38:12,953 - MedKG-RAG - INFO - [56c07ef5ef6e394741000023] Cross-encoder rerank starting
+2026-05-16 07:38:15,766 - MedKG-RAG - INFO - [56c07ef5ef6e394741000023] Cross-encoder rerank returned 20 text results
+2026-05-16 07:38:15,769 - MedKG-RAG - INFO - [11/20] Evaluating: What disease is small bowel lymphoma commonly associated with...
+2026-05-16 07:38:15,769 - MedKG-RAG - INFO - [5509bd6a1180f13250000002] QueryAnalyzer starting
+2026-05-16 07:38:16,229 - MedKG-RAG - INFO - [5509bd6a1180f13250000002] QueryAnalyzer done. rewritten_query='Diseases associated with small bowel lymphoma'
+2026-05-16 07:38:16,229 - MedKG-RAG - INFO - [5509bd6a1180f13250000002] Embedding query
+2026-05-16 07:38:16,263 - MedKG-RAG - INFO - [5509bd6a1180f13250000002] Vector search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:38:18,363 - MedKG-RAG - INFO - [5509bd6a1180f13250000002] Vector search returned 73 parent results
+2026-05-16 07:38:18,363 - MedKG-RAG - INFO - [5509bd6a1180f13250000002] BM25 search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:38:18,495 - MedKG-RAG - INFO - [5509bd6a1180f13250000002] BM25 search returned 94 parent results
+2026-05-16 07:38:18,495 - MedKG-RAG - INFO - [5509bd6a1180f13250000002] RRF fusion starting with k=60
+2026-05-16 07:38:18,495 - MedKG-RAG - INFO - [5509bd6a1180f13250000002] RRF fusion returned 80 fused results
+2026-05-16 07:38:18,495 - MedKG-RAG - INFO - [5509bd6a1180f13250000002] Cross-encoder rerank starting
+2026-05-16 07:38:21,612 - MedKG-RAG - INFO - [5509bd6a1180f13250000002] Cross-encoder rerank returned 20 text results
+2026-05-16 07:38:21,612 - MedKG-RAG - INFO - [12/20] Evaluating: Which calcium/calmodulin dependent protein phosphatase is involved in the activa...
+2026-05-16 07:38:21,628 - MedKG-RAG - INFO - [54f9c40ddd3fc62544000001] QueryAnalyzer starting
+2026-05-16 07:38:22,147 - MedKG-RAG - INFO - [54f9c40ddd3fc62544000001] QueryAnalyzer done. rewritten_query='Calcium/calmodulin dependent protein phosphatase involved in NFAT transcription factor activation'
+2026-05-16 07:38:22,147 - MedKG-RAG - INFO - [54f9c40ddd3fc62544000001] Embedding query
+2026-05-16 07:38:22,182 - MedKG-RAG - INFO - [54f9c40ddd3fc62544000001] Vector search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:38:25,721 - MedKG-RAG - INFO - [54f9c40ddd3fc62544000001] Vector search returned 64 parent results
+2026-05-16 07:38:25,737 - MedKG-RAG - INFO - [54f9c40ddd3fc62544000001] BM25 search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:38:25,898 - MedKG-RAG - INFO - [54f9c40ddd3fc62544000001] BM25 search returned 90 parent results
+2026-05-16 07:38:25,898 - MedKG-RAG - INFO - [54f9c40ddd3fc62544000001] RRF fusion starting with k=60
+2026-05-16 07:38:25,898 - MedKG-RAG - INFO - [54f9c40ddd3fc62544000001] RRF fusion returned 80 fused results
+2026-05-16 07:38:25,898 - MedKG-RAG - INFO - [54f9c40ddd3fc62544000001] Cross-encoder rerank starting
+2026-05-16 07:38:28,426 - MedKG-RAG - INFO - [54f9c40ddd3fc62544000001] Cross-encoder rerank returned 20 text results
+2026-05-16 07:38:28,439 - MedKG-RAG - INFO - [13/20] Evaluating: Is abdominal pain a common symptom in autism?...
+2026-05-16 07:38:28,439 - MedKG-RAG - INFO - [515debe7298dcd4e51000026] QueryAnalyzer starting
+2026-05-16 07:38:28,955 - MedKG-RAG - INFO - [515debe7298dcd4e51000026] QueryAnalyzer done. rewritten_query='Is abdominal pain a common symptom in autism spectrum disorder'
+2026-05-16 07:38:28,955 - MedKG-RAG - INFO - [515debe7298dcd4e51000026] Embedding query
+2026-05-16 07:38:29,000 - MedKG-RAG - INFO - [515debe7298dcd4e51000026] Vector search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:38:31,269 - MedKG-RAG - INFO - [515debe7298dcd4e51000026] Vector search returned 76 parent results
+2026-05-16 07:38:31,269 - MedKG-RAG - INFO - [515debe7298dcd4e51000026] BM25 search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:38:31,390 - MedKG-RAG - INFO - [515debe7298dcd4e51000026] BM25 search returned 100 parent results
+2026-05-16 07:38:31,390 - MedKG-RAG - INFO - [515debe7298dcd4e51000026] RRF fusion starting with k=60
+2026-05-16 07:38:31,390 - MedKG-RAG - INFO - [515debe7298dcd4e51000026] RRF fusion returned 80 fused results
+2026-05-16 07:38:31,390 - MedKG-RAG - INFO - [515debe7298dcd4e51000026] Cross-encoder rerank starting
+2026-05-16 07:38:33,788 - MedKG-RAG - INFO - [515debe7298dcd4e51000026] Cross-encoder rerank returned 20 text results
+2026-05-16 07:38:33,788 - MedKG-RAG - INFO - [14/20] Evaluating: Are cyclophilins ubiquitously expressed?...
+2026-05-16 07:38:33,788 - MedKG-RAG - INFO - [56f6ab7009dd18d46b00000d] QueryAnalyzer starting
+2026-05-16 07:38:34,101 - MedKG-RAG - INFO - [56f6ab7009dd18d46b00000d] QueryAnalyzer done. rewritten_query='Are cyclophilins ubiquitously expressed in humans?'
+2026-05-16 07:38:34,101 - MedKG-RAG - INFO - [56f6ab7009dd18d46b00000d] Embedding query
+2026-05-16 07:38:34,135 - MedKG-RAG - INFO - [56f6ab7009dd18d46b00000d] Vector search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:38:35,549 - MedKG-RAG - INFO - [56f6ab7009dd18d46b00000d] Vector search returned 68 parent results
+2026-05-16 07:38:35,549 - MedKG-RAG - INFO - [56f6ab7009dd18d46b00000d] BM25 search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:38:35,616 - MedKG-RAG - INFO - [56f6ab7009dd18d46b00000d] BM25 search returned 100 parent results
+2026-05-16 07:38:35,616 - MedKG-RAG - INFO - [56f6ab7009dd18d46b00000d] RRF fusion starting with k=60
+2026-05-16 07:38:35,617 - MedKG-RAG - INFO - [56f6ab7009dd18d46b00000d] RRF fusion returned 80 fused results
+2026-05-16 07:38:35,617 - MedKG-RAG - INFO - [56f6ab7009dd18d46b00000d] Cross-encoder rerank starting
+2026-05-16 07:38:37,961 - MedKG-RAG - INFO - [56f6ab7009dd18d46b00000d] Cross-encoder rerank returned 20 text results
+2026-05-16 07:38:37,976 - MedKG-RAG - INFO - [15/20] Evaluating: Are adenylyl cyclases always transmembrane proteins?...
+2026-05-16 07:38:37,976 - MedKG-RAG - INFO - [56e5aeec0c19e5451d000002] QueryAnalyzer starting
+2026-05-16 07:38:38,562 - MedKG-RAG - INFO - [56e5aeec0c19e5451d000002] QueryAnalyzer done. rewritten_query='Are adenylyl cyclases always transmembrane proteins?'
+2026-05-16 07:38:38,562 - MedKG-RAG - INFO - [56e5aeec0c19e5451d000002] Embedding query
+2026-05-16 07:38:38,599 - MedKG-RAG - INFO - [56e5aeec0c19e5451d000002] Vector search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:38:41,141 - MedKG-RAG - INFO - [56e5aeec0c19e5451d000002] Vector search returned 75 parent results
+2026-05-16 07:38:41,141 - MedKG-RAG - INFO - [56e5aeec0c19e5451d000002] BM25 search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:38:41,211 - MedKG-RAG - INFO - [56e5aeec0c19e5451d000002] BM25 search returned 87 parent results
+2026-05-16 07:38:41,211 - MedKG-RAG - INFO - [56e5aeec0c19e5451d000002] RRF fusion starting with k=60
+2026-05-16 07:38:41,211 - MedKG-RAG - INFO - [56e5aeec0c19e5451d000002] RRF fusion returned 80 fused results
+2026-05-16 07:38:41,211 - MedKG-RAG - INFO - [56e5aeec0c19e5451d000002] Cross-encoder rerank starting
+2026-05-16 07:38:43,478 - MedKG-RAG - INFO - [56e5aeec0c19e5451d000002] Cross-encoder rerank returned 20 text results
+2026-05-16 07:38:43,481 - MedKG-RAG - INFO - [16/20] Evaluating: What gene test is recommended for clopidogrel?...
+2026-05-16 07:38:43,481 - MedKG-RAG - INFO - [5156be04d24251bc05000085] QueryAnalyzer starting
+2026-05-16 07:38:43,980 - MedKG-RAG - INFO - [5156be04d24251bc05000085] QueryAnalyzer done. rewritten_query='Recommended genetic test for clopidogrel'
+2026-05-16 07:38:43,980 - MedKG-RAG - INFO - [5156be04d24251bc05000085] Embedding query
+2026-05-16 07:38:44,006 - MedKG-RAG - INFO - [5156be04d24251bc05000085] Vector search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:38:46,092 - MedKG-RAG - INFO - [5156be04d24251bc05000085] Vector search returned 59 parent results
+2026-05-16 07:38:46,092 - MedKG-RAG - INFO - [5156be04d24251bc05000085] BM25 search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:38:46,158 - MedKG-RAG - INFO - [5156be04d24251bc05000085] BM25 search returned 77 parent results
+2026-05-16 07:38:46,159 - MedKG-RAG - INFO - [5156be04d24251bc05000085] RRF fusion starting with k=60
+2026-05-16 07:38:46,159 - MedKG-RAG - INFO - [5156be04d24251bc05000085] RRF fusion returned 80 fused results
+2026-05-16 07:38:46,159 - MedKG-RAG - INFO - [5156be04d24251bc05000085] Cross-encoder rerank starting
+2026-05-16 07:38:48,849 - MedKG-RAG - INFO - [5156be04d24251bc05000085] Cross-encoder rerank returned 20 text results
+2026-05-16 07:38:48,849 - MedKG-RAG - INFO - [17/20] Evaluating: Describe clinical presentation of Parkinsonism with dementia of Guadeloupe syndr...
+2026-05-16 07:38:48,863 - MedKG-RAG - INFO - [56c1f033ef6e39474100004f] QueryAnalyzer starting
+2026-05-16 07:38:49,204 - MedKG-RAG - INFO - [56c1f033ef6e39474100004f] QueryAnalyzer done. rewritten_query='Clinical presentation of Parkinsonism with dementia of Guadeloupe syndrome'
+2026-05-16 07:38:49,211 - MedKG-RAG - INFO - [56c1f033ef6e39474100004f] Embedding query
+2026-05-16 07:38:49,240 - MedKG-RAG - INFO - [56c1f033ef6e39474100004f] Vector search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:38:52,065 - MedKG-RAG - INFO - [56c1f033ef6e39474100004f] Vector search returned 79 parent results
+2026-05-16 07:38:52,065 - MedKG-RAG - INFO - [56c1f033ef6e39474100004f] BM25 search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:38:52,153 - MedKG-RAG - INFO - [56c1f033ef6e39474100004f] BM25 search returned 86 parent results
+2026-05-16 07:38:52,153 - MedKG-RAG - INFO - [56c1f033ef6e39474100004f] RRF fusion starting with k=60
+2026-05-16 07:38:52,153 - MedKG-RAG - INFO - [56c1f033ef6e39474100004f] RRF fusion returned 80 fused results
+2026-05-16 07:38:52,153 - MedKG-RAG - INFO - [56c1f033ef6e39474100004f] Cross-encoder rerank starting
+2026-05-16 07:38:54,592 - MedKG-RAG - INFO - [56c1f033ef6e39474100004f] Cross-encoder rerank returned 20 text results
+2026-05-16 07:38:54,592 - MedKG-RAG - INFO - [18/20] Evaluating: Describe armoured brain syndrome....
+2026-05-16 07:38:54,592 - MedKG-RAG - INFO - [54cf42bdf693c3b16b000007] QueryAnalyzer starting
+2026-05-16 07:38:54,994 - MedKG-RAG - INFO - [54cf42bdf693c3b16b000007] QueryAnalyzer done. rewritten_query='Armored brain syndrome'
+2026-05-16 07:38:54,994 - MedKG-RAG - INFO - [54cf42bdf693c3b16b000007] Embedding query
+2026-05-16 07:38:55,015 - MedKG-RAG - INFO - [54cf42bdf693c3b16b000007] Vector search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:38:56,571 - MedKG-RAG - INFO - [54cf42bdf693c3b16b000007] Vector search returned 80 parent results
+2026-05-16 07:38:56,571 - MedKG-RAG - INFO - [54cf42bdf693c3b16b000007] BM25 search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:38:56,628 - MedKG-RAG - INFO - [54cf42bdf693c3b16b000007] BM25 search returned 95 parent results
+2026-05-16 07:38:56,629 - MedKG-RAG - INFO - [54cf42bdf693c3b16b000007] RRF fusion starting with k=60
+2026-05-16 07:38:56,629 - MedKG-RAG - INFO - [54cf42bdf693c3b16b000007] RRF fusion returned 80 fused results
+2026-05-16 07:38:56,629 - MedKG-RAG - INFO - [54cf42bdf693c3b16b000007] Cross-encoder rerank starting
+2026-05-16 07:38:58,972 - MedKG-RAG - INFO - [54cf42bdf693c3b16b000007] Cross-encoder rerank returned 20 text results
+2026-05-16 07:38:58,972 - MedKG-RAG - INFO - [19/20] Evaluating: Which are the main histone modifications associated with enhancers?...
+2026-05-16 07:38:58,983 - MedKG-RAG - INFO - [5131bef65274a5fb07000008] QueryAnalyzer starting
+2026-05-16 07:38:59,297 - MedKG-RAG - INFO - [5131bef65274a5fb07000008] QueryAnalyzer done. rewritten_query='Main histone modifications associated with enhancers'
+2026-05-16 07:38:59,297 - MedKG-RAG - INFO - [5131bef65274a5fb07000008] Embedding query
+2026-05-16 07:38:59,326 - MedKG-RAG - INFO - [5131bef65274a5fb07000008] Vector search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:39:01,199 - MedKG-RAG - INFO - [5131bef65274a5fb07000008] Vector search returned 80 parent results
+2026-05-16 07:39:01,199 - MedKG-RAG - INFO - [5131bef65274a5fb07000008] BM25 search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:39:01,308 - MedKG-RAG - INFO - [5131bef65274a5fb07000008] BM25 search returned 90 parent results
+2026-05-16 07:39:01,308 - MedKG-RAG - INFO - [5131bef65274a5fb07000008] RRF fusion starting with k=60
+2026-05-16 07:39:01,308 - MedKG-RAG - INFO - [5131bef65274a5fb07000008] RRF fusion returned 80 fused results
+2026-05-16 07:39:01,308 - MedKG-RAG - INFO - [5131bef65274a5fb07000008] Cross-encoder rerank starting
+2026-05-16 07:39:03,393 - MedKG-RAG - INFO - [5131bef65274a5fb07000008] Cross-encoder rerank returned 20 text results
+2026-05-16 07:39:03,393 - MedKG-RAG - INFO - [20/20] Evaluating: Can the iPS cell technology be used in Fanconi anemia therapy?...
+2026-05-16 07:39:03,393 - MedKG-RAG - INFO - [54edef0594afd6150400000d] QueryAnalyzer starting
+2026-05-16 07:39:03,709 - MedKG-RAG - INFO - [54edef0594afd6150400000d] QueryAnalyzer done. rewritten_query='Can induced pluripotent stem cell technology be used in Fanconi anemia therapy?'
+2026-05-16 07:39:03,709 - MedKG-RAG - INFO - [54edef0594afd6150400000d] Embedding query
+2026-05-16 07:39:03,742 - MedKG-RAG - INFO - [54edef0594afd6150400000d] Vector search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:39:04,928 - MedKG-RAG - INFO - [54edef0594afd6150400000d] Vector search returned 80 parent results
+2026-05-16 07:39:04,928 - MedKG-RAG - INFO - [54edef0594afd6150400000d] BM25 search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:39:05,173 - MedKG-RAG - INFO - [54edef0594afd6150400000d] BM25 search returned 100 parent results
+2026-05-16 07:39:05,173 - MedKG-RAG - INFO - [54edef0594afd6150400000d] RRF fusion starting with k=60
+2026-05-16 07:39:05,173 - MedKG-RAG - INFO - [54edef0594afd6150400000d] RRF fusion returned 80 fused results
+2026-05-16 07:39:05,173 - MedKG-RAG - INFO - [54edef0594afd6150400000d] Cross-encoder rerank starting
+2026-05-16 07:39:07,719 - MedKG-RAG - INFO - [54edef0594afd6150400000d] Cross-encoder rerank returned 20 text results
+2026-05-16 07:39:07,723 - MedKG-RAG - INFO - Results saved to D:\workspace\Repo\medical-chatbot-assistant\data\eval_results\bioasq\detail.jsonl and D:\workspace\Repo\medical-chatbot-assistant\data\eval_results\bioasq\summary.json
+2026-05-16 07:41:21,975 - MedKG-RAG - INFO - Loaded 20 questions for evaluation.
+2026-05-16 07:41:21,975 - MedKG-RAG - INFO - Runtime settings: K_RRF=60, TOP_K_RRF=80, VECTOR_TOP_K=80, KEYWORD_TOP_K=80, CHILD_FETCH_LIMIT=120, RERANK_TEXT_TOP_M=20, K_VALUES=[5, 10, 20]
+2026-05-16 07:41:21,975 - MedKG-RAG - INFO - Initializing pipeline components...
+2026-05-16 07:41:22,006 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-05-16 07:41:25,277 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-05-16 07:41:25,297 - MedKG-RAG - INFO - [1/20] Evaluating: What is the major adverse effect of adriamycin(doxorubicin)?...
+2026-05-16 07:41:25,297 - MedKG-RAG - INFO - [53551206a0726bee57000001] QueryAnalyzer starting
+2026-05-16 07:41:26,214 - MedKG-RAG - INFO - [53551206a0726bee57000001] QueryAnalyzer done. rewritten_query='What is the major adverse effect of doxorubicin?'
+2026-05-16 07:41:26,214 - MedKG-RAG - INFO - [53551206a0726bee57000001] Embedding query
+2026-05-16 07:41:26,864 - MedKG-RAG - INFO - [53551206a0726bee57000001] Vector search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:41:29,782 - MedKG-RAG - INFO - [53551206a0726bee57000001] Vector search returned 82 parent results
+2026-05-16 07:41:29,783 - MedKG-RAG - INFO - [53551206a0726bee57000001] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:41:30,096 - MedKG-RAG - INFO - [53551206a0726bee57000001] BM25 search returned 80 parent results
+2026-05-16 07:41:30,097 - MedKG-RAG - INFO - [53551206a0726bee57000001] RRF fusion starting with k=60
+2026-05-16 07:41:30,097 - MedKG-RAG - INFO - [53551206a0726bee57000001] RRF fusion returned 80 fused results
+2026-05-16 07:41:30,097 - MedKG-RAG - INFO - [53551206a0726bee57000001] Cross-encoder rerank starting
+2026-05-16 07:42:08,726 - MedKG-RAG - INFO - [53551206a0726bee57000001] Cross-encoder rerank returned 20 text results
+2026-05-16 07:42:08,727 - MedKG-RAG - INFO - [2/20] Evaluating: Is there a mouse model for Fanconi anemia?...
+2026-05-16 07:42:08,729 - MedKG-RAG - INFO - [54edf05494afd6150400000e] QueryAnalyzer starting
+2026-05-16 07:42:09,245 - MedKG-RAG - INFO - [54edf05494afd6150400000e] QueryAnalyzer done. rewritten_query='Fanconi anemia mouse model'
+2026-05-16 07:42:09,245 - MedKG-RAG - INFO - [54edf05494afd6150400000e] Embedding query
+2026-05-16 07:42:09,356 - MedKG-RAG - INFO - [54edf05494afd6150400000e] Vector search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:42:12,860 - MedKG-RAG - INFO - [54edf05494afd6150400000e] Vector search returned 61 parent results
+2026-05-16 07:42:12,860 - MedKG-RAG - INFO - [54edf05494afd6150400000e] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:42:13,373 - MedKG-RAG - INFO - [54edf05494afd6150400000e] BM25 search returned 80 parent results
+2026-05-16 07:42:13,374 - MedKG-RAG - INFO - [54edf05494afd6150400000e] RRF fusion starting with k=60
+2026-05-16 07:42:13,375 - MedKG-RAG - INFO - [54edf05494afd6150400000e] RRF fusion returned 80 fused results
+2026-05-16 07:42:13,376 - MedKG-RAG - INFO - [54edf05494afd6150400000e] Cross-encoder rerank starting
+2026-05-16 07:42:15,861 - MedKG-RAG - INFO - [54edf05494afd6150400000e] Cross-encoder rerank returned 20 text results
+2026-05-16 07:42:15,864 - MedKG-RAG - INFO - [3/20] Evaluating: Is Rac1 involved in cancer cell invasion?...
+2026-05-16 07:42:15,864 - MedKG-RAG - INFO - [5319abc9b166e2b80600002d] QueryAnalyzer starting
+2026-05-16 07:42:16,334 - MedKG-RAG - INFO - [5319abc9b166e2b80600002d] QueryAnalyzer done. rewritten_query='Is Rac1 involved in cancer cell invasion?'
+2026-05-16 07:42:16,336 - MedKG-RAG - INFO - [5319abc9b166e2b80600002d] Embedding query
+2026-05-16 07:42:16,455 - MedKG-RAG - INFO - [5319abc9b166e2b80600002d] Vector search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:42:21,673 - MedKG-RAG - INFO - [5319abc9b166e2b80600002d] Vector search returned 68 parent results
+2026-05-16 07:42:21,673 - MedKG-RAG - INFO - [5319abc9b166e2b80600002d] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:42:22,155 - MedKG-RAG - INFO - [5319abc9b166e2b80600002d] BM25 search returned 75 parent results
+2026-05-16 07:42:22,155 - MedKG-RAG - INFO - [5319abc9b166e2b80600002d] RRF fusion starting with k=60
+2026-05-16 07:42:22,155 - MedKG-RAG - INFO - [5319abc9b166e2b80600002d] RRF fusion returned 80 fused results
+2026-05-16 07:42:22,155 - MedKG-RAG - INFO - [5319abc9b166e2b80600002d] Cross-encoder rerank starting
+2026-05-16 07:42:24,583 - MedKG-RAG - INFO - [5319abc9b166e2b80600002d] Cross-encoder rerank returned 20 text results
+2026-05-16 07:42:24,598 - MedKG-RAG - INFO - [4/20] Evaluating: Which are the APOBEC3 protein family members able to inhibit Vif-deficient HIV-1...
+2026-05-16 07:42:24,614 - MedKG-RAG - INFO - [54de15f91388e8454a000002] QueryAnalyzer starting
+2026-05-16 07:42:25,206 - MedKG-RAG - INFO - [54de15f91388e8454a000002] QueryAnalyzer done. rewritten_query='APOBEC3 protein family members that inhibit Vif-deficient HIV-1 replication'
+2026-05-16 07:42:25,207 - MedKG-RAG - INFO - [54de15f91388e8454a000002] Embedding query
+2026-05-16 07:42:25,386 - MedKG-RAG - INFO - [54de15f91388e8454a000002] Vector search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:42:27,071 - MedKG-RAG - INFO - [54de15f91388e8454a000002] Vector search returned 49 parent results
+2026-05-16 07:42:27,071 - MedKG-RAG - INFO - [54de15f91388e8454a000002] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:42:27,984 - MedKG-RAG - INFO - [54de15f91388e8454a000002] BM25 search returned 53 parent results
+2026-05-16 07:42:27,984 - MedKG-RAG - INFO - [54de15f91388e8454a000002] RRF fusion starting with k=60
+2026-05-16 07:42:27,985 - MedKG-RAG - INFO - [54de15f91388e8454a000002] RRF fusion returned 63 fused results
+2026-05-16 07:42:27,985 - MedKG-RAG - INFO - [54de15f91388e8454a000002] Cross-encoder rerank starting
+2026-05-16 07:42:29,998 - MedKG-RAG - INFO - [54de15f91388e8454a000002] Cross-encoder rerank returned 20 text results
+2026-05-16 07:42:29,998 - MedKG-RAG - INFO - [5/20] Evaluating: Can we use platelet biomarkers to study Alzheimer's disease?...
+2026-05-16 07:42:29,998 - MedKG-RAG - INFO - [530b4f49970c65fa6b00000a] QueryAnalyzer starting
+2026-05-16 07:42:30,347 - MedKG-RAG - INFO - [530b4f49970c65fa6b00000a] QueryAnalyzer done. rewritten_query="Using platelet biomarkers to study Alzheimer's disease"
+2026-05-16 07:42:30,347 - MedKG-RAG - INFO - [530b4f49970c65fa6b00000a] Embedding query
+2026-05-16 07:42:30,454 - MedKG-RAG - INFO - [530b4f49970c65fa6b00000a] Vector search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:42:32,392 - MedKG-RAG - INFO - [530b4f49970c65fa6b00000a] Vector search returned 72 parent results
+2026-05-16 07:42:32,392 - MedKG-RAG - INFO - [530b4f49970c65fa6b00000a] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:42:32,950 - MedKG-RAG - INFO - [530b4f49970c65fa6b00000a] BM25 search returned 80 parent results
+2026-05-16 07:42:32,952 - MedKG-RAG - INFO - [530b4f49970c65fa6b00000a] RRF fusion starting with k=60
+2026-05-16 07:42:32,953 - MedKG-RAG - INFO - [530b4f49970c65fa6b00000a] RRF fusion returned 80 fused results
+2026-05-16 07:42:32,954 - MedKG-RAG - INFO - [530b4f49970c65fa6b00000a] Cross-encoder rerank starting
+2026-05-16 07:42:35,593 - MedKG-RAG - INFO - [530b4f49970c65fa6b00000a] Cross-encoder rerank returned 20 text results
+2026-05-16 07:42:35,593 - MedKG-RAG - INFO - [6/20] Evaluating: Which genetic defects are observed in Prader-Willi syndrome?...
+2026-05-16 07:42:35,593 - MedKG-RAG - INFO - [5306158358348c0f52000001] QueryAnalyzer starting
+2026-05-16 07:42:36,135 - MedKG-RAG - INFO - [5306158358348c0f52000001] QueryAnalyzer done. rewritten_query='Genetic defects in Prader-Willi syndrome'
+2026-05-16 07:42:36,135 - MedKG-RAG - INFO - [5306158358348c0f52000001] Embedding query
+2026-05-16 07:42:36,260 - MedKG-RAG - INFO - [5306158358348c0f52000001] Vector search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:42:37,642 - MedKG-RAG - INFO - [5306158358348c0f52000001] Vector search returned 65 parent results
+2026-05-16 07:42:37,642 - MedKG-RAG - INFO - [5306158358348c0f52000001] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:42:37,768 - MedKG-RAG - INFO - [5306158358348c0f52000001] BM25 search returned 68 parent results
+2026-05-16 07:42:37,769 - MedKG-RAG - INFO - [5306158358348c0f52000001] RRF fusion starting with k=60
+2026-05-16 07:42:37,769 - MedKG-RAG - INFO - [5306158358348c0f52000001] RRF fusion returned 80 fused results
+2026-05-16 07:42:37,769 - MedKG-RAG - INFO - [5306158358348c0f52000001] Cross-encoder rerank starting
+2026-05-16 07:42:40,393 - MedKG-RAG - INFO - [5306158358348c0f52000001] Cross-encoder rerank returned 20 text results
+2026-05-16 07:42:40,408 - MedKG-RAG - INFO - [7/20] Evaluating: What is the most likely age of diagnosis of Crohn's disease (CD)?...
+2026-05-16 07:42:40,408 - MedKG-RAG - INFO - [56cae3eb5795f9a73e000021] QueryAnalyzer starting
+2026-05-16 07:42:40,844 - MedKG-RAG - INFO - [56cae3eb5795f9a73e000021] QueryAnalyzer done. rewritten_query="What is the typical age of diagnosis for Crohn's disease?"
+2026-05-16 07:42:40,844 - MedKG-RAG - INFO - [56cae3eb5795f9a73e000021] Embedding query
+2026-05-16 07:42:40,967 - MedKG-RAG - INFO - [56cae3eb5795f9a73e000021] Vector search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:42:42,540 - MedKG-RAG - INFO - [56cae3eb5795f9a73e000021] Vector search returned 68 parent results
+2026-05-16 07:42:42,540 - MedKG-RAG - INFO - [56cae3eb5795f9a73e000021] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:42:42,802 - MedKG-RAG - INFO - [56cae3eb5795f9a73e000021] BM25 search returned 80 parent results
+2026-05-16 07:42:42,803 - MedKG-RAG - INFO - [56cae3eb5795f9a73e000021] RRF fusion starting with k=60
+2026-05-16 07:42:42,803 - MedKG-RAG - INFO - [56cae3eb5795f9a73e000021] RRF fusion returned 80 fused results
+2026-05-16 07:42:42,804 - MedKG-RAG - INFO - [56cae3eb5795f9a73e000021] Cross-encoder rerank starting
+2026-05-16 07:42:45,507 - MedKG-RAG - INFO - [56cae3eb5795f9a73e000021] Cross-encoder rerank returned 20 text results
+2026-05-16 07:42:45,507 - MedKG-RAG - INFO - [8/20] Evaluating: How does thyroid hormone affect insulin resistance in the heart?...
+2026-05-16 07:42:45,507 - MedKG-RAG - INFO - [51682c52298dcd4e51000067] QueryAnalyzer starting
+2026-05-16 07:42:45,939 - MedKG-RAG - INFO - [51682c52298dcd4e51000067] QueryAnalyzer done. rewritten_query='Thyroid hormone effect on insulin resistance in the heart'
+2026-05-16 07:42:45,940 - MedKG-RAG - INFO - [51682c52298dcd4e51000067] Embedding query
+2026-05-16 07:42:46,034 - MedKG-RAG - INFO - [51682c52298dcd4e51000067] Vector search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:42:48,250 - MedKG-RAG - INFO - [51682c52298dcd4e51000067] Vector search returned 66 parent results
+2026-05-16 07:42:48,250 - MedKG-RAG - INFO - [51682c52298dcd4e51000067] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:42:48,451 - MedKG-RAG - INFO - [51682c52298dcd4e51000067] BM25 search returned 80 parent results
+2026-05-16 07:42:48,451 - MedKG-RAG - INFO - [51682c52298dcd4e51000067] RRF fusion starting with k=60
+2026-05-16 07:42:48,452 - MedKG-RAG - INFO - [51682c52298dcd4e51000067] RRF fusion returned 80 fused results
+2026-05-16 07:42:48,452 - MedKG-RAG - INFO - [51682c52298dcd4e51000067] Cross-encoder rerank starting
+2026-05-16 07:42:51,023 - MedKG-RAG - INFO - [51682c52298dcd4e51000067] Cross-encoder rerank returned 20 text results
+2026-05-16 07:42:51,029 - MedKG-RAG - INFO - [9/20] Evaluating: Is CHEK2 involved in cell cycle control?...
+2026-05-16 07:42:51,030 - MedKG-RAG - INFO - [53175e25b166e2b806000007] QueryAnalyzer starting
+2026-05-16 07:42:51,535 - MedKG-RAG - INFO - [53175e25b166e2b806000007] QueryAnalyzer done. rewritten_query='Is CHEK2 involved in cell cycle control?'
+2026-05-16 07:42:51,535 - MedKG-RAG - INFO - [53175e25b166e2b806000007] Embedding query
+2026-05-16 07:42:51,636 - MedKG-RAG - INFO - [53175e25b166e2b806000007] Vector search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:42:52,935 - MedKG-RAG - INFO - [53175e25b166e2b806000007] Vector search returned 86 parent results
+2026-05-16 07:42:52,937 - MedKG-RAG - INFO - [53175e25b166e2b806000007] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:42:53,330 - MedKG-RAG - INFO - [53175e25b166e2b806000007] BM25 search returned 80 parent results
+2026-05-16 07:42:53,330 - MedKG-RAG - INFO - [53175e25b166e2b806000007] RRF fusion starting with k=60
+2026-05-16 07:42:53,330 - MedKG-RAG - INFO - [53175e25b166e2b806000007] RRF fusion returned 80 fused results
+2026-05-16 07:42:53,330 - MedKG-RAG - INFO - [53175e25b166e2b806000007] Cross-encoder rerank starting
+2026-05-16 07:42:55,713 - MedKG-RAG - INFO - [53175e25b166e2b806000007] Cross-encoder rerank returned 20 text results
+2026-05-16 07:42:55,713 - MedKG-RAG - INFO - [10/20] Evaluating: Describe mechanism of action of PLX3397 drug....
+2026-05-16 07:42:55,713 - MedKG-RAG - INFO - [56c07ef5ef6e394741000023] QueryAnalyzer starting
+2026-05-16 07:42:56,174 - MedKG-RAG - INFO - [56c07ef5ef6e394741000023] QueryAnalyzer done. rewritten_query='What is the mechanism of action of PLX3397?'
+2026-05-16 07:42:56,174 - MedKG-RAG - INFO - [56c07ef5ef6e394741000023] Embedding query
+2026-05-16 07:42:56,503 - MedKG-RAG - INFO - [56c07ef5ef6e394741000023] Vector search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:42:58,759 - MedKG-RAG - INFO - [56c07ef5ef6e394741000023] Vector search returned 85 parent results
+2026-05-16 07:42:58,762 - MedKG-RAG - INFO - [56c07ef5ef6e394741000023] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:42:59,190 - MedKG-RAG - INFO - [56c07ef5ef6e394741000023] BM25 search returned 80 parent results
+2026-05-16 07:42:59,190 - MedKG-RAG - INFO - [56c07ef5ef6e394741000023] RRF fusion starting with k=60
+2026-05-16 07:42:59,190 - MedKG-RAG - INFO - [56c07ef5ef6e394741000023] RRF fusion returned 80 fused results
+2026-05-16 07:42:59,190 - MedKG-RAG - INFO - [56c07ef5ef6e394741000023] Cross-encoder rerank starting
+2026-05-16 07:43:01,525 - MedKG-RAG - INFO - [56c07ef5ef6e394741000023] Cross-encoder rerank returned 20 text results
+2026-05-16 07:43:01,527 - MedKG-RAG - INFO - [11/20] Evaluating: What disease is small bowel lymphoma commonly associated with...
+2026-05-16 07:43:01,527 - MedKG-RAG - INFO - [5509bd6a1180f13250000002] QueryAnalyzer starting
+2026-05-16 07:43:01,941 - MedKG-RAG - INFO - [5509bd6a1180f13250000002] QueryAnalyzer done. rewritten_query='Diseases associated with small bowel lymphoma'
+2026-05-16 07:43:01,941 - MedKG-RAG - INFO - [5509bd6a1180f13250000002] Embedding query
+2026-05-16 07:43:02,027 - MedKG-RAG - INFO - [5509bd6a1180f13250000002] Vector search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:43:04,047 - MedKG-RAG - INFO - [5509bd6a1180f13250000002] Vector search returned 73 parent results
+2026-05-16 07:43:04,047 - MedKG-RAG - INFO - [5509bd6a1180f13250000002] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:43:04,459 - MedKG-RAG - INFO - [5509bd6a1180f13250000002] BM25 search returned 80 parent results
+2026-05-16 07:43:04,460 - MedKG-RAG - INFO - [5509bd6a1180f13250000002] RRF fusion starting with k=60
+2026-05-16 07:43:04,463 - MedKG-RAG - INFO - [5509bd6a1180f13250000002] RRF fusion returned 80 fused results
+2026-05-16 07:43:04,463 - MedKG-RAG - INFO - [5509bd6a1180f13250000002] Cross-encoder rerank starting
+2026-05-16 07:43:07,078 - MedKG-RAG - INFO - [5509bd6a1180f13250000002] Cross-encoder rerank returned 20 text results
+2026-05-16 07:43:07,080 - MedKG-RAG - INFO - [12/20] Evaluating: Which calcium/calmodulin dependent protein phosphatase is involved in the activa...
+2026-05-16 07:43:07,080 - MedKG-RAG - INFO - [54f9c40ddd3fc62544000001] QueryAnalyzer starting
+2026-05-16 07:43:07,498 - MedKG-RAG - INFO - [54f9c40ddd3fc62544000001] QueryAnalyzer done. rewritten_query='Calcium/calmodulin dependent protein phosphatase involved in NFAT transcription factor activation'
+2026-05-16 07:43:07,498 - MedKG-RAG - INFO - [54f9c40ddd3fc62544000001] Embedding query
+2026-05-16 07:43:07,582 - MedKG-RAG - INFO - [54f9c40ddd3fc62544000001] Vector search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:43:09,984 - MedKG-RAG - INFO - [54f9c40ddd3fc62544000001] Vector search returned 64 parent results
+2026-05-16 07:43:09,985 - MedKG-RAG - INFO - [54f9c40ddd3fc62544000001] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:43:10,464 - MedKG-RAG - INFO - [54f9c40ddd3fc62544000001] BM25 search returned 80 parent results
+2026-05-16 07:43:10,464 - MedKG-RAG - INFO - [54f9c40ddd3fc62544000001] RRF fusion starting with k=60
+2026-05-16 07:43:10,465 - MedKG-RAG - INFO - [54f9c40ddd3fc62544000001] RRF fusion returned 80 fused results
+2026-05-16 07:43:10,466 - MedKG-RAG - INFO - [54f9c40ddd3fc62544000001] Cross-encoder rerank starting
+2026-05-16 07:43:12,764 - MedKG-RAG - INFO - [54f9c40ddd3fc62544000001] Cross-encoder rerank returned 20 text results
+2026-05-16 07:43:12,767 - MedKG-RAG - INFO - [13/20] Evaluating: Is abdominal pain a common symptom in autism?...
+2026-05-16 07:43:12,768 - MedKG-RAG - INFO - [515debe7298dcd4e51000026] QueryAnalyzer starting
+2026-05-16 07:43:13,139 - MedKG-RAG - INFO - [515debe7298dcd4e51000026] QueryAnalyzer done. rewritten_query='Is abdominal pain a common symptom in autism spectrum disorder'
+2026-05-16 07:43:13,139 - MedKG-RAG - INFO - [515debe7298dcd4e51000026] Embedding query
+2026-05-16 07:43:13,250 - MedKG-RAG - INFO - [515debe7298dcd4e51000026] Vector search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:43:14,869 - MedKG-RAG - INFO - [515debe7298dcd4e51000026] Vector search returned 76 parent results
+2026-05-16 07:43:14,870 - MedKG-RAG - INFO - [515debe7298dcd4e51000026] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:43:15,164 - MedKG-RAG - INFO - [515debe7298dcd4e51000026] BM25 search returned 80 parent results
+2026-05-16 07:43:15,164 - MedKG-RAG - INFO - [515debe7298dcd4e51000026] RRF fusion starting with k=60
+2026-05-16 07:43:15,164 - MedKG-RAG - INFO - [515debe7298dcd4e51000026] RRF fusion returned 80 fused results
+2026-05-16 07:43:15,164 - MedKG-RAG - INFO - [515debe7298dcd4e51000026] Cross-encoder rerank starting
+2026-05-16 07:43:17,591 - MedKG-RAG - INFO - [515debe7298dcd4e51000026] Cross-encoder rerank returned 20 text results
+2026-05-16 07:43:17,591 - MedKG-RAG - INFO - [14/20] Evaluating: Are cyclophilins ubiquitously expressed?...
+2026-05-16 07:43:17,591 - MedKG-RAG - INFO - [56f6ab7009dd18d46b00000d] QueryAnalyzer starting
+2026-05-16 07:43:17,938 - MedKG-RAG - INFO - [56f6ab7009dd18d46b00000d] QueryAnalyzer done. rewritten_query='Are cyclophilins ubiquitously expressed in humans?'
+2026-05-16 07:43:17,939 - MedKG-RAG - INFO - [56f6ab7009dd18d46b00000d] Embedding query
+2026-05-16 07:43:18,014 - MedKG-RAG - INFO - [56f6ab7009dd18d46b00000d] Vector search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:43:19,544 - MedKG-RAG - INFO - [56f6ab7009dd18d46b00000d] Vector search returned 68 parent results
+2026-05-16 07:43:19,545 - MedKG-RAG - INFO - [56f6ab7009dd18d46b00000d] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:43:19,722 - MedKG-RAG - INFO - [56f6ab7009dd18d46b00000d] BM25 search returned 80 parent results
+2026-05-16 07:43:19,723 - MedKG-RAG - INFO - [56f6ab7009dd18d46b00000d] RRF fusion starting with k=60
+2026-05-16 07:43:19,724 - MedKG-RAG - INFO - [56f6ab7009dd18d46b00000d] RRF fusion returned 80 fused results
+2026-05-16 07:43:19,724 - MedKG-RAG - INFO - [56f6ab7009dd18d46b00000d] Cross-encoder rerank starting
+2026-05-16 07:43:22,123 - MedKG-RAG - INFO - [56f6ab7009dd18d46b00000d] Cross-encoder rerank returned 20 text results
+2026-05-16 07:43:22,123 - MedKG-RAG - INFO - [15/20] Evaluating: Are adenylyl cyclases always transmembrane proteins?...
+2026-05-16 07:43:22,123 - MedKG-RAG - INFO - [56e5aeec0c19e5451d000002] QueryAnalyzer starting
+2026-05-16 07:43:22,549 - MedKG-RAG - INFO - [56e5aeec0c19e5451d000002] QueryAnalyzer done. rewritten_query='Are adenylyl cyclases always transmembrane proteins?'
+2026-05-16 07:43:22,549 - MedKG-RAG - INFO - [56e5aeec0c19e5451d000002] Embedding query
+2026-05-16 07:43:22,675 - MedKG-RAG - INFO - [56e5aeec0c19e5451d000002] Vector search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:43:24,912 - MedKG-RAG - INFO - [56e5aeec0c19e5451d000002] Vector search returned 75 parent results
+2026-05-16 07:43:24,913 - MedKG-RAG - INFO - [56e5aeec0c19e5451d000002] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:43:25,101 - MedKG-RAG - INFO - [56e5aeec0c19e5451d000002] BM25 search returned 80 parent results
+2026-05-16 07:43:25,103 - MedKG-RAG - INFO - [56e5aeec0c19e5451d000002] RRF fusion starting with k=60
+2026-05-16 07:43:25,104 - MedKG-RAG - INFO - [56e5aeec0c19e5451d000002] RRF fusion returned 80 fused results
+2026-05-16 07:43:25,105 - MedKG-RAG - INFO - [56e5aeec0c19e5451d000002] Cross-encoder rerank starting
+2026-05-16 07:43:27,381 - MedKG-RAG - INFO - [56e5aeec0c19e5451d000002] Cross-encoder rerank returned 20 text results
+2026-05-16 07:43:27,381 - MedKG-RAG - INFO - [16/20] Evaluating: What gene test is recommended for clopidogrel?...
+2026-05-16 07:43:27,381 - MedKG-RAG - INFO - [5156be04d24251bc05000085] QueryAnalyzer starting
+2026-05-16 07:43:27,759 - MedKG-RAG - INFO - [5156be04d24251bc05000085] QueryAnalyzer done. rewritten_query='Recommended genetic test for clopidogrel'
+2026-05-16 07:43:27,759 - MedKG-RAG - INFO - [5156be04d24251bc05000085] Embedding query
+2026-05-16 07:43:27,839 - MedKG-RAG - INFO - [5156be04d24251bc05000085] Vector search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:43:29,190 - MedKG-RAG - INFO - [5156be04d24251bc05000085] Vector search returned 59 parent results
+2026-05-16 07:43:29,190 - MedKG-RAG - INFO - [5156be04d24251bc05000085] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:43:29,386 - MedKG-RAG - INFO - [5156be04d24251bc05000085] BM25 search returned 77 parent results
+2026-05-16 07:43:29,386 - MedKG-RAG - INFO - [5156be04d24251bc05000085] RRF fusion starting with k=60
+2026-05-16 07:43:29,386 - MedKG-RAG - INFO - [5156be04d24251bc05000085] RRF fusion returned 80 fused results
+2026-05-16 07:43:29,386 - MedKG-RAG - INFO - [5156be04d24251bc05000085] Cross-encoder rerank starting
+2026-05-16 07:43:32,046 - MedKG-RAG - INFO - [5156be04d24251bc05000085] Cross-encoder rerank returned 20 text results
+2026-05-16 07:43:32,046 - MedKG-RAG - INFO - [17/20] Evaluating: Describe clinical presentation of Parkinsonism with dementia of Guadeloupe syndr...
+2026-05-16 07:43:32,046 - MedKG-RAG - INFO - [56c1f033ef6e39474100004f] QueryAnalyzer starting
+2026-05-16 07:43:32,516 - MedKG-RAG - INFO - [56c1f033ef6e39474100004f] QueryAnalyzer done. rewritten_query='Clinical presentation of Parkinsonism with dementia of Guadeloupe syndrome'
+2026-05-16 07:43:32,519 - MedKG-RAG - INFO - [56c1f033ef6e39474100004f] Embedding query
+2026-05-16 07:43:32,632 - MedKG-RAG - INFO - [56c1f033ef6e39474100004f] Vector search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:43:34,514 - MedKG-RAG - INFO - [56c1f033ef6e39474100004f] Vector search returned 79 parent results
+2026-05-16 07:43:34,514 - MedKG-RAG - INFO - [56c1f033ef6e39474100004f] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:43:34,885 - MedKG-RAG - INFO - [56c1f033ef6e39474100004f] BM25 search returned 80 parent results
+2026-05-16 07:43:34,885 - MedKG-RAG - INFO - [56c1f033ef6e39474100004f] RRF fusion starting with k=60
+2026-05-16 07:43:34,885 - MedKG-RAG - INFO - [56c1f033ef6e39474100004f] RRF fusion returned 80 fused results
+2026-05-16 07:43:34,885 - MedKG-RAG - INFO - [56c1f033ef6e39474100004f] Cross-encoder rerank starting
+2026-05-16 07:43:37,344 - MedKG-RAG - INFO - [56c1f033ef6e39474100004f] Cross-encoder rerank returned 20 text results
+2026-05-16 07:43:37,381 - MedKG-RAG - INFO - [18/20] Evaluating: Describe armoured brain syndrome....
+2026-05-16 07:43:37,383 - MedKG-RAG - INFO - [54cf42bdf693c3b16b000007] QueryAnalyzer starting
+2026-05-16 07:43:37,832 - MedKG-RAG - INFO - [54cf42bdf693c3b16b000007] QueryAnalyzer done. rewritten_query='Armored brain syndrome'
+2026-05-16 07:43:37,833 - MedKG-RAG - INFO - [54cf42bdf693c3b16b000007] Embedding query
+2026-05-16 07:43:37,954 - MedKG-RAG - INFO - [54cf42bdf693c3b16b000007] Vector search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:43:39,106 - MedKG-RAG - INFO - [54cf42bdf693c3b16b000007] Vector search returned 100 parent results
+2026-05-16 07:43:39,106 - MedKG-RAG - INFO - [54cf42bdf693c3b16b000007] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:43:39,367 - MedKG-RAG - INFO - [54cf42bdf693c3b16b000007] BM25 search returned 80 parent results
+2026-05-16 07:43:39,367 - MedKG-RAG - INFO - [54cf42bdf693c3b16b000007] RRF fusion starting with k=60
+2026-05-16 07:43:39,367 - MedKG-RAG - INFO - [54cf42bdf693c3b16b000007] RRF fusion returned 80 fused results
+2026-05-16 07:43:39,367 - MedKG-RAG - INFO - [54cf42bdf693c3b16b000007] Cross-encoder rerank starting
+2026-05-16 07:43:41,703 - MedKG-RAG - INFO - [54cf42bdf693c3b16b000007] Cross-encoder rerank returned 20 text results
+2026-05-16 07:43:41,705 - MedKG-RAG - INFO - [19/20] Evaluating: Which are the main histone modifications associated with enhancers?...
+2026-05-16 07:43:41,705 - MedKG-RAG - INFO - [5131bef65274a5fb07000008] QueryAnalyzer starting
+2026-05-16 07:43:42,020 - MedKG-RAG - INFO - [5131bef65274a5fb07000008] QueryAnalyzer done. rewritten_query='Main histone modifications associated with enhancers'
+2026-05-16 07:43:42,020 - MedKG-RAG - INFO - [5131bef65274a5fb07000008] Embedding query
+2026-05-16 07:43:42,106 - MedKG-RAG - INFO - [5131bef65274a5fb07000008] Vector search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:43:43,640 - MedKG-RAG - INFO - [5131bef65274a5fb07000008] Vector search returned 84 parent results
+2026-05-16 07:43:43,640 - MedKG-RAG - INFO - [5131bef65274a5fb07000008] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:43:43,790 - MedKG-RAG - INFO - [5131bef65274a5fb07000008] BM25 search returned 80 parent results
+2026-05-16 07:43:43,791 - MedKG-RAG - INFO - [5131bef65274a5fb07000008] RRF fusion starting with k=60
+2026-05-16 07:43:43,791 - MedKG-RAG - INFO - [5131bef65274a5fb07000008] RRF fusion returned 80 fused results
+2026-05-16 07:43:43,792 - MedKG-RAG - INFO - [5131bef65274a5fb07000008] Cross-encoder rerank starting
+2026-05-16 07:43:45,902 - MedKG-RAG - INFO - [5131bef65274a5fb07000008] Cross-encoder rerank returned 20 text results
+2026-05-16 07:43:45,902 - MedKG-RAG - INFO - [20/20] Evaluating: Can the iPS cell technology be used in Fanconi anemia therapy?...
+2026-05-16 07:43:45,902 - MedKG-RAG - INFO - [54edef0594afd6150400000d] QueryAnalyzer starting
+2026-05-16 07:43:46,334 - MedKG-RAG - INFO - [54edef0594afd6150400000d] QueryAnalyzer done. rewritten_query='Can induced pluripotent stem cell technology be used in Fanconi anemia therapy?'
+2026-05-16 07:43:46,334 - MedKG-RAG - INFO - [54edef0594afd6150400000d] Embedding query
+2026-05-16 07:43:46,455 - MedKG-RAG - INFO - [54edef0594afd6150400000d] Vector search starting with top_k=100, child_fetch_limit=120
+2026-05-16 07:43:47,465 - MedKG-RAG - INFO - [54edef0594afd6150400000d] Vector search returned 81 parent results
+2026-05-16 07:43:47,466 - MedKG-RAG - INFO - [54edef0594afd6150400000d] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-05-16 07:43:47,826 - MedKG-RAG - INFO - [54edef0594afd6150400000d] BM25 search returned 80 parent results
+2026-05-16 07:43:47,826 - MedKG-RAG - INFO - [54edef0594afd6150400000d] RRF fusion starting with k=60
+2026-05-16 07:43:47,826 - MedKG-RAG - INFO - [54edef0594afd6150400000d] RRF fusion returned 80 fused results
+2026-05-16 07:43:47,826 - MedKG-RAG - INFO - [54edef0594afd6150400000d] Cross-encoder rerank starting
+2026-05-16 07:43:50,412 - MedKG-RAG - INFO - [54edef0594afd6150400000d] Cross-encoder rerank returned 20 text results
+2026-05-16 07:43:50,426 - MedKG-RAG - INFO - Results saved to D:\workspace\Repo\medical-chatbot-assistant\data\eval_results\bioasq\detail.jsonl and D:\workspace\Repo\medical-chatbot-assistant\data\eval_results\bioasq\summary.json

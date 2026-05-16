@@ -35,6 +35,7 @@ from src.storage.weaviate_client import WeaviateChildStore
 from src.storage.parent_store import ParentStore
 from src.retrieval.vector_search import vector_search
 from src.retrieval.keyword_search import keyword_search
+from src.retrieval.parallel_retrieval import ParallelRetriever
 from src.reranking.rrf import RRFManager
 from src.reranking.cross_encoder import CrossEncoderReranker
 from src.query.query_analyzer import QueryAnalyzer
@@ -196,27 +197,27 @@ def run_retrieval_pipeline(
     query_vector = query_embedder.embed_texts(rewritten_query)[0]
 
     logger.info(
-        f"{label}Vector search starting with top_k={settings.RETRIEVAL_TOP_K}, "
+        f"{label}Vector search starting with top_k={settings.VECTOR_TOP_K}, "
         f"child_fetch_limit={CHILD_FETCH_LIMIT}"
     )
     vec_results = vector_search(
         query_vector=query_vector,
         weaviate_store=weaviate_store,
         parent_store=parent_store,
-        top_k=settings.RETRIEVAL_TOP_K,
+        top_k=settings.VECTOR_TOP_K,
         child_fetch_limit=CHILD_FETCH_LIMIT,
     )
     logger.info(f"{label}Vector search returned {len(vec_results)} parent results")
 
     logger.info(
-        f"{label}BM25 search starting with top_k={settings.RETRIEVAL_TOP_K}, "
+        f"{label}BM25 search starting with top_k={settings.KEYWORD_TOP_K}, "
         f"child_fetch_limit={CHILD_FETCH_LIMIT}"
     )
     bm25_results = keyword_search(
         query_text=rewritten_query,
         weaviate_store=weaviate_store,
         parent_store=parent_store,
-        top_k=settings.RETRIEVAL_TOP_K,
+        top_k=settings.KEYWORD_TOP_K,
         child_fetch_limit=CHILD_FETCH_LIMIT,
     )
     logger.info(f"{label}BM25 search returned {len(bm25_results)} parent results")
@@ -266,7 +267,8 @@ def evaluate(limit: int | None = None, question_id: Optional[str] = None) -> Non
         "Runtime settings: "
         f"K_RRF={settings.K_RRF}, "
         f"TOP_K_RRF={settings.TOP_K_RRF}, "
-        f"RETRIEVAL_TOP_K={settings.RETRIEVAL_TOP_K}, "
+        f"VECTOR_TOP_K={settings.KEYWORD_TOP_K}, "
+        f"KEYWORD_TOP_K={settings.KEYWORD_TOP_K}, "
         f"CHILD_FETCH_LIMIT={settings.CHILD_FETCH_LIMIT}, "
         f"RERANK_TEXT_TOP_M={settings.RERANK_TEXT_TOP_M}, "
         f"K_VALUES={settings.K_VALUES}"
@@ -422,7 +424,8 @@ def _build_summary(
             "failed_questions": failed_questions,
             "k_rrf": settings.K_RRF,
             "top_k_rrf": settings.TOP_K_RRF,
-            "retrieval_top_k": settings.RETRIEVAL_TOP_K,
+            "vector_top_k": settings.VECTOR_TOP_K,
+            "keyword_top_k": settings.KEYWORD_TOP_K,
             "rerank_text_top_m": settings.RERANK_TEXT_TOP_M,
             "child_fetch_limit": CHILD_FETCH_LIMIT,
             "k_values": K_VALUES,
