@@ -7,8 +7,9 @@ Evaluates the full text retrieval pipeline against the BioASQ gold standard:
 Metrics computed (all at K=5, 10, 20):
     - Precision@K, Recall@K, F1@K  (document-level, PMID matching)
     - MAP@K  (Mean Average Precision truncated at K)
+    - GMAP@K (Geometric Mean Average Precision truncated at K)
     - MRR    (Mean Reciprocal Rank)
-    - Snippet Recall@K, Snippet Precision@K, Snippet F1@K (snippet-level, text containment)
+    - Snippet Recall@K, Snippet Precision@K, Snippet F1@K (snippet-level, text containment proxy)
 
 Outputs:
     data/eval_results/bioasq/detail.jsonl   - per-question results
@@ -19,6 +20,7 @@ import sys
 import json
 import argparse
 import time
+import math
 from pathlib import Path
 from typing import List, Dict, Set, Any, Tuple, Optional
 
@@ -45,6 +47,7 @@ K_VALUES = settings.K_VALUES
 CHILD_FETCH_LIMIT = settings.CHILD_FETCH_LIMIT
 VAL_PATH = settings.DATA_PATH / "val" / "val_bioasq.jsonl"
 OUTPUT_DIR = settings.DATA_PATH / "eval_results" / "bioasq"
+GMAP_EPSILON = 1e-6
 
 
 def precision_at_k(retrieved_pmids: List[str], gold_pmids: Set[str], k: int) -> float:
@@ -97,6 +100,19 @@ def reciprocal_rank(retrieved_pmids: List[str], gold_pmids: Set[str]) -> float:
         if pmid in gold_pmids:
             return 1.0 / i
     return 0.0
+
+
+def geometric_mean_average_precision(
+    metrics_list: List[Dict[str, float]],
+    key: str,
+    epsilon: float = GMAP_EPSILON,
+) -> float:
+    """Compute GMAP from per-question AP values using a small epsilon for stability."""
+    values = [m[key] for m in metrics_list if key in m]
+    if not values:
+        return 0.0
+    log_sum = sum(math.log(v + epsilon) for v in values)
+    return round(math.exp(log_sum / len(values)), 4)
 
 
 def compute_document_metrics(
@@ -243,7 +259,7 @@ def run_retrieval_pipeline(
     return ranked_text, rewritten_query
 
 
-def evaluate(limit: int | None = None, question_id: Optional[str] = None) -> None:
+def evaluate(limit: int | None = None) -> None:
     """Run the full retrieval evaluation on BioASQ validation data."""
     if not VAL_PATH.exists():
         logger.error(f"Validation file not found: {VAL_PATH}")
@@ -254,12 +270,6 @@ def evaluate(limit: int | None = None, question_id: Optional[str] = None) -> Non
         for line in f:
             questions.append(json.loads(line))
 
-    if question_id:
-        questions = [q for q in questions if q["id"] == question_id]
-        if not questions:
-            logger.error(f"Question ID not found in validation file: {question_id}")
-            sys.exit(1)
-
     if limit:
         questions = questions[:limit]
     logger.info(f"Loaded {len(questions)} questions for evaluation.")
@@ -267,7 +277,7 @@ def evaluate(limit: int | None = None, question_id: Optional[str] = None) -> Non
         "Runtime settings: "
         f"K_RRF={settings.K_RRF}, "
         f"TOP_K_RRF={settings.TOP_K_RRF}, "
-        f"VECTOR_TOP_K={settings.KEYWORD_TOP_K}, "
+        f"VECTOR_TOP_K={settings.VECTOR_TOP_K}, "
         f"KEYWORD_TOP_K={settings.KEYWORD_TOP_K}, "
         f"CHILD_FETCH_LIMIT={settings.CHILD_FETCH_LIMIT}, "
         f"RERANK_TEXT_TOP_M={settings.RERANK_TEXT_TOP_M}, "
@@ -402,6 +412,9 @@ def _build_summary(
         doc_agg[f"MAP@{k}"] = mean_metric(
             all_doc_metrics, f"average_precision_at_{k}"
         )
+        doc_agg[f"GMAP@{k}"] = geometric_mean_average_precision(
+            all_doc_metrics, f"average_precision_at_{k}"
+        )
     doc_agg["MRR"] = mean_metric(all_doc_metrics, "reciprocal_rank")
 
     snippet_agg = {}
@@ -457,14 +470,14 @@ def _print_summary(summary: Dict[str, Any]) -> None:
     print(f"  {'-'*16} {'-'*8} {'-'*8} {'-'*8}")
 
     doc = summary["document_metrics"]
-    for metric_name in ["Precision", "Recall", "F1", "MAP"]:
+    for metric_name in ["Precision", "Recall", "F1", "MAP", "GMAP"]:
         vals = [doc.get(f"{metric_name}@{k}", 0.0) for k in K_VALUES]
         print(f"  {metric_name:<16} {vals[0]:>8.4f} {vals[1]:>8.4f} {vals[2]:>8.4f}")
 
     print(f"  {'MRR':<16} {doc.get('MRR', 0.0):>8.4f}")
     print()
 
-    print("SNIPPET-LEVEL METRICS (text containment)")
+    print("SNIPPET-LEVEL METRICS (text containment proxy)")
     print("-" * 60)
     print(f"  {'Metric':<20} {'@5':>8} {'@10':>8} {'@20':>8}")
     print(f"  {'-'*20} {'-'*8} {'-'*8} {'-'*8}")
@@ -477,8 +490,8 @@ def _print_summary(summary: Dict[str, Any]) -> None:
     print("=" * 60)
 
 
-if __name__ == "__main__":
-    setup_logging()
+def build_arg_parser() -> argparse.ArgumentParser:
+    """Build CLI parser for retrieval evaluation."""
     parser = argparse.ArgumentParser(
         description="Evaluate text retrieval pipeline on BioASQ validation data."
     )
@@ -486,9 +499,11 @@ if __name__ == "__main__":
         "--limit", type=int, default=None,
         help="Evaluate only the first N questions (for quick testing)."
     )
-    parser.add_argument(
-        "--question-id", type=str, default=None,
-        help="Evaluate only one specific BioASQ question ID."
-    )
+    return parser
+
+
+if __name__ == "__main__":
+    setup_logging()
+    parser = build_arg_parser()
     args = parser.parse_args()
-    evaluate(limit=args.limit, question_id=args.question_id)
+    evaluate(limit=args.limit)

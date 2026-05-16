@@ -1,6 +1,7 @@
 import io
 import json
 import logging
+import math
 import tempfile
 import unittest
 from pathlib import Path
@@ -19,6 +20,27 @@ class _DummyResource:
 
 
 class EvaluateRetrievalTests(unittest.TestCase):
+    def test_geometric_mean_average_precision_handles_zero_ap(self):
+        metrics_list = [
+            {"average_precision_at_5": 1.0},
+            {"average_precision_at_5": 0.25},
+            {"average_precision_at_5": 0.0},
+        ]
+
+        gmap = er.geometric_mean_average_precision(metrics_list, "average_precision_at_5")
+        expected = round(
+            math.exp(
+                (
+                    math.log(1.0 + er.GMAP_EPSILON)
+                    + math.log(0.25 + er.GMAP_EPSILON)
+                    + math.log(0.0 + er.GMAP_EPSILON)
+                ) / 3
+            ),
+            4,
+        )
+
+        self.assertEqual(gmap, expected)
+
     def test_compute_document_metrics_uses_top_k_correctly(self):
         retrieved_pmids = ["p1", "x1", "x2", "x3", "x4", "p2"]
         gold_pmids = {"p1", "p2"}
@@ -47,6 +69,70 @@ class EvaluateRetrievalTests(unittest.TestCase):
         self.assertEqual(metrics["snippet_recall_at_5"], 1.0)
         self.assertEqual(metrics["snippet_precision_at_5"], 0.4)
         self.assertEqual(metrics["snippet_f1_at_5"], 0.5714)
+
+    def test_build_summary_includes_gmap_and_new_config_keys(self):
+        all_doc_metrics = [
+            {
+                "precision_at_5": 0.5,
+                "recall_at_5": 0.25,
+                "f1_at_5": 0.3333,
+                "average_precision_at_5": 0.5,
+                "precision_at_10": 0.4,
+                "recall_at_10": 0.4,
+                "f1_at_10": 0.4,
+                "average_precision_at_10": 0.4,
+                "precision_at_20": 0.2,
+                "recall_at_20": 0.5,
+                "f1_at_20": 0.2857,
+                "average_precision_at_20": 0.2,
+                "reciprocal_rank": 1.0,
+            },
+            {
+                "precision_at_5": 0.0,
+                "recall_at_5": 0.0,
+                "f1_at_5": 0.0,
+                "average_precision_at_5": 0.0,
+                "precision_at_10": 0.1,
+                "recall_at_10": 0.2,
+                "f1_at_10": 0.1333,
+                "average_precision_at_10": 0.1,
+                "precision_at_20": 0.1,
+                "recall_at_20": 0.4,
+                "f1_at_20": 0.16,
+                "average_precision_at_20": 0.05,
+                "reciprocal_rank": 0.0,
+            },
+        ]
+        all_snippet_metrics = [
+            {
+                "snippet_recall_at_5": 0.5,
+                "snippet_precision_at_5": 0.4,
+                "snippet_f1_at_5": 0.4444,
+                "snippet_recall_at_10": 0.6,
+                "snippet_precision_at_10": 0.3,
+                "snippet_f1_at_10": 0.4,
+                "snippet_recall_at_20": 0.7,
+                "snippet_precision_at_20": 0.2,
+                "snippet_f1_at_20": 0.3111,
+            }
+        ]
+
+        summary = er._build_summary(all_doc_metrics, all_snippet_metrics, 2, 0)
+
+        self.assertIn("GMAP@5", summary["document_metrics"])
+        self.assertIn("GMAP@10", summary["document_metrics"])
+        self.assertIn("GMAP@20", summary["document_metrics"])
+        self.assertIn("vector_top_k", summary["config"])
+        self.assertIn("keyword_top_k", summary["config"])
+        self.assertNotIn("retrieval_top_k", summary["config"])
+
+    def test_build_arg_parser_rejects_removed_question_id(self):
+        parser = er.build_arg_parser()
+        args = parser.parse_args(["--limit", "3"])
+        self.assertEqual(args.limit, 3)
+
+        with self.assertRaises(SystemExit):
+            parser.parse_args(["--question-id", "q1"])
 
     def test_evaluate_logs_pipeline_errors_and_continues(self):
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -135,6 +221,12 @@ class EvaluateRetrievalTests(unittest.TestCase):
             summary = json.loads((output_dir / "summary.json").read_text(encoding="utf-8"))
             self.assertEqual(summary["config"]["failed_questions"], 1)
             self.assertEqual(summary["config"]["evaluated_questions"], 1)
+            self.assertIn("vector_top_k", summary["config"])
+            self.assertIn("keyword_top_k", summary["config"])
+            self.assertNotIn("retrieval_top_k", summary["config"])
+            self.assertIn("GMAP@5", summary["document_metrics"])
+            self.assertIn("GMAP@10", summary["document_metrics"])
+            self.assertIn("GMAP@20", summary["document_metrics"])
 
             detail_lines = (
                 output_dir / "detail.jsonl"

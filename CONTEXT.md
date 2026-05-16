@@ -259,13 +259,19 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 Pipeline evaluated: QueryAnalyzer (temp=0) → Vector + BM25 → RRF → Cross-Encoder.
 Evaluation is **deterministic** (single run, temperature=0 for QueryAnalyzer).
 
-> **Best observed text-only eval config (May 16, 2026)**: On a 20-question BioASQ validation subset, the strongest configuration tested so far is:
-> `TOP_K_RRF=80`, `RETRIEVAL_TOP_K=80`, `CHILD_FETCH_LIMIT=120`, `RERANK_TEXT_TOP_M=20`.
-> Observed aggregate metrics:
-> - Document: `P@5=0.6700`, `R@5=0.4626`, `MAP@5=0.6488`, `MRR=0.8267`
-> - Document: `P@20=0.3200`, `R@20=0.7625`, `MAP@20=0.6174`
-> - Snippet: `Snippet_F1@5=0.4726`, `Snippet_F1@10=0.5121`, `Snippet_F1@20=0.4237`
-> Increasing `RERANK_TEXT_TOP_M` above `20` slightly reduced retrieval metrics in this setup.
+> **Best observed text-only eval config (May 16, 2026)**:
+> `VECTOR_TOP_K=80`, `KEYWORD_TOP_K=80`, `TOP_K_RRF=80`, `K_RRF=60`, `CHILD_FETCH_LIMIT=120`, `RERANK_TEXT_TOP_M=20`.
+> This is the strongest configuration tested so far and is now the default retrieval baseline.
+>
+> **Observed 50-question validation metrics after retrieval fixes**:
+> - Document: `P@5=0.6520`, `R@5=0.5206`, `P@10=0.5140`, `R@10=0.7289`
+> - Document: `P@20=0.3320`, `R@20=0.8757`, `MAP@5=0.7040`, `MAP@10=0.6717`, `MAP@20=0.7113`, `MRR=0.8640`
+> - Snippet: `Snippet_Recall@5=0.5042`, `Snippet_Recall@10=0.7124`, `Snippet_Recall@20=0.8593`
+> - Snippet: `Snippet_Precision@5=0.5960`, `Snippet_Precision@10=0.4880`, `Snippet_Precision@20=0.3230`
+> - Snippet: `Snippet_F1@5=0.4754`, `Snippet_F1@10=0.5191`, `Snippet_F1@20=0.4348`
+>
+> **Important implementation note**:
+> `CrossEncoderReranker` must preserve negative logits. MedCPT Cross-Encoder returns raw scores, so filtering out passages with `score <= 0` incorrectly lowers `Recall@10/@20`, `MAP@20`, and snippet coverage.
 
 ##### Document-Level Metrics (PMID matching)
 | Metric | K Values | Description |
@@ -274,24 +280,46 @@ Evaluation is **deterministic** (single run, temperature=0 for QueryAnalyzer).
 | **Recall@K** | 5, 10, 20 | Fraction of gold PMIDs retrieved in top-K |
 | **F1@K** | 5, 10, 20 | Harmonic mean of P@K and R@K |
 | **MAP@K** | 5, 10, 20 | Mean Average Precision truncated at K |
+| **GMAP@K** | 5, 10, 20 | Geometric Mean Average Precision truncated at K |
 | **MRR** | — | Mean Reciprocal Rank of first relevant document |
 
 > **MAP@K**: `MAP@K = mean(AP@K)` across all queries.
 > `AP@K = (1/|gold|) * Σᵢ₌₁ᴷ P(i) × rel(i)` — considers ranking quality up to position K.
+>
+> **GMAP@K**: `GMAP@K = exp(mean(log(AP@K + 1e-6)))` across all queries.
 
-##### Snippet-Level Metrics (text containment)
+##### Snippet-Level Metrics (text containment proxy)
 | Metric | K Values | Description |
 |---|---|---|
 | **Snippet Recall@K** | 5, 10, 20 | Fraction of gold snippets whose text appears as a substring in a retrieved parent chunk with the same PMID |
 | **Snippet Precision@K** | 5, 10, 20 | Fraction of top-K retrieved items that contain at least one gold snippet |
 
 > **Matching Logic**: A gold snippet is "covered" if `gold_snippet_text in retrieved_parent_text` for a parent chunk sharing the same PMID.
+>
+> **Evaluation Policy (paper direction, current decision)**:
+> - `Document retrieval` is reported in a single summary block using:
+>   - `Precision@K`, `Recall@K`, `F1@K`, `MAP@K`, `GMAP@K`
+>   - `MRR`
+> - `@10` is the closest slice to BioASQ-style official-like document evaluation.
+> - `Snippet retrieval` remains a **proxy metric** based on parent-text containment.
+> - The repo does **not** currently implement official BioASQ snippet overlap scoring with character offsets.
+> - The repo does **not** currently use child chunks or sentence windows as snippet prediction units.
+
+> **Dataset provenance note**:
+> `preprocess_bioasq_taskB.py` preserves snippet-to-PMID alignment, but the eval JSONL currently keeps only:
+> - `snippet.text`
+> - `snippet.pmid`
+>
+> Article `abstractText` is refetched from PubMed XML and serialized into the corpus, so any exact-match mismatch should be treated as a text-normalization / serialization issue, not as a PMID mismatch.
 
 ##### Output
 | File | Path | Content |
 |---|---|---|
 | **Detail** | `data/eval_results/bioasq/detail.jsonl` | Per-question: retrieved items, relevance labels, all metrics |
 | **Summary** | `data/eval_results/bioasq/summary.json` | Aggregate metrics across all questions |
+| **Grid Search** | `data/eval_results/bioasq/grid_search_20q_<timestamp>.json` | Full config + all document/snippet metrics for each retrieval hyperparameter run on a fixed 20-question subset |
+
+> **Grid Search Utility**: `scripts/grid_search_retrieval.py` runs a fixed 20-question retrieval benchmark over a preset grid of `(VECTOR_TOP_K, KEYWORD_TOP_K)` configurations while keeping the stronger baseline values for `CHILD_FETCH_LIMIT`, `TOP_K_RRF`, `K_RRF`, and `RERANK_TEXT_TOP_M` unless overridden via CLI.
 
 #### Generation
 - **Exact Match / F1** (standard QA metrics)
@@ -484,7 +512,8 @@ SQLITE_PARENT_DB_PATH=./vectorstore/parent_chunks.db
 RAW_DATA_PATH=./data/raw/
 
 # Pipeline Params
-RETRIEVAL_TOP_K=20
+VECTOR_TOP_K=20
+KEYWORD_TOP_K=20
 CHILD_FETCH_LIMIT=60
 RERANK_TEXT_TOP_M=20
 RERANK_KG_TOP_N=20
