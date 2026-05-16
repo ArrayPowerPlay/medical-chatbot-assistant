@@ -24,9 +24,9 @@ class Settings(BaseSettings):
     WEAVIATE_GRPC_PORT : int = 50051             # Use GRPC protocol for big data processing     
 
     # RAG hyperparameters
-    RETRIEVAL_TOP_K: int = 20 
-    RERANK_TOP_K: int = 10
-    CHILD_FETCH_LIMIT: int = 60         # Number of child chunks to be fetched
+    VECTOR_TOP_K: int = 80
+    KEYWORD_TOP_K: int = 80 
+    CHILD_FETCH_LIMIT: int = 80         # Number of child chunks to be fetched
 
     # Parent-Child chunking
     TIER1_MAX_LEN: int = 500            # Threshold of article's title + abstract length to be chunked or not
@@ -36,11 +36,12 @@ class Settings(BaseSettings):
     CHILD_CHUNK_SIZE : int = 500
 
     # Reranking configuration
-    RERANK_TEXT_TOP_M: int = 5
+    RERANK_TEXT_TOP_M: int = 20
     RERANK_KG_TOP_N: int = 20
 
     # RRF top_k configuration
-    TOP_K_RRF: int = 60
+    TOP_K_RRF: int = 80
+    K_RRF: int = 60
 
     # PostgreSQL configuraion
     POSTGRE_HOST: str = "localhost"
