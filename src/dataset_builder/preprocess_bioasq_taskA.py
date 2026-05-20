@@ -1,3 +1,5 @@
+"""Download and filter the BioASQ-aligned PubMed corpus into corpus.jsonl."""
+
 import json
 import os
 import sys

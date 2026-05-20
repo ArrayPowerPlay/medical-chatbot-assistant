@@ -1,3 +1,5 @@
+"""Chunk, embed, and index corpus.jsonl records into SQLite and Weaviate."""
+
 import json
 import sys
 from pathlib import Path
@@ -13,7 +15,6 @@ parent_root = Path(__file__).resolve().parent.parent
 if str(parent_root) not in sys.path:
     sys.path.append(str(parent_root))
 
-from config.settings import settings
 from config.logging_config import logger, setup_logging
 from src.dataset_builder.parent_child_chunker import AdaptiveChunker
 from src.storage.parent_store import ParentStore

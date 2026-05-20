@@ -19925,3 +19925,10 @@ weaviate.exceptions.WeaviateQueryError: Query call with protocol GRPC search fai
 2026-05-16 18:08:11,305 - MedKG-RAG - INFO - [5a68eabab750ff4455000015] Cross-encoder rerank starting
 2026-05-16 18:08:13,955 - MedKG-RAG - INFO - [5a68eabab750ff4455000015] Cross-encoder rerank returned 20 text results
 2026-05-16 18:08:13,977 - MedKG-RAG - INFO - Results saved to D:\workspace\Repo\medical-chatbot-assistant\data\eval_results\bioasq\detail.jsonl and D:\workspace\Repo\medical-chatbot-assistant\data\eval_results\bioasq\summary.json
+2026-05-20 15:48:22,337 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-05-20 15:48:22,347 - MedKG-RAG - INFO - Loading MedCPT-Article-Encoder...
+2026-05-20 15:48:22,348 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-05-20 16:19:40,418 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-05-20 16:19:40,427 - MedKG-RAG - INFO - Loading MedCPT-Article-Encoder...
+2026-05-20 16:19:40,428 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-05-20 16:19:48,529 - MedKG-RAG - INFO - Reading and chunking data completed. Read 311 articles.

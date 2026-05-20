@@ -34,8 +34,8 @@ rag-project/
 │       └── medaesqa/
 │
 ├── scripts/
-│   ├── ingest_documents.py           # Load BioASQ docs → parent-child chunk → MedCPT → Weaviate
 │   ├── build_kg.py                   # PrimeKG → filter → Neo4j import + MedCPT node embeddings
+│   ├── process_and_index_corpus.py   # Chunk, embed, and index corpus.jsonl into SQLite + Weaviate
 │   ├── evaluation/
 │   │   ├── bioasq/
 │   │   │   ├── val_retrieval.py      # BioASQ validation retrieval evaluation
@@ -66,8 +66,9 @@ rag-project/
 │   │
 │   ├── dataset_builder/              # Offline data processing (batch, one-time)
 │   │   ├── __init__.py
-│   │   ├── preprocess_bioasq_taskA.py # Load BioASQ PubMed articles
-│   │   ├── preprocess_bioasq_taskB.py # Preprocess Q&A for task B (test, val split)
+│   │   ├── preprocess_bioasq_taskA.py # Download/filter the main BioASQ PubMed corpus
+│   │   ├── preprocess_bioasq_taskB.py # Build BioASQ QA splits + shared PubMed/PMC fetch helpers
+│   │   ├── augment_corpus_with_medaesqa.py # Add MedAESQA gold PMIDs into corpus.jsonl
 │   │   ├── parent_child_chunker.py    # Adaptive 3-tier chunking using SciSpaCy
 │   │
 │   ├── retrieval/                    # 3 parallel retrieval streams

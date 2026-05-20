@@ -24,7 +24,7 @@ class WeaviateChildStore:
         # connect_to_local: use when database is local
         self.client = weaviate.connect_to_local(
             host=url.replace("http://", "").replace("https://", "").split(":")[0],
-            port=int(url.split(":")[-1] if ":" in url.split("//")[-1] else 8080),
+            port=int(url.split(":")[-1] if ":" in url.split("//")[-1] else 8081),
             grpc_port=grpc_port
         )
 

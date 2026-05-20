@@ -1,15 +1,27 @@
+"""Build BioASQ validation/test QA files and shared PubMed/PMC fetch helpers."""
+
 import json
 import re
 import sys
 import time
+from html import unescape
+from html.parser import HTMLParser
 from pathlib import Path
-from typing import List, Dict
+from typing import List, Dict, Tuple
 import httpx
 import xml.etree.ElementTree as ET
 
 # Add project root to sys.path
 project_root = Path(__file__).resolve().parent.parent.parent
 sys.path.append(str(project_root))
+
+DEFAULT_HTTP_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/124.0.0.0 Safari/537.36"
+    )
+}
 
 
 def _has_full_snippet_coverage(sample: Dict) -> bool:
@@ -46,104 +58,365 @@ def extract_pmid(url: str) -> str:
     return match.group(1) if match else ""
 
 
+def _normalize_xml_text(text: str) -> str:
+    """Collapse internal whitespace extracted from XML nodes."""
+    return re.sub(r"\s+", " ", text or "").strip()
+
+
+def _element_text(element: ET.Element | None) -> str:
+    """Extract recursively nested text from an XML element."""
+    if element is None:
+        return ""
+    return _normalize_xml_text("".join(element.itertext()))
+
+
 def _parse_pubmed_xml(xml_content: str) -> Dict[str, Dict]:
     """Parse the XML response from PubMed and extract article details."""
     results = {}
     try:
         root = ET.fromstring(xml_content)
-        for article in root.findall('.//PubmedArticle'):
-            pmid_element = article.find('.//PMID')
-            if pmid_element is None or pmid_element.text is None:
+        for article in root:
+            if article.tag not in {"PubmedArticle", "PubmedBookArticle"}:
                 continue
-            
-            pmid = pmid_element.text
-            
+
+            pmid_element = article.find('.//PMID')
+            pmid = _element_text(pmid_element)
+            if not pmid:
+                continue
+
             title_element = article.find('.//ArticleTitle')
-            # Ensure title is a string, default to empty string if None
-            title = title_element.text if title_element is not None and title_element.text is not None else ""
-            
+            title = _element_text(title_element)
+
             abstract_texts = []
             for abstract_element in article.findall('.//AbstractText'):
-                if abstract_element.text:
-                    abstract_texts.append(abstract_element.text)
-            abstract = " ".join(abstract_texts)
-            
-            # Clean up potential HTML tags just in case
-            title = re.sub(r'<[^>]*>', '', title)
-            abstract = re.sub(r'<[^>]*>', '', abstract)
+                abstract_text = _element_text(abstract_element)
+                if not abstract_text:
+                    continue
+
+                label = _normalize_xml_text(abstract_element.attrib.get("Label", ""))
+                if label:
+                    abstract_text = f"{label}: {abstract_text}"
+                abstract_texts.append(abstract_text)
+            abstract = _normalize_xml_text(" ".join(abstract_texts))
+
+            pmcid_element = article.find(".//ArticleId[@IdType='pmc']")
+            pmcid = _element_text(pmcid_element)
+            if pmcid and not pmcid.upper().startswith("PMC"):
+                pmcid = f"PMC{pmcid}"
 
             results[pmid] = {
                 "pmid": pmid,
                 "title": title.strip(),
-                "abstractText": abstract.strip()
+                "abstractText": abstract.strip(),
+                "pmcid": pmcid,
+                "content_source": "pubmed_abstract" if abstract.strip() else "pubmed_no_abstract",
+                "record_type": article.tag,
             }
     except ET.ParseError as e:
         print(f"\nError parsing XML: {e}")
     return results
 
 
-def fetch_pubmed_data(pmids: List[str]) -> Dict[str, Dict]:
-    """Fetch abstract and title from PubMed using NCBI E-Utilities with retries."""
-    if not pmids:
-        return {}
-    
+def _request_with_retries(
+    client: httpx.Client,
+    url: str,
+    params: Dict[str, str],
+    request_label: str,
+    max_retries: int = 3,
+) -> httpx.Response | None:
+    """Fetch one E-Utilities resource with retry and exponential backoff."""
+    for attempt in range(max_retries):
+        try:
+            response = client.get(url, params=params)
+            response.raise_for_status()
+            return response
+        except httpx.RequestError as e:
+            print(
+                f"\nError fetching {request_label}. Attempt {attempt + 1}/{max_retries}. "
+                f"Error: {e}"
+            )
+            if attempt < max_retries - 1:
+                time.sleep(2 ** attempt)
+        except httpx.HTTPStatusError as e:
+            print(
+                f"\nHTTP error fetching {request_label}. Attempt {attempt + 1}/{max_retries}. "
+                f"Error: {e}"
+            )
+            if attempt < max_retries - 1:
+                time.sleep(2 ** attempt)
+    return None
+
+
+def _classify_pubmed_record(record: Dict[str, str]) -> str:
+    """Map a parsed PubMed record to a fetch status label."""
+    if record.get("title") and record.get("abstractText"):
+        return "fetched_pubmed_abstract"
+    if record.get("title"):
+        return "no_pubmed_abstract"
+    return "parse_failed"
+
+
+def fetch_pubmed_records(pmids: List[str]) -> Tuple[Dict[str, Dict], Dict[str, Dict[str, str]]]:
+    """Fetch PubMed metadata and return both records and per-PMID status."""
+    unique_pmids = list(dict.fromkeys(str(pmid).strip() for pmid in pmids if str(pmid).strip()))
+    if not unique_pmids:
+        return {}, {}
+
     base_url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi"
-    results = {}
-    failed_pmids = []
-    
     batch_size = 150
-    max_retries = 3
-    total_pmids = len(pmids)
+    total_pmids = len(unique_pmids)
+    records: Dict[str, Dict] = {}
+    statuses: Dict[str, Dict[str, str]] = {}
+
     print(f"Starting to fetch abstracts for {total_pmids} unique PMIDs...")
 
-    for i in range(0, len(pmids), batch_size):
-        batch = pmids[i:i+batch_size]
-        params = {
-            "db": "pubmed",
-            "id": ",".join(batch),
-            "retmode": "xml",
-            "rettype": "abstract"
-        }
-        
-        for attempt in range(max_retries):
-            try:
-                with httpx.Client(timeout=30.0) as client:
-                    response = client.get(base_url, params=params)
-                    response.raise_for_status()  # Will raise an exception for 4xx/5xx status
-                    
-                    # Successfully fetched, now parse
-                    batch_results = _parse_pubmed_xml(response.text)
-                    results.update(batch_results)
-                    
-                    # Check if all PMIDs in the batch were parsed successfully
-                    missing_in_batch = set(batch) - set(batch_results.keys())
-                    if missing_in_batch:
-                        print(f"\nWarning: Could not parse data for PMIDs in batch: {list(missing_in_batch)}")
-                        # You might want to add them to a retry list, but often this is a parsing/data issue
-                    
-                    print(f"Fetched {len(results)}/{total_pmids} articles...", end="\r")
-                    time.sleep(0.4) # Respect NCBI rate limits
-                    break # Exit retry loop on success
+    with httpx.Client(
+        timeout=30.0,
+        follow_redirects=True,
+        headers=DEFAULT_HTTP_HEADERS,
+    ) as client:
+        for i in range(0, total_pmids, batch_size):
+            batch = unique_pmids[i:i + batch_size]
+            params = {
+                "db": "pubmed",
+                "id": ",".join(batch),
+                "retmode": "xml",
+                "rettype": "abstract",
+            }
+            response = _request_with_retries(
+                client=client,
+                url=base_url,
+                params=params,
+                request_label=f"PubMed batch starting at index {i}",
+            )
+            if response is None:
+                for pmid in batch:
+                    statuses[pmid] = {"status": "fetch_failed"}
+                continue
 
-            except httpx.RequestError as e:
-                print(f"\nError fetching batch starting at index {i}. Attempt {attempt + 1}/{max_retries}. Error: {e}")
-                if attempt < max_retries - 1:
-                    time.sleep(2 ** attempt) # Exponential backoff
-                else:
-                    print(f"\nFailed to fetch batch after {max_retries} attempts. Skipping PMIDs: {batch}")
-                    failed_pmids.extend(batch)
-            except Exception as e:
-                print(f"\nAn unexpected error occurred: {e}")
-                # Decide if you want to retry on unexpected errors
-                break # Or continue to next batch
+            batch_results = _parse_pubmed_xml(response.text)
+            records.update(batch_results)
 
-    if failed_pmids:
-        print("\n--------------------------------------------------")
-        print(f"Could not fetch data for the following {len(failed_pmids)} PMIDs after all retries:")
-        print(", ".join(failed_pmids))
-        print("--------------------------------------------------")
-            
-    return results
+            for pmid, record in batch_results.items():
+                statuses[pmid] = {
+                    "status": _classify_pubmed_record(record),
+                    "pmcid": record.get("pmcid", ""),
+                }
+
+            missing_in_batch = sorted(set(batch) - set(batch_results.keys()))
+            if missing_in_batch:
+                print(f"\nWarning: Missing PMIDs in batch parse. Retrying individually: {missing_in_batch}")
+
+            for pmid in missing_in_batch:
+                single_params = {
+                    "db": "pubmed",
+                    "id": pmid,
+                    "retmode": "xml",
+                    "rettype": "abstract",
+                }
+                single_response = _request_with_retries(
+                    client=client,
+                    url=base_url,
+                    params=single_params,
+                    request_label=f"PubMed PMID {pmid}",
+                )
+                if single_response is None:
+                    statuses[pmid] = {"status": "fetch_failed"}
+                    continue
+
+                single_result = _parse_pubmed_xml(single_response.text)
+                if pmid not in single_result:
+                    statuses[pmid] = {"status": "parse_failed"}
+                    continue
+
+                record = single_result[pmid]
+                records[pmid] = record
+                statuses[pmid] = {
+                    "status": _classify_pubmed_record(record),
+                    "pmcid": record.get("pmcid", ""),
+                }
+
+            print(f"Fetched {len(records)}/{total_pmids} articles...", end="\r")
+            time.sleep(0.4)
+
+    for pmid in unique_pmids:
+        statuses.setdefault(pmid, {"status": "parse_failed"})
+
+    return records, statuses
+
+
+def fetch_pubmed_data(pmids: List[str]) -> Dict[str, Dict]:
+    """Backward-compatible wrapper returning only parsed PubMed records."""
+    records, _ = fetch_pubmed_records(pmids)
+    return records
+
+
+def _parse_pmc_xml(xml_content: str, pmid: str, pmcid: str) -> Dict[str, str] | None:
+    """Parse PMC XML and extract a plain-text fallback document."""
+    try:
+        root = ET.fromstring(xml_content)
+    except ET.ParseError:
+        return None
+
+    title = ""
+    title_element = root.find(".//front//article-title")
+    if title_element is not None:
+        title = _element_text(title_element)
+
+    abstract_parts = []
+    for abstract_element in root.findall(".//front//abstract"):
+        abstract_text = _element_text(abstract_element)
+        if abstract_text:
+            abstract_parts.append(abstract_text)
+
+    body_parts = []
+    for paragraph in root.findall(".//body//p"):
+        paragraph_text = _element_text(paragraph)
+        if paragraph_text:
+            body_parts.append(paragraph_text)
+
+    full_text = _normalize_xml_text(" ".join(abstract_parts + body_parts))
+    if not full_text:
+        return None
+
+    return {
+        "pmid": pmid,
+        "pmcid": pmcid,
+        "title": title,
+        "abstractText": full_text,
+        "content_source": "pmc_fulltext_fallback",
+    }
+
+
+class _PMCBodyHTMLParser(HTMLParser):
+    """Extract main article-body paragraph text from a PMC HTML page."""
+
+    def __init__(self):
+        super().__init__()
+        self.in_body_section = False
+        self.body_section_depth = 0
+        self.capture_text = False
+        self.capture_title = False
+        self.current_text_parts: List[str] = []
+        self.paragraphs: List[str] = []
+        self.title_parts: List[str] = []
+
+    def handle_starttag(self, tag: str, attrs):
+        attrs_dict = dict(attrs)
+        class_value = attrs_dict.get("class", "")
+
+        if tag == "section" and "main-article-body" in class_value:
+            self.in_body_section = True
+            self.body_section_depth = 1
+            return
+
+        if self.in_body_section and tag == "section":
+            self.body_section_depth += 1
+
+        if not self.in_body_section and tag == "h1" and "content-title" in class_value:
+            self.capture_title = True
+
+        if self.in_body_section and tag == "p":
+            self.capture_text = True
+            self.current_text_parts = []
+
+    def handle_endtag(self, tag: str):
+        if self.capture_title and tag == "h1":
+            self.capture_title = False
+
+        if self.capture_text and tag == "p":
+            paragraph = _normalize_xml_text(unescape("".join(self.current_text_parts)))
+            if paragraph:
+                self.paragraphs.append(paragraph)
+            self.capture_text = False
+            self.current_text_parts = []
+
+        if self.in_body_section and tag == "section":
+            self.body_section_depth -= 1
+            if self.body_section_depth <= 0:
+                self.in_body_section = False
+                self.body_section_depth = 0
+
+    def handle_data(self, data: str):
+        if self.capture_title:
+            self.title_parts.append(data)
+        if self.capture_text:
+            self.current_text_parts.append(data)
+
+
+def _parse_pmc_html(html_content: str, pmid: str, pmcid: str) -> Dict[str, str] | None:
+    """Parse PMC HTML when the XML payload contains only metadata."""
+    parser = _PMCBodyHTMLParser()
+    parser.feed(html_content)
+
+    full_text = _normalize_xml_text(" ".join(parser.paragraphs))
+    if not full_text:
+        return None
+
+    title = _normalize_xml_text("".join(parser.title_parts))
+    return {
+        "pmid": pmid,
+        "pmcid": pmcid,
+        "title": title,
+        "abstractText": full_text,
+        "content_source": "pmc_fulltext_fallback",
+    }
+
+
+def fetch_pmc_fulltext_records(
+    pmid_to_pmcid: Dict[str, str]
+) -> Tuple[Dict[str, Dict], Dict[str, str]]:
+    """Fetch PMC full-text fallbacks for PMIDs whose PubMed record lacks an abstract."""
+    if not pmid_to_pmcid:
+        return {}, {}
+
+    base_url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi"
+    records: Dict[str, Dict] = {}
+    failures: Dict[str, str] = {}
+
+    with httpx.Client(
+        timeout=60.0,
+        follow_redirects=True,
+        headers=DEFAULT_HTTP_HEADERS,
+    ) as client:
+        for pmid, pmcid in pmid_to_pmcid.items():
+            if not pmcid:
+                failures[pmid] = "no_pmcid"
+                continue
+
+            params = {"db": "pmc", "id": pmcid, "retmode": "xml"}
+            response = _request_with_retries(
+                client=client,
+                url=base_url,
+                params=params,
+                request_label=f"PMC full text for {pmcid}",
+            )
+            if response is None:
+                failures[pmid] = "pmc_fetch_failed"
+                continue
+
+            record = _parse_pmc_xml(response.text, pmid=pmid, pmcid=pmcid)
+            if record is None:
+                html_url = f"https://pmc.ncbi.nlm.nih.gov/articles/{pmcid}/"
+                html_response = _request_with_retries(
+                    client=client,
+                    url=html_url,
+                    params={},
+                    request_label=f"PMC HTML full text for {pmcid}",
+                )
+                if html_response is None:
+                    failures[pmid] = "pmc_html_fetch_failed"
+                    continue
+
+                record = _parse_pmc_html(html_response.text, pmid=pmid, pmcid=pmcid)
+                if record is None:
+                    failures[pmid] = "pmc_html_parse_failed"
+                    continue
+
+            records[pmid] = record
+            time.sleep(0.4)
+
+    return records, failures
 
 
 def preprocess_bioasq_taskB(input_file: str, num_samples_needed: int = 1000):

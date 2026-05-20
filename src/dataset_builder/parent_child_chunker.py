@@ -1,3 +1,5 @@
+"""Adaptive parent-child chunking utilities for PubMed title and abstract records."""
+
 import spacy
 from typing import List, Dict
 from config.settings import settings
