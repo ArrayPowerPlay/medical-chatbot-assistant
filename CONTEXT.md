@@ -249,26 +249,37 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 #### External Evaluation
 | Dataset | Split | Size | Phase |
 |---|---|---|---|
-| MedQA | Validation | Full set | Generation |
-| MedQA | Test | Full set | Generation |
+| MedAESQA | Validation | 12 questions | Generation |
+| MedAESQA | Test | 28 questions | Generation |
+| PubMedQA (`PQA-L`) | Optional | Labeled subset | Oracle-context generation |
+
+> **MedAESQA policy**: used as a small external **generation benchmark**, not as the main retrieval benchmark.
+> **PubMedQA policy**: if used, feed only the dataset-provided abstract context and disable retrieval to avoid source-article leakage.
+> **MedAESQA corpus coverage policy**: it is acceptable to append all MedAESQA-referenced PMIDs into `data/corpus/corpus.jsonl` once for full-dataset coverage before evaluation. This is not treated as leakage because MedAESQA is not the main retrieval benchmark and the augmentation is done corpus-wide, not per-question at inference time.
 
 ### 3.4 Evaluation Metrics
 
-#### Text Retrieval (`scripts/evaluate_retrieval.py`)
+#### Text Retrieval (`scripts/evaluation/bioasq/val_retrieval.py`, `scripts/evaluation/bioasq/test_retrieval.py`)
 
 Pipeline evaluated: QueryAnalyzer (temp=0) → Vector + BM25 → RRF → Cross-Encoder.
 Evaluation is **deterministic** (single run, temperature=0 for QueryAnalyzer).
 
+> **Code layout**:
+> - `scripts/evaluation/shared/retrieval_common.py` holds the shared BioASQ retrieval evaluation logic.
+> - `scripts/evaluation/bioasq/val_retrieval.py` writes validation outputs.
+> - `scripts/evaluation/bioasq/test_retrieval.py` mirrors the same evaluator for the frozen test split.
+
 > **Best observed text-only eval config (May 16, 2026)**:
-> `VECTOR_TOP_K=80`, `KEYWORD_TOP_K=80`, `TOP_K_RRF=80`, `K_RRF=60`, `CHILD_FETCH_LIMIT=120`, `RERANK_TEXT_TOP_M=20`.
+> `VECTOR_TOP_K=40`, `KEYWORD_TOP_K=80`, `TOP_K_RRF=80`, `K_RRF=60`, `CHILD_FETCH_LIMIT=120`, `RERANK_TEXT_TOP_M=20`.
 > This is the strongest configuration tested so far and is now the default retrieval baseline.
 >
-> **Observed 50-question validation metrics after retrieval fixes**:
-> - Document: `P@5=0.6520`, `R@5=0.5206`, `P@10=0.5140`, `R@10=0.7289`
-> - Document: `P@20=0.3320`, `R@20=0.8757`, `MAP@5=0.7040`, `MAP@10=0.6717`, `MAP@20=0.7113`, `MRR=0.8640`
-> - Snippet: `Snippet_Recall@5=0.5042`, `Snippet_Recall@10=0.7124`, `Snippet_Recall@20=0.8593`
-> - Snippet: `Snippet_Precision@5=0.5960`, `Snippet_Precision@10=0.4880`, `Snippet_Precision@20=0.3230`
-> - Snippet: `Snippet_F1@5=0.4754`, `Snippet_F1@10=0.5191`, `Snippet_F1@20=0.4348`
+> **Observed full validation metrics with the best text-only config**:
+> - Document: `P@5=0.4912`, `R@5=0.6560`, `F1@5=0.4605`, `MAP@5=0.7200`, `GMAP@5=0.3655`
+> - Document: `P@10=0.3578`, `R@10=0.7905`, `F1@10=0.4139`, `MAP@10=0.7211`, `GMAP@10=0.4656`
+> - Document: `P@20=0.2240`, `R@20=0.8735`, `F1@20=0.3101`, `MAP@20=0.7336`, `GMAP@20=0.5241`, `MRR=0.8777`
+> - Snippet: `Snippet_Recall@5=0.5982`, `Snippet_Precision@5=0.4608`, `Snippet_F1@5=0.4315`
+> - Snippet: `Snippet_Recall@10=0.7208`, `Snippet_Precision@10=0.3370`, `Snippet_F1@10=0.3889`
+> - Snippet: `Snippet_Recall@20=0.7955`, `Snippet_Precision@20=0.2137`, `Snippet_F1@20=0.2936`
 >
 > **Important implementation note**:
 > `CrossEncoderReranker` must preserve negative logits. MedCPT Cross-Encoder returns raw scores, so filtering out passages with `score <= 0` incorrectly lowers `Recall@10/@20`, `MAP@20`, and snippet coverage.
@@ -315,17 +326,23 @@ Evaluation is **deterministic** (single run, temperature=0 for QueryAnalyzer).
 ##### Output
 | File | Path | Content |
 |---|---|---|
-| **Detail** | `data/eval_results/bioasq/detail.jsonl` | Per-question: retrieved items, relevance labels, all metrics |
-| **Summary** | `data/eval_results/bioasq/summary.json` | Aggregate metrics across all questions |
-| **Grid Search** | `data/eval_results/bioasq/grid_search_20q_<timestamp>.json` | Full config + all document/snippet metrics for each retrieval hyperparameter run on a fixed 20-question subset |
+| **Validation Detail** | `results/eval_results/bioasq/retrieval/detail.jsonl` | Per-question validation results |
+| **Validation Summary** | `results/eval_results/bioasq/retrieval/summary.json` | Aggregate validation metrics |
+| **Test Detail** | `results/test_results/bioasq/retrieval/detail.jsonl` | Per-question frozen test results |
+| **Test Summary** | `results/test_results/bioasq/retrieval/summary.json` | Aggregate frozen test metrics |
+| **Grid Search** | `results/eval_results/bioasq/retrieval/grid_search_20q_<timestamp>.json` | Full config + all document/snippet metrics for each retrieval hyperparameter run on a fixed 20-question subset |
 
-> **Grid Search Utility**: `scripts/grid_search_retrieval.py` runs a fixed 20-question retrieval benchmark over a preset grid of `(VECTOR_TOP_K, KEYWORD_TOP_K)` configurations while keeping the stronger baseline values for `CHILD_FETCH_LIMIT`, `TOP_K_RRF`, `K_RRF`, and `RERANK_TEXT_TOP_M` unless overridden via CLI.
+> **Grid Search Utility**: `scripts/evaluation/grid_search_retrieval.py` runs a fixed 20-question retrieval benchmark over a preset grid of `(VECTOR_TOP_K, KEYWORD_TOP_K)` configurations while keeping the stronger baseline values for `CHILD_FETCH_LIMIT`, `TOP_K_RRF`, `K_RRF`, and `RERANK_TEXT_TOP_M` unless overridden via CLI.
 
 #### Generation
-- **Exact Match / F1** (standard QA metrics)
-- **Answer Relevance** (RAGAS)
-- **Answer Faithfulness** (RAGAS)
-- **Context Precision** (RAGAS)
+- **ROUGE-SU4 F1**
+- **RAGAS Context Precision**
+- **RAGAS Context Recall**
+- **RAGAS Faithfulness**
+- **RAGAS Answer Correctness**
+- **RAGAS Answer Relevancy** — validation/debug only
+
+> **MedAESQA evaluator policy**: use a **custom evaluator** for the project pipeline. `medaesqa_eval.py` is kept only as a dataset-reference script and is not the main evaluator for project results.
 
 ---
 
@@ -365,6 +382,23 @@ pydantic, pydantic-settings — Config & validation
 psycopg2-binary           — PostgreSQL driver (conversation history)
 ragas                     — RAG evaluation framework
 ```
+
+### Generation Baselines / Settings (BioASQ End-to-End)
+- **LLM-only** — no retrieval, direct answer generation
+- **BM25-only + generator** — lexical retrieval baseline
+- **Vector-only + generator** — dense retrieval baseline
+- **Text-only hybrid RAG** — Vector + BM25 + RRF + Cross-Encoder, no KG
+- **KG-only + generator** — graph evidence only
+- **Full system** — Text retrieval + KG retrieval + reranking + interleaving
+
+### Evaluation Code Structure
+- **Runtime code** lives under `src/`
+- **Evaluation code** lives under `scripts/evaluation/`
+  - `shared/` — common code used by both validation and test evaluators
+  - `bioasq/` — BioASQ split-specific entrypoints (`val_*`, `test_*`)
+  - `medaesqa/` — future MedAESQA entrypoints
+- **Dataset augmentation scripts** live under `src/dataset_builder/`
+- **Outputs** are split between `results/eval_results/` and `results/test_results/`
 
 ---
 
@@ -562,7 +596,8 @@ POSTGRES_DB=chat_history
 - **Entity Extraction**: Handled by `query_analyzer.py` via Llama 70B.
 - **Generation Phase**: Completed — `kg_merger.py`, `prompt_builder.py`, `llm_generator.py` are implemented.
 - **End-to-End Pipeline**: `rag_pipeline.py` orchestrates the full flow from query analysis to answer generation.
-- **Pipeline Config Alignment**: As of May 16, 2026, `RAGPipeline.run()` forwards both `top_k` and `child_fetch_limit` into `ParallelRetriever`, so online inference can use the same retrieval-depth settings as `scripts/evaluate_retrieval.py`.
+- **Pipeline Config Alignment**: As of May 16, 2026, `RAGPipeline.run()` forwards both `top_k` and `child_fetch_limit` into `ParallelRetriever`, so online inference can use the same retrieval-depth settings as `scripts/evaluation/bioasq/val_retrieval.py`.
+- **Generation Tuning Scope**: once retrieval is frozen, generation tuning only touches prompt design, text/KG context budget, text/KG ratio, KG merger/interleaving, head-tail placement, abstain policy, citation style, `temperature`, and `max_tokens`. Retrieval knobs such as `VECTOR_TOP_K`, `KEYWORD_TOP_K`, `TOP_K_RRF`, `RERANK_TEXT_TOP_M`, and `RERANK_KG_TOP_N` must stay frozen during generation tuning.
 - **Conversation History**: `ConversationStore` (PostgreSQL, `psycopg2`) persists multi-turn sessions. Data stored in Docker named volume `postgres_data` for durability. Auto-titles conversations with the first user question.
 - **API Layer**: FastAPI app (`api/main.py`) with `/api/chat`, `/api/conversations`, `/api/conversations/{id}/messages`, and `/api/health` endpoints. Static frontend served at `/`.
 - **LLM History Window**: Controlled by `HISTORY_TURNS_FOR_LLM` (default 5 turns = 10 messages). This is a global server-side constant, not per-user. Applied uniformly in `QueryAnalyzer` and `LLMGenerator`.

@@ -7,7 +7,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts import evaluate_retrieval as er
+from scripts.evaluation.shared import retrieval_common as er
 
 
 class _DummyResource:
@@ -127,7 +127,7 @@ class EvaluateRetrievalTests(unittest.TestCase):
         self.assertNotIn("retrieval_top_k", summary["config"])
 
     def test_build_arg_parser_rejects_removed_question_id(self):
-        parser = er.build_arg_parser()
+        parser = er.build_arg_parser("test parser")
         args = parser.parse_args(["--limit", "3"])
         self.assertEqual(args.limit, 3)
 
@@ -197,9 +197,7 @@ class EvaluateRetrievalTests(unittest.TestCase):
             er.logger.addHandler(handler)
 
             try:
-                with patch.object(er, "VAL_PATH", val_path), \
-                     patch.object(er, "OUTPUT_DIR", output_dir), \
-                     patch.object(er, "_print_summary"), \
+                with patch.object(er, "_print_summary"), \
                      patch.object(er, "QueryAnalyzer", return_value=query_analyzer), \
                      patch.object(er, "MedCPTEmbedder", return_value=query_embedder), \
                      patch.object(er, "WeaviateChildStore", return_value=weaviate_store), \
@@ -207,7 +205,12 @@ class EvaluateRetrievalTests(unittest.TestCase):
                      patch.object(er, "RRFManager", return_value=rrf_manager), \
                      patch.object(er, "CrossEncoderReranker", return_value=cross_encoder), \
                      patch.object(er, "run_retrieval_pipeline", side_effect=fake_run_retrieval_pipeline):
-                    er.evaluate(limit=2)
+                    er.evaluate_split(
+                        data_path=val_path,
+                        output_dir=output_dir,
+                        split_name="validation",
+                        limit=2,
+                    )
             finally:
                 er.logger.removeHandler(handler)
 

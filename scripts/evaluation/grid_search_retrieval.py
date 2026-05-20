@@ -10,7 +10,7 @@ Default behavior:
     - Keep other strong baseline settings fixed unless overridden
 
 Output:
-    data/eval_results/bioasq/grid_search_20q_<timestamp>.json
+    results/eval_results/bioasq/retrieval/grid_search_20q_<timestamp>.json
 """
 
 import sys
@@ -21,7 +21,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
 # Configure project root
-project_root = Path(__file__).resolve().parent.parent
+project_root = Path(__file__).resolve().parent.parent.parent
 if str(project_root) not in sys.path:
     sys.path.append(str(project_root))
 
@@ -33,11 +33,11 @@ from src.storage.parent_store import ParentStore
 from src.reranking.rrf import RRFManager
 from src.reranking.cross_encoder import CrossEncoderReranker
 from src.query.query_analyzer import QueryAnalyzer
-from scripts import evaluate_retrieval as er
+from scripts.evaluation.shared import retrieval_common as er
 
 
 VAL_PATH = settings.DATA_PATH / "val" / "val_bioasq.jsonl"
-OUTPUT_DIR = settings.DATA_PATH / "eval_results" / "bioasq"
+OUTPUT_DIR = settings.EVAL_RESULTS_PATH / "bioasq" / "retrieval"
 DEFAULT_LIMIT = 20
 
 
@@ -212,7 +212,6 @@ def apply_run_settings(
     settings.TOP_K_RRF = top_k_rrf
     settings.K_RRF = k_rrf
     settings.RERANK_TEXT_TOP_M = rerank_text_top_m
-    er.CHILD_FETCH_LIMIT = child_fetch_limit
 
 
 def run_grid_search(
@@ -303,8 +302,8 @@ def run_grid_search(
                 "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S"),
                 "notes": (
                     "Each run reports full summary metrics and per-question detail "
-                    "records from evaluate_retrieval on the same 20-question "
-                    "validation subset."
+                    "records from scripts/evaluation/bioasq/val_retrieval.py "
+                    "on the same 20-question validation subset."
                 ),
             },
             "runs": runs,

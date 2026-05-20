@@ -1,52 +1,34 @@
 """
-Text Retrieval Evaluation on BioASQ Validation Data
-
-Evaluates the full text retrieval pipeline against the BioASQ gold standard:
-    QueryAnalyzer (temp=0) -> Vector + BM25 -> RRF -> Cross-Encoder
-
-Metrics computed (all at K=5, 10, 20):
-    - Precision@K, Recall@K, F1@K  (document-level, PMID matching)
-    - MAP@K  (Mean Average Precision truncated at K)
-    - GMAP@K (Geometric Mean Average Precision truncated at K)
-    - MRR    (Mean Reciprocal Rank)
-    - Snippet Recall@K, Snippet Precision@K, Snippet F1@K (snippet-level, text containment proxy)
-
-Outputs:
-    data/eval_results/bioasq/detail.jsonl   - per-question results
-    data/eval_results/bioasq/summary.json   - aggregate metrics
+Shared retrieval evaluation utilities for BioASQ validation/test scripts.
 """
 
-import sys
-import json
 import argparse
-import time
+import json
 import math
+import sys
+import time
 from pathlib import Path
-from typing import List, Dict, Set, Any, Tuple, Optional
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 # Configure project root
-project_root = Path(__file__).resolve().parent.parent
+project_root = Path(__file__).resolve().parent.parent.parent.parent
 if str(project_root) not in sys.path:
     sys.path.append(str(project_root))
 
-from config.settings import settings
 from config.logging_config import logger
-from config.logging_config import setup_logging
+from config.settings import settings
 from src.embeddings.medcpt_embedder import MedCPTEmbedder
-from src.storage.weaviate_client import WeaviateChildStore
-from src.storage.parent_store import ParentStore
-from src.retrieval.vector_search import vector_search
-from src.retrieval.keyword_search import keyword_search
-from src.retrieval.parallel_retrieval import ParallelRetriever
-from src.reranking.rrf import RRFManager
-from src.reranking.cross_encoder import CrossEncoderReranker
 from src.query.query_analyzer import QueryAnalyzer
+from src.reranking.cross_encoder import CrossEncoderReranker
+from src.reranking.rrf import RRFManager
+from src.retrieval.keyword_search import keyword_search
+from src.retrieval.vector_search import vector_search
+from src.storage.parent_store import ParentStore
+from src.storage.weaviate_client import WeaviateChildStore
+
 
 
 K_VALUES = settings.K_VALUES
-CHILD_FETCH_LIMIT = settings.CHILD_FETCH_LIMIT
-VAL_PATH = settings.DATA_PATH / "val" / "val_bioasq.jsonl"
-OUTPUT_DIR = settings.DATA_PATH / "eval_results" / "bioasq"
 GMAP_EPSILON = 1e-6
 
 
@@ -136,9 +118,9 @@ def compute_document_metrics(
 
 
 def compute_snippet_metrics(
-    retrieved_items: List[Dict],
-    gold_snippets: List[Dict],
-    gold_pmids: Set[str]
+    retrieved_items: List[Dict[str, Any]],
+    gold_snippets: List[Dict[str, Any]],
+    gold_pmids: Set[str],
 ) -> Dict[str, float]:
     """Compute snippet-level recall and precision at each K."""
     if not gold_snippets:
@@ -200,8 +182,11 @@ def run_retrieval_pipeline(
     rrf_manager: RRFManager,
     cross_encoder: CrossEncoderReranker,
     debug_label: Optional[str] = None,
-) -> Tuple[List[Dict], str]:
+) -> Tuple[List[Dict[str, Any]], str]:
     """Run the full text retrieval pipeline for a single query."""
+    if vector_search is None or keyword_search is None:
+        raise ImportError("Retrieval backends are unavailable in the current environment.")
+
     label = f"[{debug_label}] " if debug_label else ""
 
     logger.info(f"{label}QueryAnalyzer starting")
@@ -214,27 +199,27 @@ def run_retrieval_pipeline(
 
     logger.info(
         f"{label}Vector search starting with top_k={settings.VECTOR_TOP_K}, "
-        f"child_fetch_limit={CHILD_FETCH_LIMIT}"
+        f"child_fetch_limit={settings.CHILD_FETCH_LIMIT}"
     )
     vec_results = vector_search(
         query_vector=query_vector,
         weaviate_store=weaviate_store,
         parent_store=parent_store,
         top_k=settings.VECTOR_TOP_K,
-        child_fetch_limit=CHILD_FETCH_LIMIT,
+        child_fetch_limit=settings.CHILD_FETCH_LIMIT,
     )
     logger.info(f"{label}Vector search returned {len(vec_results)} parent results")
 
     logger.info(
         f"{label}BM25 search starting with top_k={settings.KEYWORD_TOP_K}, "
-        f"child_fetch_limit={CHILD_FETCH_LIMIT}"
+        f"child_fetch_limit={settings.CHILD_FETCH_LIMIT}"
     )
     bm25_results = keyword_search(
         query_text=rewritten_query,
         weaviate_store=weaviate_store,
         parent_store=parent_store,
         top_k=settings.KEYWORD_TOP_K,
-        child_fetch_limit=CHILD_FETCH_LIMIT,
+        child_fetch_limit=settings.CHILD_FETCH_LIMIT,
     )
     logger.info(f"{label}BM25 search returned {len(bm25_results)} parent results")
 
@@ -259,20 +244,43 @@ def run_retrieval_pipeline(
     return ranked_text, rewritten_query
 
 
-def evaluate(limit: int | None = None) -> None:
-    """Run the full retrieval evaluation on BioASQ validation data."""
-    if not VAL_PATH.exists():
-        logger.error(f"Validation file not found: {VAL_PATH}")
+def evaluate_split(
+    data_path: Path,
+    output_dir: Path,
+    split_name: str,
+    limit: Optional[int] = None,
+) -> None:
+    """Run retrieval evaluation for one dataset split."""
+    missing_runtime_deps = [
+        name
+        for name, value in [
+            ("QueryAnalyzer", QueryAnalyzer),
+            ("MedCPTEmbedder", MedCPTEmbedder),
+            ("WeaviateChildStore", WeaviateChildStore),
+            ("ParentStore", ParentStore),
+            ("RRFManager", RRFManager),
+            ("CrossEncoderReranker", CrossEncoderReranker),
+        ]
+        if value is None
+    ]
+    if missing_runtime_deps:
+        raise ImportError(
+            "Missing runtime dependencies for retrieval evaluation: "
+            + ", ".join(missing_runtime_deps)
+        )
+
+    if not data_path.exists():
+        logger.error(f"Evaluation file not found: {data_path}")
         sys.exit(1)
 
-    questions = []
-    with open(VAL_PATH, "r", encoding="utf-8") as f:
+    questions: List[Dict[str, Any]] = []
+    with open(data_path, "r", encoding="utf-8") as f:
         for line in f:
             questions.append(json.loads(line))
 
     if limit:
         questions = questions[:limit]
-    logger.info(f"Loaded {len(questions)} questions for evaluation.")
+    logger.info(f"Loaded {len(questions)} questions for {split_name} evaluation.")
     logger.info(
         "Runtime settings: "
         f"K_RRF={settings.K_RRF}, "
@@ -293,9 +301,9 @@ def evaluate(limit: int | None = None) -> None:
     rrf_manager = RRFManager()
     cross_encoder = CrossEncoderReranker()
 
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    detail_path = OUTPUT_DIR / "detail.jsonl"
-    summary_path = OUTPUT_DIR / "summary.json"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    detail_path = output_dir / "detail.jsonl"
+    summary_path = output_dir / "summary.json"
 
     all_doc_metrics: List[Dict[str, float]] = []
     all_snippet_metrics: List[Dict[str, float]] = []
@@ -341,18 +349,20 @@ def evaluate(limit: int | None = None) -> None:
 
                     retrieved_items_output = []
                     for rank, item in enumerate(ranked_text, 1):
-                        retrieved_items_output.append({
-                            "rank": rank,
-                            "parent_id": item.get("parent_id", ""),
-                            "pmid": item.get("pmid", ""),
-                            "title": item.get("title", ""),
-                            "text": item.get("text", "")[:500],
-                            "is_relevant": item.get("pmid", "") in gold_pmids,
-                            "score": item.get(
-                                "cross_encoder_score",
-                                item.get("rrf_score", 0.0),
-                            ),
-                        })
+                        retrieved_items_output.append(
+                            {
+                                "rank": rank,
+                                "parent_id": item.get("parent_id", ""),
+                                "pmid": item.get("pmid", ""),
+                                "title": item.get("title", ""),
+                                "text": item.get("text", "")[:500],
+                                "is_relevant": item.get("pmid", "") in gold_pmids,
+                                "score": item.get(
+                                    "cross_encoder_score",
+                                    item.get("rrf_score", 0.0),
+                                ),
+                            }
+                        )
 
                     detail_record = {
                         "question_id": q_id,
@@ -373,7 +383,12 @@ def evaluate(limit: int | None = None) -> None:
                     continue
 
         summary = _build_summary(
-            all_doc_metrics, all_snippet_metrics, len(questions), failed_questions
+            all_doc_metrics=all_doc_metrics,
+            all_snippet_metrics=all_snippet_metrics,
+            total_questions=len(questions),
+            failed_questions=failed_questions,
+            data_path=data_path,
+            split_name=split_name,
         )
 
         with open(summary_path, "w", encoding="utf-8") as f:
@@ -396,11 +411,13 @@ def _build_summary(
     all_snippet_metrics: List[Dict[str, float]],
     total_questions: int,
     failed_questions: int,
+    data_path: Optional[Path] = None,
+    split_name: str = "validation",
 ) -> Dict[str, Any]:
     """Aggregate per-question metrics into a summary dictionary."""
     n = len(all_doc_metrics)
 
-    def mean_metric(metrics_list: List[Dict], key: str) -> float:
+    def mean_metric(metrics_list: List[Dict[str, float]], key: str) -> float:
         vals = [m[key] for m in metrics_list if key in m]
         return round(sum(vals) / len(vals), 4) if vals else 0.0
 
@@ -409,9 +426,7 @@ def _build_summary(
         doc_agg[f"Precision@{k}"] = mean_metric(all_doc_metrics, f"precision_at_{k}")
         doc_agg[f"Recall@{k}"] = mean_metric(all_doc_metrics, f"recall_at_{k}")
         doc_agg[f"F1@{k}"] = mean_metric(all_doc_metrics, f"f1_at_{k}")
-        doc_agg[f"MAP@{k}"] = mean_metric(
-            all_doc_metrics, f"average_precision_at_{k}"
-        )
+        doc_agg[f"MAP@{k}"] = mean_metric(all_doc_metrics, f"average_precision_at_{k}")
         doc_agg[f"GMAP@{k}"] = geometric_mean_average_precision(
             all_doc_metrics, f"average_precision_at_{k}"
         )
@@ -431,7 +446,8 @@ def _build_summary(
 
     return {
         "config": {
-            "val_file": str(VAL_PATH),
+            "split_name": split_name,
+            "data_file": str(data_path) if data_path else "",
             "total_questions": total_questions,
             "evaluated_questions": n,
             "failed_questions": failed_questions,
@@ -440,7 +456,7 @@ def _build_summary(
             "vector_top_k": settings.VECTOR_TOP_K,
             "keyword_top_k": settings.KEYWORD_TOP_K,
             "rerank_text_top_m": settings.RERANK_TEXT_TOP_M,
-            "child_fetch_limit": CHILD_FETCH_LIMIT,
+            "child_fetch_limit": settings.CHILD_FETCH_LIMIT,
             "k_values": K_VALUES,
             "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S"),
         },
@@ -451,8 +467,10 @@ def _build_summary(
 
 def _print_summary(summary: Dict[str, Any]) -> None:
     """Print a formatted summary table to stdout."""
+    split_name = summary["config"].get("split_name", "validation").upper()
+
     print("\n" + "=" * 60)
-    print("TEXT RETRIEVAL EVALUATION - BioASQ")
+    print(f"TEXT RETRIEVAL EVALUATION - BioASQ {split_name}")
     print("=" * 60)
 
     config = summary["config"]
@@ -467,7 +485,7 @@ def _print_summary(summary: Dict[str, Any]) -> None:
     print("DOCUMENT-LEVEL METRICS (PMID matching)")
     print("-" * 60)
     print(f"  {'Metric':<16} {'@5':>8} {'@10':>8} {'@20':>8}")
-    print(f"  {'-'*16} {'-'*8} {'-'*8} {'-'*8}")
+    print(f"  {'-' * 16} {'-' * 8} {'-' * 8} {'-' * 8}")
 
     doc = summary["document_metrics"]
     for metric_name in ["Precision", "Recall", "F1", "MAP", "GMAP"]:
@@ -480,7 +498,7 @@ def _print_summary(summary: Dict[str, Any]) -> None:
     print("SNIPPET-LEVEL METRICS (text containment proxy)")
     print("-" * 60)
     print(f"  {'Metric':<20} {'@5':>8} {'@10':>8} {'@20':>8}")
-    print(f"  {'-'*20} {'-'*8} {'-'*8} {'-'*8}")
+    print(f"  {'-' * 20} {'-' * 8} {'-' * 8} {'-' * 8}")
 
     snip = summary["snippet_metrics"]
     for metric_name in ["Snippet_Recall", "Snippet_Precision", "Snippet_F1"]:
@@ -490,20 +508,13 @@ def _print_summary(summary: Dict[str, Any]) -> None:
     print("=" * 60)
 
 
-def build_arg_parser() -> argparse.ArgumentParser:
-    """Build CLI parser for retrieval evaluation."""
-    parser = argparse.ArgumentParser(
-        description="Evaluate text retrieval pipeline on BioASQ validation data."
-    )
+def build_arg_parser(description: str) -> argparse.ArgumentParser:
+    """Build CLI parser for retrieval evaluation scripts."""
+    parser = argparse.ArgumentParser(description=description)
     parser.add_argument(
-        "--limit", type=int, default=None,
-        help="Evaluate only the first N questions (for quick testing)."
+        "--limit",
+        type=int,
+        default=None,
+        help="Evaluate only the first N questions (for quick testing).",
     )
     return parser
-
-
-if __name__ == "__main__":
-    setup_logging()
-    parser = build_arg_parser()
-    args = parser.parse_args()
-    evaluate(limit=args.limit)

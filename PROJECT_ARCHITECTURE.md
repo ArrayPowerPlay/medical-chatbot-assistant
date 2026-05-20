@@ -23,11 +23,28 @@ rag-project/
 │       ├── nodes.csv                 # PrimeKG nodes (filtered)
 │       └── relationships.csv         # PrimeKG edges (filtered)
 │
+├── results/
+│   ├── eval_results/                 # Validation/dev evaluation outputs
+│   │   ├── bioasq/
+│   │   │   ├── retrieval/
+│   │   │   └── generation/
+│   │   └── medaesqa/
+│   └── test_results/                 # Final frozen test outputs
+│       ├── bioasq/
+│       └── medaesqa/
+│
 ├── scripts/
 │   ├── ingest_documents.py           # Load BioASQ docs → parent-child chunk → MedCPT → Weaviate
 │   ├── build_kg.py                   # PrimeKG → filter → Neo4j import + MedCPT node embeddings
-│   ├── evaluate_retrieval.py         # BioASQ Phase A retrieval evaluation (Recall@K)
-│   ├── evaluate_generation.py        # BioASQ Phase B + MedQA generation eval (EM/F1, RAGAS)
+│   ├── evaluation/
+│   │   ├── bioasq/
+│   │   │   ├── val_retrieval.py      # BioASQ validation retrieval evaluation
+│   │   │   ├── test_retrieval.py     # BioASQ frozen test retrieval evaluation
+│   │   │   ├── val_generation.py     # BioASQ validation generation evaluation
+│   │   │   └── test_generation.py    # BioASQ frozen test generation evaluation
+│   │   ├── medaesqa/                 # Future MedAESQA evaluation entrypoints
+│   │   ├── shared/                   # Shared evaluation helpers for val/test
+│   │   └── grid_search_retrieval.py  # Retrieval hyperparameter sweep
 │   └── seed_demo_data.py            # Optional: seed sample data for dev
 │
 ├── src/

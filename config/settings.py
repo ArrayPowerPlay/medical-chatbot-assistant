@@ -7,6 +7,9 @@ class Settings(BaseSettings):
     # Project Paths
     BASE_DIR: Path = Path(__file__).resolve().parent.parent   # .resolve: absolute path
     DATA_PATH: Path = BASE_DIR / "data"
+    RESULTS_PATH: Path = BASE_DIR / "results"
+    EVAL_RESULTS_PATH: Path = RESULTS_PATH / "eval_results"
+    TEST_RESULTS_PATH: Path = RESULTS_PATH / "test_results"
 
     # API Keys
     GROQ_API_KEY: str = Field(default="")
