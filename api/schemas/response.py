@@ -2,13 +2,14 @@
 Pydantic response models for the chatbot API.
 """
 from pydantic import BaseModel, Field
-from typing import List
+from typing import List, Optional
 
 
 class SourceItem(BaseModel):
     """A single retrieved source (text passage or KG path)."""
     source_type: str = Field(description="'text_retrieval' or kg_retrieval.")
     content: str = Field(description="The text passage or KG path.")
+    pmid: Optional[str] = Field(default=None, description="Optional PubMed ID of the source article.")
 
 
 class ChatResponse(BaseModel):

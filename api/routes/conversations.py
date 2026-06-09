@@ -49,7 +49,7 @@ def get_messages(
     First call (no before_id): returns the newest 'limit' messages.
     Subsequent calls (with before_id): returns the next older batch.
     """
-    conv_store = raw_request.state.app.conv_store
+    conv_store = raw_request.app.state.conv_store
      
     if not conv_store.conversation_exists(conv_id):
         raise HTTPException(status_code=404, detail="Conversation not found.")

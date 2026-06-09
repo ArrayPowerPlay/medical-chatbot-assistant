@@ -1,5 +1,5 @@
 """
-Deploy ncbi/MedCPT-Cross-Encoder to Model (Cloud GPU)
+Deploy ncbi/MedCPT-Cross-Encoder to Modal (Cloud GPU)
 Takes query and a list of passages, returns reranking scores
 """
 

@@ -35,7 +35,7 @@ class QueryAnalyzer:
         """
         system_prompt = (
             "You are an expert medical AI assistant for a RAG system. "
-            "Your task is to analyze the user's raw conversational input and perform three tasks simultaneously.\n\n"
+            "Your task is to analyze the user's raw conversational input and perform four tasks simultaneously.\n\n"
             "### TASK 1: QUERY REWRITING\n"
             "Transform the raw user input into a precise, standalone medical query optimized for retrieval.\n"
             "- Replace pronouns with exact clinical entities from conversation history (if provided).\n"
@@ -54,6 +54,16 @@ class QueryAnalyzer:
             "Classify the REWRITTEN query into exactly one or many of these intent categories:\n"
             "- symptom_lookup, treatment_lookup, mechanism_lookup, side_effect_lookup, "
             "contraindication_lookup, disease_relation, genetic_association, drug_target_lookup, general\n\n"
+            "### TASK 4: QUESTION TYPE CLASSIFICATION\n"
+            "Classify the question into exactly ONE of these question types:\n"
+            "- \"yesno\": question expects a Yes or No answer (e.g. \"Is X secreted?\", \"Does Y cause Z?\")\n"
+            "- \"list\": question asks to enumerate multiple items (e.g. \"List the ligands of EGFR\", "
+            "\"Which miRNAs are biomarkers for cancer?\")\n"
+            "- \"factoid\": question expects a single short entity/value (e.g. \"What is the synonym of X?\", "
+            "\"Where is protein Y located?\", \"Which cancer does drug Z treat?\")\n"
+            "- \"summary\": question requires a comprehensive multi-sentence explanation "
+            "(e.g. \"What is the effect of X on Y?\", \"What is the mechanism of Z?\", "
+            "\"Is X a mendelian or multifactorial disorder?\")\n\n"
             "### RULES:\n"
             "1. JSON FORMAT ONLY: Return a valid JSON object. Do not wrap in markdown or add explanations.\n"
             "2. EXACT OUTPUT SCHEMA REQUIRED:\n"
@@ -63,7 +73,8 @@ class QueryAnalyzer:
             "  \"effect_phenotypes\": [\"name1\"],\n"
             "  \"drugs\": [],\n"
             "  \"gene_proteins\": [],\n"
-            "  \"intents\": [\"treatment_lookup\"]\n"
+            "  \"intents\": [\"treatment_lookup\"],\n"
+            "  \"question_type\": \"summary\"\n"
             "}"
         )
 
@@ -94,13 +105,16 @@ class QueryAnalyzer:
             if not valid_intents:
                 valid_intents = ["general"]
 
+            question_type = data.get("question_type", "summary")
+
             return {
                 "rewritten_query": data.get("rewritten_query", query),
                 "diseases": data.get("diseases", []),
                 "effect_phenotypes": data.get("effect_phenotypes", []),
                 "drugs": data.get("drugs", []),
                 "gene_proteins": data.get("gene_proteins", []),
-                "intents": valid_intents
+                "intents": valid_intents,
+                "question_type": question_type,
             }
         
         except Exception as e:
@@ -115,7 +129,8 @@ class QueryAnalyzer:
             "effect_phenotypes": [],
             "drugs": [],
             "gene_proteins": [],
-            "intents": ["general"]
+            "intents": ["general"],
+            "question_type": "summary",  # safest fallback: comprehensive answer
         }
 
     def close(self) -> None:

@@ -1,0 +1,157 @@
+[
+  {
+    "rank_candidate": "007_k2_h110_h25_cap50_rkg20_t0p0_mt2048_kgm1_ht1",
+    "score": 0.1274,
+    "summary_path": "D:\\workspace\\Repo\\medical-chatbot-assistant\\results\\eval_results\\bioasq\\generation\\tuning\\stage1\\007_k2_h110_h25_cap50_rkg20_t0p0_mt2048_kgm1_ht1\\summary.json",
+    "config": {
+      "data_file": "D:\\workspace\\Repo\\medical-chatbot-assistant\\data\\val\\val_bioasq.jsonl",
+      "total_questions": 20,
+      "evaluated_questions": 20,
+      "failed_questions": 0,
+      "timestamp": "2026-06-09T00:38:57",
+      "split_name": "validation",
+      "limit": 20,
+      "requested_ragas": false,
+      "ragas_evaluator_llm_model": "gpt-4o-mini",
+      "ragas_evaluator_embedding_model": "text-embedding-3-small",
+      "kg_top_k": 2,
+      "kg_hop1_m": 10,
+      "kg_hop2_n": 5,
+      "kg_hop2_cap": 50,
+      "rerank_kg_top_n": 20,
+      "generation_temperature": 0.0,
+      "use_kg_merger": true,
+      "use_head_tail_placement": true,
+      "generation_max_tokens": 2048
+    },
+    "generation_metrics": {
+      "ROUGE-SU4-Precision": 0.1399,
+      "ROUGE-SU4-Recall": 0.3543,
+      "ROUGE-SU4-F1": 0.1274
+    }
+  },
+  {
+    "rank_candidate": "011_k3_h110_h23_cap50_rkg20_t0p0_mt2048_kgm1_ht1",
+    "score": 0.1254,
+    "summary_path": "D:\\workspace\\Repo\\medical-chatbot-assistant\\results\\eval_results\\bioasq\\generation\\tuning\\stage1\\011_k3_h110_h23_cap50_rkg20_t0p0_mt2048_kgm1_ht1\\summary.json",
+    "config": {
+      "data_file": "D:\\workspace\\Repo\\medical-chatbot-assistant\\data\\val\\val_bioasq.jsonl",
+      "total_questions": 20,
+      "evaluated_questions": 20,
+      "failed_questions": 0,
+      "timestamp": "2026-06-09T00:57:10",
+      "split_name": "validation",
+      "limit": 20,
+      "requested_ragas": false,
+      "ragas_evaluator_llm_model": "gpt-4o-mini",
+      "ragas_evaluator_embedding_model": "text-embedding-3-small",
+      "kg_top_k": 3,
+      "kg_hop1_m": 10,
+      "kg_hop2_n": 3,
+      "kg_hop2_cap": 50,
+      "rerank_kg_top_n": 20,
+      "generation_temperature": 0.0,
+      "use_kg_merger": true,
+      "use_head_tail_placement": true,
+      "generation_max_tokens": 2048
+    },
+    "generation_metrics": {
+      "ROUGE-SU4-Precision": 0.0934,
+      "ROUGE-SU4-Recall": 0.3834,
+      "ROUGE-SU4-F1": 0.1254
+    }
+  },
+  {
+    "rank_candidate": "002_k3_h110_h25_cap50_rkg20_t0p1_mt2048_kgm1_ht1",
+    "score": 0.1209,
+    "summary_path": "D:\\workspace\\Repo\\medical-chatbot-assistant\\results\\eval_results\\bioasq\\generation\\tuning\\stage1\\002_k3_h110_h25_cap50_rkg20_t0p1_mt2048_kgm1_ht1\\summary.json",
+    "config": {
+      "data_file": "D:\\workspace\\Repo\\medical-chatbot-assistant\\data\\val\\val_bioasq.jsonl",
+      "total_questions": 20,
+      "evaluated_questions": 20,
+      "failed_questions": 0,
+      "timestamp": "2026-06-09T00:05:58",
+      "split_name": "validation",
+      "limit": 20,
+      "requested_ragas": false,
+      "ragas_evaluator_llm_model": "gpt-4o-mini",
+      "ragas_evaluator_embedding_model": "text-embedding-3-small",
+      "kg_top_k": 3,
+      "kg_hop1_m": 10,
+      "kg_hop2_n": 5,
+      "kg_hop2_cap": 50,
+      "rerank_kg_top_n": 20,
+      "generation_temperature": 0.1,
+      "use_kg_merger": true,
+      "use_head_tail_placement": true,
+      "generation_max_tokens": 2048
+    },
+    "generation_metrics": {
+      "ROUGE-SU4-Precision": 0.1387,
+      "ROUGE-SU4-Recall": 0.3591,
+      "ROUGE-SU4-F1": 0.1209
+    }
+  },
+  {
+    "rank_candidate": "001_k3_h110_h25_cap50_rkg20_t0p0_mt2048_kgm1_ht1",
+    "score": 0.1207,
+    "summary_path": "D:\\workspace\\Repo\\medical-chatbot-assistant\\results\\eval_results\\bioasq\\generation\\tuning\\stage1\\001_k3_h110_h25_cap50_rkg20_t0p0_mt2048_kgm1_ht1\\summary.json",
+    "config": {
+      "data_file": "D:\\workspace\\Repo\\medical-chatbot-assistant\\data\\val\\val_bioasq.jsonl",
+      "total_questions": 20,
+      "evaluated_questions": 20,
+      "failed_questions": 0,
+      "timestamp": "2026-06-08T23:58:30",
+      "split_name": "validation",
+      "limit": 20,
+      "requested_ragas": false,
+      "ragas_evaluator_llm_model": "gpt-4o-mini",
+      "ragas_evaluator_embedding_model": "text-embedding-3-small",
+      "kg_top_k": 3,
+      "kg_hop1_m": 10,
+      "kg_hop2_n": 5,
+      "kg_hop2_cap": 50,
+      "rerank_kg_top_n": 20,
+      "generation_temperature": 0.0,
+      "use_kg_merger": true,
+      "use_head_tail_placement": true,
+      "generation_max_tokens": 2048
+    },
+    "generation_metrics": {
+      "ROUGE-SU4-Precision": 0.143,
+      "ROUGE-SU4-Recall": 0.3612,
+      "ROUGE-SU4-F1": 0.1207
+    }
+  },
+  {
+    "rank_candidate": "014_k3_h110_h25_cap80_rkg20_t0p0_mt2048_kgm1_ht1",
+    "score": 0.1206,
+    "summary_path": "D:\\workspace\\Repo\\medical-chatbot-assistant\\results\\eval_results\\bioasq\\generation\\tuning\\stage1\\014_k3_h110_h25_cap80_rkg20_t0p0_mt2048_kgm1_ht1\\summary.json",
+    "config": {
+      "data_file": "D:\\workspace\\Repo\\medical-chatbot-assistant\\data\\val\\val_bioasq.jsonl",
+      "total_questions": 20,
+      "evaluated_questions": 20,
+      "failed_questions": 0,
+      "timestamp": "2026-06-09T01:07:10",
+      "split_name": "validation",
+      "limit": 20,
+      "requested_ragas": false,
+      "ragas_evaluator_llm_model": "gpt-4o-mini",
+      "ragas_evaluator_embedding_model": "text-embedding-3-small",
+      "kg_top_k": 3,
+      "kg_hop1_m": 10,
+      "kg_hop2_n": 5,
+      "kg_hop2_cap": 80,
+      "rerank_kg_top_n": 20,
+      "generation_temperature": 0.0,
+      "use_kg_merger": true,
+      "use_head_tail_placement": true,
+      "generation_max_tokens": 2048
+    },
+    "generation_metrics": {
+      "ROUGE-SU4-Precision": 0.1332,
+      "ROUGE-SU4-Recall": 0.3793,
+      "ROUGE-SU4-F1": 0.1206
+    }
+  }
+]

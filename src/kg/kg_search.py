@@ -1,4 +1,5 @@
 from config.logging_config import logger
+from config.settings import settings
 from src.kg.neo4j_client import Neo4jClient
 from src.kg.kg_linearization import PathLinearizer
 
@@ -16,10 +17,10 @@ class KGSearch:
         entity_article_embeddings: list[list[float]],
         rewritten_query_vec: list[float],
         intents: list[str] = ["general"],
-        top_k: int = 3,
-        hop1_m: int = 10,
-        hop2_n: int = 5,
-        hop2_cap: int = 50
+        top_k: int = settings.KG_TOP_K,
+        hop1_m: int = settings.KG_HOP1_M,
+        hop2_n: int = settings.KG_HOP2_N,
+        hop2_cap: int = settings.KG_HOP2_CAP,
     ) -> list[dict]:
         """Full KG retrieval pipeline: 2-stage retrieval → KG linearization.
 

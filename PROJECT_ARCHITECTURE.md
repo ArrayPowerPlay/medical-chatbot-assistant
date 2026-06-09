@@ -42,7 +42,7 @@ rag-project/
 │   │   │   ├── test_retrieval.py     # BioASQ frozen test retrieval evaluation
 │   │   │   ├── val_generation.py     # BioASQ validation generation evaluation
 │   │   │   └── test_generation.py    # BioASQ frozen test generation evaluation
-│   │   ├── medaesqa/                 # Future MedAESQA evaluation entrypoints
+│   │   ├── medaesqa/                 # MedAESQA validation/test evaluation entrypoints (val_generation.py, test_generation.py)
 │   │   ├── shared/                   # Shared evaluation helpers for val/test
 │   │   └── grid_search_retrieval.py  # Retrieval hyperparameter sweep
 │   └── seed_demo_data.py            # Optional: seed sample data for dev

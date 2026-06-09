@@ -41,10 +41,12 @@ def chat(request: ChatRequest, raw_request: Request) -> ChatResponse:
 
     ### 3. Run pipeline
     try:
+        use_citations = request.use_citations if request.use_citations is not None else settings.USE_CITATIONS
         result = pipeline.run(
             query=request.question,
             history=history,
             conversation_id=conversation_id,
+            use_citations=use_citations,
         )
     except Exception as e:
         logger.error(f"[Chat]: Pipeline error: {e}", exc_info=True)   # logger adds the full stack trace of the exception to the log
@@ -65,6 +67,7 @@ def chat(request: ChatRequest, raw_request: Request) -> ChatResponse:
         SourceItem(
             source_type=src.get("source_type", "unknown"),
             content=src.get("text", src.get("content", "")),
+            pmid=src.get("pmid"),
         )
         for src in result.get("sources", [])
     ]

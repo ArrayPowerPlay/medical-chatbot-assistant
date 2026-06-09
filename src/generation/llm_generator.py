@@ -13,8 +13,8 @@ class LLMGenerator:
         
         self.client = Groq(api_key=api_key)
         self.model_name = settings.LLM_MODEL
-        self.temperature = 0.0
-        self.max_tokens = 1024
+        self.temperature = settings.GENERATION_TEMPERATURE
+        self.max_tokens = settings.GENERATION_MAX_TOKENS
     
     def generate_answer(self, system_prompt: str, user_prompt: str, history: Optional[List[Dict[str, str]]] = None) -> str:
         """Generate a complete answer for user using system prompt, history, and user prompt."""

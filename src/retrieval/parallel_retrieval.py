@@ -39,7 +39,11 @@ class ParallelRetriever:
         intents: List[str] = ["general"],
         vector_top_k: int = settings.VECTOR_TOP_K,
         keyword_top_k: int = settings.KEYWORD_TOP_K,
-        child_fetch_limit: int = settings.CHILD_FETCH_LIMIT
+        child_fetch_limit: int = settings.CHILD_FETCH_LIMIT,
+        kg_top_k: int = settings.KG_TOP_K,
+        kg_hop1_m: int = settings.KG_HOP1_M,
+        kg_hop2_n: int = settings.KG_HOP2_N,
+        kg_hop2_cap: int = settings.KG_HOP2_CAP,
     ) -> Tuple[List[Dict], List[Dict], List[Dict]]:
         """
         Runs the 3 retrieval streams in parallel.
@@ -89,7 +93,11 @@ class ParallelRetriever:
                 self.kg_searcher.search,
                 entity_article_embeddings=entity_article_embeddings,
                 rewritten_query_vec=query_vector_list,
-                intents=intents
+                intents=intents,
+                top_k=kg_top_k,
+                hop1_m=kg_hop1_m,
+                hop2_n=kg_hop2_n,
+                hop2_cap=kg_hop2_cap,
             )
 
             # Gather results

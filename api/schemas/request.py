@@ -17,3 +17,4 @@ class ChatRequest(BaseModel):
                           description="Ask anything about medical domain",
                           examples=["What are the symptoms of Type 2 Diabetes?"])
     conversation_id: Optional[str] = Field(default=None, description="UUID of an existing conversation")
+    use_citations: Optional[bool] = Field(default=None, description="Whether to enable citation mode and require PMIDs")

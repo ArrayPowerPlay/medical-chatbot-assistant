@@ -120,6 +120,17 @@ class RAGPipeline:
         vector_top_k: int = settings.VECTOR_TOP_K,
         keyword_top_k: int = settings.KEYWORD_TOP_K,
         child_fetch_limit: int = settings.CHILD_FETCH_LIMIT,
+        kg_top_k: int = settings.KG_TOP_K,
+        kg_hop1_m: int = settings.KG_HOP1_M,
+        kg_hop2_n: int = settings.KG_HOP2_N,
+        kg_hop2_cap: int = settings.KG_HOP2_CAP,
+        rerank_kg_top_n: int = settings.RERANK_KG_TOP_N,
+        generation_temperature: float = settings.GENERATION_TEMPERATURE,
+        generation_max_tokens: int = settings.GENERATION_MAX_TOKENS,
+        use_kg_merger: bool = settings.USE_KG_MERGER,
+        use_head_tail_placement: bool = settings.USE_HEAD_TAIL_PLACEMENT,
+        use_citations: bool = settings.USE_CITATIONS,
+        question_type: Optional[str] = None,
     ) -> Dict[str, Any]:
         """
         Run the full synchronous RAG pipeline.
@@ -143,6 +154,8 @@ class RAGPipeline:
         analysis = self.query_analyzer.analyze(query=query, history=normalized_history)
         rewritten_query = analysis.get("rewritten_query", query)
         intents = analysis.get("intents", ["general"])
+        # question_type is classified by the LLM inside QueryAnalyzer (no extra call)
+        question_type = analysis.get("question_type", "summary")
 
         query_vector = self.query_embedder.embed_texts(rewritten_query)[0]
         entity_texts = self._build_entity_texts(analysis)
@@ -160,6 +173,10 @@ class RAGPipeline:
             vector_top_k=vector_top_k,
             keyword_top_k=keyword_top_k,
             child_fetch_limit=child_fetch_limit,
+            kg_top_k=kg_top_k,
+            kg_hop1_m=kg_hop1_m,
+            kg_hop2_n=kg_hop2_n,
+            kg_hop2_cap=kg_hop2_cap,
         )
 
         logger.info(f"[RAG Pipeline]: Parallel retrieval completed! "
@@ -179,11 +196,16 @@ class RAGPipeline:
         ranked_text, ranked_kg = self.cross_encoder_reranker.rerank(
             query=rewritten_query,
             rrf_results=rrf_results,
-            kg_results=kg_results
+            kg_results=kg_results,
+            top_n=rerank_kg_top_n,
         )
         logger.info(f"[RAG Pipeline]: Cross-Encoder returned {len(ranked_text)} texts and {len(ranked_kg)} KG paths.")
         logger.info(f"[RAG Pipeline]: Merging KG paths and preparing prompt context...")
-        merged_kg = self.kg_merger.merge_top_paths(ranked_kg)      
+        merged_kg = (
+            self.kg_merger.merge_top_paths(ranked_kg)
+            if use_kg_merger
+            else ranked_kg
+        )
 
         ### 5. Context re-ordering on text results and KG merged results
         # Manual interleaving
@@ -201,11 +223,16 @@ class RAGPipeline:
         
         system_prompt, user_prompt = build_prompts(
             query=rewritten_query,
-            retrieved_items=interleaved_items
+            retrieved_items=interleaved_items,
+            use_head_tail_placement=use_head_tail_placement,
+            use_citations=use_citations,
+            question_type=question_type,
         )
 
         ### 6. Generate the final answer
         logger.info("[RAG Pipeline]: Generating final answer...")
+        self.llm_generator.temperature = generation_temperature
+        self.llm_generator.max_tokens = generation_max_tokens
         answer = self.llm_generator.generate_answer(
             system_prompt=system_prompt,
             user_prompt=user_prompt,
@@ -217,5 +244,6 @@ class RAGPipeline:
             "conversation_id": conversation_id,
             "sources": interleaved_items,
             "rewritten_query": rewritten_query,
-            "analysis": analysis
+            "analysis": analysis,
+            "question_type": question_type,
         }

@@ -335,12 +335,22 @@ Evaluation is **deterministic** (single run, temperature=0 for QueryAnalyzer).
 > **Grid Search Utility**: `scripts/evaluation/grid_search_retrieval.py` runs a fixed 20-question retrieval benchmark over a preset grid of `(VECTOR_TOP_K, KEYWORD_TOP_K)` configurations while keeping the stronger baseline values for `CHILD_FETCH_LIMIT`, `TOP_K_RRF`, `K_RRF`, and `RERANK_TEXT_TOP_M` unless overridden via CLI.
 
 #### Generation
-- **ROUGE-SU4 F1**
+- **ROUGE-SU4 F1** — primary metric for BioASQ (ideal answer quality)
 - **RAGAS Context Precision**
 - **RAGAS Context Recall**
 - **RAGAS Faithfulness**
 - **RAGAS Answer Correctness**
 - **RAGAS Answer Relevancy** — validation/debug only
+
+> **Generation improvements (June 2026)**:
+> 1. **Type-conditional prompting**: `QueryAnalyzer` now classifies `question_type` (summary | list | yesno | factoid) as **TASK 4** in its existing single LLM call (no extra cost). `prompt_builder.py` uses this to inject a type-specific instruction into the system prompt.
+> 2. **Preamble stripping**: Before computing ROUGE-SU4, `strip_preamble()` removes common LLM openers ("Based on the provided context...") that don't appear in gold references and hurt lexical overlap.
+> 3. **Anti-preamble instruction**: System prompt now explicitly instructs the LLM to start answers directly without preamble phrases.
+
+> **MedAESQA metric set (secondary dataset)**:
+> `ROUGE-SU4-F1` + `Citation-Precision` + `Citation-Recall` + `Citation-F1`. RAGAS dropped (redundant for secondary dataset). `Citation-Coverage` and `Citation-Count` are also dropped as they are not informative/necessary.
+> `Citation-F1` = harmonic mean of Citation-P and Citation-R (added June 2026).
+> `use_citations=True` is hardcoded default for MedAESQA test entrypoint (citation quality is its primary signal).
 
 > **MedAESQA evaluator policy**: use a **custom evaluator** for the project pipeline. `medaesqa_eval.py` is kept only as a dataset-reference script and is not the main evaluator for project results.
 
@@ -396,7 +406,7 @@ ragas                     — RAG evaluation framework
 - **Evaluation code** lives under `scripts/evaluation/`
   - `shared/` — common code used by both validation and test evaluators
   - `bioasq/` — BioASQ split-specific entrypoints (`val_*`, `test_*`)
-  - `medaesqa/` — future MedAESQA entrypoints
+  - `medaesqa/` — MedAESQA split-specific entrypoints (`val_generation.py`, `test_generation.py`)
 - **Dataset augmentation scripts** live under `src/dataset_builder/`
 - **Outputs** are split between `results/eval_results/` and `results/test_results/`
 

@@ -61,6 +61,20 @@ class Settings(BaseSettings):
     LLM_MODEL: str = "llama-3.3-70b-versatile"
     EMBEDDING_MODEL: str = "ncbi/MedCPT-Article-Encoder"
     QUERY_MODEL: str = "ncbi/MedCPT-Query-Encoder"
+    RAGAS_EVALUATOR_LLM_MODEL: str = "gpt-4o-mini"        # Judge model used by RAGAS to score answer quality and context usage
+    RAGAS_EVALUATOR_EMBEDDING_MODEL: str = "text-embedding-3-small"  # Embedding model used by RAGAS for semantic evaluation steps
+
+    # Generation defaults
+    GENERATION_TEMPERATURE: float = 0.0   # Default sampling temperature for answer generation; keep low for factual QA
+    GENERATION_MAX_TOKENS: int = 2048     # Default maximum number of tokens the generator may produce for one answer
+    USE_KG_MERGER: bool = True            # Whether KG paths with the same prefix should be merged before prompt construction
+    USE_HEAD_TAIL_PLACEMENT: bool = True  # Whether retrieved context should be reordered with head-tail placement before generation
+    USE_CITATIONS: bool = True            # Whether the generator should be instructed to cite sources using PMIDs
+    KG_TOP_K: int = 3                     # Maximum number of anchor nodes retrieved per extracted entity during Stage 1 anchor search
+    KG_HOP1_M: int = 10                   # Maximum number of 1-hop neighbours kept for each anchor node during Stage 2a expansion
+    KG_HOP2_N: int = 5                    # Maximum number of 2-hop neighbours kept for each 1-hop node during Stage 2b expansion
+    KG_HOP2_CAP: int = 50                 # Global hard cap on the total number of 2-hop triples returned after KG expansion
+    RERANK_KG_TOP_N: int = 20             # Number of KG paths kept after cross-encoder reranking
 
     # LLM History Configuration
     HISTORY_TURNS_FOR_LLM: int = 5    # 1 turn = user + assistant. 5 turns = 10 messages

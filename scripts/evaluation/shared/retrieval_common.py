@@ -1,14 +1,13 @@
 """
-Shared retrieval evaluation utilities for BioASQ validation/test scripts.
+Shared retrieval evaluation utilities for BioASQ validation/test scripts. 
 """
-
 import argparse
 import json
 import math
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import List, Dict, Any, Optional, Set, Tuple
 
 # Configure project root
 project_root = Path(__file__).resolve().parent.parent.parent.parent
@@ -25,7 +24,6 @@ from src.retrieval.keyword_search import keyword_search
 from src.retrieval.vector_search import vector_search
 from src.storage.parent_store import ParentStore
 from src.storage.weaviate_client import WeaviateChildStore
-
 
 
 K_VALUES = settings.K_VALUES
@@ -248,7 +246,7 @@ def evaluate_split(
     data_path: Path,
     output_dir: Path,
     split_name: str,
-    limit: Optional[int] = None,
+    limit: Optional[int] = None
 ) -> None:
     """Run retrieval evaluation for one dataset split."""
     missing_runtime_deps = [
@@ -259,7 +257,7 @@ def evaluate_split(
             ("WeaviateChildStore", WeaviateChildStore),
             ("ParentStore", ParentStore),
             ("RRFManager", RRFManager),
-            ("CrossEncoderReranker", CrossEncoderReranker),
+            ("CrossEncoderReranker", CrossEncoderReranker)
         ]
         if value is None
     ]
@@ -268,13 +266,13 @@ def evaluate_split(
             "Missing runtime dependencies for retrieval evaluation: "
             + ", ".join(missing_runtime_deps)
         )
-
+    
     if not data_path.exists():
         logger.error(f"Evaluation file not found: {data_path}")
         sys.exit(1)
 
     questions: List[Dict[str, Any]] = []
-    with open(data_path, "r", encoding="utf-8") as f:
+    with open(data_path, "r", encoding='utf-8') as f:
         for line in f:
             questions.append(json.loads(line))
 
@@ -286,7 +284,7 @@ def evaluate_split(
         f"K_RRF={settings.K_RRF}, "
         f"TOP_K_RRF={settings.TOP_K_RRF}, "
         f"VECTOR_TOP_K={settings.VECTOR_TOP_K}, "
-        f"KEYWORD_TOP_K={settings.KEYWORD_TOP_K}, "
+        f"KEYWORK_TOP_K={settings.KEYWORD_TOP_K}, "
         f"CHILD_FETCH_LIMIT={settings.CHILD_FETCH_LIMIT}, "
         f"RERANK_TEXT_TOP_M={settings.RERANK_TEXT_TOP_M}, "
         f"K_VALUES={settings.K_VALUES}"
@@ -295,7 +293,7 @@ def evaluate_split(
     logger.info("Initializing pipeline components...")
     query_analyzer = QueryAnalyzer()
     query_analyzer.temperature = 0.0
-    query_embedder = MedCPTEmbedder(mode="query")
+    query_embedder = MedCPTEmbedder(mode='query')
     weaviate_store = WeaviateChildStore()
     parent_store = ParentStore(settings.SQLITE_PARENT_DB_PATH)
     rrf_manager = RRFManager()
@@ -310,13 +308,13 @@ def evaluate_split(
     failed_questions = 0
 
     try:
-        with open(detail_path, "w", encoding="utf-8") as detail_file:
+        with open(detail_path, 'w', encoding='utf-8') as detail_file:
             for i, q in enumerate(questions):
                 q_id = q["id"]
                 body = q["body"]
                 gold_pmids = set(q["relevant_pmid"])
                 gold_snippets = q.get("snippets", [])
-
+                
                 logger.info(f"[{i+1}/{len(questions)}] Evaluating: {body[:80]}...")
 
                 try:
@@ -328,7 +326,7 @@ def evaluate_split(
                         parent_store=parent_store,
                         rrf_manager=rrf_manager,
                         cross_encoder=cross_encoder,
-                        debug_label=q_id,
+                        debug_label=q_id
                     )
 
                     seen_pmids: Set[str] = set()
@@ -342,9 +340,7 @@ def evaluate_split(
                     doc_metrics = compute_document_metrics(retrieved_pmids, gold_pmids)
                     all_doc_metrics.append(doc_metrics)
 
-                    snippet_metrics = compute_snippet_metrics(
-                        ranked_text, gold_snippets, gold_pmids
-                    )
+                    snippet_metrics = compute_snippet_metrics(ranked_text, gold_snippets, gold_pmids)
                     all_snippet_metrics.append(snippet_metrics)
 
                     retrieved_items_output = []
@@ -359,8 +355,8 @@ def evaluate_split(
                                 "is_relevant": item.get("pmid", "") in gold_pmids,
                                 "score": item.get(
                                     "cross_encoder_score",
-                                    item.get("rrf_score", 0.0),
-                                ),
+                                    item.get("rrf_score", 0.0)
+                                )
                             }
                         )
 
@@ -372,7 +368,7 @@ def evaluate_split(
                         "num_gold_pmids": len(gold_pmids),
                         "retrieved_items": retrieved_items_output,
                         "doc_metrics": doc_metrics,
-                        "snippet_metrics": snippet_metrics,
+                        "snippet_metrics": snippet_metrics
                     }
                     detail_file.write(json.dumps(detail_record, ensure_ascii=False) + "\n")
                     detail_file.flush()
@@ -381,22 +377,21 @@ def evaluate_split(
                     logger.exception(f"Failed on question {q_id}:")
                     failed_questions += 1
                     continue
-
+        
         summary = _build_summary(
             all_doc_metrics=all_doc_metrics,
             all_snippet_metrics=all_snippet_metrics,
             total_questions=len(questions),
             failed_questions=failed_questions,
             data_path=data_path,
-            split_name=split_name,
+            split_name=split_name
         )
 
-        with open(summary_path, "w", encoding="utf-8") as f:
+        with open(summary_path, 'w', encoding='utf-8') as f:
             json.dump(summary, f, indent=2, ensure_ascii=False)
 
         _print_summary(summary)
         logger.info(f"Results saved to {detail_path} and {summary_path}")
-
     finally:
         query_analyzer.close()
         query_embedder.close()
@@ -410,7 +405,7 @@ def _build_summary(
     all_doc_metrics: List[Dict[str, float]],
     all_snippet_metrics: List[Dict[str, float]],
     total_questions: int,
-    failed_questions: int,
+    failed_questions: int, 
     data_path: Optional[Path] = None,
     split_name: str = "validation",
 ) -> Dict[str, Any]:
@@ -420,7 +415,7 @@ def _build_summary(
     def mean_metric(metrics_list: List[Dict[str, float]], key: str) -> float:
         vals = [m[key] for m in metrics_list if key in m]
         return round(sum(vals) / len(vals), 4) if vals else 0.0
-
+    
     doc_agg = {}
     for k in K_VALUES:
         doc_agg[f"Precision@{k}"] = mean_metric(all_doc_metrics, f"precision_at_{k}")
@@ -431,7 +426,6 @@ def _build_summary(
             all_doc_metrics, f"average_precision_at_{k}"
         )
     doc_agg["MRR"] = mean_metric(all_doc_metrics, "reciprocal_rank")
-
     snippet_agg = {}
     for k in K_VALUES:
         snippet_agg[f"Snippet_Recall@{k}"] = mean_metric(

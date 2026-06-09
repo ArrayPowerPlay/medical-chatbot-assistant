@@ -1,0 +1,50 @@
+{
+  "config": {
+    "split_name": "test",
+    "data_file": "D:\\workspace\\Repo\\medical-chatbot-assistant\\data\\test\\test_bioasq.jsonl",
+    "total_questions": 500,
+    "evaluated_questions": 500,
+    "failed_questions": 0,
+    "k_rrf": 60,
+    "top_k_rrf": 80,
+    "vector_top_k": 40,
+    "keyword_top_k": 80,
+    "rerank_text_top_m": 20,
+    "child_fetch_limit": 120,
+    "k_values": [
+      5,
+      10,
+      20
+    ],
+    "timestamp": "2026-05-26T10:32:00"
+  },
+  "document_metrics": {
+    "Precision@5": 0.5492,
+    "Recall@5": 0.5968,
+    "F1@5": 0.4777,
+    "MAP@5": 0.7,
+    "GMAP@5": 0.3241,
+    "Precision@10": 0.412,
+    "Recall@10": 0.7425,
+    "F1@10": 0.453,
+    "MAP@10": 0.6892,
+    "GMAP@10": 0.442,
+    "Precision@20": 0.2658,
+    "Recall@20": 0.8522,
+    "F1@20": 0.3581,
+    "MAP@20": 0.7038,
+    "GMAP@20": 0.5281,
+    "MRR": 0.8626
+  },
+  "snippet_metrics": {
+    "Snippet_Recall@5": 0.5685,
+    "Snippet_Precision@5": 0.5272,
+    "Snippet_F1@5": 0.4577,
+    "Snippet_Recall@10": 0.7028,
+    "Snippet_Precision@10": 0.395,
+    "Snippet_F1@10": 0.4325,
+    "Snippet_Recall@20": 0.8095,
+    "Snippet_Precision@20": 0.2599,
+    "Snippet_F1@20": 0.347
+  }
+}
