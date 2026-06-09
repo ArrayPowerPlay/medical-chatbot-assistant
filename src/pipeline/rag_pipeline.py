@@ -177,6 +177,7 @@ class RAGPipeline:
             kg_hop1_m=kg_hop1_m,
             kg_hop2_n=kg_hop2_n,
             kg_hop2_cap=kg_hop2_cap,
+            original_query_text=query,
         )
 
         logger.info(f"[RAG Pipeline]: Parallel retrieval completed! "

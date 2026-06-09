@@ -31,7 +31,7 @@ OUTPUT_DIR = settings.EVAL_RESULTS_PATH / "bioasq" / "generation"
 
 def evaluate(
     limit: int | None = None,
-    use_ragas: bool = False,
+    use_ragas: bool = True,
     generation_temperature: float = settings.GENERATION_TEMPERATURE,
     kg_top_k: int = settings.KG_TOP_K,
     kg_hop1_m: int = settings.KG_HOP1_M,

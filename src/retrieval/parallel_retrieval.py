@@ -44,6 +44,7 @@ class ParallelRetriever:
         kg_hop1_m: int = settings.KG_HOP1_M,
         kg_hop2_n: int = settings.KG_HOP2_N,
         kg_hop2_cap: int = settings.KG_HOP2_CAP,
+        original_query_text: str | None = None,
     ) -> Tuple[List[Dict], List[Dict], List[Dict]]:
         """
         Runs the 3 retrieval streams in parallel.
@@ -55,6 +56,7 @@ class ParallelRetriever:
             intents: List of query intents. Defaults to ["general"].
             top_k: Number of parent results to return for vector and keyword search. Defaults to 20.
             child_fetch_limit: Number of child chunks to fetch initially. Defaults to 60.
+            original_query_text: The original user query text (optional).
             
         Returns:
             Tuple containing:
@@ -85,7 +87,8 @@ class ParallelRetriever:
                 weaviate_store=self.weaviate_store,
                 parent_store=self.parent_store,
                 top_k=keyword_top_k,
-                child_fetch_limit=child_fetch_limit
+                child_fetch_limit=child_fetch_limit,
+                original_query=original_query_text
             )
 
             # Stream 3: KG Search

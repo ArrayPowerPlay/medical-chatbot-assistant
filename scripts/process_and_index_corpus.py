@@ -1,4 +1,4 @@
-"""Chunk, embed, and index corpus.jsonl records into SQLite and Weaviate."""
+"""Chunk, embed, and index corpus.jsonl records into SQLite and Weaviatepyht."""
 
 import json
 import sys

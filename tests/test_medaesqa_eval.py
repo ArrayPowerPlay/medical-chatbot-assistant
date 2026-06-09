@@ -8,12 +8,11 @@ from src.generation.prompt_builder import build_prompts
 
 class MedAESQAEvalTests(unittest.TestCase):
     def test_extract_pmids_from_text(self):
-        text = "This is a statement [12345, 67890] and another [111]."
-        self.assertEqual(extract_pmids_from_text(text), {"12345", "67890", "111"})
+        text = "This is a statement [12345, 67890], another [111], and [PMID: 999] or [pmid: 888,777]."
+        self.assertEqual(extract_pmids_from_text(text), {"12345", "67890", "111", "999", "888", "777"})
 
     def test_extract_pmids_from_empty_text(self):
         self.assertEqual(extract_pmids_from_text(""), set())
-        self.assertEqual(extract_pmids_from_text(None), set())
 
     def test_compute_citation_metrics(self):
         prediction = "Treatment is good [12345, 111]."

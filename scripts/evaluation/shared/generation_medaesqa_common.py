@@ -27,7 +27,7 @@ from config.logging_config import logger
 from config.settings import settings
 from scripts.evaluation.shared import generation_bioasq_common as bioasq_common
 
-PMID_GROUP_PATTERN = re.compile(r"\[(\d+(?:,\s*\d+)*)\]")
+PMID_GROUP_PATTERN = re.compile(r"\[(?:PMID:\s*)?(\d+(?:,\s*\d+)*)\]", re.IGNORECASE)
 
 
 def extract_pmids_from_text(text: str) -> Set[str]:
