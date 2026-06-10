@@ -178,8 +178,12 @@ def _summarize_sources(sources: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
 
 
 def _mean_metric(metrics_list: Iterable[Dict[str, float]], key: str) -> float:
-    """Compute a rounded mean for a metric key."""
-    values = [metric[key] for metric in metrics_list if key in metric]
+    """Compute a rounded mean for a metric key, filtering out NaN values."""
+    import math
+    values = [
+        metric[key] for metric in metrics_list 
+        if key in metric and isinstance(metric[key], (int, float)) and not math.isnan(metric[key])
+    ]
     return round(sum(values) / len(values), 4) if values else 0.0
 
 
@@ -219,9 +223,14 @@ def initialize_ragas_evaluator(enabled: bool) -> Optional[Dict[str, Any]]:
         return None
 
     try:
-        llm = ChatOpenAI(model=settings.RAGAS_EVALUATOR_LLM_MODEL, temperature=settings.GENERATION_TEMPERATURE)
+        llm = ChatOpenAI(
+            model=settings.RAGAS_EVALUATOR_LLM_MODEL, 
+            temperature=settings.GENERATION_TEMPERATURE,
+            max_retries=10,
+        )
         embeddings = OpenAIEmbeddings(
-            model=settings.RAGAS_EVALUATOR_EMBEDDING_MODEL
+            model=settings.RAGAS_EVALUATOR_EMBEDDING_MODEL,
+            max_retries=10,
         )
     except Exception as exc:
         logger.error(f"Failed to initialize RAGAS evaluator clients: {exc}")
@@ -271,11 +280,19 @@ def evaluate_ragas_question(
         )
 
         try:
+            from ragas.run_config import RunConfig
+            run_config = RunConfig(
+                max_workers=2,
+                max_retries=10,
+                max_wait=60,
+                timeout=180,
+            )
             result = evaluator["evaluate_fn"](
                 dataset,
                 metrics=evaluator["metrics"],
                 llm=evaluator["llm"],
                 embeddings=evaluator["embeddings"],
+                run_config=run_config,
                 raise_exceptions=False,       # If error occurs, continue to run
             )
             row = result.to_pandas().iloc[0].to_dict() # Retrieve the first row and convert to dict

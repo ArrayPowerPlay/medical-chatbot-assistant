@@ -16,7 +16,7 @@ from config.settings import settings
 
 
 STAGE1_LIMIT = 15
-STAGE2_LIMIT = 35
+STAGE2_LIMIT = 25
 TOP_K_STAGE1_SHORTLIST = 5
 
 
