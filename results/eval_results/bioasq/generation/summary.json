@@ -1,16 +1,16 @@
 {
   "config": {
     "data_file": "D:\\workspace\\Repo\\medical-chatbot-assistant\\data\\val\\val_bioasq.jsonl",
-    "total_questions": 25,
-    "evaluated_questions": 25,
+    "total_questions": 1,
+    "evaluated_questions": 1,
     "failed_questions": 0,
-    "timestamp": "2026-06-10T02:10:52",
+    "timestamp": "2026-06-10T18:25:26",
     "split_name": "validation",
-    "limit": 25,
+    "limit": 1,
     "requested_ragas": true,
     "ragas_evaluator_llm_model": "gpt-4o-mini",
     "ragas_evaluator_embedding_model": "text-embedding-3-small",
-    "kg_top_k": 2,
+    "kg_top_k": 3,
     "kg_hop1_m": 10,
     "kg_hop2_n": 5,
     "kg_hop2_cap": 50,
@@ -21,16 +21,16 @@
     "generation_max_tokens": 2048
   },
   "generation_metrics": {
-    "ROUGE-SU4-Precision": 0.1506,
-    "ROUGE-SU4-Recall": 0.3097,
-    "ROUGE-SU4-F1": 0.1644
+    "ROUGE-SU4-Precision": 0.3571,
+    "ROUGE-SU4-Recall": 0.1784,
+    "ROUGE-SU4-F1": 0.2073
   },
   "ragas_metrics": {
     "context_precision": NaN,
-    "context_recall": 0.96,
-    "faithfulness": NaN,
-    "answer_correctness": NaN,
-    "answer_relevancy": 0.8316
+    "context_recall": 1.0,
+    "faithfulness": 1.0,
+    "answer_correctness": 0.5444,
+    "answer_relevancy": 0.8982
   },
   "ragas_enabled": true
 }

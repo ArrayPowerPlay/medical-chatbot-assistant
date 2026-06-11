@@ -38,11 +38,11 @@ def build_baseline_config() -> Dict[str, Any]:
 def build_stage1_search_space() -> Dict[str, List[Any]]:
     """Return the agreed Stage 1 one-factor-at-a-time search space."""
     return {
-        "generation_temperature": [0.0],
+        "generation_temperature": [0.0], 
         "generation_max_tokens": [256, 512],
-        "kg_top_k": [2],
-        "kg_hop1_m": [5],
-        "kg_hop2_n": [3, 5, 8],
+        "kg_top_k": [2, 3], 
+        "kg_hop1_m": [3, 5],   
+        "kg_hop2_n": [3, 5, 7],
         "kg_hop2_cap": [30, 50, 80],
         "rerank_kg_top_n": [10, 20, 30],
         "use_kg_merger": [True],

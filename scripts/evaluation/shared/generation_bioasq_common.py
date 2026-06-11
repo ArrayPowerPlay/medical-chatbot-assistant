@@ -178,12 +178,8 @@ def _summarize_sources(sources: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
 
 
 def _mean_metric(metrics_list: Iterable[Dict[str, float]], key: str) -> float:
-    """Compute a rounded mean for a metric key, filtering out NaN values."""
-    import math
-    values = [
-        metric[key] for metric in metrics_list 
-        if key in metric and isinstance(metric[key], (int, float)) and not math.isnan(metric[key])
-    ]
+    """Compute a rounded mean for a metric key."""
+    values = [metric[key] for metric in metrics_list if key in metric]
     return round(sum(values) / len(values), 4) if values else 0.0
 
 
@@ -202,6 +198,9 @@ def initialize_ragas_evaluator(enabled: bool) -> Optional[Dict[str, Any]]:
     """Initialize RAGAS runtime components, or log an error and disable it."""
     if not enabled:
         return None
+
+    from dotenv import load_dotenv
+    load_dotenv()
 
     if not os.environ.get("OPENAI_API_KEY"):
         logger.error("RAGAS evaluator requires OPENAI_API_KEY but it is not set.")
@@ -223,14 +222,21 @@ def initialize_ragas_evaluator(enabled: bool) -> Optional[Dict[str, Any]]:
         return None
 
     try:
+        # Limit API requests to avoid OpenAI Tier 1 rate limits
+        # 0.5 request / second -> 1 request per 2 seconds
+        from langchain_core.rate_limiters import InMemoryRateLimiter
+        rate_limiter = InMemoryRateLimiter(requests_per_second=0.5)
         llm = ChatOpenAI(
             model=settings.RAGAS_EVALUATOR_LLM_MODEL, 
             temperature=settings.GENERATION_TEMPERATURE,
             max_retries=10,
+            rate_limiter=rate_limiter,
+            timeout=300,  # type: ignore
         )
         embeddings = OpenAIEmbeddings(
             model=settings.RAGAS_EVALUATOR_EMBEDDING_MODEL,
             max_retries=10,
+            timeout=300,  # type: ignore
         )
     except Exception as exc:
         logger.error(f"Failed to initialize RAGAS evaluator clients: {exc}")
@@ -282,10 +288,10 @@ def evaluate_ragas_question(
         try:
             from ragas.run_config import RunConfig
             run_config = RunConfig(
-                max_workers=2,
+                max_workers=1,
                 max_retries=10,
                 max_wait=60,
-                timeout=180,
+                timeout=1800,
             )
             result = evaluator["evaluate_fn"](
                 dataset,
@@ -458,6 +464,9 @@ def evaluate_split(
     all_ragas_metrics: List[Dict[str, float]] = []
     failed_questions = 0
 
+    ragas_inputs = []
+    detail_records = []
+
     try:
         logger.info("Initializing RAG pipeline...")
         from src.pipeline.rag_pipeline import RAGPipeline
@@ -465,10 +474,7 @@ def evaluate_split(
         pipeline = RAGPipeline()
         pipeline.query_analyzer.temperature = 0.0
 
-        with (
-            open(detail_path, "w", encoding="utf-8") as detail_file,
-            open(predictions_path, "w", encoding="utf-8") as predictions_file,
-        ):
+        with open(predictions_path, "w", encoding="utf-8") as predictions_file:
             for i, question in enumerate(questions):
                 question_id = question["id"]
                 body = question["body"]
@@ -508,20 +514,22 @@ def evaluate_split(
                     )
                     all_generation_metrics.append(generation_metrics)
 
-                    ragas_metrics = evaluate_ragas_question(
-                        evaluator=ragas_evaluator,
-                        question=body,
-                        generated_answer=generated_answer,
-                        contexts=[
-                            text.strip()
-                            for item in sources
-                            for text in [item.get("text", item.get("content", ""))]
-                            if isinstance(text, str) and text.strip()
-                        ],
-                        references=gold_answers,
-                    )
-                    if ragas_metrics:
-                        all_ragas_metrics.append(ragas_metrics)
+                    contexts = [
+                        text.strip()
+                        for item in sources
+                        for text in [item.get("text", item.get("content", ""))]
+                        if isinstance(text, str) and text.strip()
+                    ]
+
+                    if ragas_evaluator is not None:
+                        ragas_inputs.append({
+                            "question_index": len(all_generation_metrics) - 1,    # Use for mapping from ragas results
+                            "question_id": question_id,
+                            "question": body,
+                            "answer": generated_answer,
+                            "contexts": contexts,
+                            "references": gold_answers,
+                        })
 
                     prediction_record = {
                         "question_id": question_id,
@@ -547,14 +555,94 @@ def evaluate_split(
                         "gold_pmids": sorted(gold_pmids),
                         "retrieved_sources": _summarize_sources(sources),
                         "generation_metrics": generation_metrics,
-                        "ragas_metrics": ragas_metrics,
+                        "ragas_metrics": {},
                     }
-                    detail_file.write(json.dumps(detail_record, ensure_ascii=False) + "\n")
-                    detail_file.flush()
+                    detail_records.append(detail_record)
 
                 except Exception:
                     logger.exception(f"Failed on question {question_id}:")
                     failed_questions += 1
+
+        if ragas_evaluator is not None and ragas_inputs:
+            logger.info("Starting batch RAGAS evaluation...")
+            ragas_dataset_rows = []
+            for item in ragas_inputs:
+                cleaned_refs = [ref.strip() for ref in item["references"] if isinstance(ref, str) and ref.strip()]
+                for ref in cleaned_refs:
+                    ragas_dataset_rows.append({
+                        "question_index": item["question_index"],
+                        "question_id": item["question_id"],
+                        "question": item["question"],
+                        "answer": item["answer"],
+                        "contexts": item["contexts"],
+                        "ground_truth": ref,
+                    })
+
+            if ragas_dataset_rows:
+                questions_list = [r["question"] for r in ragas_dataset_rows]
+                answers_list = [r["answer"] for r in ragas_dataset_rows]
+                contexts_list = [r["contexts"] for r in ragas_dataset_rows]
+                ground_truths_list = [r["ground_truth"] for r in ragas_dataset_rows]
+
+                dataset = ragas_evaluator["dataset_cls"].from_dict(
+                    {
+                        "question": questions_list,
+                        "answer": answers_list,
+                        "contexts": contexts_list,
+                        "ground_truth": ground_truths_list,
+                    }
+                )
+
+                try:
+                    from ragas.run_config import RunConfig
+                    run_config = RunConfig(
+                        max_workers=1,
+                        max_retries=10,
+                        max_wait=60,
+                        timeout=1800,
+                    )
+                    logger.info(f"Sending {len(ragas_dataset_rows)} rows to RAGAS...")
+                    result = ragas_evaluator["evaluate_fn"](
+                        dataset,
+                        metrics=ragas_evaluator["metrics"],
+                        llm=ragas_evaluator["llm"],
+                        embeddings=ragas_evaluator["embeddings"],
+                        run_config=run_config,
+                        raise_exceptions=False,     # Continue to run if errors happen
+                    )
+                    df = result.to_pandas()
+
+                    # Map results back to each question index
+                    for item in ragas_inputs:
+                        q_idx = item["question_index"]
+                        q_scores_list = []
+                        for idx, r in enumerate(ragas_dataset_rows):
+                            if r["question_index"] == q_idx:
+                                row_scores = {}
+                                for key in ragas_evaluator["metric_keys"]:
+                                    val = df.iloc[idx].get(key)
+                                    if isinstance(val, (int, float)):
+                                        row_scores[key] = float(val)
+                                q_scores_list.append(row_scores)
+
+                        # Average across multiple references for this question
+                        avg_scores = {}
+                        for key in ragas_evaluator["metric_keys"]:
+                            vals = [s[key] for s in q_scores_list if key in s]
+                            if vals:
+                                avg_scores[key] = round(sum(vals) / len(vals), 4)
+
+                        if avg_scores:
+                            all_ragas_metrics.append(avg_scores)
+                            detail_records[q_idx]["ragas_metrics"] = avg_scores
+
+                except Exception as exc:
+                    logger.error(f"Batch RAGAS evaluation failed: {exc}")
+
+        # Write detail.jsonl after RAGAS evaluation completes
+        with open(detail_path, "w", encoding="utf-8") as detail_file:
+            for record in detail_records:
+                detail_file.write(json.dumps(record, ensure_ascii=False) + "\n")
 
         summary = _build_summary(
             all_generation_metrics=all_generation_metrics,
