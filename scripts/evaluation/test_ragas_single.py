@@ -21,12 +21,133 @@ project_root = Path(__file__).resolve().parent.parent.parent
 if str(project_root) not in sys.path:
     sys.path.append(str(project_root))
 
-from config.logging_config import setup_logging
+import sys
+import types
+try:
+    from langchain_google_vertexai import ChatVertexAI
+except ImportError:
+    class ChatVertexAI:
+        pass
+# Register dummy fallback module to satisfy old Ragas imports
+vertexai_module = types.ModuleType("vertexai")
+vertexai_module.ChatVertexAI = ChatVertexAI
+sys.modules["langchain_community.chat_models.vertexai"] = vertexai_module
+
+from typing import Optional, Dict, Any, List, Sequence
+from config.logging_config import setup_logging, logger
 from config.settings import settings
 from scripts.evaluation.shared.generation_bioasq_common import (
     initialize_ragas_evaluator,
-    evaluate_ragas_question,
+    get_ragas_metric_keys,
 )
+
+
+def evaluate_ragas_question(
+    evaluator: Optional[Dict[str, Any]],
+    question: str,
+    generated_answer: str,
+    contexts: List[str],
+    references: Sequence[str],
+) -> Dict[str, float]:
+    """Evaluate one question with RAGAS and average across references using split groups."""
+    if evaluator is None:
+        return {}
+
+    cleaned_refs = [ref.strip() for ref in references if isinstance(ref, str) and ref.strip()]
+    if not cleaned_refs:
+        return {}
+
+    indep_metric_names = ["faithfulness", "answer_relevancy"]
+    dep_metric_names = ["context_precision", "context_recall", "answer_correctness"]
+
+    indep_metrics = [m for m in evaluator["metrics"] if m.name in indep_metric_names]
+    dep_metrics = [m for m in evaluator["metrics"] if m.name in dep_metric_names]
+
+    from ragas.run_config import RunConfig
+    run_config = RunConfig(
+        max_workers=1,
+        max_retries=10,
+        max_wait=60,
+        timeout=1800,
+    )
+
+    # 1. Evaluate independent metrics (Group 1) - once
+    first_ref = cleaned_refs[0] if cleaned_refs else ""
+    dataset_indep = evaluator["dataset_cls"].from_dict(
+        {
+            "question": [question],
+            "answer": [generated_answer],
+            "contexts": [contexts],
+            "ground_truth": [first_ref],
+        }
+    )
+
+    indep_scores = {}
+    if indep_metrics:
+        try:
+            result_indep = evaluator["evaluate_fn"](
+                dataset_indep,
+                metrics=indep_metrics,
+                llm=evaluator["llm"],
+                embeddings=evaluator["embeddings"],
+                run_config=run_config,
+                raise_exceptions=False,
+            )
+            row = result_indep.to_pandas().iloc[0].to_dict()
+            for key in indep_metric_names:
+                val = row.get(key)
+                if isinstance(val, (int, float)):
+                    indep_scores[key] = float(val)
+        except Exception as exc:
+            logger.error(f"Single question independent RAGAS evaluation failed: {exc}")
+
+    # 2. Evaluate dependent metrics (Group 2) - once per reference
+    dep_scores_list = []
+    if dep_metrics:
+        for reference in cleaned_refs:
+            dataset_dep = evaluator["dataset_cls"].from_dict(
+                {
+                    "question": [question],
+                    "answer": [generated_answer],
+                    "contexts": [contexts],
+                    "ground_truth": [reference],
+                }
+            )
+            try:
+                result_dep = evaluator["evaluate_fn"](
+                    dataset_dep,
+                    metrics=dep_metrics,
+                    llm=evaluator["llm"],
+                    embeddings=evaluator["embeddings"],
+                    run_config=run_config,
+                    raise_exceptions=False,
+                )
+                row = result_dep.to_pandas().iloc[0].to_dict()
+                scores = {}
+                for key in dep_metric_names:
+                    val = row.get(key)
+                    if isinstance(val, (int, float)):
+                        scores[key] = float(val)
+                dep_scores_list.append(scores)
+            except Exception as exc:
+                logger.error(f"Single question dependent RAGAS evaluation failed for reference: {exc}")
+
+    # Average dependent scores
+    dep_avg_scores = {}
+    for key in dep_metric_names:
+        vals = [s[key] for s in dep_scores_list if key in s]
+        if vals:
+            dep_avg_scores[key] = sum(vals) / len(vals)
+
+    # Combine and return
+    combined = {}
+    for key in get_ragas_metric_keys():
+        if key in indep_scores:
+            combined[key] = round(indep_scores[key], 4)
+        elif key in dep_avg_scores:
+            combined[key] = round(dep_avg_scores[key], 4)
+
+    return combined
 
 
 def run_test():

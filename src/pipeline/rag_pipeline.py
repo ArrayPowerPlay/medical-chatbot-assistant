@@ -18,10 +18,10 @@ The pipeline follows these main steps:
     the conversation history.
 """
 from typing import Dict, Optional, List, Any
-from operator import itemgetter     # Utility function used for getting items in Dict, List,...
+import argparse
 
 from config.settings import settings
-from config.logging_config import logger
+from config.logging_config import logger, setup_logging
 from src.query.query_analyzer import QueryAnalyzer
 from src.retrieval.parallel_retrieval import ParallelRetriever
 from src.reranking.cross_encoder import CrossEncoderReranker
@@ -248,3 +248,16 @@ class RAGPipeline:
             "analysis": analysis,
             "question_type": question_type,
         }
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Run full RAG pipeline.")
+    parser.add_argument("--question", type=str, help="Question you want to ask.")
+    return parser
+
+
+if __name__ == "__main__":
+    setup_logging()
+    pipeline = RAGPipeline()
+    args = build_parser().parse_args()
+    result = pipeline.run(query = args.question, history=None)

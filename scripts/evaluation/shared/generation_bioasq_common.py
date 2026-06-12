@@ -205,7 +205,6 @@ def initialize_ragas_evaluator(enabled: bool) -> Optional[Dict[str, Any]]:
     if not os.environ.get("OPENAI_API_KEY"):
         logger.error("RAGAS evaluator requires OPENAI_API_KEY but it is not set.")
         return None
-
     try:
         from datasets import Dataset
         from ragas import evaluate
@@ -229,8 +228,8 @@ def initialize_ragas_evaluator(enabled: bool) -> Optional[Dict[str, Any]]:
         llm = ChatOpenAI(
             model=settings.RAGAS_EVALUATOR_LLM_MODEL, 
             temperature=settings.GENERATION_TEMPERATURE,
-            max_retries=10,
-            rate_limiter=rate_limiter,
+            max_retries=10,            # Max retry attempts when submitting a request to OpenAI
+            rate_limiter=rate_limiter, 
             timeout=300,  # type: ignore
         )
         embeddings = OpenAIEmbeddings(
@@ -256,70 +255,6 @@ def initialize_ragas_evaluator(enabled: bool) -> Optional[Dict[str, Any]]:
         ],
         "metric_keys": get_ragas_metric_keys(),
     }
-
-
-def evaluate_ragas_question(
-    evaluator: Optional[Dict[str, Any]],
-    question: str,
-    generated_answer: str,
-    contexts: List[str],
-    references: Sequence[str],
-) -> Dict[str, float]:
-    """Evaluate one question with RAGAS and average across references."""
-    if evaluator is None:
-        return {}
-
-    cleaned_refs = [ref.strip() for ref in references if isinstance(ref, str) and ref.strip()]
-    if not cleaned_refs:
-        return {}
-
-    per_reference_scores: List[Dict[str, float]] = []
-
-    for reference in cleaned_refs:
-        dataset = evaluator["dataset_cls"].from_dict(
-            {
-                "question": [question],
-                "answer": [generated_answer],
-                "contexts": [contexts],
-                "ground_truth": [reference],
-            }
-        )
-
-        try:
-            from ragas.run_config import RunConfig
-            run_config = RunConfig(
-                max_workers=1,
-                max_retries=10,
-                max_wait=60,
-                timeout=1800,
-            )
-            result = evaluator["evaluate_fn"](
-                dataset,
-                metrics=evaluator["metrics"],
-                llm=evaluator["llm"],
-                embeddings=evaluator["embeddings"],
-                run_config=run_config,
-                raise_exceptions=False,       # If error occurs, continue to run
-            )
-            row = result.to_pandas().iloc[0].to_dict() # Retrieve the first row and convert to dict
-        except Exception as exc:
-            logger.error(f"RAGAS evaluation failed for question: {exc}")
-            return {}
-
-        scores: Dict[str, float] = {}
-        for key in evaluator["metric_keys"]:
-            value = row.get(key)
-            if isinstance(value, (int, float)):
-                scores[key] = round(float(value), 4)
-        per_reference_scores.append(scores)
-
-    averaged: Dict[str, float] = {}
-    for key in evaluator["metric_keys"]:
-        values = [score[key] for score in per_reference_scores if key in score]
-        if values:
-            averaged[key] = round(sum(values) / len(values), 4)
-
-    return averaged
 
 
 def build_generation_eval_config(
@@ -565,11 +500,67 @@ def evaluate_split(
 
         if ragas_evaluator is not None and ragas_inputs:
             logger.info("Starting batch RAGAS evaluation...")
-            ragas_dataset_rows = []
+
+            indep_metric_names = ["faithfulness", "answer_relevancy"]
+            dep_metric_names = ["context_precision", "context_recall", "answer_correctness"]
+
+            indep_metrics = [m for m in ragas_evaluator["metrics"] if m.name in indep_metric_names]
+            dep_metrics = [m for m in ragas_evaluator["metrics"] if m.name in dep_metric_names]
+
+            from ragas.run_config import RunConfig
+            run_config = RunConfig(
+                max_workers=1,
+                max_retries=10,
+                max_wait=60,
+                timeout=1800,
+            )
+
+            # Group 1: Reference-independent evaluation (one row per question)
+            indep_dataset_rows = []
+            for item in ragas_inputs:
+                first_ref = ""
+                cleaned_refs = [ref.strip() for ref in item["references"] if isinstance(ref, str) and ref.strip()]
+                if cleaned_refs:
+                    first_ref = cleaned_refs[0]
+                indep_dataset_rows.append({
+                    "question_index": item["question_index"],
+                    "question_id": item["question_id"],
+                    "question": item["question"],
+                    "answer": item["answer"],
+                    "contexts": item["contexts"],
+                    "ground_truth": first_ref,
+                })
+
+            df_indep = None
+            if indep_dataset_rows and indep_metrics:
+                dataset_indep = ragas_evaluator["dataset_cls"].from_dict(
+                    {
+                        "question": [r["question"] for r in indep_dataset_rows],
+                        "answer": [r["answer"] for r in indep_dataset_rows],
+                        "contexts": [r["contexts"] for r in indep_dataset_rows],
+                        "ground_truth": [r["ground_truth"] for r in indep_dataset_rows],
+                    }
+                )
+                try:
+                    logger.info(f"Sending {len(indep_dataset_rows)} unique questions to RAGAS (Reference-Independent)...")
+                    result_indep = ragas_evaluator["evaluate_fn"](
+                        dataset_indep,
+                        metrics=indep_metrics,
+                        llm=ragas_evaluator["llm"],
+                        embeddings=ragas_evaluator["embeddings"],
+                        run_config=run_config,
+                        raise_exceptions=False,
+                    )
+                    df_indep = result_indep.to_pandas()
+                except Exception as exc:
+                    logger.error(f"Reference-Independent RAGAS evaluation failed: {exc}")
+
+            # Group 2: Reference-dependent evaluation (one row per reference)
+            dep_dataset_rows = []
             for item in ragas_inputs:
                 cleaned_refs = [ref.strip() for ref in item["references"] if isinstance(ref, str) and ref.strip()]
                 for ref in cleaned_refs:
-                    ragas_dataset_rows.append({
+                    dep_dataset_rows.append({
                         "question_index": item["question_index"],
                         "question_id": item["question_id"],
                         "question": item["question"],
@@ -578,66 +569,79 @@ def evaluate_split(
                         "ground_truth": ref,
                     })
 
-            if ragas_dataset_rows:
-                questions_list = [r["question"] for r in ragas_dataset_rows]
-                answers_list = [r["answer"] for r in ragas_dataset_rows]
-                contexts_list = [r["contexts"] for r in ragas_dataset_rows]
-                ground_truths_list = [r["ground_truth"] for r in ragas_dataset_rows]
-
-                dataset = ragas_evaluator["dataset_cls"].from_dict(
+            df_dep = None
+            if dep_dataset_rows and dep_metrics:
+                dataset_dep = ragas_evaluator["dataset_cls"].from_dict(
                     {
-                        "question": questions_list,
-                        "answer": answers_list,
-                        "contexts": contexts_list,
-                        "ground_truth": ground_truths_list,
+                        "question": [r["question"] for r in dep_dataset_rows],
+                        "answer": [r["answer"] for r in dep_dataset_rows],
+                        "contexts": [r["contexts"] for r in dep_dataset_rows],
+                        "ground_truth": [r["ground_truth"] for r in dep_dataset_rows],
                     }
                 )
-
                 try:
-                    from ragas.run_config import RunConfig
-                    run_config = RunConfig(
-                        max_workers=1,
-                        max_retries=10,
-                        max_wait=60,
-                        timeout=1800,
-                    )
-                    logger.info(f"Sending {len(ragas_dataset_rows)} rows to RAGAS...")
-                    result = ragas_evaluator["evaluate_fn"](
-                        dataset,
-                        metrics=ragas_evaluator["metrics"],
+                    logger.info(f"Sending {len(dep_dataset_rows)} rows to RAGAS (Reference-Dependent)...")
+                    result_dep = ragas_evaluator["evaluate_fn"](
+                        dataset_dep,
+                        metrics=dep_metrics,
                         llm=ragas_evaluator["llm"],
                         embeddings=ragas_evaluator["embeddings"],
                         run_config=run_config,
-                        raise_exceptions=False,     # Continue to run if errors happen
+                        raise_exceptions=False,
                     )
-                    df = result.to_pandas()
-
-                    # Map results back to each question index
-                    for item in ragas_inputs:
-                        q_idx = item["question_index"]
-                        q_scores_list = []
-                        for idx, r in enumerate(ragas_dataset_rows):
-                            if r["question_index"] == q_idx:
-                                row_scores = {}
-                                for key in ragas_evaluator["metric_keys"]:
-                                    val = df.iloc[idx].get(key)
-                                    if isinstance(val, (int, float)):
-                                        row_scores[key] = float(val)
-                                q_scores_list.append(row_scores)
-
-                        # Average across multiple references for this question
-                        avg_scores = {}
-                        for key in ragas_evaluator["metric_keys"]:
-                            vals = [s[key] for s in q_scores_list if key in s]
-                            if vals:
-                                avg_scores[key] = round(sum(vals) / len(vals), 4)
-
-                        if avg_scores:
-                            all_ragas_metrics.append(avg_scores)
-                            detail_records[q_idx]["ragas_metrics"] = avg_scores
-
+                    df_dep = result_dep.to_pandas()
                 except Exception as exc:
-                    logger.error(f"Batch RAGAS evaluation failed: {exc}")
+                    logger.error(f"Reference-Dependent RAGAS evaluation failed: {exc}")
+
+            # Map independent results back
+            indep_scores_by_q_idx = {}
+            if df_indep is not None:
+                for idx, r in enumerate(indep_dataset_rows):
+                    q_idx = r["question_index"]
+                    scores = {}
+                    for key in indep_metric_names:
+                        if key in df_indep.columns:
+                            val = df_indep.iloc[idx].get(key)
+                            if isinstance(val, (int, float)):
+                                scores[key] = float(val)
+                    indep_scores_by_q_idx[q_idx] = scores
+
+            # Map dependent results back (group by question index)
+            q_dep_scores_list = {}
+            if df_dep is not None:
+                for idx, r in enumerate(dep_dataset_rows):
+                    q_idx = r["question_index"]
+                    scores = {}
+                    for key in dep_metric_names:
+                        if key in df_dep.columns:
+                            val = df_dep.iloc[idx].get(key)
+                            if isinstance(val, (int, float)):
+                                scores[key] = float(val)
+                    q_dep_scores_list.setdefault(q_idx, []).append(scores)
+
+            # Map results back to each question index, average dependent scores, and merge
+            for item in ragas_inputs:
+                q_idx = item["question_index"]
+                
+                q_indep_scores = indep_scores_by_q_idx.get(q_idx, {})
+                dep_scores_list = q_dep_scores_list.get(q_idx, [])
+                
+                q_dep_avg_scores = {}
+                for key in dep_metric_names:
+                    vals = [s[key] for s in dep_scores_list if key in s]
+                    if vals:
+                        q_dep_avg_scores[key] = round(sum(vals) / len(vals), 4)
+
+                combined_scores = {}
+                for key in get_ragas_metric_keys():
+                    if key in q_indep_scores:
+                        combined_scores[key] = q_indep_scores[key]
+                    elif key in q_dep_avg_scores:
+                        combined_scores[key] = q_dep_avg_scores[key]
+
+                if combined_scores:
+                    all_ragas_metrics.append(combined_scores)
+                    detail_records[q_idx]["ragas_metrics"] = combined_scores
 
         # Write detail.jsonl after RAGAS evaluation completes
         with open(detail_path, "w", encoding="utf-8") as detail_file:
