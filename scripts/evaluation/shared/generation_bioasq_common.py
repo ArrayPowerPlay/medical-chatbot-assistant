@@ -205,6 +205,19 @@ def initialize_ragas_evaluator(enabled: bool) -> Optional[Dict[str, Any]]:
     if not os.environ.get("OPENAI_API_KEY"):
         logger.error("RAGAS evaluator requires OPENAI_API_KEY but it is not set.")
         return None
+
+    # Register dummy fallback module to satisfy old Ragas imports
+    import sys
+    import types
+    try:
+        from langchain_google_vertexai import ChatVertexAI  # type: ignore
+    except ImportError:
+        class ChatVertexAI:
+            pass
+    vertexai_module = types.ModuleType("vertexai")
+    vertexai_module.ChatVertexAI = ChatVertexAI             # type: ignore
+    sys.modules["langchain_community.chat_models.vertexai"] = vertexai_module
+
     try:
         from datasets import Dataset
         from ragas import evaluate
