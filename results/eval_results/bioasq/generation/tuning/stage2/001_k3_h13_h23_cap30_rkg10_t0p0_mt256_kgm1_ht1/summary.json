@@ -4,7 +4,7 @@
     "total_questions": 25,
     "evaluated_questions": 25,
     "failed_questions": 0,
-    "timestamp": "2026-06-13T14:59:56",
+    "timestamp": "2026-06-13T22:48:03",
     "split_name": "validation",
     "limit": 25,
     "requested_ragas": true,
@@ -21,16 +21,16 @@
     "generation_max_tokens": 256
   },
   "generation_metrics": {
-    "ROUGE-SU4-Precision": 0.0054,
-    "ROUGE-SU4-Recall": 0.0096,
-    "ROUGE-SU4-F1": 0.006
+    "ROUGE-SU4-Precision": 0.1638,
+    "ROUGE-SU4-Recall": 0.3236,
+    "ROUGE-SU4-F1": 0.1786
   },
   "ragas_metrics": {
-    "context_precision": 0.8921,
-    "context_recall": 0.9067,
-    "faithfulness": 0.0,
-    "answer_correctness": 0.0482,
-    "answer_relevancy": 0.0027
+    "context_precision": 0.6824,
+    "context_recall": 0.9467,
+    "faithfulness": 0.8988,
+    "answer_correctness": 0.6726,
+    "answer_relevancy": 0.8555
   },
   "ragas_enabled": true
 }

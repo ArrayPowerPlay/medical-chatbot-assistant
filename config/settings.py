@@ -66,7 +66,7 @@ class Settings(BaseSettings):
 
     # Generation defaults
     GENERATION_TEMPERATURE: float = 0.0   # Default sampling temperature for answer generation; keep low for factual QA
-    GENERATION_MAX_TOKENS: int = 256      # Default maximum number of tokens the generator may produce for one answer
+    GENERATION_MAX_TOKENS: int = 512      # Default maximum number of tokens the generator may produce for one answer
     USE_KG_MERGER: bool = True            # Whether KG paths with the same prefix should be merged before prompt construction
     USE_HEAD_TAIL_PLACEMENT: bool = True  # Whether retrieved context should be reordered with head-tail placement before generation
     USE_CITATIONS: bool = True            # Whether the generator should be instructed to cite sources using PMIDs
