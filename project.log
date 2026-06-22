@@ -74072,3 +74072,739 @@ dystrophy (FSHD)?'...
 2026-06-21 00:26:03,306 - openai._base_client - INFO - Retrying request to /chat/completions in 8.640000 seconds
 2026-06-21 00:26:33,599 - MedKG-RAG - INFO - Results saved to D:\workspace\Repo\medical-chatbot-assistant\results\test_results\bioasq\generation\detail.jsonl, D:\workspace\Repo\medical-chatbot-assistant\results\test_results\bioasq\generation\summary.json, and D:\workspace\Repo\medical-chatbot-assistant\results\test_results\bioasq\generation\predictions.jsonl
 2026-06-21 00:26:34,916 - MedKG-RAG - INFO - Neo4j connection closed
+2026-06-22 23:34:35,820 - MedKG-RAG - INFO - Loaded 20 questions for MedAESQA retrieval evaluation (limit=20).
+2026-06-22 23:34:35,820 - MedKG-RAG - INFO - Runtime settings: VECTOR_TOP_K=40, KEYWORD_TOP_K=80, CHILD_FETCH_LIMIT=120, K_RRF=60, TOP_K_RRF=80, RERANK_TEXT_TOP_M=20
+2026-06-22 23:34:35,820 - MedKG-RAG - INFO - Initialising pipeline components...
+2026-06-22 23:34:35,849 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-06-22 23:59:58,039 - MedKG-RAG - INFO - Loaded 20 questions for MedAESQA retrieval evaluation (limit=20).
+2026-06-22 23:59:58,039 - MedKG-RAG - INFO - Runtime settings: VECTOR_TOP_K=40, KEYWORD_TOP_K=80, CHILD_FETCH_LIMIT=120, K_RRF=60, TOP_K_RRF=80, RERANK_TEXT_TOP_M=20
+2026-06-22 23:59:58,039 - MedKG-RAG - INFO - Initialising pipeline components...
+2026-06-22 23:59:58,077 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-06-23 00:00:02,362 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-06-23 00:00:02,397 - MedKG-RAG - INFO - [1/20] Evaluating Q-116: Are there ways to prevent sleep apnea or treat it naturally?...
+2026-06-23 00:00:02,400 - MedKG-RAG - INFO - [116] QueryAnalyzer starting
+2026-06-23 00:00:03,909 - MedKG-RAG - INFO - [116] QueryAnalyzer done. rewritten_query='How to prevent or treat sleep apnea naturally'
+2026-06-23 00:00:03,913 - MedKG-RAG - INFO - [116] Embedding query
+2026-06-23 00:00:04,822 - MedKG-RAG - INFO - [116] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:00:18,019 - MedKG-RAG - INFO - [116] Vector search returned 40 parent results
+2026-06-23 00:00:18,021 - MedKG-RAG - INFO - [116] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:00:18,216 - MedKG-RAG - INFO - [116] BM25 search returned 80 parent results
+2026-06-23 00:00:18,217 - MedKG-RAG - INFO - [116] RRF fusion starting with k=60
+2026-06-23 00:00:18,218 - MedKG-RAG - INFO - [116] RRF fusion returned 80 fused results
+2026-06-23 00:00:18,218 - MedKG-RAG - INFO - [116] Cross-encoder rerank starting
+2026-06-23 00:00:49,158 - MedKG-RAG - INFO - [116] Cross-encoder rerank returned 20 text results
+2026-06-23 00:00:49,160 - MedKG-RAG - INFO - [2/20] Evaluating Q-117: What will mutation in runx2 affect in the future?...
+2026-06-23 00:00:49,161 - MedKG-RAG - INFO - [117] QueryAnalyzer starting
+2026-06-23 00:00:49,881 - MedKG-RAG - INFO - [117] QueryAnalyzer done. rewritten_query='What will a mutation in the RUNX2 gene affect?'
+2026-06-23 00:00:49,882 - MedKG-RAG - INFO - [117] Embedding query
+2026-06-23 00:00:50,067 - MedKG-RAG - INFO - [117] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:00:54,909 - MedKG-RAG - INFO - [117] Vector search returned 40 parent results
+2026-06-23 00:00:54,910 - MedKG-RAG - INFO - [117] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:00:55,038 - MedKG-RAG - INFO - [117] BM25 search returned 80 parent results
+2026-06-23 00:00:55,039 - MedKG-RAG - INFO - [117] RRF fusion starting with k=60
+2026-06-23 00:00:55,040 - MedKG-RAG - INFO - [117] RRF fusion returned 80 fused results
+2026-06-23 00:00:55,041 - MedKG-RAG - INFO - [117] Cross-encoder rerank starting
+2026-06-23 00:00:57,001 - MedKG-RAG - INFO - [117] Cross-encoder rerank returned 20 text results
+2026-06-23 00:00:57,003 - MedKG-RAG - INFO - [3/20] Evaluating Q-118: how long does a minor cornea injury take to heal without medical attention?...
+2026-06-23 00:00:57,004 - MedKG-RAG - INFO - [118] QueryAnalyzer starting
+2026-06-23 00:00:57,557 - MedKG-RAG - INFO - [118] QueryAnalyzer done. rewritten_query='corneal injury healing time without treatment'
+2026-06-23 00:00:57,559 - MedKG-RAG - INFO - [118] Embedding query
+2026-06-23 00:00:57,697 - MedKG-RAG - INFO - [118] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:01:02,761 - MedKG-RAG - INFO - [118] Vector search returned 40 parent results
+2026-06-23 00:01:02,762 - MedKG-RAG - INFO - [118] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:01:02,974 - MedKG-RAG - INFO - [118] BM25 search returned 80 parent results
+2026-06-23 00:01:02,976 - MedKG-RAG - INFO - [118] RRF fusion starting with k=60
+2026-06-23 00:01:02,977 - MedKG-RAG - INFO - [118] RRF fusion returned 80 fused results
+2026-06-23 00:01:02,978 - MedKG-RAG - INFO - [118] Cross-encoder rerank starting
+2026-06-23 00:01:05,157 - MedKG-RAG - INFO - [118] Cross-encoder rerank returned 20 text results
+2026-06-23 00:01:05,158 - MedKG-RAG - INFO - [4/20] Evaluating Q-119: what drug or combination of drugs is most popular for treating stage 4 copd?...
+2026-06-23 00:01:05,161 - MedKG-RAG - INFO - [119] QueryAnalyzer starting
+2026-06-23 00:01:05,770 - MedKG-RAG - INFO - [119] QueryAnalyzer done. rewritten_query='What are the most commonly used medications for stage 4 chronic obstructive pulmonary disease?'
+2026-06-23 00:01:05,771 - MedKG-RAG - INFO - [119] Embedding query
+2026-06-23 00:01:06,374 - MedKG-RAG - INFO - [119] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:01:11,410 - MedKG-RAG - INFO - [119] Vector search returned 40 parent results
+2026-06-23 00:01:11,411 - MedKG-RAG - INFO - [119] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:01:11,691 - MedKG-RAG - INFO - [119] BM25 search returned 80 parent results
+2026-06-23 00:01:11,692 - MedKG-RAG - INFO - [119] RRF fusion starting with k=60
+2026-06-23 00:01:11,693 - MedKG-RAG - INFO - [119] RRF fusion returned 80 fused results
+2026-06-23 00:01:11,696 - MedKG-RAG - INFO - [119] Cross-encoder rerank starting
+2026-06-23 00:01:14,328 - MedKG-RAG - INFO - [119] Cross-encoder rerank returned 20 text results
+2026-06-23 00:01:14,330 - MedKG-RAG - INFO - [5/20] Evaluating Q-120: what causes left sided facial numbness?...
+2026-06-23 00:01:14,330 - MedKG-RAG - INFO - [120] QueryAnalyzer starting
+2026-06-23 00:01:14,917 - MedKG-RAG - INFO - [120] QueryAnalyzer done. rewritten_query='What causes left-sided facial numbness?'
+2026-06-23 00:01:14,918 - MedKG-RAG - INFO - [120] Embedding query
+2026-06-23 00:01:15,115 - MedKG-RAG - INFO - [120] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:01:20,695 - MedKG-RAG - INFO - [120] Vector search returned 40 parent results
+2026-06-23 00:01:20,696 - MedKG-RAG - INFO - [120] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:01:20,812 - MedKG-RAG - INFO - [120] BM25 search returned 80 parent results
+2026-06-23 00:01:20,813 - MedKG-RAG - INFO - [120] RRF fusion starting with k=60
+2026-06-23 00:01:20,813 - MedKG-RAG - INFO - [120] RRF fusion returned 80 fused results
+2026-06-23 00:01:20,813 - MedKG-RAG - INFO - [120] Cross-encoder rerank starting
+2026-06-23 00:01:23,135 - MedKG-RAG - INFO - [120] Cross-encoder rerank returned 20 text results
+2026-06-23 00:01:23,138 - MedKG-RAG - INFO - [6/20] Evaluating Q-121: how can i lower my cortisol level?...
+2026-06-23 00:01:23,138 - MedKG-RAG - INFO - [121] QueryAnalyzer starting
+2026-06-23 00:01:23,561 - MedKG-RAG - INFO - [121] QueryAnalyzer done. rewritten_query='How to decrease cortisol levels'
+2026-06-23 00:01:23,562 - MedKG-RAG - INFO - [121] Embedding query
+2026-06-23 00:01:23,677 - MedKG-RAG - INFO - [121] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:01:26,482 - MedKG-RAG - INFO - [121] Vector search returned 40 parent results
+2026-06-23 00:01:26,482 - MedKG-RAG - INFO - [121] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:01:26,578 - MedKG-RAG - INFO - [121] BM25 search returned 80 parent results
+2026-06-23 00:01:26,578 - MedKG-RAG - INFO - [121] RRF fusion starting with k=60
+2026-06-23 00:01:26,578 - MedKG-RAG - INFO - [121] RRF fusion returned 80 fused results
+2026-06-23 00:01:26,579 - MedKG-RAG - INFO - [121] Cross-encoder rerank starting
+2026-06-23 00:01:28,756 - MedKG-RAG - INFO - [121] Cross-encoder rerank returned 20 text results
+2026-06-23 00:01:28,758 - MedKG-RAG - INFO - [7/20] Evaluating Q-122: what is a t wave abnormality?...
+2026-06-23 00:01:28,759 - MedKG-RAG - INFO - [122] QueryAnalyzer starting
+2026-06-23 00:01:29,306 - MedKG-RAG - INFO - [122] QueryAnalyzer done. rewritten_query='What is a T wave abnormality in an electrocardiogram?'
+2026-06-23 00:01:29,307 - MedKG-RAG - INFO - [122] Embedding query
+2026-06-23 00:01:29,464 - MedKG-RAG - INFO - [122] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:01:32,249 - MedKG-RAG - INFO - [122] Vector search returned 40 parent results
+2026-06-23 00:01:32,249 - MedKG-RAG - INFO - [122] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:01:32,452 - MedKG-RAG - INFO - [122] BM25 search returned 80 parent results
+2026-06-23 00:01:32,453 - MedKG-RAG - INFO - [122] RRF fusion starting with k=60
+2026-06-23 00:01:32,455 - MedKG-RAG - INFO - [122] RRF fusion returned 80 fused results
+2026-06-23 00:01:32,455 - MedKG-RAG - INFO - [122] Cross-encoder rerank starting
+2026-06-23 00:01:34,725 - MedKG-RAG - INFO - [122] Cross-encoder rerank returned 20 text results
+2026-06-23 00:01:34,726 - MedKG-RAG - INFO - [8/20] Evaluating Q-123: what is fbn1 mutation?...
+2026-06-23 00:01:34,727 - MedKG-RAG - INFO - [123] QueryAnalyzer starting
+2026-06-23 00:01:35,295 - MedKG-RAG - INFO - [123] QueryAnalyzer done. rewritten_query='What is FBN1 mutation?'
+2026-06-23 00:01:35,295 - MedKG-RAG - INFO - [123] Embedding query
+2026-06-23 00:01:35,457 - MedKG-RAG - INFO - [123] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:01:37,195 - MedKG-RAG - INFO - [123] Vector search returned 40 parent results
+2026-06-23 00:01:37,198 - MedKG-RAG - INFO - [123] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:01:37,299 - MedKG-RAG - INFO - [123] BM25 search returned 80 parent results
+2026-06-23 00:01:37,300 - MedKG-RAG - INFO - [123] RRF fusion starting with k=60
+2026-06-23 00:01:37,301 - MedKG-RAG - INFO - [123] RRF fusion returned 80 fused results
+2026-06-23 00:01:37,302 - MedKG-RAG - INFO - [123] Cross-encoder rerank starting
+2026-06-23 00:01:39,440 - MedKG-RAG - INFO - [123] Cross-encoder rerank returned 20 text results
+2026-06-23 00:01:39,445 - MedKG-RAG - INFO - [9/20] Evaluating Q-124: what does cad without angina mean?...
+2026-06-23 00:01:39,446 - MedKG-RAG - INFO - [124] QueryAnalyzer starting
+2026-06-23 00:01:40,002 - MedKG-RAG - INFO - [124] QueryAnalyzer done. rewritten_query='What does coronary artery disease without angina mean?'
+2026-06-23 00:01:40,003 - MedKG-RAG - INFO - [124] Embedding query
+2026-06-23 00:01:40,148 - MedKG-RAG - INFO - [124] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:01:45,766 - MedKG-RAG - INFO - [124] Vector search returned 40 parent results
+2026-06-23 00:01:45,766 - MedKG-RAG - INFO - [124] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:01:45,905 - MedKG-RAG - INFO - [124] BM25 search returned 80 parent results
+2026-06-23 00:01:45,905 - MedKG-RAG - INFO - [124] RRF fusion starting with k=60
+2026-06-23 00:01:45,907 - MedKG-RAG - INFO - [124] RRF fusion returned 80 fused results
+2026-06-23 00:01:45,907 - MedKG-RAG - INFO - [124] Cross-encoder rerank starting
+2026-06-23 00:01:48,291 - MedKG-RAG - INFO - [124] Cross-encoder rerank returned 20 text results
+2026-06-23 00:01:48,293 - MedKG-RAG - INFO - [10/20] Evaluating Q-125: what is tamsulosin used for?...
+2026-06-23 00:01:48,294 - MedKG-RAG - INFO - [125] QueryAnalyzer starting
+2026-06-23 00:01:48,796 - MedKG-RAG - INFO - [125] QueryAnalyzer done. rewritten_query='What is tamsulosin used for?'
+2026-06-23 00:01:48,797 - MedKG-RAG - INFO - [125] Embedding query
+2026-06-23 00:01:48,919 - MedKG-RAG - INFO - [125] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:01:52,007 - MedKG-RAG - INFO - [125] Vector search returned 40 parent results
+2026-06-23 00:01:52,008 - MedKG-RAG - INFO - [125] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:01:52,111 - MedKG-RAG - INFO - [125] BM25 search returned 74 parent results
+2026-06-23 00:01:52,112 - MedKG-RAG - INFO - [125] RRF fusion starting with k=60
+2026-06-23 00:01:52,114 - MedKG-RAG - INFO - [125] RRF fusion returned 80 fused results
+2026-06-23 00:01:52,114 - MedKG-RAG - INFO - [125] Cross-encoder rerank starting
+2026-06-23 00:01:54,558 - MedKG-RAG - INFO - [125] Cross-encoder rerank returned 20 text results
+2026-06-23 00:01:54,560 - MedKG-RAG - INFO - [11/20] Evaluating Q-126: what is nondisjunction and what causes it?...
+2026-06-23 00:01:54,560 - MedKG-RAG - INFO - [126] QueryAnalyzer starting
+2026-06-23 00:01:55,452 - MedKG-RAG - INFO - [126] QueryAnalyzer done. rewritten_query='What is nondisjunction and its causes?'
+2026-06-23 00:01:55,452 - MedKG-RAG - INFO - [126] Embedding query
+2026-06-23 00:01:55,554 - MedKG-RAG - INFO - [126] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:01:56,787 - MedKG-RAG - INFO - [126] Vector search returned 40 parent results
+2026-06-23 00:01:56,788 - MedKG-RAG - INFO - [126] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:01:56,979 - MedKG-RAG - INFO - [126] BM25 search returned 80 parent results
+2026-06-23 00:01:56,980 - MedKG-RAG - INFO - [126] RRF fusion starting with k=60
+2026-06-23 00:01:56,980 - MedKG-RAG - INFO - [126] RRF fusion returned 80 fused results
+2026-06-23 00:01:56,980 - MedKG-RAG - INFO - [126] Cross-encoder rerank starting
+2026-06-23 00:01:59,275 - MedKG-RAG - INFO - [126] Cross-encoder rerank returned 20 text results
+2026-06-23 00:01:59,276 - MedKG-RAG - INFO - [12/20] Evaluating Q-127: what effects does gene therapy have on an organism?...
+2026-06-23 00:01:59,276 - MedKG-RAG - INFO - [127] QueryAnalyzer starting
+2026-06-23 00:01:59,842 - MedKG-RAG - INFO - [127] QueryAnalyzer done. rewritten_query='What are the effects of gene therapy on an organism?'
+2026-06-23 00:01:59,842 - MedKG-RAG - INFO - [127] Embedding query
+2026-06-23 00:01:59,935 - MedKG-RAG - INFO - [127] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:02:02,811 - MedKG-RAG - INFO - [127] Vector search returned 40 parent results
+2026-06-23 00:02:02,813 - MedKG-RAG - INFO - [127] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:02:02,991 - MedKG-RAG - INFO - [127] BM25 search returned 80 parent results
+2026-06-23 00:02:02,991 - MedKG-RAG - INFO - [127] RRF fusion starting with k=60
+2026-06-23 00:02:02,992 - MedKG-RAG - INFO - [127] RRF fusion returned 80 fused results
+2026-06-23 00:02:02,993 - MedKG-RAG - INFO - [127] Cross-encoder rerank starting
+2026-06-23 00:02:05,069 - MedKG-RAG - INFO - [127] Cross-encoder rerank returned 20 text results
+2026-06-23 00:02:05,070 - MedKG-RAG - INFO - [13/20] Evaluating Q-128: how does cbd effect liver enzymes?...
+2026-06-23 00:02:05,072 - MedKG-RAG - INFO - [128] QueryAnalyzer starting
+2026-06-23 00:02:05,644 - MedKG-RAG - INFO - [128] QueryAnalyzer done. rewritten_query='What is the effect of Cannabidiol on liver enzymes?'
+2026-06-23 00:02:05,649 - MedKG-RAG - INFO - [128] Embedding query
+2026-06-23 00:02:05,788 - MedKG-RAG - INFO - [128] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:02:07,495 - MedKG-RAG - INFO - [128] Vector search returned 40 parent results
+2026-06-23 00:02:07,495 - MedKG-RAG - INFO - [128] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:02:07,592 - MedKG-RAG - INFO - [128] BM25 search returned 80 parent results
+2026-06-23 00:02:07,593 - MedKG-RAG - INFO - [128] RRF fusion starting with k=60
+2026-06-23 00:02:07,594 - MedKG-RAG - INFO - [128] RRF fusion returned 80 fused results
+2026-06-23 00:02:07,594 - MedKG-RAG - INFO - [128] Cross-encoder rerank starting
+2026-06-23 00:02:10,018 - MedKG-RAG - INFO - [128] Cross-encoder rerank returned 20 text results
+2026-06-23 00:02:10,021 - MedKG-RAG - INFO - [14/20] Evaluating Q-129: what are side effects for suddenly stopping metoprolol?...
+2026-06-23 00:02:10,022 - MedKG-RAG - INFO - [129] QueryAnalyzer starting
+2026-06-23 00:02:10,407 - MedKG-RAG - INFO - [129] QueryAnalyzer done. rewritten_query='What are the side effects of abrupt metoprolol withdrawal?'
+2026-06-23 00:02:10,408 - MedKG-RAG - INFO - [129] Embedding query
+2026-06-23 00:02:10,523 - MedKG-RAG - INFO - [129] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:02:12,119 - MedKG-RAG - INFO - [129] Vector search returned 40 parent results
+2026-06-23 00:02:12,119 - MedKG-RAG - INFO - [129] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:02:12,179 - MedKG-RAG - INFO - [129] BM25 search returned 80 parent results
+2026-06-23 00:02:12,179 - MedKG-RAG - INFO - [129] RRF fusion starting with k=60
+2026-06-23 00:02:12,179 - MedKG-RAG - INFO - [129] RRF fusion returned 80 fused results
+2026-06-23 00:02:12,179 - MedKG-RAG - INFO - [129] Cross-encoder rerank starting
+2026-06-23 00:02:14,876 - MedKG-RAG - INFO - [129] Cross-encoder rerank returned 20 text results
+2026-06-23 00:02:14,876 - MedKG-RAG - INFO - [15/20] Evaluating Q-130: is pcos linked to oxidative stress?...
+2026-06-23 00:02:14,877 - MedKG-RAG - INFO - [130] QueryAnalyzer starting
+2026-06-23 00:02:15,397 - MedKG-RAG - INFO - [130] QueryAnalyzer done. rewritten_query='Is Polycystic Ovary Syndrome linked to oxidative stress?'
+2026-06-23 00:02:15,398 - MedKG-RAG - INFO - [130] Embedding query
+2026-06-23 00:02:15,502 - MedKG-RAG - INFO - [130] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:02:16,954 - MedKG-RAG - INFO - [130] Vector search returned 40 parent results
+2026-06-23 00:02:16,954 - MedKG-RAG - INFO - [130] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:02:17,062 - MedKG-RAG - INFO - [130] BM25 search returned 80 parent results
+2026-06-23 00:02:17,063 - MedKG-RAG - INFO - [130] RRF fusion starting with k=60
+2026-06-23 00:02:17,064 - MedKG-RAG - INFO - [130] RRF fusion returned 80 fused results
+2026-06-23 00:02:17,065 - MedKG-RAG - INFO - [130] Cross-encoder rerank starting
+2026-06-23 00:02:19,438 - MedKG-RAG - INFO - [130] Cross-encoder rerank returned 20 text results
+2026-06-23 00:02:19,453 - MedKG-RAG - INFO - [16/20] Evaluating Q-131: what are side effects of using formoterol?...
+2026-06-23 00:02:19,454 - MedKG-RAG - INFO - [131] QueryAnalyzer starting
+2026-06-23 00:02:20,098 - MedKG-RAG - INFO - [131] QueryAnalyzer done. rewritten_query='What are the side effects of formoterol?'
+2026-06-23 00:02:20,100 - MedKG-RAG - INFO - [131] Embedding query
+2026-06-23 00:02:20,196 - MedKG-RAG - INFO - [131] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:02:20,992 - MedKG-RAG - INFO - [131] Vector search returned 40 parent results
+2026-06-23 00:02:20,993 - MedKG-RAG - INFO - [131] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:02:21,076 - MedKG-RAG - INFO - [131] BM25 search returned 80 parent results
+2026-06-23 00:02:21,079 - MedKG-RAG - INFO - [131] RRF fusion starting with k=60
+2026-06-23 00:02:21,080 - MedKG-RAG - INFO - [131] RRF fusion returned 80 fused results
+2026-06-23 00:02:21,081 - MedKG-RAG - INFO - [131] Cross-encoder rerank starting
+2026-06-23 00:02:23,332 - MedKG-RAG - INFO - [131] Cross-encoder rerank returned 20 text results
+2026-06-23 00:02:23,337 - MedKG-RAG - INFO - [17/20] Evaluating Q-132: what is the effect of low vitamin D?...
+2026-06-23 00:02:23,337 - MedKG-RAG - INFO - [132] QueryAnalyzer starting
+2026-06-23 00:02:23,858 - MedKG-RAG - INFO - [132] QueryAnalyzer done. rewritten_query='What are the effects of vitamin D deficiency?'
+2026-06-23 00:02:23,863 - MedKG-RAG - INFO - [132] Embedding query
+2026-06-23 00:02:23,987 - MedKG-RAG - INFO - [132] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:02:25,392 - MedKG-RAG - INFO - [132] Vector search returned 40 parent results
+2026-06-23 00:02:25,394 - MedKG-RAG - INFO - [132] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:02:25,509 - MedKG-RAG - INFO - [132] BM25 search returned 80 parent results
+2026-06-23 00:02:25,509 - MedKG-RAG - INFO - [132] RRF fusion starting with k=60
+2026-06-23 00:02:25,510 - MedKG-RAG - INFO - [132] RRF fusion returned 80 fused results
+2026-06-23 00:02:25,511 - MedKG-RAG - INFO - [132] Cross-encoder rerank starting
+2026-06-23 00:02:28,181 - MedKG-RAG - INFO - [132] Cross-encoder rerank returned 20 text results
+2026-06-23 00:02:28,182 - MedKG-RAG - INFO - [18/20] Evaluating Q-133: What are the short and long term effects of surgery and its complexity for women...
+2026-06-23 00:02:28,182 - MedKG-RAG - INFO - [133] QueryAnalyzer starting
+2026-06-23 00:02:28,592 - MedKG-RAG - INFO - [133] QueryAnalyzer done. rewritten_query='What are the short and long term effects of surgical intervention and its complexity for women with ovarian cysts?'
+2026-06-23 00:02:28,592 - MedKG-RAG - INFO - [133] Embedding query
+2026-06-23 00:02:28,724 - MedKG-RAG - INFO - [133] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:02:30,418 - MedKG-RAG - INFO - [133] Vector search returned 40 parent results
+2026-06-23 00:02:30,418 - MedKG-RAG - INFO - [133] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:02:30,578 - MedKG-RAG - INFO - [133] BM25 search returned 80 parent results
+2026-06-23 00:02:30,579 - MedKG-RAG - INFO - [133] RRF fusion starting with k=60
+2026-06-23 00:02:30,579 - MedKG-RAG - INFO - [133] RRF fusion returned 80 fused results
+2026-06-23 00:02:30,579 - MedKG-RAG - INFO - [133] Cross-encoder rerank starting
+2026-06-23 00:02:33,013 - MedKG-RAG - INFO - [133] Cross-encoder rerank returned 20 text results
+2026-06-23 00:02:33,014 - MedKG-RAG - INFO - [19/20] Evaluating Q-134: what are the symptoms and treatments for ibs?...
+2026-06-23 00:02:33,014 - MedKG-RAG - INFO - [134] QueryAnalyzer starting
+2026-06-23 00:02:33,377 - MedKG-RAG - INFO - [134] QueryAnalyzer done. rewritten_query='What are the symptoms and treatments for Irritable Bowel Syndrome?'
+2026-06-23 00:02:33,379 - MedKG-RAG - INFO - [134] Embedding query
+2026-06-23 00:02:33,500 - MedKG-RAG - INFO - [134] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:02:34,557 - MedKG-RAG - INFO - [134] Vector search returned 40 parent results
+2026-06-23 00:02:34,557 - MedKG-RAG - INFO - [134] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:02:34,626 - MedKG-RAG - INFO - [134] BM25 search returned 80 parent results
+2026-06-23 00:02:34,626 - MedKG-RAG - INFO - [134] RRF fusion starting with k=60
+2026-06-23 00:02:34,626 - MedKG-RAG - INFO - [134] RRF fusion returned 80 fused results
+2026-06-23 00:02:34,626 - MedKG-RAG - INFO - [134] Cross-encoder rerank starting
+2026-06-23 00:02:36,715 - MedKG-RAG - INFO - [134] Cross-encoder rerank returned 20 text results
+2026-06-23 00:02:36,715 - MedKG-RAG - INFO - [20/20] Evaluating Q-135: what can happen if you are prescribed thyroid meds but don't take them?...
+2026-06-23 00:02:36,715 - MedKG-RAG - INFO - [135] QueryAnalyzer starting
+2026-06-23 00:02:37,412 - MedKG-RAG - INFO - [135] QueryAnalyzer done. rewritten_query='What are the consequences of not taking prescribed thyroid medication?'
+2026-06-23 00:02:37,412 - MedKG-RAG - INFO - [135] Embedding query
+2026-06-23 00:02:37,517 - MedKG-RAG - INFO - [135] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:02:42,069 - MedKG-RAG - INFO - [135] Vector search returned 40 parent results
+2026-06-23 00:02:42,070 - MedKG-RAG - INFO - [135] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:02:42,157 - MedKG-RAG - INFO - [135] BM25 search returned 80 parent results
+2026-06-23 00:02:42,157 - MedKG-RAG - INFO - [135] RRF fusion starting with k=60
+2026-06-23 00:02:42,157 - MedKG-RAG - INFO - [135] RRF fusion returned 80 fused results
+2026-06-23 00:02:42,158 - MedKG-RAG - INFO - [135] Cross-encoder rerank starting
+2026-06-23 00:02:44,506 - MedKG-RAG - INFO - [135] Cross-encoder rerank returned 20 text results
+2026-06-23 00:02:44,558 - MedKG-RAG - INFO - Results saved → D:\workspace\Repo\medical-chatbot-assistant\results\test_results\medaesqa\retrieval\detail.jsonl  |  D:\workspace\Repo\medical-chatbot-assistant\results\test_results\medaesqa\retrieval\summary.json
+2026-06-23 00:03:40,761 - MedKG-RAG - INFO - Loaded 40 questions for MedAESQA retrieval evaluation (limit=None).
+2026-06-23 00:03:40,762 - MedKG-RAG - INFO - Runtime settings: VECTOR_TOP_K=40, KEYWORD_TOP_K=80, CHILD_FETCH_LIMIT=120, K_RRF=60, TOP_K_RRF=80, RERANK_TEXT_TOP_M=20
+2026-06-23 00:03:40,763 - MedKG-RAG - INFO - Initialising pipeline components...
+2026-06-23 00:03:40,898 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-06-23 00:03:44,596 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-06-23 00:03:44,624 - MedKG-RAG - INFO - [1/40] Evaluating Q-116: Are there ways to prevent sleep apnea or treat it naturally?...
+2026-06-23 00:03:44,626 - MedKG-RAG - INFO - [116] QueryAnalyzer starting
+2026-06-23 00:03:45,528 - MedKG-RAG - INFO - [116] QueryAnalyzer done. rewritten_query='How to prevent or treat sleep apnea naturally'
+2026-06-23 00:03:45,530 - MedKG-RAG - INFO - [116] Embedding query
+2026-06-23 00:03:46,064 - MedKG-RAG - INFO - [116] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:03:47,859 - MedKG-RAG - INFO - [116] Vector search returned 40 parent results
+2026-06-23 00:03:47,865 - MedKG-RAG - INFO - [116] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:03:48,108 - MedKG-RAG - INFO - [116] BM25 search returned 80 parent results
+2026-06-23 00:03:48,108 - MedKG-RAG - INFO - [116] RRF fusion starting with k=60
+2026-06-23 00:03:48,108 - MedKG-RAG - INFO - [116] RRF fusion returned 80 fused results
+2026-06-23 00:03:48,108 - MedKG-RAG - INFO - [116] Cross-encoder rerank starting
+2026-06-23 00:03:53,665 - MedKG-RAG - INFO - [116] Cross-encoder rerank returned 20 text results
+2026-06-23 00:03:53,666 - MedKG-RAG - INFO - [2/40] Evaluating Q-117: What will mutation in runx2 affect in the future?...
+2026-06-23 00:03:53,666 - MedKG-RAG - INFO - [117] QueryAnalyzer starting
+2026-06-23 00:03:54,247 - MedKG-RAG - INFO - [117] QueryAnalyzer done. rewritten_query='What will a mutation in the RUNX2 gene affect?'
+2026-06-23 00:03:54,247 - MedKG-RAG - INFO - [117] Embedding query
+2026-06-23 00:03:54,365 - MedKG-RAG - INFO - [117] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:03:56,246 - MedKG-RAG - INFO - [117] Vector search returned 40 parent results
+2026-06-23 00:03:56,246 - MedKG-RAG - INFO - [117] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:03:56,526 - MedKG-RAG - INFO - [117] BM25 search returned 80 parent results
+2026-06-23 00:03:56,526 - MedKG-RAG - INFO - [117] RRF fusion starting with k=60
+2026-06-23 00:03:56,527 - MedKG-RAG - INFO - [117] RRF fusion returned 80 fused results
+2026-06-23 00:03:56,527 - MedKG-RAG - INFO - [117] Cross-encoder rerank starting
+2026-06-23 00:04:22,640 - MedKG-RAG - INFO - [117] Cross-encoder rerank returned 20 text results
+2026-06-23 00:04:22,641 - MedKG-RAG - INFO - [3/40] Evaluating Q-118: how long does a minor cornea injury take to heal without medical attention?...
+2026-06-23 00:04:22,641 - MedKG-RAG - INFO - [118] QueryAnalyzer starting
+2026-06-23 00:04:23,290 - MedKG-RAG - INFO - [118] QueryAnalyzer done. rewritten_query='corneal injury healing time without treatment'
+2026-06-23 00:04:23,291 - MedKG-RAG - INFO - [118] Embedding query
+2026-06-23 00:04:23,386 - MedKG-RAG - INFO - [118] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:04:24,718 - MedKG-RAG - INFO - [118] Vector search returned 40 parent results
+2026-06-23 00:04:24,719 - MedKG-RAG - INFO - [118] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:04:25,274 - MedKG-RAG - INFO - [118] BM25 search returned 80 parent results
+2026-06-23 00:04:25,275 - MedKG-RAG - INFO - [118] RRF fusion starting with k=60
+2026-06-23 00:04:25,276 - MedKG-RAG - INFO - [118] RRF fusion returned 80 fused results
+2026-06-23 00:04:25,276 - MedKG-RAG - INFO - [118] Cross-encoder rerank starting
+2026-06-23 00:04:27,593 - MedKG-RAG - INFO - [118] Cross-encoder rerank returned 20 text results
+2026-06-23 00:04:27,597 - MedKG-RAG - INFO - [4/40] Evaluating Q-119: what drug or combination of drugs is most popular for treating stage 4 copd?...
+2026-06-23 00:04:27,599 - MedKG-RAG - INFO - [119] QueryAnalyzer starting
+2026-06-23 00:04:28,035 - MedKG-RAG - INFO - [119] QueryAnalyzer done. rewritten_query='What are the most commonly used medications for stage 4 chronic obstructive pulmonary disease?'
+2026-06-23 00:04:28,035 - MedKG-RAG - INFO - [119] Embedding query
+2026-06-23 00:04:28,135 - MedKG-RAG - INFO - [119] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:04:29,412 - MedKG-RAG - INFO - [119] Vector search returned 40 parent results
+2026-06-23 00:04:29,413 - MedKG-RAG - INFO - [119] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:04:30,070 - MedKG-RAG - INFO - [119] BM25 search returned 80 parent results
+2026-06-23 00:04:30,070 - MedKG-RAG - INFO - [119] RRF fusion starting with k=60
+2026-06-23 00:04:30,072 - MedKG-RAG - INFO - [119] RRF fusion returned 80 fused results
+2026-06-23 00:04:30,072 - MedKG-RAG - INFO - [119] Cross-encoder rerank starting
+2026-06-23 00:04:32,586 - MedKG-RAG - INFO - [119] Cross-encoder rerank returned 20 text results
+2026-06-23 00:04:32,588 - MedKG-RAG - INFO - [5/40] Evaluating Q-120: what causes left sided facial numbness?...
+2026-06-23 00:04:32,588 - MedKG-RAG - INFO - [120] QueryAnalyzer starting
+2026-06-23 00:04:33,047 - MedKG-RAG - INFO - [120] QueryAnalyzer done. rewritten_query='What causes left-sided facial numbness?'
+2026-06-23 00:04:33,047 - MedKG-RAG - INFO - [120] Embedding query
+2026-06-23 00:04:33,143 - MedKG-RAG - INFO - [120] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:04:34,710 - MedKG-RAG - INFO - [120] Vector search returned 40 parent results
+2026-06-23 00:04:34,710 - MedKG-RAG - INFO - [120] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:04:34,916 - MedKG-RAG - INFO - [120] BM25 search returned 80 parent results
+2026-06-23 00:04:34,917 - MedKG-RAG - INFO - [120] RRF fusion starting with k=60
+2026-06-23 00:04:34,917 - MedKG-RAG - INFO - [120] RRF fusion returned 80 fused results
+2026-06-23 00:04:34,917 - MedKG-RAG - INFO - [120] Cross-encoder rerank starting
+2026-06-23 00:04:37,571 - MedKG-RAG - INFO - [120] Cross-encoder rerank returned 20 text results
+2026-06-23 00:04:37,571 - MedKG-RAG - INFO - [6/40] Evaluating Q-121: how can i lower my cortisol level?...
+2026-06-23 00:04:37,572 - MedKG-RAG - INFO - [121] QueryAnalyzer starting
+2026-06-23 00:04:38,107 - MedKG-RAG - INFO - [121] QueryAnalyzer done. rewritten_query='How to decrease cortisol levels'
+2026-06-23 00:04:38,108 - MedKG-RAG - INFO - [121] Embedding query
+2026-06-23 00:04:38,192 - MedKG-RAG - INFO - [121] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:04:39,312 - MedKG-RAG - INFO - [121] Vector search returned 40 parent results
+2026-06-23 00:04:39,312 - MedKG-RAG - INFO - [121] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:04:39,536 - MedKG-RAG - INFO - [121] BM25 search returned 80 parent results
+2026-06-23 00:04:39,537 - MedKG-RAG - INFO - [121] RRF fusion starting with k=60
+2026-06-23 00:04:39,537 - MedKG-RAG - INFO - [121] RRF fusion returned 80 fused results
+2026-06-23 00:04:39,537 - MedKG-RAG - INFO - [121] Cross-encoder rerank starting
+2026-06-23 00:04:42,101 - MedKG-RAG - INFO - [121] Cross-encoder rerank returned 20 text results
+2026-06-23 00:04:42,103 - MedKG-RAG - INFO - [7/40] Evaluating Q-122: what is a t wave abnormality?...
+2026-06-23 00:04:42,104 - MedKG-RAG - INFO - [122] QueryAnalyzer starting
+2026-06-23 00:04:42,606 - MedKG-RAG - INFO - [122] QueryAnalyzer done. rewritten_query='What is a T wave abnormality in an electrocardiogram?'
+2026-06-23 00:04:42,607 - MedKG-RAG - INFO - [122] Embedding query
+2026-06-23 00:04:42,738 - MedKG-RAG - INFO - [122] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:04:43,964 - MedKG-RAG - INFO - [122] Vector search returned 40 parent results
+2026-06-23 00:04:43,964 - MedKG-RAG - INFO - [122] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:04:44,044 - MedKG-RAG - INFO - [122] BM25 search returned 80 parent results
+2026-06-23 00:04:44,044 - MedKG-RAG - INFO - [122] RRF fusion starting with k=60
+2026-06-23 00:04:44,044 - MedKG-RAG - INFO - [122] RRF fusion returned 80 fused results
+2026-06-23 00:04:44,044 - MedKG-RAG - INFO - [122] Cross-encoder rerank starting
+2026-06-23 00:04:46,708 - MedKG-RAG - INFO - [122] Cross-encoder rerank returned 20 text results
+2026-06-23 00:04:46,708 - MedKG-RAG - INFO - [8/40] Evaluating Q-123: what is fbn1 mutation?...
+2026-06-23 00:04:46,708 - MedKG-RAG - INFO - [123] QueryAnalyzer starting
+2026-06-23 00:04:47,107 - MedKG-RAG - INFO - [123] QueryAnalyzer done. rewritten_query='What is FBN1 mutation?'
+2026-06-23 00:04:47,108 - MedKG-RAG - INFO - [123] Embedding query
+2026-06-23 00:04:47,200 - MedKG-RAG - INFO - [123] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:04:48,298 - MedKG-RAG - INFO - [123] Vector search returned 40 parent results
+2026-06-23 00:04:48,299 - MedKG-RAG - INFO - [123] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:04:48,429 - MedKG-RAG - INFO - [123] BM25 search returned 80 parent results
+2026-06-23 00:04:48,431 - MedKG-RAG - INFO - [123] RRF fusion starting with k=60
+2026-06-23 00:04:48,432 - MedKG-RAG - INFO - [123] RRF fusion returned 80 fused results
+2026-06-23 00:04:48,433 - MedKG-RAG - INFO - [123] Cross-encoder rerank starting
+2026-06-23 00:04:50,688 - MedKG-RAG - INFO - [123] Cross-encoder rerank returned 20 text results
+2026-06-23 00:04:50,690 - MedKG-RAG - INFO - [9/40] Evaluating Q-124: what does cad without angina mean?...
+2026-06-23 00:04:50,690 - MedKG-RAG - INFO - [124] QueryAnalyzer starting
+2026-06-23 00:04:51,136 - MedKG-RAG - INFO - [124] QueryAnalyzer done. rewritten_query='What does coronary artery disease without angina mean?'
+2026-06-23 00:04:51,137 - MedKG-RAG - INFO - [124] Embedding query
+2026-06-23 00:04:51,222 - MedKG-RAG - INFO - [124] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:04:54,378 - MedKG-RAG - INFO - [124] Vector search returned 40 parent results
+2026-06-23 00:04:54,378 - MedKG-RAG - INFO - [124] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:04:54,540 - MedKG-RAG - INFO - [124] BM25 search returned 80 parent results
+2026-06-23 00:04:54,540 - MedKG-RAG - INFO - [124] RRF fusion starting with k=60
+2026-06-23 00:04:54,540 - MedKG-RAG - INFO - [124] RRF fusion returned 80 fused results
+2026-06-23 00:04:54,540 - MedKG-RAG - INFO - [124] Cross-encoder rerank starting
+2026-06-23 00:04:57,049 - MedKG-RAG - INFO - [124] Cross-encoder rerank returned 20 text results
+2026-06-23 00:04:57,050 - MedKG-RAG - INFO - [10/40] Evaluating Q-125: what is tamsulosin used for?...
+2026-06-23 00:04:57,052 - MedKG-RAG - INFO - [125] QueryAnalyzer starting
+2026-06-23 00:04:57,682 - MedKG-RAG - INFO - [125] QueryAnalyzer done. rewritten_query='What is the use of tamsulosin?'
+2026-06-23 00:04:57,682 - MedKG-RAG - INFO - [125] Embedding query
+2026-06-23 00:04:57,780 - MedKG-RAG - INFO - [125] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:04:59,049 - MedKG-RAG - INFO - [125] Vector search returned 40 parent results
+2026-06-23 00:04:59,050 - MedKG-RAG - INFO - [125] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:04:59,248 - MedKG-RAG - INFO - [125] BM25 search returned 69 parent results
+2026-06-23 00:04:59,249 - MedKG-RAG - INFO - [125] RRF fusion starting with k=60
+2026-06-23 00:04:59,249 - MedKG-RAG - INFO - [125] RRF fusion returned 80 fused results
+2026-06-23 00:04:59,249 - MedKG-RAG - INFO - [125] Cross-encoder rerank starting
+2026-06-23 00:05:01,794 - MedKG-RAG - INFO - [125] Cross-encoder rerank returned 20 text results
+2026-06-23 00:05:01,796 - MedKG-RAG - INFO - [11/40] Evaluating Q-126: what is nondisjunction and what causes it?...
+2026-06-23 00:05:01,796 - MedKG-RAG - INFO - [126] QueryAnalyzer starting
+2026-06-23 00:05:02,542 - MedKG-RAG - INFO - [126] QueryAnalyzer done. rewritten_query='What is nondisjunction and its causes?'
+2026-06-23 00:05:02,542 - MedKG-RAG - INFO - [126] Embedding query
+2026-06-23 00:05:02,642 - MedKG-RAG - INFO - [126] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:05:04,521 - MedKG-RAG - INFO - [126] Vector search returned 40 parent results
+2026-06-23 00:05:04,522 - MedKG-RAG - INFO - [126] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:05:05,172 - MedKG-RAG - INFO - [126] BM25 search returned 80 parent results
+2026-06-23 00:05:05,173 - MedKG-RAG - INFO - [126] RRF fusion starting with k=60
+2026-06-23 00:05:05,174 - MedKG-RAG - INFO - [126] RRF fusion returned 80 fused results
+2026-06-23 00:05:05,175 - MedKG-RAG - INFO - [126] Cross-encoder rerank starting
+2026-06-23 00:05:07,651 - MedKG-RAG - INFO - [126] Cross-encoder rerank returned 20 text results
+2026-06-23 00:05:07,653 - MedKG-RAG - INFO - [12/40] Evaluating Q-127: what effects does gene therapy have on an organism?...
+2026-06-23 00:05:07,653 - MedKG-RAG - INFO - [127] QueryAnalyzer starting
+2026-06-23 00:05:08,180 - MedKG-RAG - INFO - [127] QueryAnalyzer done. rewritten_query='What are the effects of gene therapy on an organism?'
+2026-06-23 00:05:08,180 - MedKG-RAG - INFO - [127] Embedding query
+2026-06-23 00:05:08,283 - MedKG-RAG - INFO - [127] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:05:09,936 - MedKG-RAG - INFO - [127] Vector search returned 40 parent results
+2026-06-23 00:05:09,937 - MedKG-RAG - INFO - [127] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:05:10,422 - MedKG-RAG - INFO - [127] BM25 search returned 80 parent results
+2026-06-23 00:05:10,422 - MedKG-RAG - INFO - [127] RRF fusion starting with k=60
+2026-06-23 00:05:10,423 - MedKG-RAG - INFO - [127] RRF fusion returned 80 fused results
+2026-06-23 00:05:10,423 - MedKG-RAG - INFO - [127] Cross-encoder rerank starting
+2026-06-23 00:05:12,668 - MedKG-RAG - INFO - [127] Cross-encoder rerank returned 20 text results
+2026-06-23 00:05:12,670 - MedKG-RAG - INFO - [13/40] Evaluating Q-128: how does cbd effect liver enzymes?...
+2026-06-23 00:05:12,670 - MedKG-RAG - INFO - [128] QueryAnalyzer starting
+2026-06-23 00:05:13,116 - MedKG-RAG - INFO - [128] QueryAnalyzer done. rewritten_query='What is the effect of Cannabidiol on liver enzymes?'
+2026-06-23 00:05:13,118 - MedKG-RAG - INFO - [128] Embedding query
+2026-06-23 00:05:13,243 - MedKG-RAG - INFO - [128] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:05:14,804 - MedKG-RAG - INFO - [128] Vector search returned 40 parent results
+2026-06-23 00:05:14,806 - MedKG-RAG - INFO - [128] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:05:15,088 - MedKG-RAG - INFO - [128] BM25 search returned 80 parent results
+2026-06-23 00:05:15,089 - MedKG-RAG - INFO - [128] RRF fusion starting with k=60
+2026-06-23 00:05:15,090 - MedKG-RAG - INFO - [128] RRF fusion returned 80 fused results
+2026-06-23 00:05:15,091 - MedKG-RAG - INFO - [128] Cross-encoder rerank starting
+2026-06-23 00:05:17,687 - MedKG-RAG - INFO - [128] Cross-encoder rerank returned 20 text results
+2026-06-23 00:05:17,689 - MedKG-RAG - INFO - [14/40] Evaluating Q-129: what are side effects for suddenly stopping metoprolol?...
+2026-06-23 00:05:17,689 - MedKG-RAG - INFO - [129] QueryAnalyzer starting
+2026-06-23 00:05:18,160 - MedKG-RAG - INFO - [129] QueryAnalyzer done. rewritten_query='What are the side effects of abrupt metoprolol withdrawal?'
+2026-06-23 00:05:18,161 - MedKG-RAG - INFO - [129] Embedding query
+2026-06-23 00:05:18,195 - MedKG-RAG - INFO - [129] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:05:19,095 - MedKG-RAG - INFO - [129] Vector search returned 40 parent results
+2026-06-23 00:05:19,097 - MedKG-RAG - INFO - [129] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:05:19,402 - MedKG-RAG - INFO - [129] BM25 search returned 80 parent results
+2026-06-23 00:05:19,403 - MedKG-RAG - INFO - [129] RRF fusion starting with k=60
+2026-06-23 00:05:19,403 - MedKG-RAG - INFO - [129] RRF fusion returned 80 fused results
+2026-06-23 00:05:19,403 - MedKG-RAG - INFO - [129] Cross-encoder rerank starting
+2026-06-23 00:05:22,030 - MedKG-RAG - INFO - [129] Cross-encoder rerank returned 20 text results
+2026-06-23 00:05:22,031 - MedKG-RAG - INFO - [15/40] Evaluating Q-130: is pcos linked to oxidative stress?...
+2026-06-23 00:05:22,032 - MedKG-RAG - INFO - [130] QueryAnalyzer starting
+2026-06-23 00:05:22,715 - MedKG-RAG - INFO - [130] QueryAnalyzer done. rewritten_query='Is Polycystic Ovary Syndrome linked to oxidative stress?'
+2026-06-23 00:05:22,715 - MedKG-RAG - INFO - [130] Embedding query
+2026-06-23 00:05:22,744 - MedKG-RAG - INFO - [130] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:05:23,634 - MedKG-RAG - INFO - [130] Vector search returned 40 parent results
+2026-06-23 00:05:23,635 - MedKG-RAG - INFO - [130] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:05:24,012 - MedKG-RAG - INFO - [130] BM25 search returned 80 parent results
+2026-06-23 00:05:24,012 - MedKG-RAG - INFO - [130] RRF fusion starting with k=60
+2026-06-23 00:05:24,012 - MedKG-RAG - INFO - [130] RRF fusion returned 80 fused results
+2026-06-23 00:05:24,013 - MedKG-RAG - INFO - [130] Cross-encoder rerank starting
+2026-06-23 00:05:26,330 - MedKG-RAG - INFO - [130] Cross-encoder rerank returned 20 text results
+2026-06-23 00:05:26,331 - MedKG-RAG - INFO - [16/40] Evaluating Q-131: what are side effects of using formoterol?...
+2026-06-23 00:05:26,332 - MedKG-RAG - INFO - [131] QueryAnalyzer starting
+2026-06-23 00:05:26,693 - MedKG-RAG - INFO - [131] QueryAnalyzer done. rewritten_query='What are the side effects of formoterol?'
+2026-06-23 00:05:26,693 - MedKG-RAG - INFO - [131] Embedding query
+2026-06-23 00:05:26,739 - MedKG-RAG - INFO - [131] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:05:27,275 - MedKG-RAG - INFO - [131] Vector search returned 40 parent results
+2026-06-23 00:05:27,275 - MedKG-RAG - INFO - [131] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:05:27,791 - MedKG-RAG - INFO - [131] BM25 search returned 80 parent results
+2026-06-23 00:05:27,791 - MedKG-RAG - INFO - [131] RRF fusion starting with k=60
+2026-06-23 00:05:27,791 - MedKG-RAG - INFO - [131] RRF fusion returned 80 fused results
+2026-06-23 00:05:27,791 - MedKG-RAG - INFO - [131] Cross-encoder rerank starting
+2026-06-23 00:05:29,914 - MedKG-RAG - INFO - [131] Cross-encoder rerank returned 20 text results
+2026-06-23 00:05:29,915 - MedKG-RAG - INFO - [17/40] Evaluating Q-132: what is the effect of low vitamin D?...
+2026-06-23 00:05:29,916 - MedKG-RAG - INFO - [132] QueryAnalyzer starting
+2026-06-23 00:05:30,670 - MedKG-RAG - INFO - [132] QueryAnalyzer done. rewritten_query='What are the effects of vitamin D deficiency?'
+2026-06-23 00:05:30,671 - MedKG-RAG - INFO - [132] Embedding query
+2026-06-23 00:05:30,811 - MedKG-RAG - INFO - [132] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:05:31,890 - MedKG-RAG - INFO - [132] Vector search returned 40 parent results
+2026-06-23 00:05:31,890 - MedKG-RAG - INFO - [132] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:05:32,552 - MedKG-RAG - INFO - [132] BM25 search returned 80 parent results
+2026-06-23 00:05:32,553 - MedKG-RAG - INFO - [132] RRF fusion starting with k=60
+2026-06-23 00:05:32,554 - MedKG-RAG - INFO - [132] RRF fusion returned 80 fused results
+2026-06-23 00:05:32,554 - MedKG-RAG - INFO - [132] Cross-encoder rerank starting
+2026-06-23 00:05:35,170 - MedKG-RAG - INFO - [132] Cross-encoder rerank returned 20 text results
+2026-06-23 00:05:35,170 - MedKG-RAG - INFO - [18/40] Evaluating Q-133: What are the short and long term effects of surgery and its complexity for women...
+2026-06-23 00:05:35,171 - MedKG-RAG - INFO - [133] QueryAnalyzer starting
+2026-06-23 00:05:35,687 - MedKG-RAG - INFO - [133] QueryAnalyzer done. rewritten_query='What are the short and long term effects of surgical intervention and its complexity for women with ovarian cysts?'
+2026-06-23 00:05:35,687 - MedKG-RAG - INFO - [133] Embedding query
+2026-06-23 00:05:35,833 - MedKG-RAG - INFO - [133] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:05:37,253 - MedKG-RAG - INFO - [133] Vector search returned 40 parent results
+2026-06-23 00:05:37,257 - MedKG-RAG - INFO - [133] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:05:37,824 - MedKG-RAG - INFO - [133] BM25 search returned 80 parent results
+2026-06-23 00:05:37,824 - MedKG-RAG - INFO - [133] RRF fusion starting with k=60
+2026-06-23 00:05:37,825 - MedKG-RAG - INFO - [133] RRF fusion returned 80 fused results
+2026-06-23 00:05:37,825 - MedKG-RAG - INFO - [133] Cross-encoder rerank starting
+2026-06-23 00:05:40,173 - MedKG-RAG - INFO - [133] Cross-encoder rerank returned 20 text results
+2026-06-23 00:05:40,174 - MedKG-RAG - INFO - [19/40] Evaluating Q-134: what are the symptoms and treatments for ibs?...
+2026-06-23 00:05:40,175 - MedKG-RAG - INFO - [134] QueryAnalyzer starting
+2026-06-23 00:05:40,564 - MedKG-RAG - INFO - [134] QueryAnalyzer done. rewritten_query='What are the symptoms and treatments for Irritable Bowel Syndrome?'
+2026-06-23 00:05:40,566 - MedKG-RAG - INFO - [134] Embedding query
+2026-06-23 00:05:40,836 - MedKG-RAG - INFO - [134] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:05:41,814 - MedKG-RAG - INFO - [134] Vector search returned 40 parent results
+2026-06-23 00:05:41,814 - MedKG-RAG - INFO - [134] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:05:42,145 - MedKG-RAG - INFO - [134] BM25 search returned 80 parent results
+2026-06-23 00:05:42,147 - MedKG-RAG - INFO - [134] RRF fusion starting with k=60
+2026-06-23 00:05:42,153 - MedKG-RAG - INFO - [134] RRF fusion returned 80 fused results
+2026-06-23 00:05:42,153 - MedKG-RAG - INFO - [134] Cross-encoder rerank starting
+2026-06-23 00:05:44,196 - MedKG-RAG - INFO - [134] Cross-encoder rerank returned 20 text results
+2026-06-23 00:05:44,197 - MedKG-RAG - INFO - [20/40] Evaluating Q-135: what can happen if you are prescribed thyroid meds but don't take them?...
+2026-06-23 00:05:44,197 - MedKG-RAG - INFO - [135] QueryAnalyzer starting
+2026-06-23 00:05:44,802 - MedKG-RAG - INFO - [135] QueryAnalyzer done. rewritten_query='What are the consequences of not taking prescribed thyroid medication?'
+2026-06-23 00:05:44,803 - MedKG-RAG - INFO - [135] Embedding query
+2026-06-23 00:05:44,943 - MedKG-RAG - INFO - [135] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:05:45,753 - MedKG-RAG - INFO - [135] Vector search returned 40 parent results
+2026-06-23 00:05:45,754 - MedKG-RAG - INFO - [135] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:05:46,093 - MedKG-RAG - INFO - [135] BM25 search returned 80 parent results
+2026-06-23 00:05:46,093 - MedKG-RAG - INFO - [135] RRF fusion starting with k=60
+2026-06-23 00:05:46,094 - MedKG-RAG - INFO - [135] RRF fusion returned 80 fused results
+2026-06-23 00:05:46,095 - MedKG-RAG - INFO - [135] Cross-encoder rerank starting
+2026-06-23 00:05:48,410 - MedKG-RAG - INFO - [135] Cross-encoder rerank returned 20 text results
+2026-06-23 00:05:48,438 - MedKG-RAG - INFO - [21/40] Evaluating Q-136: what can be done for severe elbow pain?...
+2026-06-23 00:05:48,446 - MedKG-RAG - INFO - [136] QueryAnalyzer starting
+2026-06-23 00:05:48,848 - MedKG-RAG - INFO - [136] QueryAnalyzer done. rewritten_query='Treatment options for severe elbow pain'
+2026-06-23 00:05:48,848 - MedKG-RAG - INFO - [136] Embedding query
+2026-06-23 00:05:48,978 - MedKG-RAG - INFO - [136] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:05:58,996 - MedKG-RAG - INFO - [136] Vector search returned 40 parent results
+2026-06-23 00:05:58,998 - MedKG-RAG - INFO - [136] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:05:59,568 - MedKG-RAG - INFO - [136] BM25 search returned 80 parent results
+2026-06-23 00:05:59,569 - MedKG-RAG - INFO - [136] RRF fusion starting with k=60
+2026-06-23 00:05:59,569 - MedKG-RAG - INFO - [136] RRF fusion returned 80 fused results
+2026-06-23 00:05:59,569 - MedKG-RAG - INFO - [136] Cross-encoder rerank starting
+2026-06-23 00:06:01,862 - MedKG-RAG - INFO - [136] Cross-encoder rerank returned 20 text results
+2026-06-23 00:06:01,863 - MedKG-RAG - INFO - [22/40] Evaluating Q-137: in an adult with type 2 diabetes would metformin or ketogenic diet be the most e...
+2026-06-23 00:06:01,863 - MedKG-RAG - INFO - [137] QueryAnalyzer starting
+2026-06-23 00:06:02,500 - MedKG-RAG - INFO - [137] QueryAnalyzer done. rewritten_query='In an adult with Type 2 Diabetes, which is more effective for lowering A1C levels: Metformin or a Ketogenic Diet?'
+2026-06-23 00:06:02,509 - MedKG-RAG - INFO - [137] Embedding query
+2026-06-23 00:06:02,653 - MedKG-RAG - INFO - [137] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:06:11,716 - MedKG-RAG - INFO - [137] Vector search returned 40 parent results
+2026-06-23 00:06:11,716 - MedKG-RAG - INFO - [137] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:06:16,342 - MedKG-RAG - INFO - [137] BM25 search returned 80 parent results
+2026-06-23 00:06:16,342 - MedKG-RAG - INFO - [137] RRF fusion starting with k=60
+2026-06-23 00:06:16,344 - MedKG-RAG - INFO - [137] RRF fusion returned 80 fused results
+2026-06-23 00:06:16,344 - MedKG-RAG - INFO - [137] Cross-encoder rerank starting
+2026-06-23 00:06:19,228 - MedKG-RAG - INFO - [137] Cross-encoder rerank returned 20 text results
+2026-06-23 00:06:19,230 - MedKG-RAG - INFO - [23/40] Evaluating Q-138: can i use Sudafed after using Afrin for nasal congestion?...
+2026-06-23 00:06:19,230 - MedKG-RAG - INFO - [138] QueryAnalyzer starting
+2026-06-23 00:06:19,767 - MedKG-RAG - INFO - [138] QueryAnalyzer done. rewritten_query='Can Sudafed be used after Afrin for nasal congestion?'
+2026-06-23 00:06:19,982 - MedKG-RAG - INFO - [138] Embedding query
+2026-06-23 00:06:20,136 - MedKG-RAG - INFO - [138] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:06:27,852 - MedKG-RAG - INFO - [138] Vector search returned 40 parent results
+2026-06-23 00:06:27,852 - MedKG-RAG - INFO - [138] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:06:28,768 - MedKG-RAG - INFO - [138] BM25 search returned 80 parent results
+2026-06-23 00:06:28,772 - MedKG-RAG - INFO - [138] RRF fusion starting with k=60
+2026-06-23 00:06:28,773 - MedKG-RAG - INFO - [138] RRF fusion returned 80 fused results
+2026-06-23 00:06:28,773 - MedKG-RAG - INFO - [138] Cross-encoder rerank starting
+2026-06-23 00:06:30,979 - MedKG-RAG - INFO - [138] Cross-encoder rerank returned 20 text results
+2026-06-23 00:06:30,980 - MedKG-RAG - INFO - [24/40] Evaluating Q-139: what are possible long-term outcomes of not treating anorexia?...
+2026-06-23 00:06:30,980 - MedKG-RAG - INFO - [139] QueryAnalyzer starting
+2026-06-23 00:06:31,531 - MedKG-RAG - INFO - [139] QueryAnalyzer done. rewritten_query='What are the long-term consequences of not treating anorexia nervosa?'
+2026-06-23 00:06:31,533 - MedKG-RAG - INFO - [139] Embedding query
+2026-06-23 00:06:31,677 - MedKG-RAG - INFO - [139] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:06:40,964 - MedKG-RAG - INFO - [139] Vector search returned 40 parent results
+2026-06-23 00:06:40,965 - MedKG-RAG - INFO - [139] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:06:41,170 - MedKG-RAG - INFO - [139] BM25 search returned 80 parent results
+2026-06-23 00:06:41,170 - MedKG-RAG - INFO - [139] RRF fusion starting with k=60
+2026-06-23 00:06:41,171 - MedKG-RAG - INFO - [139] RRF fusion returned 80 fused results
+2026-06-23 00:06:41,171 - MedKG-RAG - INFO - [139] Cross-encoder rerank starting
+2026-06-23 00:06:43,570 - MedKG-RAG - INFO - [139] Cross-encoder rerank returned 20 text results
+2026-06-23 00:06:43,572 - MedKG-RAG - INFO - [25/40] Evaluating Q-140: what can cause acute fractures in both of your hands when there hasn’t been inju...
+2026-06-23 00:06:43,577 - MedKG-RAG - INFO - [140] QueryAnalyzer starting
+2026-06-23 00:06:44,157 - MedKG-RAG - INFO - [140] QueryAnalyzer done. rewritten_query='What can cause acute fractures in both hands without injury or trauma?'
+2026-06-23 00:06:44,158 - MedKG-RAG - INFO - [140] Embedding query
+2026-06-23 00:06:44,193 - MedKG-RAG - INFO - [140] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:06:52,240 - MedKG-RAG - INFO - [140] Vector search returned 40 parent results
+2026-06-23 00:06:52,240 - MedKG-RAG - INFO - [140] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:06:52,671 - MedKG-RAG - INFO - [140] BM25 search returned 80 parent results
+2026-06-23 00:06:52,672 - MedKG-RAG - INFO - [140] RRF fusion starting with k=60
+2026-06-23 00:06:52,672 - MedKG-RAG - INFO - [140] RRF fusion returned 80 fused results
+2026-06-23 00:06:52,673 - MedKG-RAG - INFO - [140] Cross-encoder rerank starting
+2026-06-23 00:06:54,881 - MedKG-RAG - INFO - [140] Cross-encoder rerank returned 20 text results
+2026-06-23 00:06:54,882 - MedKG-RAG - INFO - [26/40] Evaluating Q-141: what are the possible complications for a person that has yellow fever?...
+2026-06-23 00:06:54,882 - MedKG-RAG - INFO - [141] QueryAnalyzer starting
+2026-06-23 00:06:55,317 - MedKG-RAG - INFO - [141] QueryAnalyzer done. rewritten_query='What are the possible complications of yellow fever?'
+2026-06-23 00:06:55,317 - MedKG-RAG - INFO - [141] Embedding query
+2026-06-23 00:06:55,347 - MedKG-RAG - INFO - [141] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:07:02,629 - MedKG-RAG - INFO - [141] Vector search returned 40 parent results
+2026-06-23 00:07:02,629 - MedKG-RAG - INFO - [141] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:07:02,752 - MedKG-RAG - INFO - [141] BM25 search returned 79 parent results
+2026-06-23 00:07:02,753 - MedKG-RAG - INFO - [141] RRF fusion starting with k=60
+2026-06-23 00:07:02,753 - MedKG-RAG - INFO - [141] RRF fusion returned 80 fused results
+2026-06-23 00:07:02,753 - MedKG-RAG - INFO - [141] Cross-encoder rerank starting
+2026-06-23 00:07:04,769 - MedKG-RAG - INFO - [141] Cross-encoder rerank returned 20 text results
+2026-06-23 00:07:04,770 - MedKG-RAG - INFO - [27/40] Evaluating Q-142: what medication has a drug interaction with high blood pressure?...
+2026-06-23 00:07:04,770 - MedKG-RAG - INFO - [142] QueryAnalyzer starting
+2026-06-23 00:07:05,191 - MedKG-RAG - INFO - [142] QueryAnalyzer done. rewritten_query='What medications have a drug interaction with hypertension?'
+2026-06-23 00:07:05,192 - MedKG-RAG - INFO - [142] Embedding query
+2026-06-23 00:07:05,249 - MedKG-RAG - INFO - [142] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:07:11,036 - MedKG-RAG - INFO - [142] Vector search returned 40 parent results
+2026-06-23 00:07:11,036 - MedKG-RAG - INFO - [142] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:07:11,441 - MedKG-RAG - INFO - [142] BM25 search returned 80 parent results
+2026-06-23 00:07:11,442 - MedKG-RAG - INFO - [142] RRF fusion starting with k=60
+2026-06-23 00:07:11,443 - MedKG-RAG - INFO - [142] RRF fusion returned 80 fused results
+2026-06-23 00:07:11,443 - MedKG-RAG - INFO - [142] Cross-encoder rerank starting
+2026-06-23 00:07:13,826 - MedKG-RAG - INFO - [142] Cross-encoder rerank returned 20 text results
+2026-06-23 00:07:13,827 - MedKG-RAG - INFO - [28/40] Evaluating Q-143: how to live with huntington's disease?...
+2026-06-23 00:07:13,827 - MedKG-RAG - INFO - [143] QueryAnalyzer starting
+2026-06-23 00:07:14,270 - MedKG-RAG - INFO - [143] QueryAnalyzer done. rewritten_query="Living with Huntington's disease"
+2026-06-23 00:07:14,271 - MedKG-RAG - INFO - [143] Embedding query
+2026-06-23 00:07:14,355 - MedKG-RAG - INFO - [143] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:07:19,877 - MedKG-RAG - INFO - [143] Vector search returned 40 parent results
+2026-06-23 00:07:19,877 - MedKG-RAG - INFO - [143] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:07:20,260 - MedKG-RAG - INFO - [143] BM25 search returned 80 parent results
+2026-06-23 00:07:20,260 - MedKG-RAG - INFO - [143] RRF fusion starting with k=60
+2026-06-23 00:07:20,260 - MedKG-RAG - INFO - [143] RRF fusion returned 80 fused results
+2026-06-23 00:07:20,260 - MedKG-RAG - INFO - [143] Cross-encoder rerank starting
+2026-06-23 00:07:22,164 - MedKG-RAG - INFO - [143] Cross-encoder rerank returned 20 text results
+2026-06-23 00:07:22,164 - MedKG-RAG - INFO - [29/40] Evaluating Q-144: when should i treat high blood pressure?...
+2026-06-23 00:07:22,165 - MedKG-RAG - INFO - [144] QueryAnalyzer starting
+2026-06-23 00:07:22,641 - MedKG-RAG - INFO - [144] QueryAnalyzer done. rewritten_query='When to treat hypertension'
+2026-06-23 00:07:22,642 - MedKG-RAG - INFO - [144] Embedding query
+2026-06-23 00:07:22,666 - MedKG-RAG - INFO - [144] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:07:26,238 - MedKG-RAG - INFO - [144] Vector search returned 40 parent results
+2026-06-23 00:07:26,238 - MedKG-RAG - INFO - [144] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:07:26,376 - MedKG-RAG - INFO - [144] BM25 search returned 80 parent results
+2026-06-23 00:07:26,376 - MedKG-RAG - INFO - [144] RRF fusion starting with k=60
+2026-06-23 00:07:26,376 - MedKG-RAG - INFO - [144] RRF fusion returned 80 fused results
+2026-06-23 00:07:26,376 - MedKG-RAG - INFO - [144] Cross-encoder rerank starting
+2026-06-23 00:07:28,693 - MedKG-RAG - INFO - [144] Cross-encoder rerank returned 20 text results
+2026-06-23 00:07:28,694 - MedKG-RAG - INFO - [30/40] Evaluating Q-145: What are the side effects of opdivo treatment for melanoma?...
+2026-06-23 00:07:28,694 - MedKG-RAG - INFO - [145] QueryAnalyzer starting
+2026-06-23 00:07:29,279 - MedKG-RAG - INFO - [145] QueryAnalyzer done. rewritten_query='What are the side effects of Nivolumab treatment for Melanoma?'
+2026-06-23 00:07:29,279 - MedKG-RAG - INFO - [145] Embedding query
+2026-06-23 00:07:29,309 - MedKG-RAG - INFO - [145] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:07:33,970 - MedKG-RAG - INFO - [145] Vector search returned 40 parent results
+2026-06-23 00:07:33,970 - MedKG-RAG - INFO - [145] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:07:34,185 - MedKG-RAG - INFO - [145] BM25 search returned 80 parent results
+2026-06-23 00:07:34,185 - MedKG-RAG - INFO - [145] RRF fusion starting with k=60
+2026-06-23 00:07:34,186 - MedKG-RAG - INFO - [145] RRF fusion returned 80 fused results
+2026-06-23 00:07:34,186 - MedKG-RAG - INFO - [145] Cross-encoder rerank starting
+2026-06-23 00:07:36,496 - MedKG-RAG - INFO - [145] Cross-encoder rerank returned 20 text results
+2026-06-23 00:07:36,496 - MedKG-RAG - INFO - [31/40] Evaluating Q-146: how can ptsd be treated/managed?...
+2026-06-23 00:07:36,496 - MedKG-RAG - INFO - [146] QueryAnalyzer starting
+2026-06-23 00:07:36,962 - MedKG-RAG - INFO - [146] QueryAnalyzer done. rewritten_query='What are the treatments and management options for Post-Traumatic Stress Disorder?'
+2026-06-23 00:07:36,962 - MedKG-RAG - INFO - [146] Embedding query
+2026-06-23 00:07:37,073 - MedKG-RAG - INFO - [146] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:07:42,228 - MedKG-RAG - INFO - [146] Vector search returned 40 parent results
+2026-06-23 00:07:42,228 - MedKG-RAG - INFO - [146] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:07:42,530 - MedKG-RAG - INFO - [146] BM25 search returned 80 parent results
+2026-06-23 00:07:42,530 - MedKG-RAG - INFO - [146] RRF fusion starting with k=60
+2026-06-23 00:07:42,531 - MedKG-RAG - INFO - [146] RRF fusion returned 80 fused results
+2026-06-23 00:07:42,531 - MedKG-RAG - INFO - [146] Cross-encoder rerank starting
+2026-06-23 00:07:44,699 - MedKG-RAG - INFO - [146] Cross-encoder rerank returned 20 text results
+2026-06-23 00:07:44,700 - MedKG-RAG - INFO - [32/40] Evaluating Q-147: what treatments options are available for atherosclerosis?...
+2026-06-23 00:07:44,700 - MedKG-RAG - INFO - [147] QueryAnalyzer starting
+2026-06-23 00:07:45,284 - MedKG-RAG - INFO - [147] QueryAnalyzer done. rewritten_query='What are the treatment options for atherosclerosis?'
+2026-06-23 00:07:45,284 - MedKG-RAG - INFO - [147] Embedding query
+2026-06-23 00:07:45,314 - MedKG-RAG - INFO - [147] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:07:52,131 - MedKG-RAG - INFO - [147] Vector search returned 40 parent results
+2026-06-23 00:07:52,131 - MedKG-RAG - INFO - [147] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:07:52,306 - MedKG-RAG - INFO - [147] BM25 search returned 80 parent results
+2026-06-23 00:07:52,308 - MedKG-RAG - INFO - [147] RRF fusion starting with k=60
+2026-06-23 00:07:52,309 - MedKG-RAG - INFO - [147] RRF fusion returned 80 fused results
+2026-06-23 00:07:52,309 - MedKG-RAG - INFO - [147] Cross-encoder rerank starting
+2026-06-23 00:07:54,305 - MedKG-RAG - INFO - [147] Cross-encoder rerank returned 20 text results
+2026-06-23 00:07:54,306 - MedKG-RAG - INFO - [33/40] Evaluating Q-148: why do i bruise so easily?...
+2026-06-23 00:07:54,307 - MedKG-RAG - INFO - [148] QueryAnalyzer starting
+2026-06-23 00:07:54,692 - MedKG-RAG - INFO - [148] QueryAnalyzer done. rewritten_query='What causes easy bruising?'
+2026-06-23 00:07:54,692 - MedKG-RAG - INFO - [148] Embedding query
+2026-06-23 00:07:54,731 - MedKG-RAG - INFO - [148] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:08:00,544 - MedKG-RAG - INFO - [148] Vector search returned 40 parent results
+2026-06-23 00:08:00,544 - MedKG-RAG - INFO - [148] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:08:00,619 - MedKG-RAG - INFO - [148] BM25 search returned 80 parent results
+2026-06-23 00:08:00,619 - MedKG-RAG - INFO - [148] RRF fusion starting with k=60
+2026-06-23 00:08:00,620 - MedKG-RAG - INFO - [148] RRF fusion returned 80 fused results
+2026-06-23 00:08:00,620 - MedKG-RAG - INFO - [148] Cross-encoder rerank starting
+2026-06-23 00:08:02,823 - MedKG-RAG - INFO - [148] Cross-encoder rerank returned 20 text results
+2026-06-23 00:08:02,824 - MedKG-RAG - INFO - [34/40] Evaluating Q-149: what is the best test to rule out a lumbar disc herniation?...
+2026-06-23 00:08:02,824 - MedKG-RAG - INFO - [149] QueryAnalyzer starting
+2026-06-23 00:08:03,731 - MedKG-RAG - INFO - [149] QueryAnalyzer done. rewritten_query='What is the best diagnostic test for ruling out lumbar disc herniation?'
+2026-06-23 00:08:03,731 - MedKG-RAG - INFO - [149] Embedding query
+2026-06-23 00:08:03,763 - MedKG-RAG - INFO - [149] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:08:08,970 - MedKG-RAG - INFO - [149] Vector search returned 40 parent results
+2026-06-23 00:08:08,971 - MedKG-RAG - INFO - [149] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:08:09,353 - MedKG-RAG - INFO - [149] BM25 search returned 80 parent results
+2026-06-23 00:08:09,354 - MedKG-RAG - INFO - [149] RRF fusion starting with k=60
+2026-06-23 00:08:09,354 - MedKG-RAG - INFO - [149] RRF fusion returned 80 fused results
+2026-06-23 00:08:09,354 - MedKG-RAG - INFO - [149] Cross-encoder rerank starting
+2026-06-23 00:08:11,703 - MedKG-RAG - INFO - [149] Cross-encoder rerank returned 20 text results
+2026-06-23 00:08:11,703 - MedKG-RAG - INFO - [35/40] Evaluating Q-150: what are the effectiveness of physical therapy interventions in reducing pain in...
+2026-06-23 00:08:11,703 - MedKG-RAG - INFO - [150] QueryAnalyzer starting
+2026-06-23 00:08:12,566 - MedKG-RAG - INFO - [150] QueryAnalyzer done. rewritten_query='Effectiveness of physical therapy in reducing pain in lumbar disc herniation patients'
+2026-06-23 00:08:12,567 - MedKG-RAG - INFO - [150] Embedding query
+2026-06-23 00:08:12,610 - MedKG-RAG - INFO - [150] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:08:14,277 - MedKG-RAG - INFO - [150] Vector search returned 40 parent results
+2026-06-23 00:08:14,277 - MedKG-RAG - INFO - [150] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:08:15,167 - MedKG-RAG - INFO - [150] BM25 search returned 80 parent results
+2026-06-23 00:08:15,167 - MedKG-RAG - INFO - [150] RRF fusion starting with k=60
+2026-06-23 00:08:15,168 - MedKG-RAG - INFO - [150] RRF fusion returned 80 fused results
+2026-06-23 00:08:15,168 - MedKG-RAG - INFO - [150] Cross-encoder rerank starting
+2026-06-23 00:08:17,317 - MedKG-RAG - INFO - [150] Cross-encoder rerank returned 20 text results
+2026-06-23 00:08:17,318 - MedKG-RAG - INFO - [36/40] Evaluating Q-151: what has turned my skin gray and scaly?...
+2026-06-23 00:08:17,318 - MedKG-RAG - INFO - [151] QueryAnalyzer starting
+2026-06-23 00:08:17,788 - MedKG-RAG - INFO - [151] QueryAnalyzer done. rewritten_query='What causes gray and scaly skin?'
+2026-06-23 00:08:17,790 - MedKG-RAG - INFO - [151] Embedding query
+2026-06-23 00:08:17,817 - MedKG-RAG - INFO - [151] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:08:22,261 - MedKG-RAG - INFO - [151] Vector search returned 40 parent results
+2026-06-23 00:08:22,262 - MedKG-RAG - INFO - [151] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:08:22,383 - MedKG-RAG - INFO - [151] BM25 search returned 80 parent results
+2026-06-23 00:08:22,383 - MedKG-RAG - INFO - [151] RRF fusion starting with k=60
+2026-06-23 00:08:22,383 - MedKG-RAG - INFO - [151] RRF fusion returned 80 fused results
+2026-06-23 00:08:22,384 - MedKG-RAG - INFO - [151] Cross-encoder rerank starting
+2026-06-23 00:08:24,402 - MedKG-RAG - INFO - [151] Cross-encoder rerank returned 20 text results
+2026-06-23 00:08:24,402 - MedKG-RAG - INFO - [37/40] Evaluating Q-152: is it possible to quit taking amlodipine after taking for many years?...
+2026-06-23 00:08:24,402 - MedKG-RAG - INFO - [152] QueryAnalyzer starting
+2026-06-23 00:08:24,971 - MedKG-RAG - INFO - [152] QueryAnalyzer done. rewritten_query='Can amlodipine be discontinued after long-term use?'
+2026-06-23 00:08:24,971 - MedKG-RAG - INFO - [152] Embedding query
+2026-06-23 00:08:24,997 - MedKG-RAG - INFO - [152] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:08:26,951 - MedKG-RAG - INFO - [152] Vector search returned 40 parent results
+2026-06-23 00:08:26,951 - MedKG-RAG - INFO - [152] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:08:27,268 - MedKG-RAG - INFO - [152] BM25 search returned 80 parent results
+2026-06-23 00:08:27,269 - MedKG-RAG - INFO - [152] RRF fusion starting with k=60
+2026-06-23 00:08:27,269 - MedKG-RAG - INFO - [152] RRF fusion returned 80 fused results
+2026-06-23 00:08:27,269 - MedKG-RAG - INFO - [152] Cross-encoder rerank starting
+2026-06-23 00:08:29,637 - MedKG-RAG - INFO - [152] Cross-encoder rerank returned 20 text results
+2026-06-23 00:08:29,639 - MedKG-RAG - INFO - [38/40] Evaluating Q-153: if hct is 34, does pt need blood transfusion?...
+2026-06-23 00:08:29,639 - MedKG-RAG - INFO - [153] QueryAnalyzer starting
+2026-06-23 00:08:30,141 - MedKG-RAG - INFO - [153] QueryAnalyzer done. rewritten_query='Is a hematocrit of 34 an indication for blood transfusion?'
+2026-06-23 00:08:30,141 - MedKG-RAG - INFO - [153] Embedding query
+2026-06-23 00:08:30,176 - MedKG-RAG - INFO - [153] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:08:36,352 - MedKG-RAG - INFO - [153] Vector search returned 40 parent results
+2026-06-23 00:08:36,352 - MedKG-RAG - INFO - [153] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:08:36,448 - MedKG-RAG - INFO - [153] BM25 search returned 80 parent results
+2026-06-23 00:08:36,448 - MedKG-RAG - INFO - [153] RRF fusion starting with k=60
+2026-06-23 00:08:36,449 - MedKG-RAG - INFO - [153] RRF fusion returned 80 fused results
+2026-06-23 00:08:36,449 - MedKG-RAG - INFO - [153] Cross-encoder rerank starting
+2026-06-23 00:08:38,766 - MedKG-RAG - INFO - [153] Cross-encoder rerank returned 20 text results
+2026-06-23 00:08:38,767 - MedKG-RAG - INFO - [39/40] Evaluating Q-154: how to breathe when you are short of breath?...
+2026-06-23 00:08:38,767 - MedKG-RAG - INFO - [154] QueryAnalyzer starting
+2026-06-23 00:08:39,314 - MedKG-RAG - INFO - [154] QueryAnalyzer done. rewritten_query='Management of dyspnea'
+2026-06-23 00:08:39,315 - MedKG-RAG - INFO - [154] Embedding query
+2026-06-23 00:08:39,383 - MedKG-RAG - INFO - [154] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:08:43,434 - MedKG-RAG - INFO - [154] Vector search returned 40 parent results
+2026-06-23 00:08:43,434 - MedKG-RAG - INFO - [154] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:08:43,493 - MedKG-RAG - INFO - [154] BM25 search returned 78 parent results
+2026-06-23 00:08:43,493 - MedKG-RAG - INFO - [154] RRF fusion starting with k=60
+2026-06-23 00:08:43,493 - MedKG-RAG - INFO - [154] RRF fusion returned 80 fused results
+2026-06-23 00:08:43,494 - MedKG-RAG - INFO - [154] Cross-encoder rerank starting
+2026-06-23 00:08:45,724 - MedKG-RAG - INFO - [154] Cross-encoder rerank returned 20 text results
+2026-06-23 00:08:45,725 - MedKG-RAG - INFO - [40/40] Evaluating Q-155: for how long after cataract surgery do i keep dropping eye drops?...
+2026-06-23 00:08:45,725 - MedKG-RAG - INFO - [155] QueryAnalyzer starting
+2026-06-23 00:08:46,227 - MedKG-RAG - INFO - [155] QueryAnalyzer done. rewritten_query='What is the duration of post-cataract surgery eye drop use?'
+2026-06-23 00:08:46,227 - MedKG-RAG - INFO - [155] Embedding query
+2026-06-23 00:08:46,280 - MedKG-RAG - INFO - [155] Vector search starting with top_k=40, child_fetch_limit=120
+2026-06-23 00:08:50,110 - MedKG-RAG - INFO - [155] Vector search returned 40 parent results
+2026-06-23 00:08:50,111 - MedKG-RAG - INFO - [155] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-06-23 00:08:50,333 - MedKG-RAG - INFO - [155] BM25 search returned 80 parent results
+2026-06-23 00:08:50,333 - MedKG-RAG - INFO - [155] RRF fusion starting with k=60
+2026-06-23 00:08:50,334 - MedKG-RAG - INFO - [155] RRF fusion returned 80 fused results
+2026-06-23 00:08:50,334 - MedKG-RAG - INFO - [155] Cross-encoder rerank starting
+2026-06-23 00:08:52,704 - MedKG-RAG - INFO - [155] Cross-encoder rerank returned 20 text results
+2026-06-23 00:08:52,720 - MedKG-RAG - INFO - Results saved → D:\workspace\Repo\medical-chatbot-assistant\results\test_results\medaesqa\retrieval\detail.jsonl  |  D:\workspace\Repo\medical-chatbot-assistant\results\test_results\medaesqa\retrieval\summary.json
