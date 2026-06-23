@@ -7,6 +7,12 @@ MedAESQA is used as a secondary citation benchmark. The metric set is:
 RAGAS is intentionally omitted: it is expensive and redundant given that
 BioASQ is the primary evaluation dataset and MedAESQA's unique contribution
 is citation attribution quality.
+
+ROUGE note: MedAESQA gold answers embed inline PMID citations such as
+[28646811, 33659106] directly within the reference text. These brackets are
+stripped from gold references before ROUGE-SU4 computation so that lexical
+overlap reflects content quality, not citation-format differences.
+The raw (unstripped) gold answer is preserved in the detail output.
 """
 
 import argparse
@@ -39,6 +45,22 @@ def extract_pmids_from_text(text: str) -> Set[str]:
             if cleaned:
                 pmids.add(cleaned)
     return pmids
+
+
+def strip_pmid_brackets(text: str) -> str:
+    """Remove inline PMID citation brackets from text before ROUGE computation.
+
+    MedAESQA gold answers embed citations like [28646811, 33659106] directly
+    in the reference text. Stripping them ensures ROUGE-SU4 measures content
+    overlap rather than citation-format differences.
+
+    Example:
+        Input:  "Weight loss reduces apnea [33659106, 12693795]."
+        Output: "Weight loss reduces apnea."
+    """
+    cleaned = PMID_GROUP_PATTERN.sub("", text or "")
+    # Collapse any double spaces left after removal
+    return re.sub(r" {2,}", " ", cleaned).strip()
 
 
 def compute_citation_metrics(
@@ -172,11 +194,25 @@ def evaluate_split(
                     sources = result.get("sources", [])
                     question_type = result.get("question_type", "unknown")
 
-                    # Strip preamble before ROUGE (same logic as BioASQ eval)
-                    answer_for_rouge = bioasq_common.strip_preamble(generated_answer)
+                    # Strip preamble then PMID brackets from model answer before ROUGE.
+                    # ROUGE measures content quality, not citation format:
+                    #   - strip_preamble: removes LLM openers ("Based on the context...")
+                    #   - strip_pmid_brackets: removes [PMID: 12345] tokens that add
+                    #     noise to lexical overlap without reflecting answer quality.
+                    # The raw generated_answer (with citations) is preserved for
+                    # citation_* metrics, which measure attribution behaviour separately.
+                    answer_for_rouge = strip_pmid_brackets(
+                        bioasq_common.strip_preamble(generated_answer)
+                    )
+
+                    # Strip inline PMID brackets from gold references before ROUGE.
+                    # MedAESQA gold answers embed [28646811, 33659106] in the text;
+                    # removing them gives a fair content-only comparison on both sides.
+                    gold_answers_for_rouge = [strip_pmid_brackets(ref) for ref in gold_answers]
+
                     generation_metrics = bioasq_common.compute_rouge_su4_multi_ref(
                         prediction=answer_for_rouge,
-                        references=gold_answers,
+                        references=gold_answers_for_rouge,
                     )
                     all_generation_metrics.append(generation_metrics)
 
@@ -207,6 +243,7 @@ def evaluate_split(
                         "generated_answer": generated_answer,
                         "answer_for_rouge": answer_for_rouge,
                         "ideal_answer": gold_answers,
+                        "ideal_answer_for_rouge": gold_answers_for_rouge,
                         "gold_pmids": sorted(gold_pmids),
                         "retrieved_sources": bioasq_common._summarize_sources(sources),
                         "generation_metrics": generation_metrics,
