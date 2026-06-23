@@ -1,17 +1,17 @@
 {
   "config": {
     "data_file": "D:\\workspace\\Repo\\medical-chatbot-assistant\\data\\test\\test_medaesqa.jsonl",
-    "total_questions": 40,
-    "evaluated_questions": 40,
+    "total_questions": 15,
+    "evaluated_questions": 15,
     "failed_questions": 0,
-    "timestamp": "2026-06-23T22:49:09",
-    "split_name": "test",
-    "limit": null,
+    "timestamp": "2026-06-23T20:43:04",
+    "split_name": "tune_ofat_15_kg_top_k_4",
+    "limit": 15,
     "requested_ragas": false,
     "ragas_evaluator_llm_model": "gpt-4o-mini",
     "ragas_evaluator_embedding_model": "text-embedding-3-small",
-    "kg_top_k": 2,
-    "kg_hop1_m": 5,
+    "kg_top_k": 4,
+    "kg_hop1_m": 3,
     "kg_hop2_n": 3,
     "kg_hop2_cap": 30,
     "rerank_kg_top_n": 10,
@@ -22,13 +22,13 @@
     "use_citations": true
   },
   "generation_metrics": {
-    "ROUGE-SU4-Precision": 0.1045,
-    "ROUGE-SU4-Recall": 0.1314,
-    "ROUGE-SU4-F1": 0.1039
+    "ROUGE-SU4-Precision": 0.1318,
+    "ROUGE-SU4-Recall": 0.1272,
+    "ROUGE-SU4-F1": 0.1092
   },
   "citation_metrics": {
-    "Citation-Precision": 0.4293,
-    "Citation-Recall": 0.6755,
-    "Citation-F1": 0.4991
+    "Citation-Precision": 0.489,
+    "Citation-Recall": 0.7743,
+    "Citation-F1": 0.5683
   }
 }

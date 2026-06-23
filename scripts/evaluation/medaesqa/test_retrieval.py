@@ -258,6 +258,9 @@ def _print_summary(summary: Dict[str, Any]) -> None:
 
 if __name__ == "__main__":
     setup_logging()
+    from scripts.evaluation.shared.config_helper import load_and_apply_config
+    load_and_apply_config("medaesqa", "retrieval")
+    
     parser = build_arg_parser(
         "Evaluate text retrieval on the MedAESQA test set "
         "(PMID-level Precision, Recall, F1)."

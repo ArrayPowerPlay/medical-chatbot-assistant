@@ -1,0 +1,12 @@
+{
+  "generation_temperature": 0.0,
+  "generation_max_tokens": 2048,
+  "use_kg_merger": true,
+  "use_head_tail_placement": true,
+  "use_citations": false,
+  "kg_top_k": 2,
+  "kg_hop1_m": 5,
+  "kg_hop2_n": 3,
+  "kg_hop2_cap": 30,
+  "rerank_kg_top_n": 10
+}

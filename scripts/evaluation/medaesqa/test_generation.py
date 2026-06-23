@@ -103,6 +103,9 @@ def build_arg_parser() -> argparse.ArgumentParser:
 
 if __name__ == "__main__":
     setup_logging()
+    from scripts.evaluation.shared.config_helper import load_and_apply_config
+    load_and_apply_config("medaesqa", "generation")
+    
     parser = build_arg_parser()
     args = parser.parse_args()
     evaluate(

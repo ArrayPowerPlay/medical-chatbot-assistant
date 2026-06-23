@@ -261,3 +261,4 @@ if __name__ == "__main__":
     pipeline = RAGPipeline()
     args = build_parser().parse_args()
     result = pipeline.run(query = args.question, history=None)
+    print(result["rewritten_query"])
