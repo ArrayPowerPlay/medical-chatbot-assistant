@@ -22,7 +22,7 @@ def load_and_apply_config(dataset_name: str, config_type: str) -> dict:
     """
     project_root = Path(__file__).resolve().parent.parent.parent.parent
     config_filename = f"{dataset_name.lower()}_{config_type.lower()}.json"
-    config_path = project_root / "config" / config_filename
+    config_path = project_root / "config" / "hyperparameters" / config_filename
     
     if not config_path.exists():
         logger.info(f"No specific config file found at {config_path}. Using settings defaults.")
