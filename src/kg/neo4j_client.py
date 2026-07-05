@@ -32,12 +32,13 @@ Design — two distinct vectors at inference
 """
 
 import numpy as np
-from neo4j import GraphDatabase
+from neo4j import AsyncGraphDatabase
 from config.logging_config import logger
 from config.settings import settings
 from src.kg.schema import INTENT_EDGE_FILTER
 from collections import defaultdict
 from typing import Any
+from src.interfaces.kg import IKGSearcher
 
 
 def _cosine_sim(a: list[float], b: list[float]) -> float:
@@ -48,35 +49,34 @@ def _cosine_sim(a: list[float], b: list[float]) -> float:
     return float(np.dot(v_a, v_b) / norm_mul) if norm_mul > 0 else 0.0
 
 
-class Neo4jClient:
-    """Manages a Neo4j driver connection and exposes the 2-stage MedCPT
-    semantic search + 2-hop traversal retrieval pipeline (HGT-free)."""
+class Neo4jClient(IKGSearcher):
+    """Manages an async Neo4j driver connection and exposes the 2-stage MedCPT
+    semantic search + 2-hop traversal retrieval pipeline."""
 
     def __init__(self):
         logger.info(f"Connecting to Neo4j at {settings.NEO4J_URL}...")
         try:
-            # Create driver to connect to Neo4j (driver: connection port to the Neo4j server)
-            self.driver = GraphDatabase.driver(
+            # Create driver to connect to Neo4j 
+            self.driver = AsyncGraphDatabase.driver(
                 settings.NEO4J_URL,
                 auth=(settings.NEO4J_USER, settings.NEO4J_PASSWORD)
             )
-            self.driver.verify_connectivity()    # Check connection to Neo4j
-            logger.info("Neo4j connection verified!")
+            logger.info("Neo4j driver initialized (async).")
         except Exception as e:
             logger.error(f"Failed to connect to Neo4j: {e}")
             self.driver = None
 
-    def close(self):
+    async def close(self):
         """Close the driver"""
         if self.driver:
-            self.driver.close()
+            await self.driver.close()
             logger.info("Neo4j connection closed")
 
     # ------------------------------------------------------------------
     # Stage 1 — Anchor search (Article-Encoder space, A-E vs A-E)
     # ------------------------------------------------------------------
 
-    def _search_anchors_for_entity(
+    async def _search_anchors_for_entity(
         self,
         entity_article_emb: list[float],
         top_k: int
@@ -100,14 +100,15 @@ class Neo4jClient:
         """
         try:
             # A temporary session is opened from the driver to execute the query
-            with self.driver.session() as session:          # type: ignore
-                result = session.run(cypher, k=top_k, embedding=entity_article_emb)
-                return [r["name"] for r in result if r.get("name")]   # Neo4j object supports dict-like functions
+            async with self.driver.session() as session:          # type: ignore
+                result = await session.run(cypher, k=top_k, embedding=entity_article_emb)
+                records = await result.data()
+                return [r["name"] for r in records if r.get("name")]
         except Exception as e:
             logger.error(f"[Stage 1]: Vector search failed: {e}")
             return []
 
-    def _find_anchors(
+    async def _find_anchors(
         self,
         entity_article_embeddings: list[list[float]],
         top_k: int
@@ -122,14 +123,19 @@ class Neo4jClient:
         Returns:
             Deduplicated list of anchor node names.
         """
+        import asyncio
         seen: set[str] = set()
         anchors: list[str] = []
-        for i, emb in enumerate(entity_article_embeddings):
-            candidates = self._search_anchors_for_entity(emb, top_k)
+        
+        tasks = [self._search_anchors_for_entity(emb, top_k) for emb in entity_article_embeddings]
+        results = await asyncio.gather(*tasks)
+
+        for i, candidates in enumerate(results):
             new = [c for c in candidates if c not in seen]
             seen.update(new)
             anchors.extend(new)
             logger.debug(f"[Stage 1]: Entity {i} => Anchors: {candidates}")
+            
         logger.info(f"[Stage 1]: Merged anchors ({len(anchors)} unique anchors): {anchors}")
         return anchors
 
@@ -137,7 +143,7 @@ class Neo4jClient:
     # Stage 2 — Neighbour retrieval (MedCPT cross-space: Q-E vs A-E)
     # ------------------------------------------------------------------
 
-    def _get_neighbors(
+    async def _get_neighbors(
         self,
         source_names: list[str],
         rewritten_query_vec: list[float],
@@ -183,11 +189,11 @@ class Neo4jClient:
             params = {"names": source_names}
 
         try:
-            with self.driver.session() as session:        # type: ignore
-                result = session.run(cypher, **params)
-                rows = [dict(r) for r in result]
-
             # Rank neighbours by cosine similarity to the rewritten query
+            async with self.driver.session() as session:        # type: ignore
+                result = await session.run(cypher, **params)
+                rows = await result.data()
+
             groups: dict[str, list[dict]] = defaultdict(list)
             for row in rows:
                 sim = (
@@ -236,7 +242,7 @@ class Neo4jClient:
     # Public API
     # ------------------------------------------------------------------
 
-    def retrieve_subgraph(
+    async def search(
         self,
         entity_article_embeddings: list[list[float]],
         rewritten_query_vec: list[float],
@@ -276,17 +282,18 @@ class Neo4jClient:
         allowed_edges = self._resolve_edge_types(intents)
 
         # Stage 1: anchor search (same-space: A-E vs A-E)
-        anchors = self._find_anchors(entity_article_embeddings, top_k)
+        anchors = await self._find_anchors(entity_article_embeddings, top_k)
         if not anchors:
             return {"hop1": [], "hop2": []}
 
         # Stage 2a: 1-hop expansion (cross-space: Q-E rewritten_query vs A-E nodes)
-        hop1 = self._get_neighbors(anchors, rewritten_query_vec, allowed_edges, hop1_m)
+        import asyncio
+        hop1 = await self._get_neighbors(anchors, rewritten_query_vec, allowed_edges, hop1_m)
         logger.info(f"[Stage 2a]: 1-hop expansion → {len(hop1)} triples")
 
         # Stage 2b: 2-hop expansion (same cross-space ranking)
         hop1_nodes = list({t["n2"] for t in hop1})       # set comprehension
-        hop2 = self._get_neighbors(hop1_nodes, rewritten_query_vec, allowed_edges, hop2_n)
+        hop2 = await self._get_neighbors(hop1_nodes, rewritten_query_vec, allowed_edges, hop2_n)
 
         if len(hop2) > hop2_cap:
             hop2 = hop2[:hop2_cap]

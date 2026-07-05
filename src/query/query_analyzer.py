@@ -6,14 +6,15 @@ This optimizes reduce latency and halves the number of LLM calls
 """
 import json
 from typing import Dict, List, Optional, Any
-from groq import Groq
+from groq import AsyncGroq
 
 from config.settings import settings
 from config.logging_config import logger
 from src.kg.schema import QueryIntent
+from src.interfaces.llm import IQueryAnalyzer
 
 
-class QueryAnalyzer:
+class QueryAnalyzer(IQueryAnalyzer):
     """Analyzes user queries to rewrite them and extract structured entities and intents
     in a single LLM call."""
     def __init__(self):
@@ -21,12 +22,12 @@ class QueryAnalyzer:
         if not api_key:
             raise ValueError("GROQ_API_KEY is missing in settings or environment variables.")
         
-        self.client = Groq(api_key=api_key)
+        self.client = AsyncGroq(api_key=api_key)
         self.model_name = settings.LLM_MODEL
         self.temperature = 0.0
         self._valid_intents = {qi.value for qi in QueryIntent}   # Set comprehension
 
-    def analyze(self, query: str, history: Optional[List[Dict[str, str]]] = None) -> Dict[str, Any]:
+    async def analyze(self, query: str, history: Optional[List[Dict[str, str]]] = None) -> Dict[str, Any]:
         """
         Analyzes the given query to perform rewriting, entity extraction, and intent classification.
 
@@ -86,7 +87,7 @@ class QueryAnalyzer:
         messages.append({"role": "user", "content": f"Analyze this query: {query}"})
 
         try: 
-            completion = self.client.chat.completions.create(
+            completion = await self.client.chat.completions.create(
                 model=self.model_name,
                 messages=messages,                        # type: ignore
                 temperature=self.temperature,

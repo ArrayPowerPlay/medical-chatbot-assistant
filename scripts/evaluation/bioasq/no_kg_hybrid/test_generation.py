@@ -1,18 +1,20 @@
 """
-BioASQ test generation evaluation entrypoint.
+BioASQ test generation evaluation entrypoint for NO KG HYBRID.
+(Vector + BM25, no KG)
 
 Outputs:
-    results/test_results/bioasq/generation/detail.jsonl
-    results/test_results/bioasq/generation/summary.json
-    results/test_results/bioasq/generation/predictions.jsonl
+    results/eval_results/bioasq/no_kg_hybrid/detail.jsonl
+    results/eval_results/bioasq/no_kg_hybrid/summary.json
+    results/eval_results/bioasq/no_kg_hybrid/predictions.jsonl
 """
 
 import argparse
 import sys
+import asyncio
 from pathlib import Path
 
 # Configure project root
-project_root = Path(__file__).resolve().parent.parent.parent.parent
+project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
 if str(project_root) not in sys.path:
     sys.path.append(str(project_root))
 
@@ -22,7 +24,7 @@ from scripts.evaluation.shared import generation_bioasq_common as common
 
 
 TEST_PATH = settings.DATA_PATH / "test" / "test_bioasq.jsonl"
-OUTPUT_DIR = settings.TEST_RESULTS_PATH / "bioasq" / "generation"
+OUTPUT_DIR = project_root / "results" / "test_results" / "bioasq" / "no_kg_hybrid"
 
 
 def evaluate(
@@ -45,6 +47,9 @@ def evaluate(
         split_name="test",
         limit=limit,
         use_ragas=use_ragas,
+        use_kg=False,       # ABLATION: KG is disabled
+        use_vector=True,
+        use_bm25=True,      # Hybrid enabled
         kg_top_k=kg_top_k,
         kg_hop1_m=kg_hop1_m,
         kg_hop2_n=kg_hop2_n,
@@ -69,7 +74,7 @@ def _str_to_bool(value: str) -> bool:
 def build_arg_parser() -> argparse.ArgumentParser:
     """Build CLI parser for BioASQ test generation evaluation."""
     parser = argparse.ArgumentParser(
-        description="Evaluate the BioASQ generation pipeline on the test split."
+        description="Evaluate the BioASQ NO KG HYBRID on the test split."
     )
     parser.add_argument("--limit", type=int, default=None)
     parser.add_argument("--use-ragas", type=_str_to_bool, default=True)

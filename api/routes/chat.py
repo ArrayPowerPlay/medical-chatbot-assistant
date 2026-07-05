@@ -13,7 +13,7 @@ router = APIRouter()
 
 
 @router.post("/chat", response_model=ChatResponse, summary="Ask a medical question", tags=["Chat"])
-def chat(request: ChatRequest, raw_request: Request) -> ChatResponse:
+async def chat(request: ChatRequest, raw_request: Request) -> ChatResponse:
     """
     Process a user question and return a valid response through the RAG pipeline.
     
@@ -41,12 +41,15 @@ def chat(request: ChatRequest, raw_request: Request) -> ChatResponse:
 
     ### 3. Run pipeline
     try:
-        use_citations = request.use_citations if request.use_citations is not None else settings.USE_CITATIONS
-        result = pipeline.run(
+        from src.pipeline.rag_pipeline import RunConfig
+        
+        run_config = RunConfig()
+
+        result = await pipeline.run(
             query=request.question,
             history=history,
             conversation_id=conversation_id,
-            use_citations=use_citations,
+            config=run_config
         )
     except Exception as e:
         logger.error(f"[Chat]: Pipeline error: {e}", exc_info=True)   # logger adds the full stack trace of the exception to the log

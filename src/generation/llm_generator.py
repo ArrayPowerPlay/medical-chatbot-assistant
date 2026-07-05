@@ -1,22 +1,23 @@
-from groq import Groq
+from groq import AsyncGroq
 from config.settings import settings
 from config.logging_config import logger
 from typing import Dict, List, Optional
+from src.interfaces.llm import ILLMGenerator
 
 
-class LLMGenerator:
+class LLMGenerator(ILLMGenerator):
     """Client for interacting with Groq API for text generation."""
     def __init__(self):
         api_key = settings.GROQ_API_KEY
         if not api_key:
             raise ValueError("GROQ_API_KEY is missing in settings or environment variables!")
         
-        self.client = Groq(api_key=api_key)
+        self.client = AsyncGroq(api_key=api_key)
         self.model_name = settings.LLM_MODEL
         self.temperature = settings.GENERATION_TEMPERATURE
         self.max_tokens = settings.GENERATION_MAX_TOKENS
     
-    def generate_answer(self, system_prompt: str, user_prompt: str, history: Optional[List[Dict[str, str]]] = None) -> str:
+    async def generate_answer(self, system_prompt: str, user_prompt: str, history: Optional[List[Dict[str, str]]] = None) -> str:
         """Generate a complete answer for user using system prompt, history, and user prompt."""
         try:
             messages = [{"role": "system", "content": system_prompt}]
@@ -27,7 +28,7 @@ class LLMGenerator:
                 
             messages.append({"role": "user", "content": user_prompt})
             
-            chat_completion = self.client.chat.completions.create(
+            chat_completion = await self.client.chat.completions.create(
                 messages=messages, # type: ignore
                 model=self.model_name,
                 temperature=self.temperature,

@@ -28,8 +28,28 @@ async def lifespan(app: FastAPI):
 
     from src.pipeline.rag_pipeline import RAGPipeline
     from src.storage.conversation_store import ConversationStore
+    from src.query.query_analyzer import QueryAnalyzer
+    from src.embeddings.medcpt_embedder import MedCPTEmbedder
+    from src.storage.weaviate_client import AsyncWeaviateChildStore
+    from src.storage.parent_store import ParentStore
+    from src.kg.neo4j_client import Neo4jClient
+    from src.generation.llm_generator import LLMGenerator
+    from src.reranking.rrf import RRFManager
+    from src.reranking.cross_encoder import CrossEncoderReranker
+    from src.generation.kg_merger import KGPathMerger
 
-    app.state.pipeline = RAGPipeline()
+    app.state.pipeline = RAGPipeline(
+        query_analyzer=QueryAnalyzer(),
+        query_embedder=MedCPTEmbedder(mode='query'),
+        entity_embedder=MedCPTEmbedder(mode='article'),
+        search_engine=AsyncWeaviateChildStore(),
+        parent_store=ParentStore(settings.SQLITE_PARENT_DB_PATH),
+        kg_searcher=Neo4jClient(),
+        rrf_manager=RRFManager(),
+        cross_encoder_reranker=CrossEncoderReranker(),
+        kg_merger=KGPathMerger(),
+        llm_generator=LLMGenerator()
+    )
     app.state.conv_store = ConversationStore()
 
     logger.info("[Startup]: All service ready.")
@@ -38,6 +58,8 @@ async def lifespan(app: FastAPI):
 
     logger.info("[Shutdown]: Releasing resources...")
     app.state.conv_store.close()
+    if hasattr(app.state.pipeline.kg_searcher, "close"):
+        await app.state.pipeline.kg_searcher.close()
     logger.info("[Shutdown]: Cleanup complete.")
 
 

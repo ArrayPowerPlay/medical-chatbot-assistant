@@ -69,7 +69,7 @@ class Settings(BaseSettings):
     GENERATION_MAX_TOKENS: int = 512      # Default maximum number of tokens the generator may produce for one answer
     USE_KG_MERGER: bool = True            # Whether KG paths with the same prefix should be merged before prompt construction
     USE_HEAD_TAIL_PLACEMENT: bool = True  # Whether retrieved context should be reordered with head-tail placement before generation
-    USE_CITATIONS: bool = True            # Whether the generator should be instructed to cite sources using PMIDs
+    USE_CITATIONS: bool = False           # Whether the generator should be instructed to cite sources using PMIDs
     KG_TOP_K: int = 2                     # Maximum number of anchor nodes retrieved per extracted entity during Stage 1 anchor search
     KG_HOP1_M: int = 3                    # Maximum number of 1-hop neighbours kept for each anchor node during Stage 2a expansion
     KG_HOP2_N: int = 3                    # Maximum number of 2-hop neighbours kept for each 1-hop node during Stage 2b expansion

@@ -1,16 +1,12 @@
 """
-BioASQ validation retrieval evaluation entrypoint.
-
-Outputs:
-    results/eval_results/bioasq/retrieval/detail.jsonl
-    results/eval_results/bioasq/retrieval/summary.json
+BioASQ test retrieval evaluation entrypoint for BASELINE VECTOR.
 """
 
 import sys
 from pathlib import Path
 
 # Configure project root
-project_root = Path(__file__).resolve().parent.parent.parent.parent
+project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
 if str(project_root) not in sys.path:
     sys.path.append(str(project_root))
 
@@ -19,24 +15,26 @@ from config.settings import settings
 from scripts.evaluation.shared import retrieval_common as common
 
 
-VAL_PATH = settings.DATA_PATH / "val" / "val_bioasq.jsonl"
-OUTPUT_DIR = settings.EVAL_RESULTS_PATH / "bioasq" / "retrieval"
+TEST_PATH = settings.DATA_PATH / "test" / "test_bioasq.jsonl"
+OUTPUT_DIR = project_root / "results" / "test_results" / "bioasq" / "baseline_vector"
 
 
 def evaluate(limit: int | None = None) -> None:
-    """Run retrieval evaluation on the BioASQ validation split."""
+    """Run retrieval evaluation on the BioASQ test split."""
     common.evaluate_split(
-        data_path=VAL_PATH,
+        data_path=TEST_PATH,
         output_dir=OUTPUT_DIR,
-        split_name="validation",
+        split_name="test",
         limit=limit,
+        use_vector=True,
+        use_bm25=False,    # Baseline vector doesn't use bm25
     )
 
 
 def build_arg_parser():
-    """Build CLI parser for retrieval evaluation."""
+    """Build CLI parser for test retrieval evaluation."""
     return common.build_arg_parser(
-        "Evaluate the BioASQ retrieval pipeline on the validation split."
+        "Evaluate the BioASQ retrieval BASELINE VECTOR on the test split."
     )
 
 

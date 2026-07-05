@@ -24,13 +24,13 @@ if str(project_root) not in sys.path:
 import sys
 import types
 try:
-    from langchain_google_vertexai import ChatVertexAI
+    from langchain_google_vertexai import ChatVertexAI   # type: ignore
 except ImportError:
     class ChatVertexAI:
         pass
 # Register dummy fallback module to satisfy old Ragas imports
 vertexai_module = types.ModuleType("vertexai")
-vertexai_module.ChatVertexAI = ChatVertexAI
+vertexai_module.ChatVertexAI = ChatVertexAI              # type: ignore
 sys.modules["langchain_community.chat_models.vertexai"] = vertexai_module
 
 from typing import Optional, Dict, Any, List, Sequence

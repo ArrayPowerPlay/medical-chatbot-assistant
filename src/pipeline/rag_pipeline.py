@@ -19,42 +19,64 @@ The pipeline follows these main steps:
 """
 from typing import Dict, Optional, List, Any
 import argparse
+from dataclasses import dataclass
 
 from config.settings import settings
 from config.logging_config import logger, setup_logging
-from src.query.query_analyzer import QueryAnalyzer
+from src.interfaces.llm import IQueryAnalyzer, ILLMGenerator
+from src.interfaces.storage import ISearchEngine, IParentStore
+from src.interfaces.kg import IKGSearcher
+from src.interfaces.embeddings import IEmbedder
+from src.interfaces.reranker import IReranker
 from src.retrieval.parallel_retrieval import ParallelRetriever
 from src.reranking.cross_encoder import CrossEncoderReranker
 from src.reranking.rrf import RRFManager
 from src.generation.kg_merger import KGPathMerger
-from src.generation.llm_generator import LLMGenerator
 from src.generation.prompt_builder import build_prompts
-from src.storage.parent_store import ParentStore
-from src.storage.weaviate_client import WeaviateChildStore
-from src.kg.kg_search import KGSearch
-from src.embeddings.medcpt_embedder import MedCPTEmbedder
 
+
+@dataclass
+class RunConfig:
+    """Configuration for RAG Pipeline runs, supports Ablation Study."""
+    use_kg: bool = True
+    use_vector: bool = True
+    use_bm25: bool = True
+    use_kg_merger: bool = settings.USE_KG_MERGER
+    use_head_tail_placement: bool = settings.USE_HEAD_TAIL_PLACEMENT
+    use_citations: bool = settings.USE_CITATIONS
 
 class RAGPipeline:
-    def __init__(self):
-        self.query_analyzer = QueryAnalyzer()
-        self.query_embedder = MedCPTEmbedder(mode='query')
-        self.entity_embedder = MedCPTEmbedder(mode='article')
+    def __init__(
+        self,
+        query_analyzer: IQueryAnalyzer,
+        query_embedder: IEmbedder,
+        entity_embedder: IEmbedder,
+        search_engine: ISearchEngine,
+        parent_store: IParentStore,
+        kg_searcher: IKGSearcher,
+        rrf_manager: RRFManager,
+        cross_encoder_reranker: IReranker,
+        kg_merger: KGPathMerger,
+        llm_generator: ILLMGenerator
+    ):
+        self.query_analyzer = query_analyzer
+        self.query_embedder = query_embedder
+        self.entity_embedder = entity_embedder
 
-        self.weaviate_store = WeaviateChildStore()
-        self.parent_store = ParentStore(settings.SQLITE_PARENT_DB_PATH)
-        self.kg_searcher = KGSearch()
+        self.search_engine = search_engine
+        self.parent_store = parent_store
+        self.kg_searcher = kg_searcher
 
         self.parallel_retriever = ParallelRetriever(
-            weaviate_store=self.weaviate_store,
+            search_engine=self.search_engine,
             parent_store=self.parent_store,
             kg_searcher=self.kg_searcher
         )
 
-        self.rrf_manager = RRFManager()
-        self.cross_encoder_reranker = CrossEncoderReranker()
-        self.kg_merger = KGPathMerger()
-        self.llm_generator = LLMGenerator()
+        self.rrf_manager = rrf_manager
+        self.cross_encoder_reranker = cross_encoder_reranker
+        self.kg_merger = kg_merger
+        self.llm_generator = llm_generator
 
     def _normalize_history(
         self,
@@ -111,11 +133,12 @@ class RAGPipeline:
 
         return entity_texts
     
-    def run(
+    async def run(
         self,
         query: str,
         history: Optional[List[Dict[str, str]]] = None,
         conversation_id: Optional[str] = None,
+        config: RunConfig = RunConfig(),
         history_turns: int = settings.HISTORY_TURNS_FOR_LLM,
         vector_top_k: int = settings.VECTOR_TOP_K,
         keyword_top_k: int = settings.KEYWORD_TOP_K,
@@ -127,13 +150,10 @@ class RAGPipeline:
         rerank_kg_top_n: int = settings.RERANK_KG_TOP_N,
         generation_temperature: float = settings.GENERATION_TEMPERATURE,
         generation_max_tokens: int = settings.GENERATION_MAX_TOKENS,
-        use_kg_merger: bool = settings.USE_KG_MERGER,
-        use_head_tail_placement: bool = settings.USE_HEAD_TAIL_PLACEMENT,
-        use_citations: bool = settings.USE_CITATIONS,
         question_type: Optional[str] = None,
     ) -> Dict[str, Any]:
         """
-        Run the full synchronous RAG pipeline.
+        Run the full async RAG pipeline.
         
         Args:
             query: Raw user question.
@@ -151,21 +171,25 @@ class RAGPipeline:
         logger.info("[RAG Pipeline]: Starting query analysis...")
         
         ### 1. Extract entities and intents from user's question
-        analysis = self.query_analyzer.analyze(query=query, history=normalized_history)
+        analysis = await self.query_analyzer.analyze(query=query, history=normalized_history)
         rewritten_query = analysis.get("rewritten_query", query)
         intents = analysis.get("intents", ["general"])
         # question_type is classified by the LLM inside QueryAnalyzer (no extra call)
         question_type = analysis.get("question_type", "summary")
 
-        query_vector = self.query_embedder.embed_texts(rewritten_query)[0]
+        # Embeddings
+        query_vectors = await self.query_embedder.embed_texts(rewritten_query)
+        query_vector = query_vectors[0]
+        
         entity_texts = self._build_entity_texts(analysis)
         entity_artical_embeddings: List[List[float]] = []
         if entity_texts:
-            entity_artical_embeddings = self.entity_embedder.embed_texts(entity_texts).tolist()
+            entity_embs = await self.entity_embedder.embed_texts(entity_texts)
+            entity_artical_embeddings = entity_embs.tolist()
 
         ### 2. Start parallel retrieval
         logger.info("[RAG Pipeline]: Starting parallel retrieval...")
-        vector_results, bm25_results, kg_results = self.parallel_retriever.retrieve(
+        vector_results, bm25_results, kg_results = await self.parallel_retriever.retrieve(
             query_text=rewritten_query,
             query_vector=query_vector,
             entity_article_embeddings=entity_artical_embeddings,
@@ -179,6 +203,11 @@ class RAGPipeline:
             kg_hop2_cap=kg_hop2_cap,
             original_query_text=query,
         )
+
+        # Apply ablation masks
+        if not config.use_vector: vector_results = []
+        if not config.use_bm25: bm25_results = []
+        if not config.use_kg: kg_results = []
 
         logger.info(f"[RAG Pipeline]: Parallel retrieval completed! "
                     f"{len(vector_results)} vectors, {len(bm25_results)} bm25, "
@@ -194,7 +223,7 @@ class RAGPipeline:
 
         ### 4. Reranking on RRF results and KG results (linearized triples)
         logger.info(f"[RAG Pipeline]: Cross-Encoder reranking...")
-        ranked_text, ranked_kg = self.cross_encoder_reranker.rerank(
+        ranked_text, ranked_kg = await self.cross_encoder_reranker.rerank(
             query=rewritten_query,
             rrf_results=rrf_results,
             kg_results=kg_results,
@@ -204,7 +233,7 @@ class RAGPipeline:
         logger.info(f"[RAG Pipeline]: Merging KG paths and preparing prompt context...")
         merged_kg = (
             self.kg_merger.merge_top_paths(ranked_kg)
-            if use_kg_merger
+            if config.use_kg_merger
             else ranked_kg
         )
 
@@ -225,8 +254,8 @@ class RAGPipeline:
         system_prompt, user_prompt = build_prompts(
             query=rewritten_query,
             retrieved_items=interleaved_items,
-            use_head_tail_placement=use_head_tail_placement,
-            use_citations=use_citations,
+            use_head_tail_placement=config.use_head_tail_placement,
+            use_citations=config.use_citations,
             question_type=question_type,
         )
 
@@ -234,7 +263,7 @@ class RAGPipeline:
         logger.info("[RAG Pipeline]: Generating final answer...")
         self.llm_generator.temperature = generation_temperature
         self.llm_generator.max_tokens = generation_max_tokens
-        answer = self.llm_generator.generate_answer(
+        answer = await self.llm_generator.generate_answer(
             system_prompt=system_prompt,
             user_prompt=user_prompt,
             history=normalized_history
@@ -258,7 +287,31 @@ def build_parser() -> argparse.ArgumentParser:
 
 if __name__ == "__main__":
     setup_logging()
-    pipeline = RAGPipeline()
-    args = build_parser().parse_args()
-    result = pipeline.run(query = args.question, history=None)
-    print(result["rewritten_query"])
+    import asyncio
+    
+    # Simple manual DI for local testing script
+    from src.query.query_analyzer import QueryAnalyzer
+    from src.embeddings.medcpt_embedder import MedCPTEmbedder
+    from src.storage.weaviate_client import AsyncWeaviateChildStore
+    from src.storage.parent_store import ParentStore
+    from src.kg.neo4j_client import Neo4jClient
+    from src.generation.llm_generator import LLMGenerator
+    
+    async def main():
+        pipeline = RAGPipeline(
+            query_analyzer=QueryAnalyzer(),
+            query_embedder=MedCPTEmbedder(mode='query'),
+            entity_embedder=MedCPTEmbedder(mode='article'),
+            search_engine=AsyncWeaviateChildStore(),
+            parent_store=ParentStore(settings.SQLITE_PARENT_DB_PATH),
+            kg_searcher=Neo4jClient(),
+            rrf_manager=RRFManager(),
+            cross_encoder_reranker=CrossEncoderReranker(),
+            kg_merger=KGPathMerger(),
+            llm_generator=LLMGenerator()
+        )
+        args = build_parser().parse_args()
+        result = await pipeline.run(query=args.question, history=None)
+        print(result["rewritten_query"])
+
+    asyncio.run(main())

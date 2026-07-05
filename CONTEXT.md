@@ -622,3 +622,17 @@ POSTGRES_DB=chat_history
 - `RAGPipeline.run()` keeps the rewritten query embedding as a NumPy-like vector for Weaviate vector search and separately converts it to a Python list only where KG retrieval needs JSON-serializable data.
 - `RAGPipeline._normalize_history()` now truncates the already-cleaned history, so invalid or empty messages are not reintroduced by slicing.
 - `src.pipeline.rag_pipeline` imports `KGSearch` from `src.kg.kg_search`, so the module imports cleanly from the project root.
+
+## 12. Clean Architecture & Ablation Study (July 2026)
+
+**Layered Architecture (Dependency Inversion)**:
+- **Presentation (API)**: FastAPI routes parsing requests.
+- **Use Case**: `RAGPipeline` (Orchestrator).
+- **Domain**: `src/interfaces/` defining contracts (`ISearchEngine`, `IKGSearcher`, `ILLMGenerator`, `IQueryAnalyzer`). NO data access logic exists here.
+- **Infrastructure**: Data access classes (`AsyncWeaviateChildStore`, `Neo4jClient`, `GroqGenerator`) implementing the domain interfaces.
+- **Async Execution**: The pipeline leverages `asyncio.gather()` for fully non-blocking I/O during retrieval.
+
+**Ablation Study Strategy (Single Branch)**:
+- **Code Separation**: Dedicated entrypoint scripts in `scripts/evaluation/bioasq/<version>/test_*.py` configure `RunConfig` statically for each variant.
+- **Result Routing**: The output of each ablation variant is routed to `results/test_results/bioasq/<version>/` instead of the root folder, keeping metrics separate.
+- **Baselines**: The primary baseline is **Vector Search Only + LLM Generator**. The intermediate baseline is **Text-only Hybrid RAG (No KG)**.

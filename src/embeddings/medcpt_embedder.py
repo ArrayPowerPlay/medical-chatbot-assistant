@@ -3,9 +3,10 @@ import numpy as np
 from transformers import AutoTokenizer, AutoModel
 from typing import List, Union
 from config.logging_config import logger
+from src.interfaces.embeddings import IEmbedder
+import asyncio
 
-
-class MedCPTEmbedder:
+class MedCPTEmbedder(IEmbedder):
     """MedCPT Dual-Encoder wrapper.
     Supports Article-Encoder (indexing) and Query-Encoder (retrieval)
     """
@@ -23,16 +24,20 @@ class MedCPTEmbedder:
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
         self.model = AutoModel.from_pretrained(self.model_name).to(self.device).eval()
 
+    async def embed_texts(self, texts: Union[str, List[str]], batch_size: int = 256) -> np.ndarray:
+        """Embed chunks into L2-normalized vectors asynchronously."""
+        return await asyncio.to_thread(self._embed_texts_sync, texts, batch_size)
+
     @torch.no_grad()    # Turn off gradient checking
-    def embed_texts(self, texts: Union[str, List[str]], batch_size: int = 256) -> np.ndarray:
-        """Embed all chunks into L2-normalized vectors."""
+    def _embed_texts_sync(self, texts: Union[str, List[str]], batch_size: int = 256) -> np.ndarray:
+        """Internal synchronous embedding logic."""
         if isinstance(texts, str):
             texts = [texts]
 
         all_embeddings = []
         for i in range(0, len(texts), batch_size):
             batch = texts[i: i + batch_size]
-            inputs = self.tokenizer(
+            inputs = self.tokenizer(             # type: ignore
                 batch, 
                 padding=True, 
                 truncation=True, 

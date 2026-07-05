@@ -6,10 +6,12 @@ from typing import List, Dict, Optional
 import time
 from config.logging_config import logger
 from config.settings import settings
+import asyncio
+from src.interfaces.storage import ISearchEngine
 
 CHILD_COLLECTION = "ChildChunks"
 
-class WeaviateChildStore:
+class AsyncWeaviateChildStore(ISearchEngine):
     """Weaviate client for storing and searching child chunks.
     Handles both vector search and BM25 keyword search.
     """
@@ -83,9 +85,12 @@ class WeaviateChildStore:
         
         logger.info(f"Inserted {len(children)} child chunks into Weaviate")
 
-    def vector_search(self, query_vector: np.ndarray, limit: int = 20) -> List[Dict]:
-        """Search child chunks by cosine similarity. Return lists of 
-        {'parent_id', 'pmid', 'text', 'score'}"""
+    async def vector_search(self, query_vector: np.ndarray, limit: int = 20) -> List[Dict]:
+        """Search child chunks by cosine similarity asynchronously."""
+        return await asyncio.to_thread(self._vector_search, query_vector, limit)
+
+    def _vector_search(self, query_vector: np.ndarray, limit: int = 20) -> List[Dict]:
+        """Internal synchronous vector search."""
         collection = self.client.collections.get(CHILD_COLLECTION)
 
         response = collection.query.near_vector(
@@ -106,9 +111,12 @@ class WeaviateChildStore:
 
         return results
     
-    def bm25_search(self, query_text: str, limit: int = 20) -> List[Dict]:
-        """Search child chunks by BM25 keyword matching. Return list of 
-        {'parent_id', 'pmid', 'text', 'score'}"""
+    async def bm25_search(self, query_text: str, limit: int = 20) -> List[Dict]:
+        """Search child chunks by BM25 keyword matching asynchronously."""
+        return await asyncio.to_thread(self._bm25_search, query_text, limit)
+
+    def _bm25_search(self, query_text: str, limit: int = 20) -> List[Dict]:
+        """Internal synchronous keyword search."""
         collection = self.client.collections.get(CHILD_COLLECTION)
 
         response = collection.query.bm25(

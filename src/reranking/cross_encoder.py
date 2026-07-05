@@ -1,10 +1,12 @@
 from typing import List, Dict, Tuple
 import modal
+import asyncio
 from config.settings import settings
 from config.logging_config import logger
+from src.interfaces.reranker import IReranker
 
 
-class CrossEncoderReranker:
+class CrossEncoderReranker(IReranker):
     """
     Client call to MedCPT-Cross-Encoder deployed on Modal.
     Merges text search results (keyword + vector search) and KG search results, then reranks them.
@@ -19,7 +21,7 @@ class CrossEncoderReranker:
             logger.error(f"[Cross Encoder Reranker]: Failed to lookup Modal App. Error: {e}")
             self.is_available = False
 
-    def rerank(
+    async def rerank(
         self,
         query: str,
         rrf_results: List[Dict],
@@ -89,7 +91,7 @@ class CrossEncoderReranker:
             return [], []
         
         try:
-            scores = self.model.rerank.remote(query, passages)       # type: ignore
+            scores = await asyncio.to_thread(self.model.rerank.remote, query, passages)       # type: ignore
         except Exception as e:
             logger.error(f"[Cross Encoder]: Rerank failed: {e}")
             return _fallback_rankings()

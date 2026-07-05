@@ -55,11 +55,18 @@ rag-project/
 ├── src/
 │   ├── __init__.py
 │   │
-│   ├── storage/                      # NEW: Persistent storage layer
+│   ├── interfaces/                   # NEW: Domain layer (Abstractions/Contracts)
+│   │   ├── __init__.py
+│   │   ├── storage.py                # ISearchEngine, IParentStore
+│   │   ├── kg.py                     # IKGSearcher
+│   │   ├── llm.py                    # ILLMGenerator, IQueryAnalyzer
+│   │   └── embeddings.py             # IEmbedder
+│   │
+│   ├── storage/                      # Infrastructure: Persistent storage layer
 │   │   ├── __init__.py
 │   │   ├── parent_store.py           # SQLite manager for parent chunks
-│   │   ├── conversation_store.py     # PostgreSQL manager for chat history (multi-turn)
-│   │   └── weaviate_client.py        # Weaviate client for child chunks (vector + BM25)
+│   │   ├── conversation_store.py     # PostgreSQL manager for chat history
+│   │   └── weaviate_client.py        # Weaviate client for child chunks (ISearchEngine)
 │   │
 │   ├── query/                        # Pre-retrieval query processing
 │   │   ├── __init__.py

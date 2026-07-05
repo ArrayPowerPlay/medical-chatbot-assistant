@@ -4,7 +4,7 @@ Orchestrates 3 parallel retrieval streams:
 2. Keyword Search 
 3. Knowledge Graph Search
 """
-import concurrent.futures
+import asyncio
 from typing import Dict, List, Tuple
 import numpy as np
 
@@ -12,9 +12,8 @@ from config.settings import settings
 from config.logging_config import logger
 from src.retrieval.vector_search import vector_search
 from src.retrieval.keyword_search import keyword_search
-from src.kg.kg_search import KGSearch
-from src.storage.weaviate_client import WeaviateChildStore
-from src.storage.parent_store import ParentStore
+from src.interfaces.storage import ISearchEngine, IParentStore
+from src.interfaces.kg import IKGSearcher
 
 
 class ParallelRetriever:
@@ -23,15 +22,15 @@ class ParallelRetriever:
     """
     def __init__(
         self,
-        weaviate_store: WeaviateChildStore,
-        parent_store: ParentStore,
-        kg_searcher: KGSearch
+        search_engine: ISearchEngine,
+        parent_store: IParentStore,
+        kg_searcher: IKGSearcher
     ):
-        self.weaviate_store = weaviate_store
+        self.search_engine = search_engine
         self.parent_store = parent_store
         self.kg_searcher = kg_searcher
 
-    def retrieve(
+    async def retrieve(
         self,
         query_text: str,
         query_vector: np.ndarray,
@@ -69,31 +68,31 @@ class ParallelRetriever:
         # Ensure query_vector is converted into list of floats for KG search if it's a numpy array
         query_vector_list = query_vector.tolist() if isinstance(query_vector, np.ndarray) else query_vector
 
-        with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
-            # Stream 1: Vector Search
-            future_vector = executor.submit(
-                vector_search,
+        # Create async tasks for the three streams
+        # Task wraps coroutine and it is a background process
+        task_vector = asyncio.create_task(
+            vector_search(
                 query_vector=query_vector,
-                weaviate_store=self.weaviate_store,
+                search_engine=self.search_engine,
                 parent_store=self.parent_store,
                 top_k=vector_top_k,
                 child_fetch_limit=child_fetch_limit
             )
-            
-            # Stream 2: Keyword Search
-            future_keyword = executor.submit(
-                keyword_search,
+        )
+        
+        task_keyword = asyncio.create_task(
+            keyword_search(
                 query_text=query_text,
-                weaviate_store=self.weaviate_store,
+                search_engine=self.search_engine,
                 parent_store=self.parent_store,
                 top_k=keyword_top_k,
                 child_fetch_limit=child_fetch_limit,
                 original_query=original_query_text
             )
+        )
 
-            # Stream 3: KG Search
-            future_kg = executor.submit(
-                self.kg_searcher.search,
+        task_kg = asyncio.create_task(
+            self.kg_searcher.search(
                 entity_article_embeddings=entity_article_embeddings,
                 rewritten_query_vec=query_vector_list,
                 intents=intents,
@@ -102,28 +101,30 @@ class ParallelRetriever:
                 hop2_n=kg_hop2_n,
                 hop2_cap=kg_hop2_cap,
             )
+        )
 
-            # Gather results
-            try:
-                vector_results = future_vector.result()   # Wait for the thread to complete
-                logger.info(f"[Parallel Retrieval]: Vector Search returned {len(vector_results)} results.")
-            except Exception as e:
-                logger.error(f"[Parallel Retrieval]: Error in Vector Search: {e}")
-                vector_results = []
-            
-            try:
-                keyword_results = future_keyword.result()
-                logger.info(f"[Parallel Retrieval]: Keyword Search returned {len(keyword_results)} results.")
-            except Exception as e:
-                logger.error(f"[Parallel Retrieval]: Error in Keyword Search: {e}")
-                keyword_results = []
-                
-            try:
-                kg_results = future_kg.result()
-                logger.info(f"[Parallel Retrieval]: KG Search returned {len(kg_results)} paths.")
-            except Exception as e:
-                logger.error(f"[Parallel Retrieval]: Error in KG Search: {e}")
-                kg_results = []
+        # Gather results concurrently
+        # Still return results if exception occurs
+        results = await asyncio.gather(task_vector, task_keyword, task_kg, return_exceptions=True)
         
-        logger.info("[Parallel Retrieval]: Completed all 3 streams!")
+        vector_results = results[0] if not isinstance(results[0], Exception) else []
+        keyword_results = results[1] if not isinstance(results[1], Exception) else []
+        kg_results = results[2] if not isinstance(results[2], Exception) else []
+
+        if isinstance(results[0], Exception):
+            logger.error(f"[Parallel Retrieval]: Error in Vector Search: {results[0]}")
+        else:
+            logger.info(f"[Parallel Retrieval]: Vector Search returned {len(vector_results)} results.")
+
+        if isinstance(results[1], Exception):
+            logger.error(f"[Parallel Retrieval]: Error in Keyword Search: {results[1]}")
+        else:
+            logger.info(f"[Parallel Retrieval]: Keyword Search returned {len(keyword_results)} results.")
+
+        if isinstance(results[2], Exception):
+            logger.error(f"[Parallel Retrieval]: Error in KG Search: {results[2]}")
+        else:
+            logger.info(f"[Parallel Retrieval]: KG Search returned {len(kg_results)} paths.")
+
+        logger.info("[Parallel Retrieval]: Completed all streams!")
         return vector_results, keyword_results, kg_results

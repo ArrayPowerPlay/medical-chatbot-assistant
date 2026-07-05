@@ -1,12 +1,11 @@
 from typing import Dict, List
 import numpy as np
-from src.storage.weaviate_client import WeaviateChildStore
-from src.storage.parent_store import ParentStore
+from src.interfaces.storage import ISearchEngine, IParentStore
 from config.settings import settings
 
-def _aggregate_to_parents(
+async def _aggregate_to_parents(
     child_results: List[Dict],
-    parent_store: ParentStore
+    parent_store: IParentStore
 ) -> List[Dict]:
     """Aggregate child results to their parent
     Strategy: parent_score = max(child_scores) for that parent
@@ -24,7 +23,7 @@ def _aggregate_to_parents(
     
     # Fetch parent data from sqlite
     parent_ids = list(parent_scores.keys())
-    parent_data = parent_store.get_parent_batch(parent_ids)   # Return Dict[str, Dict]
+    parent_data = await parent_store.get_parent_batch(parent_ids)   # Return Dict[str, Dict]
 
     # Build parent-level results sorted by 'score' desc
     results = []
@@ -43,10 +42,10 @@ def _aggregate_to_parents(
     return results
 
 
-def vector_search(
+async def vector_search(
     query_vector: np.ndarray,
-    weaviate_store: WeaviateChildStore,
-    parent_store: ParentStore,
+    search_engine: ISearchEngine,
+    parent_store: IParentStore,
     top_k: int = settings.VECTOR_TOP_K,
     child_fetch_limit: int = settings.CHILD_FETCH_LIMIT
 ) -> List[Dict]:
@@ -54,19 +53,19 @@ def vector_search(
     
     Args:
         query_vector: MedCPT query embedding
-        weaviate_store: Weaviate client
-        parent_store: SQLite parent store
+        search_engine: Child chunk search engine (Weaviate)
+        parent_store: Parent chunk storage (SQLite)
         top_k: Nmber of parent results to return
         child_fetch_limit: Number of child chunks to fetch
     
     Returns:
         List of parent-level results: [{"parent_id", "pmid", "text", "title", "score"}]
     """
-    child_results = weaviate_store.vector_search(
+    child_results = await search_engine.vector_search(
         query_vector=query_vector, 
         limit=child_fetch_limit
     )
-    parent_results = _aggregate_to_parents(
+    parent_results = await _aggregate_to_parents(
         child_results=child_results, 
         parent_store=parent_store
     )

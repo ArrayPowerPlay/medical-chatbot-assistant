@@ -1,9 +1,11 @@
 import sqlite3
+import asyncio
 from typing import List, Dict, Optional, Union
 from pathlib import Path
+from src.interfaces.storage import IParentStore
 
 
-class ParentStore:
+class ParentStore(IParentStore):
     """SQLite-based storage for parent chunks. Parents are only looked up by ID"""
     def __init__(self, db_path : Union[str, Path]):
         # Ensure db_path is a Path object for directory creation
@@ -57,8 +59,12 @@ class ParentStore:
         row = cursor.fetchone()               # Retrieve one row
         return dict(row) if row else None
     
-    def get_parent_batch(self, parent_ids: List[str]) -> Dict[str, Dict]:
-        """Retrieve multiple parents by IDs. Returns {parent_id: data}"""
+    async def get_parent_batch(self, parent_ids: List[str]) -> Dict[str, Dict]:
+        """Retrieve multiple parents by IDs asynchronously. Returns {parent_id: data}"""
+        return await asyncio.to_thread(self._get_parent_batch_sync, parent_ids)
+
+    def _get_parent_batch_sync(self, parent_ids: List[str]) -> Dict[str, Dict]:
+        """Internal synchronous batch retrieval."""
         if not parent_ids:
             return {}
         

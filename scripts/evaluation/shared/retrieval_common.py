@@ -180,6 +180,8 @@ def run_retrieval_pipeline(
     rrf_manager: RRFManager,
     cross_encoder: CrossEncoderReranker,
     debug_label: Optional[str] = None,
+    use_vector: bool = True,
+    use_bm25: bool = True,
 ) -> Tuple[List[Dict[str, Any]], str]:
     """Run the full text retrieval pipeline for a single query."""
     if vector_search is None or keyword_search is None:
@@ -195,31 +197,35 @@ def run_retrieval_pipeline(
     logger.info(f"{label}Embedding query")
     query_vector = query_embedder.embed_texts(rewritten_query)[0]
 
-    logger.info(
-        f"{label}Vector search starting with top_k={settings.VECTOR_TOP_K}, "
-        f"child_fetch_limit={settings.CHILD_FETCH_LIMIT}"
-    )
-    vec_results = vector_search(
-        query_vector=query_vector,
-        weaviate_store=weaviate_store,
-        parent_store=parent_store,
-        top_k=settings.VECTOR_TOP_K,
-        child_fetch_limit=settings.CHILD_FETCH_LIMIT,
-    )
-    logger.info(f"{label}Vector search returned {len(vec_results)} parent results")
+    vec_results = []
+    if use_vector:
+        logger.info(
+            f"{label}Vector search starting with top_k={settings.VECTOR_TOP_K}, "
+            f"child_fetch_limit={settings.CHILD_FETCH_LIMIT}"
+        )
+        vec_results = vector_search(
+            query_vector=query_vector,
+            weaviate_store=weaviate_store,
+            parent_store=parent_store,
+            top_k=settings.VECTOR_TOP_K,
+            child_fetch_limit=settings.CHILD_FETCH_LIMIT,
+        )
+        logger.info(f"{label}Vector search returned {len(vec_results)} parent results")
 
-    logger.info(
-        f"{label}BM25 search starting with top_k={settings.KEYWORD_TOP_K}, "
-        f"child_fetch_limit={settings.CHILD_FETCH_LIMIT}"
-    )
-    bm25_results = keyword_search(
-        query_text=rewritten_query,
-        weaviate_store=weaviate_store,
-        parent_store=parent_store,
-        top_k=settings.KEYWORD_TOP_K,
-        child_fetch_limit=settings.CHILD_FETCH_LIMIT,
-    )
-    logger.info(f"{label}BM25 search returned {len(bm25_results)} parent results")
+    bm25_results = []
+    if use_bm25:
+        logger.info(
+            f"{label}BM25 search starting with top_k={settings.KEYWORD_TOP_K}, "
+            f"child_fetch_limit={settings.CHILD_FETCH_LIMIT}"
+        )
+        bm25_results = keyword_search(
+            query_text=rewritten_query,
+            weaviate_store=weaviate_store,
+            parent_store=parent_store,
+            top_k=settings.KEYWORD_TOP_K,
+            child_fetch_limit=settings.CHILD_FETCH_LIMIT,
+        )
+        logger.info(f"{label}BM25 search returned {len(bm25_results)} parent results")
 
     logger.info(f"{label}RRF fusion starting with k={rrf_manager.k}")
     rrf_results = rrf_manager.rank_fusion(
@@ -246,7 +252,9 @@ def evaluate_split(
     data_path: Path,
     output_dir: Path,
     split_name: str,
-    limit: Optional[int] = None
+    limit: Optional[int] = None,
+    use_vector: bool = True,
+    use_bm25: bool = True,
 ) -> None:
     """Run retrieval evaluation for one dataset split."""
     missing_runtime_deps = [
@@ -326,7 +334,9 @@ def evaluate_split(
                         parent_store=parent_store,
                         rrf_manager=rrf_manager,
                         cross_encoder=cross_encoder,
-                        debug_label=q_id
+                        debug_label=q_id,
+                        use_vector=use_vector,
+                        use_bm25=use_bm25,
                     )
 
                     seen_pmids: Set[str] = set()
