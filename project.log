@@ -90726,3 +90726,6 @@ TypeError: string indices must be integers, not 'str'
 2026-07-10 01:27:48,270 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 18 paths.
 2026-07-10 01:27:48,270 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
 2026-07-10 01:28:33,778 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 01:33:12,341 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-10 01:33:21,199 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-10 01:33:22,879 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
