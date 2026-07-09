@@ -92,9 +92,11 @@ class AsyncWeaviateChildStore(ISearchEngine):
     def _vector_search(self, query_vector: np.ndarray, limit: int = 20) -> List[Dict]:
         """Internal synchronous vector search."""
         collection = self.client.collections.get(CHILD_COLLECTION)
+        
+        vector_list = query_vector.tolist() if isinstance(query_vector, np.ndarray) else query_vector
 
         response = collection.query.near_vector(
-            near_vector=query_vector.tolist(),
+            near_vector=vector_list,
             limit=limit,
             return_metadata=MetadataQuery(distance=True)
         )

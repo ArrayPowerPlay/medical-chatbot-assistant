@@ -11,6 +11,8 @@ import Register from './components/auth/Register';
 
 import ChatLayout from './components/chat/ChatLayout';
 
+import IntroPage from './components/layout/IntroPage';
+
 // Placeholders for future phases
 const AdminDashboard = () => <div>Admin Dashboard Content</div>;
 
@@ -19,14 +21,15 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* Public Routes */}
+        <Route path="/" element={<IntroPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
         {/* Protected Routes (User & Guest) */}
         <Route element={<ProtectedRoute allowedRoles={['user', 'guest', 'admin']} />}>
-          <Route path="/" element={<MainLayout />}>
-            <Route index element={<ChatLayout />} />
-            <Route path="/c/:id" element={<ChatLayout />} />
+          <Route element={<MainLayout />}>
+            <Route path="/chat" element={<Navigate to="/c" replace />} />
+            <Route path="/c/:id?" element={<ChatLayout />} />
           </Route>
         </Route>
 

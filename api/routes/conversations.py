@@ -71,7 +71,7 @@ def get_messages(
     if not conv_store.conversation_exists(conv_id, user_id=user["id"]):
         raise HTTPException(status_code=404, detail="Conversation not found or unauthorized.")
     
-    result = conv_store.get_messages_page(
+    result = conv_store.get_message_page(
         conversation_id=conv_id,
         limit=limit,
         before_id=before_id

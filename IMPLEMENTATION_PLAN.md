@@ -1,76 +1,54 @@
-# Implementation Plan: New Features for MedKG-RAG Chatbot
+# Bỏ qua Query Rewriting cho các câu hỏi không cần RAG (no_rag_needed)
 
-Mục tiêu: Bổ sung các tính năng tương tác người dùng, quản lý tài khoản, cải thiện UX cho chatbot và chuyển đổi kiến trúc Frontend sang React.js. Kế hoạch được chia thành các Phase nhỏ để dễ dàng triển khai và kiểm thử.
+Trong yêu cầu, bạn muốn thảo luận về việc không dùng `rewritten_query` khi intent là `no_rag_needed` và suy nghĩ xem việc Rewrite Query có thực sự quan trọng hay không. Dưới đây là phân tích và kế hoạch thực hiện.
 
-## Cấu trúc Tổng quan
+## 1. Tư duy: Việc Rewrite Query có thực sự quan trọng không?
 
-- **Frontend**: React.js (Vite) + Tailwind CSS + Zustand (State Management) + Axios (Data Fetching).
-- **Backend**: FastAPI + PostgreSQL.
+Việc **Rewrite Query (Viết lại câu hỏi)** cực kỳ quan trọng trong RAG, nhưng **chỉ quan trọng đối với bước Retrieval (Truy xuất tài liệu)**.
 
----
+**Tại sao nó quan trọng cho Retrieval?**
+- **Giải quyết ngữ cảnh (Coreference Resolution):** Nếu người dùng hỏi câu 1 là "Aspirin là gì?" và câu 2 là "Tác dụng phụ của nó là gì?", từ "nó" sẽ khiến máy tìm kiếm thất bại. Rewrite Query sẽ biến câu 2 thành "Tác dụng phụ của Aspirin là gì?".
+- **Tối ưu hóa từ khóa (Keyword/Search Optimization):** Người dùng thường nhập rườm rà ("Bác sĩ ơi cho tôi hỏi dạo này tôi hay bị đau đầu và chóng mặt thì là bệnh gì"). Rewrite Query sẽ cô đọng lại thành "nguyên nhân đau đầu chóng mặt", giúp ElasticSearch/Vector Search tìm kiếm chính xác hơn.
 
-## Các Giai đoạn Triển khai (Phases)
+**Tại sao nó KHÔNG cần thiết cho LLM Generation (khi no_rag_needed)?**
+- Khi người dùng nói chuyện phiếm ("Xin chào", "Bạn là ai", "Cảm ơn"), LLM nên nhận được **chính xác câu nói** của người dùng để trả lời tự nhiên nhất.
+- Nếu dùng `rewritten_query` (ví dụ "greeting" hoặc ""), LLM sẽ thiếu ngữ cảnh cảm xúc và sắc thái của câu gốc, hoặc thậm chí lỗi nếu chuỗi rỗng.
+- Việc bạn đề xuất dùng trực tiếp câu hỏi gốc (original query) cho các trường hợp không cần RAG là **hoàn toàn chính xác và hợp lý**.
 
-### Phase 1: Database & Backend Auth (Authentication)
-*Thiết lập hạ tầng tài khoản và bảo mật.*
+> [!TIP]
+> **Kết luận:** Giữ nguyên cơ chế Rewrite Query để phục vụ tìm kiếm RAG, nhưng **bỏ qua kết quả rewrite** (dùng câu hỏi gốc) khi giao tiếp trực tiếp với LLM (intent = `no_rag_needed`).
 
-1. **Database Schema**:
-   - Thêm bảng `Users` (PostgreSQL): `id`, `email`, `password_hash`, `role` (user/guest), `question_count` (int, default=0), `created_at`.
-   - Cập nhật bảng `Conversation`: thêm khóa ngoại `user_id` (liên kết với `Users`), thêm cột `is_pinned` (boolean, default=false).
-   - Cập nhật bảng `Message`: thêm cột `feedback_type` (like/dislike/none), `feedback_comment` (text).
-2. **Xác thực (Auth)**:
-   - Tích hợp thư viện `passlib[bcrypt]` và sinh JWT token.
-   - Viết các API: `POST /api/auth/register`, `POST /api/auth/login`, `POST /api/auth/guest`.
-   - Viết middleware/dependency FastAPI để xác thực header `Authorization: Bearer <token>`.
+## 2. Proposed Changes (Kế hoạch thay đổi)
 
-### Phase 2: Backend APIs (Conversations & Streaming Chat)
-*Nâng cấp các API chat và quản lý lịch sử.*
+Dưới đây là kế hoạch cập nhật mã nguồn để ưu tiên sử dụng `original_query` thay vì `rewritten_query` cho các intent không cần RAG.
 
-1. **Quản lý Cuộc hội thoại (Conversation APIs)**:
-   - **Ghim & Đổi tên**: `PUT /api/conversations/{id}` nhận dữ liệu update `title` và `is_pinned`.
-   - **Xóa**: `DELETE /api/conversations/{id}`.
-   - **Tìm kiếm**: `GET /api/conversations/search?q=...` (Exact match trên `title` hoặc `content` của message).
-   - Cập nhật API GET danh sách: Sắp xếp theo `is_pinned` trước (theo thời gian giảm dần), sau đó đến hội thoại không ghim (theo thời gian giảm dần). Tất cả hiển thị chung một danh sách, hội thoại được ghim sẽ có icon đánh dấu.
-2. **Feedback API**:
-   - `POST /api/conversations/{id}/messages/{msg_id}/feedback`: Nhận và cập nhật `feedback_type`, `feedback_comment` vào bảng `Message`.
-3. **Chat & Streaming (SSE)**:
-   - Cập nhật `POST /api/chat`: Thêm logic kiểm tra (Nếu role 'guest' và `question_count >= 10` -> 403 Forbidden). Cập nhật `question_count` sau mỗi câu trả lời.
-   - Tích hợp **Server-Sent Events (SSE)**: Thay vì trả về 1 JSON cục lớn, gọi Groq API ở chế độ `stream=True` và dùng `StreamingResponse` của FastAPI để yield từng từ (token) về client ngay lập tức.
-   - Đảm bảo bắt các sự kiện ngắt kết nối (`Request.is_disconnected`) hoặc `CancelledError` để hủy luồng gọi Groq LLM nếu user bấm Stop.
+### `src/pipeline/rag_pipeline.py`
 
-### Phase 3: Frontend Foundation & Auth UI
-*Xây dựng bộ khung Frontend bằng React.*
+Cập nhật hàm `run` và `run_stream` để chọn câu hỏi đầu vào cho LLM Generator.
 
-1. **Khởi tạo Project**:
-   - Setup React (Vite) + Tailwind CSS. Cấu hình hỗ trợ Dark Mode qua CSS variables (`dark:class`).
-   - Setup `Axios` interceptor để tự động chèn JWT token vào header của mọi request.
-   - Khởi tạo Store với `Zustand` để quản lý Global State: User, Token, Theme, và danh sách Conversations.
-2. **Auth UI**:
-   - Xây dựng giao diện Login, Register, và nút "Continue as Guest".
-   - Xử lý luồng đăng nhập, lưu JWT vào `localStorage` và chuyển hướng (redirect) vào trang Chat chính.
+#### [MODIFY] [rag_pipeline.py](file:///d:/workspace/Repo/medical-chatbot-assistant/src/pipeline/rag_pipeline.py)
+- Thay vì luôn truyền `rewritten_query` vào `build_prompts`, ta sẽ kiểm tra `intents`.
+- Thêm logic: 
+  ```python
+  # Sử dụng original query nếu intent là no_rag_needed, ngược lại dùng rewritten_query
+  final_query_for_llm = query if "no_rag_needed" in intents else rewritten_query
+  
+  system_prompt, user_prompt = build_prompts(
+      query=final_query_for_llm,
+      ...
+  )
+  ```
+- Nếu `no_rag_needed`, `vector_results`, `bm25_results`, `kg_results` đều được bỏ qua (như bạn đã đề cập ở phiên trước). `interleaved_items` sẽ là mảng rỗng.
 
-### Phase 4: Frontend Chat Layout & Streaming Integration
-*Giao diện chat chính.*
+### `src/generation/prompt_builder.py`
 
-1. **Layout**:
-   - Khung Chat chính và Sidebar.
-   - Thêm tính năng **Mở/Đóng Sidebar** (Toggled thông qua icon Hamburger).
-   - Nút bật/tắt Theme (Sáng/Tối).
-2. **Chat & Streaming**:
-   - Giao diện bong bóng chat (User vs Assistant) với Markdown render.
-   - Tích hợp client xử lý SSE để đọc từng token và hiển thị chữ gõ dần dần (Typing effect).
-   - Hiện vòng xoay "Thinking..." khi đợi token đầu tiên từ SSE.
-   - Thêm nút **Stop Generating** và sử dụng `AbortController` để ngắt request fetch SSE.
-   - Xử lý lỗi HTTP 403: Vô hiệu hóa ô nhập chat và thông báo vượt giới hạn cho Guest.
+#### [MODIFY] [prompt_builder.py](file:///d:/workspace/Repo/medical-chatbot-assistant/src/generation/prompt_builder.py)
+- Đảm bảo rằng prompt template hoạt động tốt khi `retrieved_items` rỗng (hiện tại có lẽ đã hỗ trợ nhưng ta cần đảm bảo system prompt cho phép LLM tự trả lời mà không bị ép buộc phải "chỉ dùng context").
 
-### Phase 5: Frontend Conversation Management & Tương tác
-*Các tính năng cá nhân hóa lịch sử.*
+## User Review Required
 
-1. **Sidebar Lịch sử**:
-   - Render chung một danh sách hội thoại (Pinned nằm ở trên cùng, hiện icon chiếc ghim kế bên).
-   - Nút "Thùng rác" để xóa hội thoại.
-   - Nút "Cây bút" để đổi tên hội thoại.
-   - Thanh Search Bar ở đầu Sidebar, khi gõ sẽ gọi API tìm kiếm và hiển thị kết quả.
-2. **Feedback UI**:
-   - Thêm icon 👍 / 👎 dưới mỗi câu trả lời của LLM.
-   - Click chọn sẽ hiển thị textarea nhỏ để nhập comment -> nhấn Gửi để gọi API feedback.
+> [!IMPORTANT]
+> - Bạn có đồng ý với phương án chỉ sử dụng câu hỏi gốc (`query`) để generate câu trả lời khi `intent == "no_rag_needed"`, trong khi vẫn giữ `rewritten_query` cho nhánh RAG không?
+> - Lỗi nhập lung tung khiến `rewritten_query = ""` cũng sẽ tự động được xử lý bằng cách này, vì lúc đó analyzer có thể xếp nó vào `no_rag_needed` (hoặc `general`) và truyền thẳng chuỗi gốc cho LLM xử lý. Bạn thấy hợp lý chứ?
+
+Bạn hãy xem qua và phản hồi nhé. Nếu đồng ý, tôi sẽ tiến hành thực thi!

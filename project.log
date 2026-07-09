@@ -88449,3 +88449,1045 @@ Is Weaviate running and reachable at http://localhost:8081?
 2026-06-23 22:49:05,966 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
 2026-06-23 22:49:09,472 - MedKG-RAG - INFO - Results saved to D:\workspace\Repo\medical-chatbot-assistant\results\test_results\medaesqa\generation\detail.jsonl, D:\workspace\Repo\medical-chatbot-assistant\results\test_results\medaesqa\generation\summary.json, and D:\workspace\Repo\medical-chatbot-assistant\results\test_results\medaesqa\generation\predictions.jsonl
 2026-06-23 22:49:09,613 - MedKG-RAG - INFO - Neo4j connection closed
+2026-07-09 15:50:04,380 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-09 15:51:35,281 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-09 15:51:43,317 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-09 15:51:47,845 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-09 15:51:51,225 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-09 15:51:51,247 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-09 15:51:51,249 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-09 15:51:51,450 - MedKG-RAG - ERROR - [Conversation Store]: Failed to connect to PostgreSQL db: connection to server at "localhost" (::1), port 5432 failed: FATAL:  password authentication failed for user "medrag"
+
+2026-07-09 16:00:15,503 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-09 16:00:23,963 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-09 16:00:26,372 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-09 16:00:28,348 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-09 16:00:30,138 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-09 16:00:30,147 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-09 16:00:30,148 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-09 16:00:30,287 - MedKG-RAG - ERROR - [Conversation Store]: Failed to connect to PostgreSQL db: connection to server at "localhost" (::1), port 5432 failed: FATAL:  password authentication failed for user "medrag"
+
+2026-07-09 16:04:54,311 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-09 16:05:03,617 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-09 16:05:06,220 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-09 16:05:08,509 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-09 16:05:10,373 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-09 16:05:10,389 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-09 16:05:10,390 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-09 16:05:10,501 - MedKG-RAG - ERROR - [Conversation Store]: Failed to connect to PostgreSQL db: connection to server at "127.0.0.1", port 5432 failed: FATAL:  password authentication failed for user "medrag"
+
+2026-07-09 16:12:24,458 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-09 16:12:36,680 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-09 16:12:38,782 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-09 16:12:41,302 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-09 16:12:43,593 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-09 16:12:43,606 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-09 16:12:43,606 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-09 16:12:43,877 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:12:43,877 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-09 16:13:41,333 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:13:41,338 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:13:45,795 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:13:46,062 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:13:46,304 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:13:46,323 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:13:46,436 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:13:46,441 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:13:46,565 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:13:46,569 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:14:31,552 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:14:31,587 - MedKG-RAG - INFO - [Conversation Store] Created conversation 3e74bfd2-efa2-4747-9ce1-f4e3b22f867b for user 1
+2026-07-09 16:14:31,592 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 16:14:31,882 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:14:31,909 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:14:34,785 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'Vaughan-Williams classification of anti-arrhythmic drugs'...
+2026-07-09 16:14:45,705 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['Mexiletine', 'Amitifadine']
+2026-07-09 16:14:48,411 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-09 16:14:51,961 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 12 triples
+2026-07-09 16:14:51,962 - MedKG-RAG - ERROR - [Parallel Retrieval]: Error in Vector Search: 'list' object has no attribute 'tolist'
+2026-07-09 16:14:51,962 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-09 16:14:51,962 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 2 paths.
+2026-07-09 16:14:51,962 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-09 16:14:51,963 - MedKG-RAG - ERROR - [Chat] Stream error: string indices must be integers, not 'str'
+Traceback (most recent call last):
+  File "D:\workspace\Repo\medical-chatbot-assistant\api\routes\chat.py", line 51, in stream_generator
+    async for chunk in pipeline.run_stream(
+  File "D:\workspace\Repo\medical-chatbot-assistant\src\pipeline\rag_pipeline.py", line 347, in run_stream
+    ranked_text, ranked_kg = await self.cross_encoder_reranker.rerank(
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\workspace\Repo\medical-chatbot-assistant\src\reranking\cross_encoder.py", line 87, in rerank
+    passages.append(item["text"])
+                    ~~~~^^^^^^^^
+TypeError: string indices must be integers, not 'str'
+2026-07-09 16:14:51,966 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:16:21,700 - MedKG-RAG - INFO - [Shutdown]: Releasing resources...
+2026-07-09 16:16:21,706 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:16:21,713 - MedKG-RAG - INFO - Neo4j connection closed
+2026-07-09 16:16:21,714 - MedKG-RAG - INFO - [Shutdown]: Cleanup complete.
+2026-07-09 16:16:34,803 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-09 16:17:07,176 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-09 16:17:12,768 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-09 16:17:16,827 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-09 16:17:19,932 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-09 16:17:19,964 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-09 16:17:19,967 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-09 16:17:20,237 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:17:20,237 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-09 16:17:24,724 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-09 16:17:51,542 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-09 16:17:56,315 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-09 16:18:00,166 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-09 16:18:02,892 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-09 16:18:02,922 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-09 16:18:02,924 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-09 16:18:03,148 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:18:03,150 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-09 16:18:55,704 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:18:55,897 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:19:41,043 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:19:41,093 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 16:19:52,939 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'Vaughan-Williams classification of anti-arrhythmic drugs'...
+2026-07-09 16:19:57,546 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['Mexiletine', 'Amitifadine']
+2026-07-09 16:20:00,872 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-09 16:20:08,386 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 12 triples
+2026-07-09 16:20:18,915 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-09 16:20:18,915 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-09 16:20:18,915 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 2 paths.
+2026-07-09 16:20:18,915 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-09 16:20:18,916 - MedKG-RAG - ERROR - [Chat] Stream error: string indices must be integers, not 'str'
+Traceback (most recent call last):
+  File "D:\workspace\Repo\medical-chatbot-assistant\api\routes\chat.py", line 51, in stream_generator
+    async for chunk in pipeline.run_stream(
+  File "D:\workspace\Repo\medical-chatbot-assistant\src\pipeline\rag_pipeline.py", line 347, in run_stream
+    ranked_text, ranked_kg = await self.cross_encoder_reranker.rerank(
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\workspace\Repo\medical-chatbot-assistant\src\reranking\cross_encoder.py", line 87, in rerank
+    passages.append(item["text"])
+                    ~~~~^^^^^^^^
+TypeError: string indices must be integers, not 'str'
+2026-07-09 16:20:18,929 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:23:05,121 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:23:05,203 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:23:47,950 - MedKG-RAG - INFO - [Shutdown]: Releasing resources...
+2026-07-09 16:23:47,954 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:23:47,960 - MedKG-RAG - INFO - Neo4j connection closed
+2026-07-09 16:23:47,960 - MedKG-RAG - INFO - [Shutdown]: Cleanup complete.
+2026-07-09 16:24:00,790 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-09 16:24:31,171 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-09 16:24:35,607 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-09 16:24:38,906 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-09 16:24:42,001 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-09 16:24:42,056 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-09 16:24:42,058 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-09 16:24:42,223 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:24:42,224 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-09 16:27:22,297 - MedKG-RAG - INFO - [Shutdown]: Releasing resources...
+2026-07-09 16:27:22,297 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:27:22,298 - MedKG-RAG - INFO - Neo4j connection closed
+2026-07-09 16:27:22,298 - MedKG-RAG - INFO - [Shutdown]: Cleanup complete.
+2026-07-09 16:27:26,179 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-09 16:27:36,654 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-09 16:27:38,658 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-09 16:27:40,601 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-09 16:27:42,471 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-09 16:27:42,472 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-09 16:27:42,473 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-09 16:27:42,628 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:27:42,629 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-09 16:27:44,309 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-09 16:27:50,129 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-09 16:27:51,127 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-09 16:27:53,239 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-09 16:27:55,147 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-09 16:27:55,149 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-09 16:27:55,149 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-09 16:27:55,218 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:27:55,218 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-09 16:28:00,653 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:28:00,680 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 16:28:02,538 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'Vaughan-Williams classification of anti-arrhythmic drugs'...
+2026-07-09 16:28:07,154 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['Mexiletine', 'Amitifadine']
+2026-07-09 16:28:07,930 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-09 16:28:10,341 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 12 triples
+2026-07-09 16:28:10,342 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-09 16:28:10,342 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-09 16:28:10,342 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 18 paths.
+2026-07-09 16:28:10,342 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-09 16:28:41,322 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:29:13,498 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:29:13,512 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:29:54,692 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:29:54,705 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:31:07,626 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:31:07,646 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:31:07,685 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:31:07,691 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:31:07,750 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:31:07,760 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:31:26,088 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:31:26,098 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:32:50,941 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:32:51,661 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 16:32:52,419 - MedKG-RAG - INFO - Client disconnected during stream.
+2026-07-09 16:32:52,421 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:32:52,708 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:32:52,738 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 16:32:55,344 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'Vaughan-Williams classification of anti-arrhythmic drugs'...
+2026-07-09 16:32:58,227 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['Mexiletine', 'Amitifadine']
+2026-07-09 16:32:59,835 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-09 16:33:09,232 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 12 triples
+2026-07-09 16:33:09,244 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-09 16:33:09,244 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-09 16:33:09,244 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 18 paths.
+2026-07-09 16:33:09,245 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-09 16:33:34,383 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:34:35,845 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:34:35,991 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:35:08,421 - MedKG-RAG - INFO - [Shutdown]: Releasing resources...
+2026-07-09 16:35:08,427 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:35:08,501 - MedKG-RAG - INFO - Neo4j connection closed
+2026-07-09 16:35:08,501 - MedKG-RAG - INFO - [Shutdown]: Cleanup complete.
+2026-07-09 16:35:18,769 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-09 16:35:58,957 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-09 16:36:07,812 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-09 16:36:16,797 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-09 16:36:19,905 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-09 16:36:19,966 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-09 16:36:19,982 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-09 16:36:20,431 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:36:20,432 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-09 16:36:45,044 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:36:45,791 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:36:45,894 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:36:45,913 - MedKG-RAG - INFO - [Conversation Store] Created conversation c33998fb-dfc7-45c2-b0cc-12c16e435345 for user 2
+2026-07-09 16:36:45,923 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 16:36:48,287 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What is paracetamol?'...
+2026-07-09 16:36:54,058 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['Acetaminophen', 'Hydrocodone']
+2026-07-09 16:36:56,486 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-09 16:37:00,106 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 12 triples
+2026-07-09 16:37:00,111 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-09 16:37:00,114 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 60 results.
+2026-07-09 16:37:00,116 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 18 paths.
+2026-07-09 16:37:00,116 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-09 16:37:05,610 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:37:05,660 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:37:32,967 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:44:05,900 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:44:05,945 - MedKG-RAG - INFO - [Conversation Store] Created conversation baabe109-3bbd-49da-9faf-3d067d20c917 for user 1
+2026-07-09 16:44:05,960 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 16:44:06,073 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:44:06,112 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:44:07,291 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What is the methyl donor of DNA (cytosine-5)-methyltransferases?'...
+2026-07-09 16:44:08,936 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['DNMT3L', 'DNMT3B']
+2026-07-09 16:44:09,090 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 5 triples
+2026-07-09 16:44:11,936 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 9 triples
+2026-07-09 16:44:11,936 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-09 16:44:11,937 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-09 16:44:11,937 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 14 paths.
+2026-07-09 16:44:11,937 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-09 16:44:15,369 - MedKG-RAG - INFO - Client disconnected during stream.
+2026-07-09 16:44:15,370 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:44:15,678 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:44:15,684 - MedKG-RAG - INFO - [Conversation Store] Created conversation a0d1ae1d-3e99-4060-9295-fb333fbdde52 for user 1
+2026-07-09 16:44:15,685 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 16:44:16,051 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:44:16,057 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:44:16,301 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What is the methyl donor of DNA (cytosine-5)-methyltransferases?'...
+2026-07-09 16:44:16,325 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['DNMT3L', 'DNMT3B']
+2026-07-09 16:44:16,473 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 5 triples
+2026-07-09 16:44:19,144 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 9 triples
+2026-07-09 16:44:19,144 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-09 16:44:19,146 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-09 16:44:19,146 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 14 paths.
+2026-07-09 16:44:19,146 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-09 16:44:19,995 - MedKG-RAG - INFO - Client disconnected during stream.
+2026-07-09 16:44:19,998 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:46:04,927 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:46:04,939 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:46:30,550 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:46:30,561 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:48:38,842 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:48:38,852 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:48:38,868 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:48:38,874 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:48:38,889 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:48:38,893 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:48:42,750 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:48:42,766 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:48:44,785 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:48:44,790 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:48:46,629 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:48:46,636 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:48:53,706 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:48:53,712 - MedKG-RAG - INFO - [Conversation Store] Created conversation aff9508b-b1cf-485b-94b2-d0ef17860f6e for user 1
+2026-07-09 16:48:53,714 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 16:48:54,311 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What is the methyl donor of DNA (cytosine-5)-methyltransferases?'...
+2026-07-09 16:48:54,335 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['DNMT3L', 'DNMT3B']
+2026-07-09 16:48:54,475 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 5 triples
+2026-07-09 16:48:57,135 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 9 triples
+2026-07-09 16:48:57,136 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-09 16:48:57,137 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-09 16:48:57,137 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 14 paths.
+2026-07-09 16:48:57,137 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-09 16:49:24,710 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:49:24,754 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:49:24,767 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:50:29,014 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:50:29,019 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:51:16,003 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:51:16,013 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:52:02,418 - MedKG-RAG - INFO - [Shutdown]: Releasing resources...
+2026-07-09 16:52:02,429 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:52:02,435 - MedKG-RAG - INFO - Neo4j connection closed
+2026-07-09 16:52:02,435 - MedKG-RAG - INFO - [Shutdown]: Cleanup complete.
+2026-07-09 16:52:37,247 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-09 16:52:45,465 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-09 16:52:46,843 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-09 16:52:48,855 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-09 16:52:50,807 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-09 16:52:50,816 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-09 16:52:50,816 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-09 16:52:50,866 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:52:50,866 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-09 16:52:51,029 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:52:51,038 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:52:51,058 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:52:51,064 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:52:51,083 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:52:51,089 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:52:56,876 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:52:56,883 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:53:07,260 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:53:07,265 - MedKG-RAG - INFO - [Conversation Store] Created conversation 14ea9575-5401-4847-a0c5-08b6d528ab01 for user 1
+2026-07-09 16:53:07,267 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 16:53:08,519 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What is the role of ERK1/2 proteins in craniosynostosis?'...
+2026-07-09 16:53:08,606 - MedKG-RAG - INFO - Client disconnected during stream.
+2026-07-09 16:53:08,606 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:53:18,364 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:53:18,369 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 16:53:19,073 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What is the method FASP used for?'...
+2026-07-09 16:53:19,074 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (0 unique anchors): []
+2026-07-09 16:53:22,214 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-09 16:53:22,215 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-09 16:53:22,215 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 0 paths.
+2026-07-09 16:53:22,215 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-09 16:53:50,336 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:56:28,013 - MedKG-RAG - INFO - [Shutdown]: Releasing resources...
+2026-07-09 16:56:28,013 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:56:28,014 - MedKG-RAG - INFO - Neo4j connection closed
+2026-07-09 16:56:28,014 - MedKG-RAG - INFO - [Shutdown]: Cleanup complete.
+2026-07-09 16:56:31,401 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-09 16:56:46,174 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-09 16:56:47,869 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-09 16:56:50,675 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-09 16:56:52,915 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-09 16:56:52,921 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-09 16:56:52,922 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-09 16:56:53,011 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:56:53,011 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-09 16:57:26,963 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:57:26,969 - MedKG-RAG - INFO - [Conversation Store] Created conversation 3fae6626-96bc-4c0b-8203-2f692cb431b6 for user 1
+2026-07-09 16:57:26,971 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 16:57:27,196 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:57:27,200 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:57:27,858 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What are the causes of cardiovascular disease?'...
+2026-07-09 16:57:29,002 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['cardiovascular disease', 'atherosclerosis']
+2026-07-09 16:57:29,732 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-09 16:57:30,646 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 12 triples
+2026-07-09 16:57:31,458 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-09 16:57:31,458 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-09 16:57:31,458 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 18 paths.
+2026-07-09 16:57:31,458 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-09 16:58:03,862 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:58:03,877 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:58:05,607 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 16:58:05,703 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 16:58:05,715 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:00:15,120 - MedKG-RAG - INFO - [Shutdown]: Releasing resources...
+2026-07-09 17:00:15,120 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:00:15,121 - MedKG-RAG - INFO - Neo4j connection closed
+2026-07-09 17:00:15,122 - MedKG-RAG - INFO - [Shutdown]: Cleanup complete.
+2026-07-09 17:00:18,419 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-09 17:00:40,022 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-09 17:00:43,343 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-09 17:00:46,393 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-09 17:00:48,576 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-09 17:00:48,581 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-09 17:00:48,582 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-09 17:00:48,670 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:00:48,670 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-09 17:00:48,697 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:00:49,208 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:00:49,242 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:00:49,255 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:00:49,299 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:00:49,307 - MedKG-RAG - INFO - [Conversation Store] Created conversation a02b7aab-2310-4e98-90e0-a57a18a2ff05 for user 3
+2026-07-09 17:00:49,316 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 17:00:50,332 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'test question'...
+2026-07-09 17:00:50,336 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (0 unique anchors): []
+2026-07-09 17:00:52,739 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-09 17:00:52,740 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-09 17:00:52,740 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 0 paths.
+2026-07-09 17:00:52,741 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-09 17:01:08,483 - MedKG-RAG - INFO - Client disconnected during stream.
+2026-07-09 17:01:08,483 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:02:58,713 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:02:58,735 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:03:06,785 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:03:06,792 - MedKG-RAG - INFO - [Conversation Store] Created conversation 770aa521-6880-410b-b812-5b1db41f4dd7 for user 1
+2026-07-09 17:03:06,795 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 17:03:07,153 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:03:07,157 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:03:07,606 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What are the causes of diabetes'...
+2026-07-09 17:03:08,566 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['diabetes mellitus (disease)', 'type 1 diabetes mellitus']
+2026-07-09 17:03:09,555 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-09 17:03:10,732 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 12 triples
+2026-07-09 17:03:11,135 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-09 17:03:11,136 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-09 17:03:11,136 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 18 paths.
+2026-07-09 17:03:11,136 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-09 17:03:49,954 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:03:49,972 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:03:51,194 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:03:51,220 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:03:51,227 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:05:36,119 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:05:36,125 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 17:05:36,776 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'Is it good to have diabetes?'...
+2026-07-09 17:05:37,570 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['diabetes mellitus (disease)', 'type 1 diabetes mellitus']
+2026-07-09 17:05:40,013 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-09 17:05:42,841 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 12 triples
+2026-07-09 17:05:42,842 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-09 17:05:42,842 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-09 17:05:42,842 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 18 paths.
+2026-07-09 17:05:42,842 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-09 17:06:13,612 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:09:04,515 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:09:04,531 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:09:13,390 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:09:13,416 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:09:15,619 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:09:15,626 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:09:16,797 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:09:16,801 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:09:18,159 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:09:18,177 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:09:22,500 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:09:22,509 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:09:23,168 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:09:23,175 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:09:24,053 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:09:24,059 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:09:24,618 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:09:24,625 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:09:30,207 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:09:30,210 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:09:32,085 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:09:32,097 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:09:33,785 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:09:33,788 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:09:34,722 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:09:34,726 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:09:44,309 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:09:44,326 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:09:44,407 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:09:44,443 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:09:44,588 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:09:44,616 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:11:01,114 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:11:01,119 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:11:02,665 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:11:02,669 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:11:03,504 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:11:03,508 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:14:04,365 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:14:04,379 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:17:20,646 - MedKG-RAG - INFO - [Shutdown]: Releasing resources...
+2026-07-09 17:17:20,648 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:17:20,659 - MedKG-RAG - INFO - Neo4j connection closed
+2026-07-09 17:17:20,659 - MedKG-RAG - INFO - [Shutdown]: Cleanup complete.
+2026-07-09 17:17:24,296 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-09 17:17:42,002 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-09 17:17:47,727 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-09 17:17:50,635 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-09 17:17:52,786 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-09 17:17:52,819 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-09 17:17:52,822 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-09 17:17:52,923 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:17:52,923 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-09 17:17:58,161 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:17:58,178 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:18:11,893 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:18:11,901 - MedKG-RAG - INFO - [Conversation Store] Created conversation 9b67b83a-b2e5-4ad6-ba83-ad3e99e2f149 for user 1
+2026-07-09 17:18:11,912 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 17:18:12,228 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:18:12,233 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:18:13,064 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What is cardiovascular disease?'...
+2026-07-09 17:18:14,153 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['cardiovascular disease', 'atherosclerosis']
+2026-07-09 17:18:15,501 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-09 17:18:16,685 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 12 triples
+2026-07-09 17:18:16,685 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-09 17:18:16,685 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-09 17:18:16,685 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 18 paths.
+2026-07-09 17:18:16,685 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-09 17:18:47,431 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:18:47,453 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:18:48,892 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:18:49,030 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:18:49,044 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:19:05,545 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:19:05,549 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:19:06,167 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:19:06,175 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:20:00,963 - MedKG-RAG - INFO - [Shutdown]: Releasing resources...
+2026-07-09 17:20:00,963 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:20:00,964 - MedKG-RAG - INFO - Neo4j connection closed
+2026-07-09 17:20:00,964 - MedKG-RAG - INFO - [Shutdown]: Cleanup complete.
+2026-07-09 17:20:04,355 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-09 17:20:30,385 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-09 17:20:32,458 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-09 17:20:34,817 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-09 17:20:37,086 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-09 17:20:37,092 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-09 17:20:37,093 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-09 17:20:37,156 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:20:37,157 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-09 17:20:37,231 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:20:37,243 - MedKG-RAG - INFO - [Conversation Store] Created conversation e2b72480-941b-47b7-97be-1f383d864426 for user 1
+2026-07-09 17:20:37,257 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 17:20:37,403 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:20:37,413 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:20:38,122 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What is heart disease'...
+2026-07-09 17:20:38,920 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['cardiovascular disease', 'heart failure']
+2026-07-09 17:20:41,646 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-09 17:20:41,940 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 11 triples
+2026-07-09 17:20:42,540 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-09 17:20:42,540 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-09 17:20:42,540 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 17 paths.
+2026-07-09 17:20:42,541 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-09 17:21:14,528 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:21:14,543 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:21:15,701 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:21:15,767 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:21:15,777 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:21:19,784 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:21:19,795 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:21:20,849 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:21:20,860 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:21:23,422 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:21:23,434 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 17:21:24,271 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 17:21:24,280 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 20:59:14,244 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-09 20:59:23,579 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-09 20:59:25,022 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-09 20:59:26,957 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-09 20:59:28,951 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-09 20:59:28,961 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-09 20:59:28,961 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-09 20:59:29,058 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 20:59:29,058 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-09 20:59:31,923 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 20:59:32,407 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 20:59:32,714 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 20:59:32,724 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 20:59:32,763 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 20:59:32,768 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 21:31:58,538 - MedKG-RAG - INFO - [Shutdown]: Releasing resources...
+2026-07-09 21:31:58,546 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 21:31:58,550 - MedKG-RAG - INFO - Neo4j connection closed
+2026-07-09 21:31:58,551 - MedKG-RAG - INFO - [Shutdown]: Cleanup complete.
+2026-07-09 21:32:02,846 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-09 21:32:17,211 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-09 21:32:20,632 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-09 21:32:23,468 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-09 21:32:25,572 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-09 21:32:25,575 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-09 21:32:25,576 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-09 21:32:25,644 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 21:32:25,645 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-09 21:32:28,770 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-09 21:32:40,942 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-09 21:32:45,192 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-09 21:32:47,695 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-09 21:32:49,814 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-09 21:32:49,819 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-09 21:32:49,821 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-09 21:32:49,906 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 21:32:49,906 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-09 21:32:49,969 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 21:32:49,983 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 21:55:34,422 - MedKG-RAG - INFO - [Shutdown]: Releasing resources...
+2026-07-09 21:55:34,453 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 21:55:34,492 - MedKG-RAG - INFO - Neo4j connection closed
+2026-07-09 21:55:34,493 - MedKG-RAG - INFO - [Shutdown]: Cleanup complete.
+2026-07-09 21:55:41,350 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-09 21:56:04,076 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-09 21:56:08,090 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-09 21:56:12,122 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-09 21:56:14,403 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-09 21:56:14,422 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-09 21:56:14,423 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-09 21:56:14,581 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 21:56:14,581 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-09 21:56:17,647 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-09 21:56:31,312 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-09 21:56:34,038 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-09 21:56:36,242 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-09 21:56:38,388 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-09 21:56:38,391 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-09 21:56:38,392 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-09 21:56:38,467 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 21:56:38,468 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-09 22:22:30,195 - MedKG-RAG - INFO - [Shutdown]: Releasing resources...
+2026-07-09 22:22:30,202 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:22:30,206 - MedKG-RAG - INFO - Neo4j connection closed
+2026-07-09 22:22:30,208 - MedKG-RAG - INFO - [Shutdown]: Cleanup complete.
+2026-07-09 22:22:34,732 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-09 22:23:01,658 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-09 22:23:07,480 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-09 22:23:11,736 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-09 22:23:13,718 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-09 22:23:13,730 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-09 22:23:13,730 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-09 22:23:13,909 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:23:13,909 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-09 22:29:36,135 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:29:36,145 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:29:40,029 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:29:40,061 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:29:41,676 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:29:41,684 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:29:44,101 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:29:44,107 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:30:03,619 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:30:04,250 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:30:04,316 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:30:04,873 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:30:04,992 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:30:05,025 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:30:05,060 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:30:05,070 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:30:21,582 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:30:21,599 - MedKG-RAG - INFO - [Conversation Store] Created conversation 69dec067-a646-4215-be4d-ee3f2f18acb9 for user 4
+2026-07-09 22:30:21,626 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 22:30:21,981 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:30:21,993 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:30:22,029 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:30:22,032 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:30:22,046 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:30:22,048 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:30:22,085 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:30:22,096 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:30:23,664 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What is cardiovascular disease?'...
+2026-07-09 22:30:24,804 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['cardiovascular disease', 'atherosclerosis']
+2026-07-09 22:30:24,916 - MedKG-RAG - INFO - Client disconnected during stream.
+2026-07-09 22:30:24,917 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:30:31,488 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:30:31,499 - MedKG-RAG - INFO - [Conversation Store] Created conversation 376dc29b-9b90-4964-a810-57086e88a1f7 for user 4
+2026-07-09 22:30:31,512 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 22:30:31,937 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:30:31,940 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:30:31,947 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:30:31,952 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:30:32,259 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What is cardiovascular disease?'...
+2026-07-09 22:30:32,337 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['cardiovascular disease', 'atherosclerosis']
+2026-07-09 22:30:36,342 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-09 22:30:40,277 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 12 triples
+2026-07-09 22:30:40,279 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-09 22:30:40,280 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-09 22:30:40,280 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 18 paths.
+2026-07-09 22:30:40,280 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-09 22:30:51,466 - MedKG-RAG - INFO - Client disconnected during stream.
+2026-07-09 22:30:51,467 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:30:53,188 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:30:53,206 - MedKG-RAG - INFO - [Conversation Store] Created conversation a1f81c30-daae-4032-aab9-966b758ab5c3 for user 4
+2026-07-09 22:30:53,224 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 22:30:53,467 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:30:53,487 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:30:53,557 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:30:53,573 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:30:53,975 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What is cardiovascular disease?'...
+2026-07-09 22:30:54,017 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['cardiovascular disease', 'atherosclerosis']
+2026-07-09 22:30:57,996 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-09 22:30:58,679 - MedKG-RAG - INFO - Client disconnected during stream.
+2026-07-09 22:30:58,680 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:31:15,487 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:31:15,491 - MedKG-RAG - INFO - [Conversation Store] Created conversation e9ded652-4682-4036-8e8a-64374ee94ab7 for user 4
+2026-07-09 22:31:15,497 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 22:31:15,537 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:31:15,549 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:31:15,601 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:31:15,620 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:31:16,327 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What is cardiovascular disease?'...
+2026-07-09 22:31:16,382 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['cardiovascular disease', 'atherosclerosis']
+2026-07-09 22:31:17,715 - MedKG-RAG - INFO - Client disconnected during stream.
+2026-07-09 22:31:17,716 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:31:30,960 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:31:30,973 - MedKG-RAG - INFO - [Conversation Store] Created conversation 41006510-878d-4044-87c1-d66657ee92ac for user 4
+2026-07-09 22:31:30,978 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 22:31:31,318 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:31:31,325 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:31:31,333 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:31:31,338 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:31:31,842 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What is cardiovascular disease?'...
+2026-07-09 22:31:31,907 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['cardiovascular disease', 'atherosclerosis']
+2026-07-09 22:31:33,191 - MedKG-RAG - INFO - Client disconnected during stream.
+2026-07-09 22:31:33,192 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:31:44,984 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:31:45,000 - MedKG-RAG - INFO - [Conversation Store] Created conversation afb5b9c8-55b4-4129-8343-301a414ff405 for user 4
+2026-07-09 22:31:45,024 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 22:31:45,179 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:31:45,190 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:31:45,230 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:31:45,242 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:31:45,791 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What is cardiovascular disease?'...
+2026-07-09 22:31:45,857 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['cardiovascular disease', 'atherosclerosis']
+2026-07-09 22:31:50,198 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-09 22:31:53,527 - MedKG-RAG - INFO - Client disconnected during stream.
+2026-07-09 22:31:53,529 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:32:00,277 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:32:00,290 - MedKG-RAG - INFO - [Conversation Store] Created conversation 08fde4de-8f5c-4da3-b23c-2201f36e5179 for user 4
+2026-07-09 22:32:00,316 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 22:32:00,398 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:32:00,421 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:32:00,482 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:32:00,495 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:32:00,521 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:32:00,537 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:32:00,567 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:32:00,580 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:32:00,987 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What is cardiovascular disease?'...
+2026-07-09 22:32:01,019 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['cardiovascular disease', 'atherosclerosis']
+2026-07-09 22:32:02,595 - MedKG-RAG - INFO - Client disconnected during stream.
+2026-07-09 22:32:02,609 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:32:43,754 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:32:43,785 - MedKG-RAG - INFO - [Conversation Store] Created conversation 3d9796b9-e0cf-4206-b6a7-6524f351f99f for user 4
+2026-07-09 22:32:43,809 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 22:32:43,866 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:32:43,885 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:32:43,892 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:32:43,904 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:32:44,613 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What is cardiovascular disease?'...
+2026-07-09 22:32:44,644 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['cardiovascular disease', 'atherosclerosis']
+2026-07-09 22:32:46,563 - MedKG-RAG - INFO - Client disconnected during stream.
+2026-07-09 22:32:46,564 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:33:18,374 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:33:18,378 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:33:18,383 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:33:18,391 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:33:18,435 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:33:18,444 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:33:19,862 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:33:19,872 - MedKG-RAG - INFO - [Conversation Store] Created conversation cad559b8-0cb3-4f21-b954-9b98ce76d125 for user 4
+2026-07-09 22:33:19,892 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 22:33:19,980 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:33:19,995 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:33:19,995 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:33:20,025 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:33:20,746 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What is cardiovascular disease?'...
+2026-07-09 22:33:20,774 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['cardiovascular disease', 'atherosclerosis']
+2026-07-09 22:33:21,636 - MedKG-RAG - INFO - Client disconnected during stream.
+2026-07-09 22:33:21,642 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:37:27,466 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:37:27,493 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:37:27,535 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:37:27,545 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:37:31,422 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:37:31,437 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:37:33,200 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:37:33,213 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:37:34,748 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:37:34,765 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:37:36,665 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:37:36,678 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:37:38,070 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:37:38,100 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:37:41,562 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:37:41,591 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:37:44,073 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:37:44,101 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:37:45,657 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:37:45,672 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:37:46,994 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:37:47,005 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:38:03,717 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:38:03,725 - MedKG-RAG - INFO - [Conversation Store] Created conversation e1229ec7-c81c-4cde-8c30-3713aaf0040b for user 4
+2026-07-09 22:38:03,734 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 22:38:03,790 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:38:03,800 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:38:04,578 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What is cardiovascular disease?'...
+2026-07-09 22:38:04,645 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['cardiovascular disease', 'atherosclerosis']
+2026-07-09 22:38:08,639 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-09 22:38:12,263 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 12 triples
+2026-07-09 22:38:12,265 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-09 22:38:12,265 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-09 22:38:12,265 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 18 paths.
+2026-07-09 22:38:12,265 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-09 22:38:38,778 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:38:38,787 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:38:39,989 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:38:40,030 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:38:40,039 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:41:46,036 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:41:46,056 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 22:41:46,935 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What is diabetes?'...
+2026-07-09 22:41:47,356 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['diabetes mellitus (disease)', 'type 1 diabetes mellitus']
+2026-07-09 22:41:51,661 - MedKG-RAG - INFO - Client disconnected during stream.
+2026-07-09 22:41:51,662 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:41:58,705 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:41:58,735 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 22:41:59,395 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What is diabetes?'...
+2026-07-09 22:41:59,444 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['diabetes mellitus (disease)', 'type 1 diabetes mellitus']
+2026-07-09 22:42:01,442 - MedKG-RAG - INFO - Client disconnected during stream.
+2026-07-09 22:42:01,443 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:42:03,411 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:42:03,463 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 22:42:04,056 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What is diabetes?'...
+2026-07-09 22:42:04,090 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['diabetes mellitus (disease)', 'type 1 diabetes mellitus']
+2026-07-09 22:42:11,569 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-09 22:42:14,042 - MedKG-RAG - INFO - Client disconnected during stream.
+2026-07-09 22:42:14,043 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:42:15,185 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:42:15,207 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 22:42:16,191 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What is diabetes?'...
+2026-07-09 22:42:16,221 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['diabetes mellitus (disease)', 'type 1 diabetes mellitus']
+2026-07-09 22:42:17,451 - MedKG-RAG - INFO - Client disconnected during stream.
+2026-07-09 22:42:17,451 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:42:23,893 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:42:23,991 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 22:42:24,868 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What is diabetes?'...
+2026-07-09 22:42:24,904 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['diabetes mellitus (disease)', 'type 1 diabetes mellitus']
+2026-07-09 22:42:25,069 - MedKG-RAG - INFO - Client disconnected during stream.
+2026-07-09 22:42:25,072 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:42:47,463 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:42:47,482 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:42:49,987 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:42:50,046 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:45:57,177 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:45:57,178 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:45:57,195 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:45:57,203 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:45:57,230 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:45:57,240 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:46:02,973 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:46:02,988 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:46:05,326 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:46:05,335 - MedKG-RAG - INFO - [Conversation Store] Created conversation 802d208e-90cb-40c9-a324-68a1c75bcd57 for user 4
+2026-07-09 22:46:05,354 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 22:46:05,737 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:46:05,760 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:46:06,039 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What is diabetes?'...
+2026-07-09 22:46:06,090 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['diabetes mellitus (disease)', 'type 1 diabetes mellitus']
+2026-07-09 22:46:13,014 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-09 22:46:20,691 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 12 triples
+2026-07-09 22:46:20,692 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-09 22:46:20,693 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-09 22:46:20,694 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 18 paths.
+2026-07-09 22:46:20,694 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-09 22:46:44,801 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:46:44,805 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:46:45,721 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:46:45,797 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:46:45,801 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:47:33,999 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:47:34,050 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 22:47:35,092 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'Vaughan-Williams classification of anti-arrhythmic drugs'...
+2026-07-09 22:47:35,735 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (4 unique anchors): ['ventricular tachycardia', 'atrial conduction disease', 'Mexiletine', 'Amitifadine']
+2026-07-09 22:47:36,722 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 9 triples
+2026-07-09 22:47:41,502 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 18 triples
+2026-07-09 22:47:41,503 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-09 22:47:41,503 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-09 22:47:41,503 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 27 paths.
+2026-07-09 22:47:41,503 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-09 22:47:46,488 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:48:07,777 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:48:07,788 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:48:09,279 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:48:09,290 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:48:09,453 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:48:09,476 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:48:09,716 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:48:09,725 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:48:09,860 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:48:09,867 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:48:11,050 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:48:11,059 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:48:11,257 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:48:11,278 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:48:11,367 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:48:11,377 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:49:51,699 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:49:51,731 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:49:51,799 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:49:51,814 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:49:59,654 - MedKG-RAG - INFO - [Shutdown]: Releasing resources...
+2026-07-09 22:49:59,654 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:49:59,657 - MedKG-RAG - INFO - Neo4j connection closed
+2026-07-09 22:49:59,658 - MedKG-RAG - INFO - [Shutdown]: Cleanup complete.
+2026-07-09 22:50:05,036 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-09 22:50:29,000 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-09 22:50:34,541 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-09 22:50:37,630 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-09 22:50:39,977 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-09 22:50:39,990 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-09 22:50:39,991 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-09 22:50:40,103 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:50:40,104 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-09 22:50:43,016 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-09 22:51:00,203 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-09 22:51:04,809 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-09 22:51:08,009 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-09 22:51:10,132 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-09 22:51:10,137 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-09 22:51:10,138 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-09 22:51:10,230 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:51:10,233 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-09 22:54:48,657 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:54:48,675 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:54:48,717 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:54:48,730 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:55:21,573 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:55:21,587 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:55:28,073 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:55:28,120 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:55:30,819 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:55:30,836 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:55:31,421 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:55:31,431 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:55:39,736 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:55:39,763 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:55:43,146 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:55:43,161 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:55:43,637 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:55:43,653 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:57:10,348 - MedKG-RAG - INFO - [Shutdown]: Releasing resources...
+2026-07-09 22:57:10,349 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:57:10,350 - MedKG-RAG - INFO - Neo4j connection closed
+2026-07-09 22:57:10,351 - MedKG-RAG - INFO - [Shutdown]: Cleanup complete.
+2026-07-09 22:57:13,073 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-09 22:57:39,366 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-09 22:57:48,091 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-09 22:57:54,331 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-09 22:57:56,972 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-09 22:57:56,976 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-09 22:57:56,979 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-09 22:57:57,243 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:57:57,245 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-09 22:58:57,649 - MedKG-RAG - INFO - [Shutdown]: Releasing resources...
+2026-07-09 22:58:57,650 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:58:57,650 - MedKG-RAG - INFO - Neo4j connection closed
+2026-07-09 22:58:57,651 - MedKG-RAG - INFO - [Shutdown]: Cleanup complete.
+2026-07-09 22:59:00,594 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-09 22:59:17,222 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-09 22:59:21,878 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-09 22:59:24,162 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-09 22:59:26,302 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-09 22:59:26,306 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-09 22:59:26,307 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-09 22:59:26,390 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:59:26,391 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-09 22:59:26,471 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:59:26,471 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:59:26,498 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:59:26,993 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:59:27,048 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:59:27,058 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 22:59:27,078 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 22:59:27,089 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 23:00:18,254 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 23:00:18,365 - MedKG-RAG - INFO - [Conversation Store] Created conversation 752ec36b-b00d-4c17-97a8-71878299c3e7 for user 5
+2026-07-09 23:00:18,410 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 23:00:18,720 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 23:00:18,747 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 23:00:20,374 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'Ewing sarcoma fusion protein'...
+2026-07-09 23:00:21,618 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (4 unique anchors): ['Ewing sarcoma', 'extraskeletal Ewing sarcoma', 'FLG2', 'FOXI1']
+2026-07-09 23:00:21,849 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 11 triples
+2026-07-09 23:00:27,427 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 18 triples
+2026-07-09 23:00:27,429 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-09 23:00:27,429 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-09 23:00:27,429 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 29 paths.
+2026-07-09 23:00:27,430 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-09 23:00:57,163 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 23:00:57,169 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 23:00:58,845 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 23:00:58,921 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 23:00:58,925 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 23:01:30,181 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 23:01:30,223 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 23:01:36,286 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 23:01:36,297 - MedKG-RAG - INFO - [Conversation Store] Created conversation ae55bc37-789a-4964-b2b7-b0b900f3730a for user 5
+2026-07-09 23:01:36,306 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis (streaming)...
+2026-07-09 23:01:36,703 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 23:01:36,726 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 23:01:37,021 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'definition of love'...
+2026-07-09 23:01:37,021 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (0 unique anchors): []
+2026-07-09 23:01:40,891 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-09 23:01:40,892 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-09 23:01:40,892 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 0 paths.
+2026-07-09 23:01:40,893 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-09 23:01:43,546 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 23:01:43,578 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 23:01:45,191 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 23:01:45,264 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 23:01:45,273 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 23:01:54,526 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 23:01:54,537 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 23:01:56,685 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 23:01:56,700 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 23:01:57,490 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 23:01:57,495 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 23:04:18,865 - MedKG-RAG - INFO - [Shutdown]: Releasing resources...
+2026-07-09 23:04:18,865 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 23:04:18,868 - MedKG-RAG - INFO - Neo4j connection closed
+2026-07-09 23:04:18,868 - MedKG-RAG - INFO - [Shutdown]: Cleanup complete.
+2026-07-09 23:04:21,569 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-09 23:04:37,578 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-09 23:04:41,981 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-09 23:04:45,520 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-09 23:04:47,605 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-09 23:04:47,614 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-09 23:04:47,614 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-09 23:04:47,705 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 23:04:47,706 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-09 23:04:50,678 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-09 23:05:06,851 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-09 23:05:11,822 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-09 23:05:14,724 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-09 23:05:16,832 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-09 23:05:16,836 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-09 23:05:16,837 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-09 23:05:16,899 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 23:05:16,899 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-09 23:05:17,221 - MedKG-RAG - INFO - [Shutdown]: Releasing resources...
+2026-07-09 23:05:17,222 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 23:05:17,222 - MedKG-RAG - INFO - Neo4j connection closed
+2026-07-09 23:05:17,223 - MedKG-RAG - INFO - [Shutdown]: Cleanup complete.
+2026-07-09 23:05:19,955 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-09 23:05:36,143 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-09 23:05:40,820 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-09 23:05:43,633 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-09 23:05:45,673 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-09 23:05:45,677 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-09 23:05:45,679 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-09 23:05:45,793 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 23:05:45,797 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-09 23:08:51,201 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 23:08:51,213 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 23:08:51,267 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 23:08:51,276 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 23:08:51,321 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 23:08:51,331 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 23:22:16,762 - MedKG-RAG - INFO - [Shutdown]: Releasing resources...
+2026-07-09 23:22:16,764 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-09 23:22:16,765 - MedKG-RAG - INFO - Neo4j connection closed
+2026-07-09 23:22:16,766 - MedKG-RAG - INFO - [Shutdown]: Cleanup complete.
+2026-07-09 23:22:20,346 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-09 23:22:38,686 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-09 23:22:43,166 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-09 23:22:46,418 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-09 23:22:48,701 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-09 23:22:48,706 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-09 23:22:48,707 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-09 23:22:48,768 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-09 23:22:48,768 - MedKG-RAG - INFO - [Startup]: All service ready.

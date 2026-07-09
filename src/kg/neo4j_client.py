@@ -251,7 +251,7 @@ class Neo4jClient(IKGSearcher):
         hop1_m: int = 10,
         hop2_n: int = 5,
         hop2_cap: int = 50
-    ) -> dict[str, list[dict]]:
+    ) -> list[dict]:
         """Full two-stage KG retrieval.
 
         Args:
@@ -270,21 +270,22 @@ class Neo4jClient(IKGSearcher):
             hop2_cap: Hard cap on total 2-hop triples.
 
         Returns:
-            {
-              "hop1": [{n1, r1, n2, sim}, ...],
-              "hop2": [{n1, r1, n2, sim}, ...],
-            }
+            List of linearized paths:
+            [
+               {"text": "Entity: A -[rel]-> Disease: B", "metadata": {"sim": 0.9, "hop": 1}},
+               ...
+            ]
         """
         if not self.driver:
             logger.warning("Neo4j driver unavailable — Skipping KG retrieval...")
-            return {"hop1": [], "hop2": []}
+            return []
 
         allowed_edges = self._resolve_edge_types(intents)
 
         # Stage 1: anchor search (same-space: A-E vs A-E)
         anchors = await self._find_anchors(entity_article_embeddings, top_k)
         if not anchors:
-            return {"hop1": [], "hop2": []}
+            return []
 
         # Stage 2a: 1-hop expansion (cross-space: Q-E rewritten_query vs A-E nodes)
         import asyncio
@@ -301,4 +302,16 @@ class Neo4jClient(IKGSearcher):
         else:
             logger.info(f"[Stage 2b]: 2-hop → {len(hop2)} triples")
 
-        return {"hop1": hop1, "hop2": hop2}
+        results = []
+        for t in hop1:
+            results.append({
+                "text": f"{t['n1_type']}: {t['n1']} -[{t['r1']}]-> {t['n2_type']}: {t['n2']}",
+                "metadata": {"sim": t["sim"], "hop": 1}
+            })
+        for t in hop2:
+            results.append({
+                "text": f"{t['n1_type']}: {t['n1']} -[{t['r1']}]-> {t['n2_type']}: {t['n2']}",
+                "metadata": {"sim": t["sim"], "hop": 2}
+            })
+
+        return results

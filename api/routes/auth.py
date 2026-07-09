@@ -81,7 +81,8 @@ def guest_login(db: ConversationStore = Depends(get_db)):
     import uuid
     # Create a random guest username
     guest_username = f"guest_{uuid.uuid4().hex[:8]}"   # .hex() returns hexadecimal type
-    hashed_password = pwd_context.hash(uuid.uuid4().hex)
+    # Avoid slow bcrypt hashing for guests since they don't actually log in with this password
+    hashed_password = f"dummy_{uuid.uuid4().hex}"
     
     user_id = db.create_user_with_username(guest_username, hashed_password, role="guest")
     
@@ -105,7 +106,7 @@ def google_auth(request: GoogleAuthRequest, db: ConversationStore = Depends(get_
         idinfo = id_token.verify_oauth2_token(
             request.token, 
             google_requests.Request(),   # send signals to Google's servers to verify the user's token
-            settings.GOOGLE_CLIENT_ID
+            settings.VITE_GOOGLE_CLIENT_ID
         )
         email = idinfo.get("email")
         if not email:

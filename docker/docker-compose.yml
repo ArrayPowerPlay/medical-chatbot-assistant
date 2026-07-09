@@ -37,14 +37,14 @@ services:
     image: postgres:15
     container_name: postgres-medrag
     ports:
-      - "5432:5432"
+      - "5433:5432"
     env_file:
       - ../.env
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data_v2:/var/lib/postgresql/data
     restart: unless-stopped
 
 volumes:
-  postgres_data:
+  postgres_data_v2:
 
 

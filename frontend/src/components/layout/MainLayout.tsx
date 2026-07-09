@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import { Menu, Moon, Sun, PanelLeftOpen } from 'lucide-react';
 import { useThemeStore } from '../../stores/themeStore';
+import logoUrl from '../../assets/logo.png';
 
 const MainLayout: React.FC = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(() => window.innerWidth >= 768);
   const { theme, toggleTheme } = useThemeStore();
   const isDarkMode = theme === 'dark';
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isDarkMode) {
@@ -35,21 +37,23 @@ const MainLayout: React.FC = () => {
                 onClick={() => setIsSidebarOpen(true)}
                 title="Open sidebar"
               >
-                {/* Use Menu icon on mobile, PanelLeftOpen on desktop */}
                 <Menu className="w-5 h-5 md:hidden" />
                 <PanelLeftOpen className="w-5 h-5 hidden md:block" />
               </button>
             )}
-            <h1 className="font-semibold text-lg md:hidden">MedKG-RAG</h1>
+            <div className={`flex items-center gap-2 cursor-pointer ml-1 ${isSidebarOpen ? 'md:hidden' : ''}`} onClick={() => navigate('/')}>
+              <img src={logoUrl} alt="Med Assistant Logo" className="w-7 h-7 object-contain rounded" onError={(e) => e.currentTarget.style.display = 'none'} />
+              <h1 className="font-bold text-lg tracking-tight text-blue-700 dark:text-blue-400 hidden sm:block">Med Assistant</h1>
+            </div>
           </div>
 
           {/* Theme Toggle */}
           <button
-            className="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+            className="p-2 rounded-xl transition-all duration-300 hover:scale-105 flex items-center justify-center bg-slate-100 text-slate-600 hover:bg-blue-100 hover:text-blue-600 dark:bg-slate-800 dark:text-amber-400 dark:hover:bg-slate-700 shadow-sm border border-slate-200 dark:border-slate-700"
             onClick={toggleTheme}
             title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
           >
-            {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            {isDarkMode ? <Sun className="w-5 h-5 drop-shadow-sm" /> : <Moon className="w-5 h-5" />}
           </button>
         </header>
 

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, ArrowRight, User } from 'lucide-react';
+import { Lock, ArrowRight, User } from 'lucide-react';
 import { useAuthStore } from '../../stores/authStore';
+import { GoogleLogin } from '@react-oauth/google';
 import axiosClient from '../../api/axiosClient';
+import logoUrl from '../../assets/logo.png';
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -18,16 +20,21 @@ const Login: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await axiosClient.post('/api/auth/login', { email, password });
+      const response = await axiosClient.post('/api/auth/login', { username, password });
       setAuth(response.data.access_token, response.data.user);
       
       if (response.data.user.role === 'admin') {
         navigate('/admin');
       } else {
-        navigate('/');
+        navigate('/c');
       }
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Failed to login. Please check your credentials.');
+      let errorMessage = 'Failed to login. Please check your credentials.';
+      if (err.response?.data?.detail) {
+        const detail = err.response.data.detail;
+        errorMessage = Array.isArray(detail) ? detail.map((d: any) => d.msg).join('; ') : detail;
+      }
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -38,7 +45,7 @@ const Login: React.FC = () => {
     try {
       const response = await axiosClient.post('/api/auth/guest');
       setAuth(response.data.access_token, response.data.user);
-      navigate('/');
+      navigate('/c');
     } catch (err: any) {
       setError('Failed to enter as guest.');
     } finally {
@@ -46,10 +53,19 @@ const Login: React.FC = () => {
     }
   };
 
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-4 transition-colors duration-200">
-      <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 p-8">
-        <div className="text-center mb-8">
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
+      <header className="h-16 px-6 flex items-center border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm sticky top-0 z-10">
+        <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
+          <img src={logoUrl} alt="Med Assistant Logo" className="w-8 h-8 object-contain rounded" onError={(e) => e.currentTarget.style.display = 'none'} />
+          <h1 className="font-bold text-xl tracking-tight text-blue-700 dark:text-blue-400">Med Assistant</h1>
+        </div>
+      </header>
+
+      <div className="flex-1 flex items-center justify-center p-4">
+        <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 p-8">
+          <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-500 mb-4">
             <User size={32} />
           </div>
@@ -65,18 +81,18 @@ const Login: React.FC = () => {
 
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Email Address</label>
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Username</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                <Mail size={20} />
+                <User size={20} />
               </div>
               <input
-                type="email"
+                type="text"
                 required
                 className="block w-full pl-10 pr-3 py-3 border border-slate-300 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-50 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 transition-shadow outline-none"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                placeholder="your username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </div>
           </div>
@@ -117,11 +133,37 @@ const Login: React.FC = () => {
             </div>
           </div>
 
-          <div className="mt-6">
+          <div className="mt-6 space-y-4">
+            <div className="flex justify-center w-full">
+              <GoogleLogin
+                onSuccess={async (credentialResponse) => {
+                  setLoading(true);
+                  try {
+                    const response = await axiosClient.post('/api/auth/google', { token: credentialResponse.credential });
+                    setAuth(response.data.access_token, response.data.user);
+                    if (response.data.user.role === 'admin') {
+                      navigate('/admin');
+                    } else {
+                      navigate('/c');
+                    }
+                  } catch (err: any) {
+                    setError('Google login failed.');
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
+                onError={() => {
+                  setError('Google login failed.');
+                }}
+                useOneTap
+              />
+            </div>
+            
             <button
+              type="button"
               onClick={handleGuest}
               disabled={loading}
-              className="w-full flex justify-center items-center py-3 px-4 border border-slate-300 dark:border-slate-700 rounded-lg shadow-sm text-sm font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 transition-colors"
+              className="w-full flex justify-center items-center py-2.5 px-4 border border-slate-300 dark:border-slate-700 rounded-lg shadow-sm text-sm font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 transition-colors"
             >
               Continue as Guest
               <ArrowRight size={16} className="ml-2" />
@@ -135,6 +177,7 @@ const Login: React.FC = () => {
             Sign up
           </Link>
         </p>
+      </div>
       </div>
     </div>
   );

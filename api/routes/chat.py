@@ -33,10 +33,14 @@ async def chat(request: ChatRequest, raw_request: Request, user: dict = Depends(
         conversation_id = None
     
     if conversation_id is None:
-        conversation_id = conv_store.create_conversation(user_id=user["id"])
+        title = request.question[:80] + ("..." if len(request.question) > 80 else "")
+        conversation_id = conv_store.create_conversation(title=title, user_id=user["id"])
 
     ### 2. Load history
     history = conv_store.get_history(conversation_id, limit=10)
+
+    # Save user message immediately to prevent it from disappearing if stream is aborted
+    conv_store.add_message(conversation_id, "user", request.question)
 
     ### 3. Run streaming generation
     async def stream_generator():
@@ -63,13 +67,14 @@ async def chat(request: ChatRequest, raw_request: Request, user: dict = Depends(
                     yield chunk
             
             # Save to db after successful generation
-            conv_store.add_message(conversation_id, "user", request.question)
-            conv_store.add_message(conversation_id, "assistant", full_answer)
+            msg_id = conv_store.add_message(conversation_id, "assistant", full_answer)
+            yield f"event: message_id\ndata: {json.dumps({'message_id': msg_id})}\n\n"
             
             ### 5. Auto-set title for a conversation
-            if not request.conversation_id:
-                title = request.question[:80] + ("..." if len(request.question) > 80 else "")
-                conv_store.update_conversation(conversation_id, title=title)
+            # (Moved to creation time for instant UI feedback)
+            # if not request.conversation_id:
+            #     title = request.question[:80] + ("..." if len(request.question) > 80 else "")
+            #     conv_store.update_conversation(conversation_id, title=title)
                 
             conv_store.increment_question_count(user["id"])
             

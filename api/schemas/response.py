@@ -26,6 +26,8 @@ class ConversationResponse(BaseModel):
     is_pinned: bool = False
     created_at: str
     updated_at: str
+    matched_message_ids: Optional[List[int]] = Field(default_factory=list)
+    snippet: Optional[str] = None        # For UI when searching text (exact match)
 
 
 class ConversationListResponse(BaseModel):
@@ -37,6 +39,8 @@ class MessageItem(BaseModel):
     id: int
     role: str
     content: str
+    feedback_type: Optional[str] = None
+    feedback_comment: Optional[str] = None
     created_at: str
 
 

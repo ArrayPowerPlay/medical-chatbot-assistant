@@ -7,6 +7,8 @@ export interface Conversation {
   user_id: number;
   created_at: string;
   updated_at: string;
+  matched_message_ids?: number[];
+  snippet?: string;
 }
 
 export interface Message {

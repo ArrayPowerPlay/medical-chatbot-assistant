@@ -138,20 +138,22 @@ class ConversationStore:
         with self.conn.cursor() as cur:
             cur.execute(query, tuple(params))
 
-    def add_message(self, conversation_id: str, role: str, content: str) -> None:
+    def add_message(self, conversation_id: str, role: str, content: str) -> int:
         """Append a message to an existing conversation."""
         if role not in ('assistant', 'user'):
             raise ValueError(f"Invalid role: '{role}'. Must be 'user' or 'assistant'!")
         
         with self.conn.cursor() as cur:
             cur.execute(
-                "INSERT INTO messages (conversation_id, role, content) VALUES (%s, %s, %s);",
+                "INSERT INTO messages (conversation_id, role, content) VALUES (%s, %s, %s) RETURNING id;",
                 (conversation_id, role, content),
             )
+            msg_id = cur.fetchone()[0]
             cur.execute(
                 "UPDATE conversations SET updated_at = NOW() WHERE id = %s;",
                 (conversation_id,),
             )
+            return msg_id
             
     def add_feedback(self, message_id: int, feedback_type: str, feedback_comment: Optional[str] = None) -> bool:
         """Add feedback to a specific message. Returns True if successful."""
@@ -232,31 +234,55 @@ class ConversationStore:
             # We use ILIKE for case-insensitive search
             pattern = f"%{search_query}%"
             query = """
-                SELECT DISTINCT c.id, c.title, c.is_pinned, c.created_at, c.updated_at 
+                SELECT c.id, c.title, c.is_pinned, c.created_at, c.updated_at,
+                       json_agg(json_build_object('id', m.id, 'content', m.content) ORDER BY m.created_at ASC) FILTER (WHERE m.id IS NOT NULL) as matched_messages
                 FROM conversations c
-                LEFT JOIN messages m ON c.id = m.conversation_id
+                LEFT JOIN messages m ON c.id = m.conversation_id AND m.content ILIKE %s
                 WHERE (c.title ILIKE %s OR m.content ILIKE %s)
             """
-            params = [pattern, pattern]
+            params = [pattern, pattern, pattern]
             
             if user_id is not None:
                 query += " AND c.user_id = %s"
                 params.append(user_id)
                 
-            query += " ORDER BY c.is_pinned DESC, c.updated_at DESC"
+            query += " GROUP BY c.id ORDER BY c.is_pinned DESC, c.updated_at DESC"
             
             cur.execute(query, tuple(params))
             rows = cur.fetchall()
-            return [
-                {
+            
+            results = []
+            for r in rows:
+                matched_messages = r["matched_messages"] or []
+                matched_message_ids = [m["id"] for m in matched_messages]
+                
+                snippet = ""
+                if matched_messages:
+                    first_content = matched_messages[0]["content"]
+                    lower_content = first_content.lower()
+                    lower_query = search_query.lower()
+                    idx = lower_content.find(lower_query)
+                    if idx != -1:
+                        start = max(0, idx - 40)
+                        end = min(len(first_content), idx + len(search_query) + 40)
+                        snippet = first_content[start:end]
+                        if start > 0:
+                            snippet = "..." + snippet
+                        if end < len(first_content):
+                            snippet = snippet + "..."
+                    else:
+                        snippet = first_content[:100] + "..."
+                        
+                results.append({
                     "id": r["id"],
                     "title": r["title"],
                     "is_pinned": r["is_pinned"],
                     "created_at": r["created_at"].isoformat(),
-                    "updated_at": r["updated_at"].isoformat()
-                }
-                for r in rows
-            ]
+                    "updated_at": r["updated_at"].isoformat(),
+                    "matched_message_ids": matched_message_ids,
+                    "snippet": snippet
+                })
+            return results
         
     def delete_conversation(self, conversation_id: str, user_id: Optional[int] = None) -> bool:
         """Return True if deleted, False if not found."""
@@ -293,7 +319,7 @@ class ConversationStore:
             if before_id is not None:
                 # Scroll-up: load messages older than the cursor
                 query = """
-                    SELECT id, role, content, created_at FROM messages
+                    SELECT id, role, content, feedback_type, feedback_comment, created_at FROM messages
                     WHERE conversation_id = %s AND id < %s
                     ORDER BY id DESC
                     LIMIT %s
@@ -302,7 +328,7 @@ class ConversationStore:
             else: 
                 # First load: get the newest messages
                 query = """
-                    SELECT id, role, content, created_at FROM messages
+                    SELECT id, role, content, feedback_type, feedback_comment, created_at FROM messages
                     WHERE conversation_id = %s 
                     ORDER BY id DESC
                     LIMIT %s
@@ -321,7 +347,9 @@ class ConversationStore:
                     "id": r["id"],
                     "role": r["role"],
                     "content": r["content"],
-                    "created_at": r["created_at"]
+                    "feedback_type": r["feedback_type"],
+                    "feedback_comment": r["feedback_comment"],
+                    "created_at": r["created_at"].isoformat()
                 }
                 for r in reversed(rows)
             ]
@@ -466,4 +494,4 @@ class ConversationStore:
                     "conversation_title": r["title"]
                 }
                 for r in cur.fetchall()
-            ]
+            ]

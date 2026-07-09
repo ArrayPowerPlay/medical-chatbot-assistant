@@ -51,7 +51,7 @@ class Settings(BaseSettings):
     K_VALUES: List[int] = [5, 10, 20]
 
     # PostgreSQL configuraion
-    POSTGRE_HOST: str = "localhost"
+    POSTGRE_HOST: str = ""
     POSTGRE_PORT: int = 5432
     POSTGRE_USER: str = ""
     POSTGRE_PASSWORD: str = ""
@@ -59,11 +59,11 @@ class Settings(BaseSettings):
 
     # JWT Authentication
     JWT_EXPIRATION_MINUTES: int = 10080  # 7 days
-    JWT_SECRET: str = ""           # secret key use to generate access token
-    JWT_ALGORITHM: str = ""        # algorithm use for generate access token
+    JWT_SECRET: str = ""                 # secret key use to generate access token
+    JWT_ALGORITHM: str = ""              # algorithm use for generate access token
     
     # Google OAuth
-    GOOGLE_CLIENT_ID: str = Field(default="")
+    VITE_GOOGLE_CLIENT_ID: str = Field(default="")
 
     # Model names
     LLM_MODEL: str = "llama-3.3-70b-versatile"

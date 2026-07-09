@@ -3,6 +3,9 @@ import { MessageSquarePlus, X, LogOut, PanelLeftClose, Pin, Trash2, Edit2, Check
 import { useAuthStore } from '../../stores/authStore';
 import { useConversationStore } from '../../stores/conversationStore';
 import { useNavigate, useParams } from 'react-router-dom';
+import SearchModal from '../chat/SearchModal';
+
+import logoUrl from '../../assets/logo.png';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -11,11 +14,11 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
   const { user, logout } = useAuthStore();
-  const { conversations, fetchConversations, searchConversations, deleteConversation, renameConversation, pinConversation } = useConversationStore();
+  const { conversations, fetchConversations, deleteConversation, renameConversation, pinConversation } = useConversationStore();
   const navigate = useNavigate();
   const { id: activeId } = useParams<{ id: string }>();
 
-  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   
   // States for rename
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -27,14 +30,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
   useEffect(() => {
     fetchConversations();
   }, [fetchConversations]);
-
-  // Debounced search
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      searchConversations(searchQuery);
-    }, 300);
-    return () => clearTimeout(handler);
-  }, [searchQuery, searchConversations]);
 
   const handleRenameSubmit = async (e: React.FormEvent, id: string) => {
     e.preventDefault();
@@ -51,7 +46,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
     if (deletingId) {
       await deleteConversation(deletingId);
       if (activeId === deletingId) {
-        navigate('/', { replace: true });
+        navigate('/c', { replace: true });
       }
       setDeletingId(null);
     }
@@ -59,6 +54,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
 
   return (
     <>
+      <SearchModal isOpen={isSearchModalOpen} onClose={() => setIsSearchModalOpen(false)} />
       {/* Mobile Backdrop */}
       {isOpen && (
         <div 
@@ -98,18 +94,26 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
 
       {/* Sidebar Container */}
       <aside 
-        className={`fixed inset-y-0 left-0 z-30 w-72 bg-slate-50 dark:bg-slate-950 border-r border-slate-200 dark:border-slate-800 transform transition-transform duration-300 ease-in-out flex flex-col ${
-          isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0 md:relative'
-        }`}
+        className={`fixed md:relative inset-y-0 left-0 z-30 bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 transition-all duration-300 ease-in-out overflow-hidden flex flex-col
+          ${isOpen ? 'translate-x-0 w-72 border-r' : '-translate-x-full w-72 md:translate-x-0 md:w-0 border-r-0'}
+        `}
       >
+        <div className="w-72 h-full flex flex-col shrink-0">
+        
+        {/* Logo Header */}
+        <div className="p-4 pb-2 flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
+          <img src={logoUrl} alt="Med Assistant Logo" className="w-8 h-8 object-contain rounded" onError={(e) => e.currentTarget.style.display = 'none'} />
+          <h1 className="font-bold text-xl tracking-tight text-blue-700 dark:text-blue-400">Med Assistant</h1>
+        </div>
+
         {/* Header - New Chat */}
-        <div className="p-4 flex items-center justify-between">
+        <div className="px-4 pb-4 pt-2 flex items-center justify-between">
           <button 
-            className="flex-1 flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium"
             onClick={() => {
-              navigate('/');
-              if (window.innerWidth < 768) setIsOpen(false);
+              navigate('/c');
+              if (window.innerWidth < 1024) setIsOpen(false);
             }}
+            className="flex-1 flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-lg transition-colors font-medium shadow-sm shadow-blue-500/20"
           >
             <MessageSquarePlus className="w-5 h-5" />
             <span>New Chat</span>
@@ -131,18 +135,15 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
           </button>
         </div>
 
-        {/* Search Bar */}
+        {/* Search Bar - Trigger Modal */}
         <div className="px-4 pb-2">
-          <div className="relative">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input 
-              type="text" 
-              placeholder="Search history..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg pl-9 pr-3 py-1.5 text-sm text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            />
-          </div>
+          <button 
+            onClick={() => setIsSearchModalOpen(true)}
+            className="w-full flex items-center justify-start gap-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 rounded-lg px-3 py-2 text-sm text-slate-500 dark:text-slate-400 transition-colors focus:outline-none focus:ring-1 focus:ring-blue-500"
+          >
+            <Search className="w-4 h-4" />
+            <span>Search history...</span>
+          </button>
         </div>
 
         {/* Conversation List */}
@@ -150,7 +151,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
           <div className="flex flex-col gap-1">
             {conversations.length === 0 ? (
               <div className="px-3 py-2 text-sm text-slate-400 dark:text-slate-500 italic text-center mt-4">
-                {searchQuery ? "No results found" : "No history yet"}
+                No history yet
               </div>
             ) : (
               conversations.map(conv => {
@@ -254,17 +255,19 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
                 {user?.role || 'Guest'}
               </div>
             </div>
+            {/* Always visible logout button */}
             <button 
               onClick={(e) => {
                 e.stopPropagation();
                 logout();
               }}
-              className="text-slate-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+              className="text-slate-400 hover:text-red-500 transition-colors p-1"
               title="Logout"
             >
-              <LogOut className="w-4 h-4" />
+              <LogOut className="w-5 h-5" />
             </button>
           </div>
+        </div>
         </div>
       </aside>
     </>
