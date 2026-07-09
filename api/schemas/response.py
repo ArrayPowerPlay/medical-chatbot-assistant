@@ -22,6 +22,7 @@ class ChatResponse(BaseModel):
 class ConversationResponse(BaseModel):
     id: str
     title: str
+    is_pinned: bool = False
     created_at: str
     updated_at: str
 
@@ -48,3 +49,9 @@ class HealthResponse(BaseModel):
     """Schema for the GET /api/health response body."""
     status: str = Field(description="Overall health status.")
     services: dict = Field(default_factory=dict) # A dict with (key, value) = (database_name, status)
+
+
+class AuthResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    user: dict = Field(description="User info dictionary")

@@ -15,7 +15,7 @@ from fastapi.staticfiles import StaticFiles   # Allows access to static files vi
 
 from config.settings import settings
 from config.logging_config import setup_logging, logger
-from api.routes import chat, health, conversations
+from api.routes import chat, health, conversations, auth
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -81,6 +81,7 @@ app.add_middleware(
 app.include_router(chat.router, prefix="/api")
 app.include_router(conversations.router, prefix="/api")
 app.include_router(health.router, prefix="/api")
+app.include_router(auth.router, prefix="/api/auth")
 
 FRONTEND_DIR = Path(__file__).resolve().parent.parent / "frontend"
 if FRONTEND_DIR.exists():

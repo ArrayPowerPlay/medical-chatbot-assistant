@@ -57,6 +57,14 @@ class Settings(BaseSettings):
     POSTGRE_PASSWORD: str = ""
     POSTGRE_DB: str = ""
 
+    # JWT Authentication
+    JWT_EXPIRATION_MINUTES: int = 10080  # 7 days
+    JWT_SECRET: str = ""           # secret key use to generate access token
+    JWT_ALGORITHM: str = ""        # algorithm use for generate access token
+    
+    # Google OAuth
+    GOOGLE_CLIENT_ID: str = Field(default="")
+
     # Model names
     LLM_MODEL: str = "llama-3.3-70b-versatile"
     EMBEDDING_MODEL: str = "ncbi/MedCPT-Article-Encoder"

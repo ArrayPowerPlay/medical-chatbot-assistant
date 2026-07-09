@@ -30,33 +30,69 @@ class ConversationStore:
             raise     # 'raise' prevents the error from being ignored and continues to be reported
 
     def _create_tables(self):
-        """Create 'conversations' and 'messages' tables if not exists."""
+        """Create 'users', 'conversations' and 'messages' tables if not exists."""
         with self.conn.cursor() as cur:    # Create a cursor to give SQL commands
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS users (
+                    id SERIAL PRIMARY KEY,
+                    username TEXT UNIQUE,
+                    email TEXT UNIQUE,
+                    password_hash TEXT,
+                    role VARCHAR(16) NOT NULL DEFAULT 'user',
+                    question_count INT NOT NULL DEFAULT 0,
+                    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+                );
+            """)
+            
+            # try:
+            #     cur.execute("ALTER TABLE users ADD COLUMN IF NOT EXISTS username TEXT UNIQUE;")
+            #     cur.execute("ALTER TABLE users ALTER COLUMN email DROP NOT NULL;")
+            #     cur.execute("ALTER TABLE users ALTER COLUMN password_hash DROP NOT NULL;")
+            # except Exception as e:
+            #     logger.warning(f"Failed to alter users table: {e}")
+            
             cur.execute("""
                 CREATE TABLE IF NOT EXISTS conversations (
                     id          TEXT PRIMARY KEY,
+                    user_id     INTEGER REFERENCES users(id) ON DELETE CASCADE,
                     title       TEXT NOT NULL DEFAULT 'New Chat',
+                    is_pinned   BOOLEAN NOT NULL DEFAULT false,
                     created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
                     updated_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
                 );
             """)
+            
+            # Alter tables for existing DBs safely
+            # try:
+            #     cur.execute("ALTER TABLE conversations ADD COLUMN IF NOT EXISTS user_id INTEGER REFERENCES users(id) ON DELETE CASCADE;")
+            #     cur.execute("ALTER TABLE conversations ADD COLUMN IF NOT EXISTS is_pinned BOOLEAN NOT NULL DEFAULT false;")
+            # except Exception as e:
+            #     logger.warning(f"Failed to alter conversations table: {e}")
             # SERIAL = auto incremented number
             # ON DELETE CASCADE = messages deleted if corresponding conversation is being deleted
             cur.execute("""
                 CREATE TABLE IF NOT EXISTS messages (
                     id               SERIAL PRIMARY KEY,
                     conversation_id  TEXT NOT NULL REFERENCES conversations(id) ON DELETE CASCADE,
-                    role             VARCHARS(16) NOT NULL CHECK (role IN ('user', 'assistant')),
+                    role             VARCHAR(16) NOT NULL CHECK (role IN ('user', 'assistant')),
                     content          TEXT NOT NULL,
+                    feedback_type    VARCHAR(16) CHECK (feedback_type IN ('like', 'dislike', 'none')),
+                    feedback_comment TEXT,
                     created_at       TIMESTAMPTZ NOT NULL DEFAULT NOW()
                 );
             """)
+            
+            # try:
+            #     cur.execute("ALTER TABLE messages ADD COLUMN IF NOT EXISTS feedback_type VARCHAR(16) CHECK (feedback_type IN ('like', 'dislike', 'none'));")
+            #     cur.execute("ALTER TABLE messages ADD COLUMN IF NOT EXISTS feedback_comment TEXT;")
+            # except Exception as e:
+            #     logger.warning(f"Failed to alter messages table: {e}")
             cur.execute("""
                 CREATE INDEX IF NOT EXISTS idx_messages_conv_id
                 ON messages(conversation_id, created_at);
             """)
 
-    def create_conversation(self, title: str = "New Chat") -> str:
+    def create_conversation(self, title: str = "New Chat", user_id: Optional[int] = None) -> str:
         """
         Create a new conversation session.
         Returns:
@@ -65,10 +101,10 @@ class ConversationStore:
         conv_id = str(uuid.uuid4())
         with self.conn.cursor() as cur:
             cur.execute(
-                "INSERT INTO conversations (id, title) VALUES (%s, %s);",
-                (conv_id, title),
+                "INSERT INTO conversations (id, title, user_id) VALUES (%s, %s, %s);",
+                (conv_id, title, user_id),
             ) 
-        logger.info(f"[Conversation Store] Created conversation {conv_id}")
+        logger.info(f"[Conversation Store] Created conversation {conv_id} for user {user_id}")
         return conv_id
     
     def conversation_exists(self, conversation_id: str) -> bool:
@@ -133,27 +169,31 @@ class ConversationStore:
                 rows = cur.fetchall()
                 return [{"role": r["role"], "content": r["content"]} for r in rows]
             
-    def list_conversations(self, limit: Optional[int] = None) -> List[Dict[str, str]]:
-        """List all conversations ordered by most recently updated."""
+    def list_conversations(self, user_id: Optional[int] = None, limit: Optional[int] = None) -> List[Dict[str, Any]]:
+        """List all conversations ordered by pinned status and recently updated."""
         with self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
+            query = "SELECT id, title, is_pinned, created_at, updated_at FROM conversations"
+            params = []
+            
+            if user_id is not None:
+                query += " WHERE user_id = %s"
+                params.append(user_id)
+                
+            query += " ORDER BY is_pinned DESC, updated_at DESC"
+            
             if limit is not None:
-                query = """
-                    SELECT id, title, created_at, updated_at FROM conversations
-                    ORDER BY updated_at DESC LIMIT %s;
-                """
-            else:
-                query = """
-                    SELECT id, title, create_at, updated_at FROM conversations
-                    ORDER BY updated_at DESC;
-                """
-            cur.execute(query)
+                query += " LIMIT %s"
+                params.append(limit)
+                
+            cur.execute(query, tuple(params))
             rows = cur.fetchall()
             return [
                 {
                     "id": r["id"],
                     "title": r["title"],
-                    "created_at": r["created_at"].isoformat(),  # Convert datetime object to string
-                    "updated_at": r["updated_at"].isoformat()
+                    "is_pinned": r["is_pinned"],
+                    "created_at": r["created_at"].isoformat(),
+                    "updated_at": r["updated_at"].isoformat()       # convert TIMESTAMPZ to string
                 }
                 for r in rows
             ]
@@ -231,3 +271,50 @@ class ConversationStore:
         if self.conn and not self.conn.closed:
             self.conn.close()
             logger.info("[Conversation Store]: Connection closed.")
+            
+
+    # --- USER MANAGEMENT METHODS ---
+    def create_user_with_username(self, username: str, password_hash: str, role: str = "user") -> Optional[int]:
+        with self.conn.cursor() as cur:
+            cur.execute(
+                "INSERT INTO users (username, password_hash, role) VALUES (%s, %s, %s) RETURNING id;",
+                (username, password_hash, role)
+            )
+            result = cur.fetchone()
+            return result[0] if result else None
+
+
+    def create_user_with_email(self, email: str, role: str = "user") -> Optional[int]:
+        with self.conn.cursor() as cur:
+            cur.execute(
+                "INSERT INTO users (email, role) VALUES (%s, %s) RETURNING id;",
+                (email, role)
+            )
+            result = cur.fetchone()
+            return result[0] if result else None
+
+
+    def get_user_by_username(self, username: str) -> Optional[Dict[str, Any]]:
+        with self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
+            cur.execute("SELECT * FROM users WHERE username = %s;", (username,))
+            row = cur.fetchone()
+            return dict(row) if row else None
+
+
+    def get_user_by_email(self, email: str) -> Optional[Dict[str, Any]]:
+        with self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
+            cur.execute("SELECT * FROM users WHERE email = %s;", (email,))
+            row = cur.fetchone()
+            return dict(row) if row else None
+
+
+    def get_user_by_id(self, user_id: int) -> Optional[Dict[str, Any]]:
+        with self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
+            cur.execute("SELECT * FROM users WHERE id = %s;", (user_id,))
+            row = cur.fetchone()
+            return dict(row) if row else None
+            
+            
+    def increment_question_count(self, user_id: int) -> None:
+        with self.conn.cursor() as cur:
+            cur.execute("UPDATE users SET question_count = question_count + 1 WHERE id = %s;", (user_id,))

@@ -421,8 +421,15 @@ ragas                     — RAG evaluation framework
 | `POST` | `/api/chat` | Send user question, receive AI answer |
 | `GET` | `/api/conversations` | List all conversations (most recent first) |
 | `GET` | `/api/conversations/{id}/messages` | Paginated message history (cursor-based) |
-| `DELETE` | `/api/conversations/{id}` | Delete a conversation and its messages |
 | `GET` | `/api/health` | Health check |
+| `POST` | `/api/auth/register` | Register new user |
+| `POST` | `/api/auth/login` | Login and receive JWT |
+| `POST` | `/api/auth/guest` | Receive guest JWT |
+| `PUT` | `/api/conversations/{id}` | Rename conversation |
+| `DELETE` | `/api/conversations/{id}` | Delete conversation |
+| `PUT` | `/api/conversations/{id}/pin` | Pin/Unpin conversation |
+| `GET` | `/api/conversations/search` | Search conversations by title or message content |
+| `POST` | `/api/conversations/{id}/messages/{msg_id}/feedback` | Submit like/dislike feedback and optional comment |
 | `GET` | `/` | Serve frontend (static files) |
 
 ### POST /api/chat — Request
@@ -445,6 +452,7 @@ ragas                     — RAG evaluation framework
   "conversation_id": "uuid"
 }
 ```
+> **Note**: This endpoint will be updated to support **Server-Sent Events (SSE)** via `StreamingResponse` to stream the answer progressively.
 
 ### GET /api/conversations/{id}/messages — Paginated Messages
 > **Cursor-based pagination** for loading chat history. The frontend first loads the newest messages, then fetches older pages as the user scrolls up (reverse-chronological infinite scroll, like ChatGPT/Gemini).
@@ -480,19 +488,23 @@ ragas                     — RAG evaluation framework
 
 ## 8. Frontend Design
 
-> **Status**: Frontend files (`index.html`, `app.js`, `chat.js`, `style.css`, `markdown.js`, `theme.js`) exist but are **not yet implemented**. The backend API is built first; frontend will be developed in a subsequent phase.
+> **Status**: The frontend architecture is being migrated to **React.js (Vite) + Tailwind CSS**.
 
-- **Type**: Single Page Application (Vanilla HTML/CSS/JS)
-- **Theme**: Dark/Light toggle, medical-themed color palette
-- **Layout**: Chat-centric with message bubbles (user vs. bot)
+- **Type**: Single Page Application (React)
+- **State Management**: Zustand (Global state for User, JWT Token, Theme, Conversations)
+- **Data Fetching**: Axios with JWT interceptors.
+- **Theme**: Dark/Light toggle using Tailwind's `dark:class`
+- **Layout**: Chat-centric with message bubbles (user vs. bot). Includes a collapsible sidebar.
 - **Chat History UX**: Reverse-scroll infinite loading — newest messages displayed first, scrolling up loads older messages via cursor-based pagination (`GET /api/conversations/{id}/messages?before_id=X`), matching the UX of ChatGPT/Gemini.
 - **Features**:
+  - User Authentication (Login, Register, Guest limit of 10 questions)
+  - Conversation Management (Pin, Edit, Delete, Search)
+  - Message Feedback (Like/Dislike + comment)
   - Markdown rendering for bot responses
   - Source citation display (expandable)
-  - Loading animation during generation
+  - Typing effect via Server-Sent Events (SSE) streaming and "Thinking..." spinner
+  - Stop generation functionality via `AbortController`
   - Responsive design (mobile-friendly)
-  - Suggested starter questions
-  - Settings panel for configurable parameters
 
 ---
 
@@ -583,12 +595,16 @@ EMBEDDING_MODEL=ncbi/MedCPT-Article-Encoder
 QUERY_MODEL=ncbi/MedCPT-Query-Encoder
 CROSS_ENCODER_MODEL=ncbi/MedCPT-Cross-Encoder
 
-# PostgreSQL (Conversation History)
+# PostgreSQL (Conversation History & Auth)
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
 POSTGRES_USER=medrag
 POSTGRES_PASSWORD=medrag_secret
 POSTGRES_DB=chat_history
+
+# JWT Auth
+JWT_ALGORITHM=HS256
+JWT_EXPIRATION_MINUTES=10080 # 7 days
 ```
 
 ---

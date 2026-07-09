@@ -123,26 +123,27 @@ rag-project/
 │   ├── main.py                       # FastAPI app entry point (includes CORS config)
 │   ├── routes/
 │   │   ├── __init__.py
-│   │   ├── chat.py                   # POST /chat - main Q&A endpoint
-│   │   └── health.py                 # GET /health - health check
-│   │   └── conversation.py           # POST /conversation - save conversation
-│   └── schemas/
-│       ├── __init__.py
-│       ├── request.py                # Pydantic request models
-│       └── response.py               # Pydantic response models
+│   │   ├── chat.py                   # POST /chat - main Q&A endpoint (Streaming SSE)
+│   │   ├── auth.py                   # Auth endpoints (Login, Register, Guest)
+│   │   ├── health.py                 # GET /health - health check
+│   │   └── conversation.py           # Conversation & Feedback management
+│   ├── schemas/
+│   │   ├── __init__.py
+│   │   ├── request.py                # Pydantic request models
+│   │   └── response.py               # Pydantic response models
+│   └── dependencies.py               # FastAPI dependencies (JWT Auth)
 │
 ├── frontend/
-│   ├── index.html                    # Main SPA entry
-│   ├── css/
-│   │   └── style.css                 # Global styles, design system
-│   ├── js/
-│   │   ├── app.js                    # Main application logic
-│   │   ├── chat.js                   # Chat UI interactions & API calls
-│   │   ├── markdown.js               # Markdown rendering for responses
-│   │   └── theme.js                  # Dark/light theme toggle
-│   └── assets/
-│       ├── icons/                    # SVG icons
-│       └── images/                   # Logo, illustrations
+│   ├── src/
+│   │   ├── components/               # React components (ChatBubble, Sidebar, Auth)
+│   │   ├── stores/                   # Zustand global state (authStore, chatStore)
+│   │   ├── api/                      # Axios client and interceptors
+│   │   ├── App.jsx                   # Main application logic
+│   │   └── main.jsx                  # React entry point
+│   ├── index.html                    # HTML entry
+│   ├── tailwind.config.js            # Tailwind CSS configuration
+│   ├── vite.config.js                # Vite build configuration
+│   └── package.json                  # NPM dependencies
 │
 ├── models/
 │   └── .gitkeep
