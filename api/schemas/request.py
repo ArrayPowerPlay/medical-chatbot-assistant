@@ -49,3 +49,13 @@ class UserRegisterRequest(BaseModel):
 
 class GoogleAuthRequest(BaseModel):
     token: str = Field(..., description="Google OAuth2 ID token")
+
+
+class ConversationUpdateRequest(BaseModel):
+    title: Optional[str] = Field(None, description="New title for the conversation")
+    is_pinned: Optional[bool] = Field(None, description="Pin or unpin the conversation")
+
+
+class FeedbackRequest(BaseModel):
+    feedback_type: str = Field(..., description="Must be 'like', 'dislike', or 'none'")
+    feedback_comment: Optional[str] = Field(None, description="Optional text comment")

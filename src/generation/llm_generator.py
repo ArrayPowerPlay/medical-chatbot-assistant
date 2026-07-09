@@ -41,3 +41,29 @@ class LLMGenerator(ILLMGenerator):
         except Exception as e:
             logger.error(f"Error during LLM generation: {e}")
             return f"I apologize, but I encountered an error while generating the response. Error details: {str(e)}"
+    async def generate_answer_stream(self, system_prompt: str, user_prompt: str, history: Optional[List[Dict[str, str]]] = None):
+        """Generate a complete answer via stream."""
+        try:
+            messages = [{"role": "system", "content": system_prompt}]
+            
+            if history:
+                messages.extend(history)
+                
+            messages.append({"role": "user", "content": user_prompt})
+            
+            chat_completion = await self.client.chat.completions.create(
+                messages=messages, # type: ignore
+                model=self.model_name,
+                temperature=self.temperature,
+                max_tokens=self.max_tokens,
+                stream=True
+            )
+
+            async for chunk in chat_completion:
+                content = chunk.choices[0].delta.content
+                if content is not None:
+                    yield content
+                    
+        except Exception as e:
+            logger.error(f"Error during LLM generation stream: {e}")
+            yield f"I apologize, but I encountered an error while generating the response. Error details: {str(e)}"

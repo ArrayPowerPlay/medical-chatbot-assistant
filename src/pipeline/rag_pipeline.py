@@ -174,7 +174,6 @@ class RAGPipeline:
         analysis = await self.query_analyzer.analyze(query=query, history=normalized_history)
         rewritten_query = analysis.get("rewritten_query", query)
         intents = analysis.get("intents", ["general"])
-        # question_type is classified by the LLM inside QueryAnalyzer (no extra call)
         question_type = analysis.get("question_type", "summary")
 
         # Embeddings
@@ -278,6 +277,145 @@ class RAGPipeline:
             "analysis": analysis,
             "question_type": question_type,
         }
+
+    async def run_stream(
+        self,
+        query: str,
+        history: Optional[List[Dict[str, str]]] = None,
+        conversation_id: Optional[str] = None,
+        config: RunConfig = RunConfig(),
+        history_turns: int = settings.HISTORY_TURNS_FOR_LLM,
+        vector_top_k: int = settings.VECTOR_TOP_K,
+        keyword_top_k: int = settings.KEYWORD_TOP_K,
+        child_fetch_limit: int = settings.CHILD_FETCH_LIMIT,
+        kg_top_k: int = settings.KG_TOP_K,
+        kg_hop1_m: int = settings.KG_HOP1_M,
+        kg_hop2_n: int = settings.KG_HOP2_N,
+        kg_hop2_cap: int = settings.KG_HOP2_CAP,
+        rerank_kg_top_n: int = settings.RERANK_KG_TOP_N,
+        generation_temperature: float = settings.GENERATION_TEMPERATURE,
+        generation_max_tokens: int = settings.GENERATION_MAX_TOKENS,
+        question_type: Optional[str] = None,
+    ):
+        """
+        Run the full async RAG pipeline and yield SSE events.
+        """
+        import json
+        max_messages = history_turns * 2
+        normalized_history = self._normalize_history(history, max_messages)
+        logger.info("[RAG Pipeline]: Starting query analysis (streaming)...")
+        
+        analysis = await self.query_analyzer.analyze(query=query, history=normalized_history)
+        rewritten_query = analysis.get("rewritten_query", query)
+        intents = analysis.get("intents", ["general"])
+        question_type = analysis.get("question_type", "summary")
+
+        query_vectors = await self.query_embedder.embed_texts(rewritten_query)
+        query_vector = query_vectors[0].tolist()
+        
+        entity_texts = self._build_entity_texts(analysis)
+        entity_article_embeddings: List[List[float]] = []
+        
+        if entity_texts:
+            entity_embs = await self.entity_embedder.embed_texts(entity_texts)
+            entity_article_embeddings = entity_embs.tolist()
+
+        vector_results, bm25_results, kg_results = await self.parallel_retriever.retrieve(
+            query_text=rewritten_query,
+            query_vector=query_vector,
+            entity_article_embeddings=entity_article_embeddings,
+            intents=intents,
+            vector_top_k=vector_top_k,
+            keyword_top_k=keyword_top_k,
+            child_fetch_limit=child_fetch_limit,
+            kg_top_k=kg_top_k,
+            kg_hop1_m=kg_hop1_m,
+            kg_hop2_n=kg_hop2_n,
+            kg_hop2_cap=kg_hop2_cap,
+            original_query_text=query,
+        )
+
+        if not config.use_vector: vector_results = []
+        if not config.use_bm25: bm25_results = []
+        if not config.use_kg: kg_results = []
+
+        rrf_results = self.rrf_manager.rank_fusion(
+            vector_results=vector_results,
+            bm25_results=bm25_results
+        )
+
+        ranked_text, ranked_kg = await self.cross_encoder_reranker.rerank(
+            query=rewritten_query,
+            rrf_results=rrf_results,
+            kg_results=kg_results,
+            top_m=vector_top_k,
+            top_n=rerank_kg_top_n,
+        )
+        
+        merged_kg = (
+            self.kg_merger.merge_top_paths(ranked_kg)
+            if config.use_kg_merger
+            else ranked_kg
+        )
+
+        interleaved_items = []
+        max_len = max(len(merged_kg), len(ranked_text))
+        for i in range(max_len):
+            if i < len(ranked_text):
+                interleaved_items.append(ranked_text[i])
+            if i < len(merged_kg):
+                interleaved_items.append(merged_kg[i])
+
+        system_prompt, user_prompt = build_prompts(
+            query=rewritten_query,
+            retrieved_items=interleaved_items,
+            use_head_tail_placement=config.use_head_tail_placement,
+            use_citations=config.use_citations,
+            question_type=question_type,
+        )
+
+        # Prepare metadata for frontend references (sort all retrieved sources by score decreasingly)
+        all_sources = ranked_text + ranked_kg
+        all_sources_sorted = sorted(all_sources, key=lambda x: x.get('score', -999.0), reverse=True)
+        
+        frontend_sources = []
+        for src in all_sources_sorted:
+            frontend_sources.append({
+                "source_type": src.get("source_type", "unknown"),
+                "content": src.get("text", src.get("content", "")),
+                "pmid": src.get("pmid"),
+                "score": src.get("score")
+            })
+
+        metadata = {
+            "conversation_id": conversation_id,
+            "sources": frontend_sources,
+        }
+        
+        yield f"event: metadata\ndata: {json.dumps(metadata)}\n\n"   # Send relevant sources to frontend first
+
+        self.llm_generator.temperature = generation_temperature
+        self.llm_generator.max_tokens = generation_max_tokens
+        
+        full_answer = ""
+        async for chunk in self.llm_generator.generate_answer_stream(
+            system_prompt=system_prompt,
+            user_prompt=user_prompt,
+            history=normalized_history
+        ):
+            full_answer += chunk
+            yield f"event: content\ndata: {json.dumps(chunk)}\n\n"
+            
+        yield f"event: done\ndata: {json.dumps({'status': 'success'})}\n\n"  # Signal frontend that the process has been complete
+        
+        # We can yield the full answer internally if needed or let the caller save it.
+        # But SSE endpoints typically just consume this generator. The route must handle saving to DB.
+        # However, it's easier to save it to the DB here if we pass conv_store, but pipeline doesn't have conv_store.
+        # So we'll let the router intercept or we just return the full answer at the end via a special event?
+        # A cleaner way is to yield a "final_answer" event with the full text so the router can catch it? No, the router is just streaming this generator.
+        # Alternatively, we can pass a callback to run_stream to execute when done.
+        
+        yield f"event: final_answer\ndata: {json.dumps({'answer': full_answer})}\n\n"   # Signal router to save answer into database
 
 
 def build_parser() -> argparse.ArgumentParser:

@@ -16,6 +16,16 @@ class ILLMGenerator(ABC):
         """Generate final answer using system/user prompts and optional history."""
         pass
 
+    @abstractmethod
+    async def generate_answer_stream(
+        self, 
+        system_prompt: str, 
+        user_prompt: str, 
+        history: Optional[List[Dict[str, str]]] = None
+    ):
+        """Generate final answer using system/user prompts and optional history via SSE."""
+        pass
+
 
 class IQueryAnalyzer(ABC):
     """Abstract interface for LLM Query Analysis (Rewriting & NER)."""

@@ -10,6 +10,7 @@ class SourceItem(BaseModel):
     source_type: str = Field(description="'text_retrieval' or kg_retrieval.")
     content: str = Field(description="The text passage or KG path.")
     pmid: Optional[str] = Field(default=None, description="Optional PubMed ID of the source article.")
+    score: Optional[float] = Field(default=None, description="Optional cross-encoder score for sorting relevant chunks.")
 
 
 class ChatResponse(BaseModel):

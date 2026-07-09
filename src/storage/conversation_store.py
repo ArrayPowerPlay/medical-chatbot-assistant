@@ -107,20 +107,36 @@ class ConversationStore:
         logger.info(f"[Conversation Store] Created conversation {conv_id} for user {user_id}")
         return conv_id
     
-    def conversation_exists(self, conversation_id: str) -> bool:
+    def conversation_exists(self, conversation_id: str, user_id: Optional[int] = None) -> bool:
         """Check whether a conversation exists."""
         # SELECT 1: return 1 if db can find a suitable row
         with self.conn.cursor() as cur:
-            cur.execute("SELECT 1 from conversations WHERE id = %s;", (conversation_id,))
+            if user_id is not None:
+                cur.execute("SELECT 1 from conversations WHERE id = %s AND user_id = %s;", (conversation_id, user_id))
+            else:
+                cur.execute("SELECT 1 from conversations WHERE id = %s;", (conversation_id,))
             return cur.fetchone() is not None
         
-    def update_title(self, conversation_id: str, title: str) -> None:
-        """Update the display title of a conversation."""
+    def update_conversation(self, conversation_id: str, title: Optional[str] = None, is_pinned: Optional[bool] = None) -> None:
+        """Update the display title and/or pinned status of a conversation."""
+        updates = []
+        params = []
+        if title is not None:
+            updates.append("title = %s")
+            params.append(title)
+        if is_pinned is not None:
+            updates.append("is_pinned = %s")
+            params.append(is_pinned)
+            
+        if not updates:
+            return
+
+        updates.append("updated_at = NOW()")
+        params.append(conversation_id)
+        
+        query = f"UPDATE conversations SET {', '.join(updates)} WHERE id = %s;"
         with self.conn.cursor() as cur:
-            cur.execute(
-                "UPDATE conversations SET title = %s, updated_at = NOW() WHERE id = %s;",
-                (title, conversation_id),
-            )
+            cur.execute(query, tuple(params))
 
     def add_message(self, conversation_id: str, role: str, content: str) -> None:
         """Append a message to an existing conversation."""
@@ -136,6 +152,18 @@ class ConversationStore:
                 "UPDATE conversations SET updated_at = NOW() WHERE id = %s;",
                 (conversation_id,),
             )
+            
+    def add_feedback(self, message_id: int, feedback_type: str, feedback_comment: Optional[str] = None) -> bool:
+        """Add feedback to a specific message. Returns True if successful."""
+        if feedback_type not in ('like', 'dislike', 'none'):
+            raise ValueError(f"Invalid feedback_type: '{feedback_type}'")
+            
+        with self.conn.cursor() as cur:
+            cur.execute(
+                "UPDATE messages SET feedback_type = %s, feedback_comment = %s WHERE id = %s;",
+                (feedback_type, feedback_comment, message_id)
+            )
+            return cur.rowcount > 0
 
     def get_history(self, conversation_id: str, limit: Optional[int] = None) -> List[Dict[str, str]]:
         """Retrieve the most recent messages in chronological order.
@@ -197,11 +225,46 @@ class ConversationStore:
                 }
                 for r in rows
             ]
+            
+    def search_conversations(self, search_query: str, user_id: Optional[int] = None) -> List[Dict[str, Any]]:
+        """Search conversations by title or message content."""
+        with self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
+            # We use ILIKE for case-insensitive search
+            pattern = f"%{search_query}%"
+            query = """
+                SELECT DISTINCT c.id, c.title, c.is_pinned, c.created_at, c.updated_at 
+                FROM conversations c
+                LEFT JOIN messages m ON c.id = m.conversation_id
+                WHERE (c.title ILIKE %s OR m.content ILIKE %s)
+            """
+            params = [pattern, pattern]
+            
+            if user_id is not None:
+                query += " AND c.user_id = %s"
+                params.append(user_id)
+                
+            query += " ORDER BY c.is_pinned DESC, c.updated_at DESC"
+            
+            cur.execute(query, tuple(params))
+            rows = cur.fetchall()
+            return [
+                {
+                    "id": r["id"],
+                    "title": r["title"],
+                    "is_pinned": r["is_pinned"],
+                    "created_at": r["created_at"].isoformat(),
+                    "updated_at": r["updated_at"].isoformat()
+                }
+                for r in rows
+            ]
         
-    def delete_conversation(self, conversation_id: int) -> bool:
+    def delete_conversation(self, conversation_id: str, user_id: Optional[int] = None) -> bool:
         """Return True if deleted, False if not found."""
         with self.conn.cursor() as cur:
-            cur.execute("DELETE FROM conversations WHERE id = %s;", (conversation_id,))
+            if user_id is not None:
+                cur.execute("DELETE FROM conversations WHERE id = %s AND user_id = %s;", (conversation_id, user_id))
+            else:
+                cur.execute("DELETE FROM conversations WHERE id = %s;", (conversation_id,))
             return cur.rowcount > 0    # Number of rows affected by the SQL query
         
     def get_message_page(
@@ -265,14 +328,12 @@ class ConversationStore:
 
             return {"messages": messages, "has_more": has_more}
 
-        
     def close(self) -> None:
         """Close the PostgreSQL connection."""
         if self.conn and not self.conn.closed:
             self.conn.close()
             logger.info("[Conversation Store]: Connection closed.")
             
-
     # --- USER MANAGEMENT METHODS ---
     def create_user_with_username(self, username: str, password_hash: str, role: str = "user") -> Optional[int]:
         with self.conn.cursor() as cur:
@@ -283,7 +344,6 @@ class ConversationStore:
             result = cur.fetchone()
             return result[0] if result else None
 
-
     def create_user_with_email(self, email: str, role: str = "user") -> Optional[int]:
         with self.conn.cursor() as cur:
             cur.execute(
@@ -293,13 +353,11 @@ class ConversationStore:
             result = cur.fetchone()
             return result[0] if result else None
 
-
     def get_user_by_username(self, username: str) -> Optional[Dict[str, Any]]:
         with self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
             cur.execute("SELECT * FROM users WHERE username = %s;", (username,))
             row = cur.fetchone()
             return dict(row) if row else None
-
 
     def get_user_by_email(self, email: str) -> Optional[Dict[str, Any]]:
         with self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
@@ -307,13 +365,11 @@ class ConversationStore:
             row = cur.fetchone()
             return dict(row) if row else None
 
-
     def get_user_by_id(self, user_id: int) -> Optional[Dict[str, Any]]:
         with self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
             cur.execute("SELECT * FROM users WHERE id = %s;", (user_id,))
             row = cur.fetchone()
             return dict(row) if row else None
-            
             
     def increment_question_count(self, user_id: int) -> None:
         with self.conn.cursor() as cur:

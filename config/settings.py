@@ -85,7 +85,7 @@ class Settings(BaseSettings):
     RERANK_KG_TOP_N: int = 10             # Number of KG paths kept after cross-encoder reranking
 
     # LLM History Configuration
-    HISTORY_TURNS_FOR_LLM: int = 5    # 1 turn = user + assistant. 5 turns = 10 messages
+    HISTORY_TURNS_FOR_LLM: int = 5     # 1 turn = user + assistant. 5 turns = 10 messages
     # Chat History Pagination
     MESSAGE_PAGE_SIZE: int = 20        # Messages per page for cursor-based pagination
 
