@@ -89823,3 +89823,556 @@ TypeError: string indices must be integers, not 'str'
 2026-07-09 23:59:17,086 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
 2026-07-09 23:59:18,779 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
 2026-07-09 23:59:18,788 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:01:42,302 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:01:42,313 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:01:43,978 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:01:43,985 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:01:58,017 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:01:58,033 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:02:41,256 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:02:41,257 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:02:41,267 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:02:41,271 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:02:41,292 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:02:41,302 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:02:42,449 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:02:42,467 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:02:43,847 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:02:43,872 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:02:44,989 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:02:45,002 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:02:46,370 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:02:46,384 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:02:47,913 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:02:47,919 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:02:48,784 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:02:48,803 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:02:50,447 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:02:50,501 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:02:54,689 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:02:54,707 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:02:58,302 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:02:58,315 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:03:01,684 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:03:01,697 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:03:02,558 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:03:02,576 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:03:03,188 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:03:03,204 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:03:04,142 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:03:04,159 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:03:04,661 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:03:04,673 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:03:07,020 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:03:07,048 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:03:07,978 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:03:08,004 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:03:08,937 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:03:08,944 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:03:13,448 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:03:13,453 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:04:56,114 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:04:56,152 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:05:07,913 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:05:08,485 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:12:10,924 - MedKG-RAG - INFO - [Shutdown]: Releasing resources...
+2026-07-10 00:12:10,926 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:12:10,930 - MedKG-RAG - INFO - Neo4j connection closed
+2026-07-10 00:12:10,930 - MedKG-RAG - INFO - [Shutdown]: Cleanup complete.
+2026-07-10 00:12:16,540 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-10 00:12:43,188 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-10 00:12:48,804 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-10 00:12:53,634 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-10 00:12:55,792 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-10 00:12:55,810 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-10 00:12:55,811 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-10 00:12:55,930 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:12:55,931 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-10 00:12:59,225 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-10 00:13:21,534 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-10 00:13:25,902 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-10 00:13:28,275 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-10 00:13:31,135 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-10 00:13:31,157 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-10 00:13:31,189 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-10 00:13:31,551 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:13:31,551 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-10 00:17:03,226 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:17:03,277 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:17:03,302 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:17:03,312 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:17:16,697 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:17:16,717 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:17:16,748 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:17:16,763 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:17:46,116 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:17:46,154 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:17:46,236 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:17:46,266 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:17:51,483 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:17:51,494 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:17:51,559 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:17:51,589 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:18:04,304 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:18:04,866 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:18:19,303 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:18:19,341 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:18:19,382 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:18:19,393 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:18:23,569 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:18:23,581 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:20:22,692 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:20:22,722 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:20:22,780 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:20:22,805 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:26:57,914 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:26:58,331 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:26:58,417 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:26:58,443 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:26:58,494 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:26:58,517 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:07,411 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:07,441 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:07,483 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:07,492 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:07,748 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:07,775 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:07,824 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:07,847 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:08,578 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:08,592 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:08,636 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:08,646 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:09,390 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:09,403 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:09,479 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:09,516 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:09,845 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:09,860 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:09,958 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:09,993 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:17,510 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:17,522 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:17,573 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:17,584 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:20,575 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:20,586 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:23,549 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:23,561 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:23,636 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:23,671 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:25,180 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:25,212 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:29,024 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:29,039 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:32,405 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:32,426 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:32,467 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:32,492 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:36,440 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:36,455 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:36,487 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:36,527 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:38,816 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:38,832 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:38,860 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:38,873 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:43,495 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:43,504 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:43,531 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:43,543 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:46,754 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:46,764 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:46,864 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:46,895 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:48,815 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:48,821 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:48,836 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:48,841 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:51,653 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:51,668 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:51,699 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:51,705 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:53,717 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:53,728 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:53,791 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:53,821 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:56,680 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:56,699 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:57,536 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:57,577 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:29:57,668 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:29:57,696 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:30:08,917 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:30:08,933 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:30:08,963 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:30:08,976 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:31:23,949 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:31:23,963 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:31:23,990 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:31:23,999 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:31:25,551 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:31:25,565 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:31:26,899 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:31:26,917 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:31:26,979 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:31:27,019 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:33:27,207 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:33:27,235 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:33:27,257 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:33:27,274 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:33:33,534 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:33:33,547 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:33:33,573 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:33:33,583 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:33:34,183 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:33:34,196 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:33:34,214 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:33:34,233 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:00,670 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:00,685 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:00,739 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:00,749 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:01,004 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:01,048 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:01,104 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:01,145 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:01,873 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:01,885 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:01,916 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:01,939 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:06,094 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:06,109 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:08,586 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:08,603 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:08,634 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:08,648 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:12,122 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:12,133 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:12,162 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:12,172 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:13,248 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:13,260 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:13,290 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:13,313 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:18,885 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:18,926 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:18,982 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:19,027 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:19,661 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:19,683 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:19,720 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:19,737 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:24,401 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:24,416 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:24,465 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:24,478 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:29,043 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:29,052 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:29,077 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:29,087 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:29,447 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:29,454 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:29,491 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:29,504 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:30,641 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:30,660 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:30,699 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:30,712 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:31,075 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:31,084 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:31,119 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:31,142 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:31,609 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:31,629 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:31,664 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:31,677 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:32,688 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:32,698 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:32,741 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:32,769 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:33,092 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:33,108 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:33,162 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:33,190 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:33,879 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:33,892 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:37,647 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:37,657 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:40,364 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:40,391 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:40,417 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:40,430 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:54,319 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:54,338 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:54,389 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:54,403 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:59,154 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:59,167 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:34:59,199 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:34:59,221 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:35:06,231 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:35:06,247 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:35:06,275 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:35:06,287 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:35:07,150 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:35:07,166 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:35:09,029 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:35:09,045 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:35:09,073 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:35:09,083 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:35:10,430 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:35:10,445 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:35:10,470 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:35:10,480 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:35:11,653 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:35:11,670 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:35:12,729 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:35:12,743 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:35:12,774 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:35:12,790 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:35:55,042 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:35:55,050 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:35:55,088 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:35:55,097 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:35:56,540 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:35:56,573 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:35:56,637 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:35:56,650 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:36:43,358 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:36:43,369 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:36:44,036 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:36:44,057 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:36:44,091 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:36:44,112 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:36:53,891 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:36:53,902 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:36:53,930 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:36:53,941 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:36:56,580 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:36:56,608 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:36:56,669 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:36:56,683 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:37:11,557 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:37:11,568 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:37:11,624 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:37:11,652 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:37:12,189 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:37:12,219 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:37:12,297 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:37:12,331 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:37:12,553 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:37:12,557 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:37:12,622 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:37:12,649 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:37:21,085 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:37:21,107 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:37:21,174 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:37:21,198 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:37:21,376 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:37:21,389 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:37:21,428 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:37:21,439 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:37:21,852 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:37:21,874 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:37:21,898 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:37:21,948 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:37:22,240 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:37:22,244 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:37:22,325 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:37:22,353 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:37:22,759 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:37:22,769 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:37:22,798 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:37:22,813 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:37:23,298 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:37:23,316 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:37:23,343 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:37:23,384 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:37:25,400 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:37:25,412 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:37:25,496 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:37:25,517 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:37:27,845 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:37:27,853 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:37:27,896 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:37:27,907 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:37:33,716 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:37:33,754 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:37:33,791 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:37:33,802 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:37:37,595 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:37:37,611 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:37:37,647 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:37:37,660 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:37:43,746 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:37:43,752 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:37:43,830 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:37:43,861 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:38:10,147 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:38:10,160 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:38:10,187 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:38:10,197 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:43:40,296 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:43:40,319 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:43:40,356 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:43:40,369 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:43:42,003 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:43:42,029 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:43:42,073 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:43:42,117 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:43:42,923 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:43:42,938 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:43:42,981 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:43:42,991 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:43:43,326 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:43:43,349 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:43:43,372 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:43:43,387 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:45:18,606 - MedKG-RAG - INFO - [Shutdown]: Releasing resources...
+2026-07-10 00:45:18,614 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:45:18,628 - MedKG-RAG - INFO - Neo4j connection closed
+2026-07-10 00:45:18,634 - MedKG-RAG - INFO - [Shutdown]: Cleanup complete.
+2026-07-10 00:45:26,377 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-10 00:45:50,587 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-10 00:45:57,126 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-10 00:46:00,081 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-10 00:46:37,688 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-10 00:47:01,156 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-10 00:47:06,368 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-10 00:47:09,256 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-10 00:47:11,595 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-10 00:47:11,629 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-10 00:47:11,631 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-10 00:47:11,836 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:47:11,837 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-10 00:47:14,802 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-10 00:47:33,228 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-10 00:47:39,042 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-10 00:47:42,249 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-10 00:47:44,865 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-10 00:47:44,877 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-10 00:47:44,883 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-10 00:47:45,043 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:47:45,044 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-10 00:47:45,278 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:47:45,292 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:47:45,302 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:47:45,309 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:47:45,332 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:47:45,347 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:47:45,362 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:47:45,367 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:47:45,367 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:47:46,164 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:47:46,263 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:47:46,277 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:47:46,333 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:47:46,342 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:47:52,803 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:47:52,835 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:47:53,225 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:47:53,235 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:48:02,126 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:48:03,046 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:48:03,127 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:48:03,159 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:48:03,187 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:48:03,209 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:48:06,669 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:48:06,689 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:48:06,765 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:48:06,787 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:48:07,861 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:48:07,875 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:48:07,894 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:48:07,907 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:48:18,118 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:48:18,128 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:48:18,156 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:48:18,166 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:48:20,634 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:48:20,652 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:48:21,770 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:48:21,781 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:48:21,810 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:48:21,837 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:48:27,503 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:48:27,527 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:48:27,606 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:48:27,632 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:51:38,349 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:51:38,773 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:51:38,886 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:51:38,903 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:51:38,931 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:51:38,947 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:51:50,860 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:51:50,874 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:51:50,906 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:51:50,917 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:51:52,505 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:51:52,515 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:51:52,561 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:51:52,571 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:51:53,369 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:51:53,379 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:51:53,422 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:51:53,444 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:52:01,596 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:52:01,608 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:52:01,640 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:52:01,650 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:52:02,968 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:52:02,978 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:52:03,038 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:52:03,047 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:52:03,850 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:52:03,861 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:52:03,892 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:52:03,904 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:52:09,839 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:52:09,868 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:52:09,937 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:52:09,965 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:52:10,834 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:52:10,846 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:52:11,701 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:52:11,721 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:52:11,747 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:52:11,762 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:54:22,840 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:54:22,875 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 00:54:22,927 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 00:54:22,962 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 01:00:03,269 - MedKG-RAG - INFO - [Shutdown]: Releasing resources...
+2026-07-10 01:00:03,269 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 01:00:03,271 - MedKG-RAG - INFO - Neo4j connection closed
+2026-07-10 01:00:03,272 - MedKG-RAG - INFO - [Shutdown]: Cleanup complete.
+2026-07-10 01:00:07,654 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-10 01:00:32,013 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-10 01:00:36,757 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-10 01:00:39,709 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-10 01:00:41,856 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-10 01:00:41,882 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-10 01:00:41,883 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-10 01:00:41,968 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 01:00:41,968 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-10 01:00:44,647 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-10 01:01:05,740 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-10 01:01:09,793 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-10 01:01:12,079 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-10 01:01:14,062 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-10 01:01:14,066 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-10 01:01:14,067 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-10 01:01:14,125 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 01:01:14,125 - MedKG-RAG - INFO - [Startup]: All service ready.
+2026-07-10 01:01:16,633 - MedKG-RAG - INFO - [Startup]: Initializing RAG pipeline...
+2026-07-10 01:01:32,469 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-10 01:01:35,888 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-10 01:01:38,363 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-10 01:01:40,352 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-10 01:01:40,355 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-10 01:01:40,355 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-10 01:01:40,443 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
+2026-07-10 01:01:40,443 - MedKG-RAG - INFO - [Startup]: All service ready.

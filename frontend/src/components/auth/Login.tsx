@@ -133,7 +133,7 @@ const Login: React.FC = () => {
             </div>
           </div>
 
-          <div className="mt-6 space-y-4">
+          <div className="mt-6 flex flex-col items-center space-y-4">
             <div className="flex justify-center w-full">
               <GoogleLogin
                 onSuccess={async (credentialResponse) => {
@@ -156,6 +156,7 @@ const Login: React.FC = () => {
                   setError('Google login failed.');
                 }}
                 useOneTap
+                width="240"
               />
             </div>
             
@@ -163,7 +164,7 @@ const Login: React.FC = () => {
               type="button"
               onClick={handleGuest}
               disabled={loading}
-              className="w-full flex justify-center items-center h-[40px] px-4 border border-slate-300 dark:border-slate-700 rounded-lg shadow-sm text-sm font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 transition-colors"
+              className="w-[240px] flex justify-center items-center h-[40px] px-4 border border-slate-300 dark:border-slate-700 rounded shadow-sm text-sm font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 transition-colors"
             >
               Continue as Guest
               <ArrowRight size={16} className="ml-2" />

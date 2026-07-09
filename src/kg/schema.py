@@ -88,6 +88,7 @@ class QueryIntent(Enum):
     GENETIC_ASSOCIATION     = "genetic_association"     # "What genes are linked to X?"
     DRUG_TARGET_LOOKUP      = "drug_target_lookup"      # "What proteins does drug X target?"
     GENERAL                 = "general"                 # Ambiguous / multi-intent
+    NO_RAG_NEEDED           = "no_rag_needed"           # Small talk or context-only answering
 
 
 # Allowed Neo4j relationship types per intent.
@@ -141,5 +142,6 @@ INTENT_EDGE_FILTER: dict[str, set[str] | None] = {
         "CARRIED_BY",
         "ASSOCIATED_WITH",
     },
-    "general": None,    # No restriction 
+    "general": None,    # No restriction
+    "no_rag_needed": None,
 }

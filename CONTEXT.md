@@ -429,9 +429,11 @@ ragas                     — RAG evaluation framework
 | `GET` | `/api/conversations/search` | Search conversations by title or message content |
 | `POST` | `/api/conversations/{id}/messages/{msg_id}/feedback` | Submit like/dislike feedback and optional comment |
 | `GET` | `/api/admin/stats` | Get system statistics (Admin only) |
-| `GET` | `/api/admin/users` | List all users (Admin only) |
+| `GET` | `/api/admin/users` | List all users with pagination (Admin only) |
 | `DELETE` | `/api/admin/users/{id}` | Delete a user (Admin only) |
 | `PUT` | `/api/admin/users/{id}/password` | Reset user password (Admin only) |
+| `GET` | `/api/admin/users/{user_id}/conversations` | List user's conversations (Admin only) |
+| `GET` | `/api/admin/conversations/{conv_id}/messages` | Get messages of a conversation (Read-only, Admin only) |
 | `GET` | `/api/admin/feedback/bad` | List disliked messages with comments (Admin only) |
 | `GET` | `/api/admin/feedback/good` | List liked messages with comments (Admin only) |
 | `GET` | `/` | Serve frontend (static files) |

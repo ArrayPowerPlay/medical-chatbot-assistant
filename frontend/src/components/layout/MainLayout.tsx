@@ -49,11 +49,15 @@ const MainLayout: React.FC = () => {
 
           {/* Theme Toggle */}
           <button
-            className="p-2 rounded-xl transition-all duration-300 hover:scale-105 flex items-center justify-center bg-slate-100 text-slate-600 hover:bg-blue-100 hover:text-blue-600 dark:bg-slate-800 dark:text-amber-400 dark:hover:bg-slate-700 shadow-sm border border-slate-200 dark:border-slate-700"
+            className="px-3 py-1.5 rounded-xl transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 bg-slate-100 text-slate-600 hover:bg-blue-100 hover:text-blue-600 dark:bg-slate-800 dark:text-amber-400 dark:hover:bg-slate-700 shadow-sm border border-slate-200 dark:border-slate-700 text-sm font-medium"
             onClick={toggleTheme}
             title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
           >
-            {isDarkMode ? <Sun className="w-5 h-5 drop-shadow-sm" /> : <Moon className="w-5 h-5" />}
+            {isDarkMode ? (
+              <><Sun className="w-4 h-4 drop-shadow-sm" /><span className="hidden sm:inline">Light Mode</span></>
+            ) : (
+              <><Moon className="w-4 h-4" /><span className="hidden sm:inline">Dark Mode</span></>
+            )}
           </button>
         </header>
 

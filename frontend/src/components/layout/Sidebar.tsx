@@ -246,21 +246,22 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
         <div className="p-4 border-t border-slate-200 dark:border-slate-800">
           <div className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors cursor-pointer group">
             <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-600 dark:text-blue-300 font-bold shrink-0">
-              {user?.email?.[0].toUpperCase() || 'G'}
+              {(user?.email?.[0] || user?.username?.[0] || 'G').toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
               <div className="text-sm font-medium text-slate-900 dark:text-slate-100 truncate">
-                {user?.email || 'Guest User'}
+                {user?.role === 'guest' ? 'Guest User' : (user?.username || user?.email || 'User')}
               </div>
               <div className="text-xs text-slate-500 dark:text-slate-400 capitalize">
                 {user?.role || 'Guest'}
               </div>
             </div>
-            {/* Always visible logout button */}
             <button 
               onClick={(e) => {
                 e.stopPropagation();
-                logout();
+                if (window.confirm('Are you sure you want to logout?')) {
+                  logout();
+                }
               }}
               className="text-slate-400 hover:text-red-500 transition-colors p-1"
               title="Logout"

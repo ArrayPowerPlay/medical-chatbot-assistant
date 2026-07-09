@@ -5,6 +5,7 @@ import psycopg2
 import psycopg2.extras
 from typing import List, Dict, Optional, Any
 
+import json
 from config.settings import settings
 from config.logging_config import logger
 
@@ -348,7 +349,7 @@ class ConversationStore:
                     "content": r["content"],
                     "feedback_type": r["feedback_type"],
                     "feedback_comment": r["feedback_comment"],
-                    "sources": r["sources"] if r["sources"] else [],
+                    "sources": json.loads(r["sources"]) if isinstance(r["sources"], str) else (r["sources"] if r["sources"] else []),
                     "created_at": r["created_at"].isoformat()
                 }
                 for r in reversed(rows)
@@ -437,10 +438,41 @@ class ConversationStore:
                 "total_dislikes": total_dislikes
             }
             
-    def get_all_users(self) -> List[Dict[str, Any]]:
+    def get_all_users(self, limit: int = 20, offset: int = 0, search: str = None, role: str = None) -> Dict[str, Any]:
         with self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
-            cur.execute("SELECT id, username, email, role, question_count, created_at FROM users ORDER BY created_at DESC;")
-            return [dict(r) for r in cur.fetchall()]
+            query_conditions = []
+            params = []
+            
+            if search:
+                query_conditions.append("(username = %s OR email = %s)")
+                params.extend([search, search])
+            if role:
+                query_conditions.append("role = %s")
+                params.append(role)
+                
+            where_clause = ""
+            if query_conditions:
+                where_clause = "WHERE " + " AND ".join(query_conditions)
+                
+            cur.execute(f"SELECT COUNT(*) FROM users {where_clause};", tuple(params))
+            total = cur.fetchone()[0]
+            
+            query = f"SELECT id, username, email, role, question_count, created_at FROM users {where_clause} ORDER BY created_at DESC LIMIT %s OFFSET %s;"
+            query_params = params + [limit, offset]
+            
+            cur.execute(query, tuple(query_params))
+            users = [
+                {
+                    "id": r["id"],
+                    "username": r["username"],
+                    "email": r["email"],
+                    "role": r["role"],
+                    "question_count": r["question_count"],
+                    "created_at": r["created_at"].isoformat()
+                }
+                for r in cur.fetchall()
+            ]
+            return {"total": total, "users": users}
             
     def delete_user(self, user_id: int) -> bool:
         with self.conn.cursor() as cur:
@@ -455,9 +487,10 @@ class ConversationStore:
     def get_bad_feedback_messages(self, limit: int = 20, offset: int = 0) -> List[Dict[str, Any]]:
         with self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
             cur.execute("""
-                SELECT m.id, m.conversation_id, m.content, m.feedback_comment, m.created_at, c.title
+                SELECT m.id, m.conversation_id, m.content, m.feedback_comment, m.created_at, c.title, u.username, u.email
                 FROM messages m
                 JOIN conversations c ON m.conversation_id = c.id
+                LEFT JOIN users u ON c.user_id = u.id
                 WHERE m.feedback_type = 'dislike'
                 ORDER BY m.created_at DESC
                 LIMIT %s OFFSET %s;
@@ -469,7 +502,9 @@ class ConversationStore:
                     "content": r["content"],
                     "feedback_comment": r["feedback_comment"],
                     "created_at": r["created_at"].isoformat(),
-                    "conversation_title": r["title"]
+                    "conversation_title": r["title"],
+                    "username": r["username"],
+                    "email": r["email"]
                 }
                 for r in cur.fetchall()
             ]
@@ -477,9 +512,10 @@ class ConversationStore:
     def get_good_feedback_messages(self, limit: int = 20, offset: int = 0) -> List[Dict[str, Any]]:
         with self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
             cur.execute("""
-                SELECT m.id, m.conversation_id, m.content, m.feedback_comment, m.created_at, c.title
+                SELECT m.id, m.conversation_id, m.content, m.feedback_comment, m.created_at, c.title, u.username, u.email
                 FROM messages m
                 JOIN conversations c ON m.conversation_id = c.id
+                LEFT JOIN users u ON c.user_id = u.id
                 WHERE m.feedback_type = 'like'
                 ORDER BY m.created_at DESC
                 LIMIT %s OFFSET %s;
@@ -491,7 +527,9 @@ class ConversationStore:
                     "content": r["content"],
                     "feedback_comment": r["feedback_comment"],
                     "created_at": r["created_at"].isoformat(),
-                    "conversation_title": r["title"]
+                    "conversation_title": r["title"],
+                    "username": r["username"],
+                    "email": r["email"]
                 }
                 for r in cur.fetchall()
             ]

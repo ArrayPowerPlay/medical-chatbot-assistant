@@ -137,6 +137,11 @@ export const useChatStream = () => {
                     }
                     return newMessages;
                   });
+                  
+                  const storeState = useAuthStore.getState() as any;
+                  if (storeState.user?.role === 'guest') {
+                    storeState.updateUser({ question_count: (storeState.user.question_count || 0) + 1 });
+                  }
                 }
               } catch (e) { }
               return;

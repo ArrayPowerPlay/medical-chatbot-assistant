@@ -16,10 +16,32 @@ def get_stats(db: ConversationStore = Depends(get_db), _: dict = Depends(verify_
     return db.get_admin_stats()
 
 
-@router.get("/users", response_model=List[Dict[str, Any]])
-def get_users(db: ConversationStore = Depends(get_db), _: dict = Depends(verify_admin)):
-    """Get all users for Admin Dashboard"""
-    return db.get_all_users()
+@router.get("/users", response_model=Dict[str, Any])
+def get_users(search: str = None, role: str = None, limit: int = 20, offset: int = 0, db: ConversationStore = Depends(get_db), _: dict = Depends(verify_admin)):
+    """Get all users for Admin Dashboard with pagination, search, and filtering"""
+    return db.get_all_users(limit=limit, offset=offset, search=search, role=role)
+
+@router.get("/users/{user_id}/conversations", response_model=List[Dict[str, Any]])
+def get_user_conversations(user_id: int, db: ConversationStore = Depends(get_db), _: dict = Depends(verify_admin)):
+    """Get all conversations of a specific user for Admin Dashboard"""
+    # Verify user exists
+    user = db.get_user_by_id(user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return db.list_conversations(user_id=user_id)
+
+@router.get("/conversations/{conv_id}/messages", response_model=Dict[str, Any])
+def get_conversation_messages(
+    conv_id: str, 
+    limit: int = 50, 
+    before_id: int = None, 
+    db: ConversationStore = Depends(get_db), 
+    _: dict = Depends(verify_admin)
+):
+    """Get messages for a conversation (Read-only view for Admin)"""
+    if not db.conversation_exists(conv_id):
+        raise HTTPException(status_code=404, detail="Conversation not found")
+    return db.get_message_page(conversation_id=conv_id, limit=limit, before_id=before_id)
 
 
 @router.delete("/users/{user_id}", status_code=status.HTTP_204_NO_CONTENT)

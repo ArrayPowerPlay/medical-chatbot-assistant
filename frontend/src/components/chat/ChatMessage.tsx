@@ -4,6 +4,7 @@ import remarkGfm from 'remark-gfm';
 import { User, Bot, ThumbsUp, ThumbsDown, Check, X, BookOpen, ChevronUp, ChevronDown } from 'lucide-react';
 import type { ChatMessageData } from '../../hooks/useChatStream';
 import { conversationApi } from '../../api/conversationApi';
+import { useAuthStore } from '../../stores/authStore';
 import { useParams, useLocation } from 'react-router-dom';
 import rehypeRaw from 'rehype-raw';
 
@@ -18,6 +19,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message, isThinking, isHighli
   const isUser = message.role === 'user';
   const { id: conversationId } = useParams<{ id: string }>();
   const messageRef = useRef<HTMLDivElement>(null);
+  const { user } = useAuthStore();
 
   const [feedbackType, setFeedbackType] = useState<'like' | 'dislike' | 'none'>(message.feedback_type || 'none');
   const [showCommentBox, setShowCommentBox] = useState(false);
@@ -130,7 +132,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message, isThinking, isHighli
             </button>
             
             {showSources && (
-              <div className="mt-3 flex flex-col gap-2">
+              <div className="mt-3 flex flex-col gap-2 max-h-[400px] overflow-y-auto pr-2">
                 {message.sources.map((src: any, idx: number) => (
                   <div key={idx} className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-3 rounded-lg text-sm text-slate-700 dark:text-slate-300">
                     <div className="flex items-center gap-2 mb-1">
@@ -155,6 +157,13 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message, isThinking, isHighli
                 ))}
               </div>
             )}
+          </div>
+        )}
+
+        {/* Guest Limit Warning */}
+        {user?.role === 'guest' && !isUser && !isThinking && (
+          <div className="mt-4 text-xs text-amber-600 dark:text-amber-500 font-medium bg-amber-50 dark:bg-amber-900/20 p-2 rounded border border-amber-100 dark:border-amber-800">
+            You have asked {user.question_count || 0}/10 free questions. ({Math.max(0, 10 - (user.question_count || 0))} questions left)
           </div>
         )}
 

@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useThemeStore } from './stores/themeStore';
 
 // Layouts
 import MainLayout from './components/layout/MainLayout';
@@ -13,10 +15,22 @@ import ChatLayout from './components/chat/ChatLayout';
 
 import IntroPage from './components/layout/IntroPage';
 
-// Placeholders for future phases
-const AdminDashboard = () => <div>Admin Dashboard Content</div>;
+// Admin Components
+import DashboardStats from './components/admin/DashboardStats';
+import UserManagement from './components/admin/UserManagement';
+import FeedbackViewer from './components/admin/FeedbackViewer';
 
 function App() {
+  const { theme } = useThemeStore();
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
+
   return (
     <BrowserRouter>
       <Routes>
@@ -26,7 +40,7 @@ function App() {
         <Route path="/register" element={<Register />} />
 
         {/* Protected Routes (User & Guest) */}
-        <Route element={<ProtectedRoute allowedRoles={['user', 'guest', 'admin']} />}>
+        <Route element={<ProtectedRoute allowedRoles={['user', 'guest']} />}>
           <Route element={<MainLayout />}>
             <Route path="/chat" element={<Navigate to="/c" replace />} />
             <Route path="/c/:id?" element={<ChatLayout />} />
@@ -36,9 +50,9 @@ function App() {
         {/* Protected Admin Routes */}
         <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
           <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<AdminDashboard />} />
-            <Route path="users" element={<div>Manage Users UI</div>} />
-            <Route path="conversations" element={<div>Conversations UI</div>} />
+            <Route index element={<DashboardStats />} />
+            <Route path="users" element={<UserManagement />} />
+            <Route path="feedback" element={<FeedbackViewer />} />
           </Route>
         </Route>
 

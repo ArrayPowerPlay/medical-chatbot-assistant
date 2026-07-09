@@ -7,7 +7,7 @@ import logoUrl from '../../assets/logo.png'; // Assuming logo is placed here
 
 const IntroPage: React.FC = () => {
   const navigate = useNavigate();
-  const { user, token, logout } = useAuthStore();
+  const { token, logout, user } = useAuthStore();
   const isAuthenticated = !!token;
   const { theme, toggleTheme } = useThemeStore();
   const isDarkMode = theme === 'dark';
@@ -30,33 +30,41 @@ const IntroPage: React.FC = () => {
           <h1 className="font-bold text-xl tracking-tight text-blue-700 dark:text-blue-400">Med Assistant</h1>
         </div>
         
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
+          {isAuthenticated && (
+            <button 
+              onClick={() => navigate(user?.role === 'admin' ? '/admin' : '/c')}
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors text-sm"
+            >
+              {user?.role === 'admin' ? 'Go to Admin Dashboard' : 'Go to Chat'}
+            </button>
+          )}
+
           <button
-            className="p-2 rounded-xl transition-all duration-300 hover:scale-105 flex items-center justify-center bg-slate-100 text-slate-600 hover:bg-blue-100 hover:text-blue-600 dark:bg-slate-800 dark:text-amber-400 dark:hover:bg-slate-700 shadow-sm border border-slate-200 dark:border-slate-700"
+            className="px-3 py-1.5 rounded-xl transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 bg-slate-100 text-slate-600 hover:bg-blue-100 hover:text-blue-600 dark:bg-slate-800 dark:text-amber-400 dark:hover:bg-slate-700 shadow-sm border border-slate-200 dark:border-slate-700 text-sm font-medium"
             onClick={toggleTheme}
             title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
           >
-            {isDarkMode ? <Sun className="w-5 h-5 drop-shadow-sm" /> : <Moon className="w-5 h-5" />}
+            {isDarkMode ? (
+              <><Sun className="w-4 h-4 drop-shadow-sm" /><span className="hidden sm:inline">Light Mode</span></>
+            ) : (
+              <><Moon className="w-4 h-4" /><span className="hidden sm:inline">Dark Mode</span></>
+            )}
           </button>
-          
+
           {isAuthenticated ? (
-            <div className="flex items-center gap-3">
-              {/* Removed email display as requested */}
-              <button 
-                onClick={() => navigate('/c')}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors text-sm"
-              >
-                Go to Chat
-              </button>
-              <button 
-                onClick={logout}
-                className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 border border-red-200 dark:border-red-900/50 rounded-lg transition-colors"
-                title="Log Out"
-              >
-                <LogOut className="w-4 h-4" />
-                <span>Log Out</span>
-              </button>
-            </div>
+            <button 
+              onClick={() => {
+                if (window.confirm('Are you sure you want to logout?')) {
+                  logout();
+                }
+              }}
+              className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 border border-red-200 dark:border-red-900/50 rounded-lg transition-colors"
+              title="Log Out"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Log Out</span>
+            </button>
           ) : (
             <div className="flex items-center gap-2">
               <button 
@@ -87,10 +95,10 @@ const IntroPage: React.FC = () => {
           </p>
           
           <button 
-            onClick={() => navigate(isAuthenticated ? '/c' : '/login')}
+            onClick={() => navigate(isAuthenticated ? (user?.role === 'admin' ? '/admin' : '/c') : '/login')}
             className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-full font-semibold text-lg transition-all transform hover:scale-105 shadow-lg hover:shadow-blue-500/30"
           >
-            Start Chatting
+            {isAuthenticated && user?.role === 'admin' ? 'Go to Admin Dashboard' : 'Start Chatting'}
           </button>
         </div>
 

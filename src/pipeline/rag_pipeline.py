@@ -176,6 +176,28 @@ class RAGPipeline:
         intents = analysis.get("intents", ["general"])
         question_type = analysis.get("question_type", "summary")
 
+        if "no_rag_needed" in intents:
+            logger.info("[RAG Pipeline]: Intent is 'no_rag_needed'. Bypassing RAG and answering directly.")
+            self.llm_generator.temperature = generation_temperature
+            self.llm_generator.max_tokens = generation_max_tokens
+            
+            system_prompt = "You are a helpful and intelligent AI medical assistant. Answer the user's question directly based on the conversational history or general knowledge. Be concise and conversational."
+            user_prompt = query
+            
+            answer = await self.llm_generator.generate_answer(
+                system_prompt=system_prompt,
+                user_prompt=user_prompt,
+                history=normalized_history
+            )
+            return {
+                "answer": answer,
+                "conversation_id": conversation_id,
+                "sources": [],
+                "rewritten_query": query,
+                "analysis": analysis,
+                "question_type": question_type,
+            }
+
         # Embeddings
         query_vectors = await self.query_embedder.embed_texts(rewritten_query)
         query_vector = query_vectors[0].tolist()
@@ -309,6 +331,29 @@ class RAGPipeline:
         rewritten_query = analysis.get("rewritten_query", query)
         intents = analysis.get("intents", ["general"])
         question_type = analysis.get("question_type", "summary")
+
+        if "no_rag_needed" in intents:
+            logger.info("[RAG Pipeline]: Intent is 'no_rag_needed'. Bypassing RAG and answering directly (streaming).")
+            yield f"event: metadata\ndata: {json.dumps({'conversation_id': conversation_id, 'sources': []})}\n\n"
+            
+            self.llm_generator.temperature = generation_temperature
+            self.llm_generator.max_tokens = generation_max_tokens
+            
+            system_prompt = "You are a helpful and intelligent AI medical assistant. Answer the user's question directly based on the conversational history or general knowledge. Be concise and conversational."
+            user_prompt = query
+            
+            full_answer = ""
+            async for chunk in self.llm_generator.generate_answer_stream(
+                system_prompt=system_prompt,
+                user_prompt=user_prompt,
+                history=normalized_history
+            ):
+                full_answer += chunk
+                yield f"event: content\ndata: {json.dumps(chunk)}\n\n"
+                
+            yield f"event: done\ndata: {json.dumps({'status': 'success'})}\n\n"
+            yield f"event: final_answer\ndata: {json.dumps({'answer': full_answer})}\n\n"
+            return
 
         query_vectors = await self.query_embedder.embed_texts(rewritten_query)
         query_vector = query_vectors[0].tolist()
