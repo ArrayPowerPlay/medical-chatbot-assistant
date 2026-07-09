@@ -41,11 +41,7 @@ const IntroPage: React.FC = () => {
           
           {isAuthenticated ? (
             <div className="flex items-center gap-3">
-              {user?.email && (
-                <span className="hidden md:inline-block text-sm text-slate-600 dark:text-slate-400">
-                  Hi, {user.email}
-                </span>
-              )}
+              {/* Removed email display as requested */}
               <button 
                 onClick={() => navigate('/c')}
                 className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors text-sm"

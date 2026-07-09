@@ -23,10 +23,9 @@ export const useConversationStore = create<ConversationState>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       const data = await conversationApi.getConversations();
-      // Ensure pinned ones are on top
       const sorted = data.conversations.sort((a, b) => {
         if (a.is_pinned === b.is_pinned) {
-          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+          return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
         }
         return a.is_pinned ? -1 : 1;
       });
@@ -83,7 +82,7 @@ export const useConversationStore = create<ConversationState>((set, get) => ({
         const updated = state.conversations.map(c => c.id === id ? { ...c, is_pinned: isPinned } : c);
         const sorted = updated.sort((a, b) => {
           if (a.is_pinned === b.is_pinned) {
-            return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+            return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
           }
           return a.is_pinned ? -1 : 1;
         });
@@ -104,7 +103,7 @@ export const useConversationStore = create<ConversationState>((set, get) => ({
       const updated = [conv, ...state.conversations];
       const sorted = updated.sort((a, b) => {
         if (a.is_pinned === b.is_pinned) {
-          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+          return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
         }
         return a.is_pinned ? -1 : 1;
       });

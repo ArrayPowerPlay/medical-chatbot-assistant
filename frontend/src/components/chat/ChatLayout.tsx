@@ -63,7 +63,8 @@ const ChatLayout: React.FC = () => {
           role: m.role,
           content: m.content,
           feedback_type: m.feedback_type,
-          feedback_comment: m.feedback_comment
+          feedback_comment: m.feedback_comment,
+          sources: m.sources
         }));
         setMessages(history);
       })

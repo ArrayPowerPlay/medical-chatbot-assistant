@@ -59,12 +59,21 @@ async def chat(request: ChatRequest, raw_request: Request, user: dict = Depends(
                 conversation_id=conversation_id,
                 config=run_config
             ):
-                if chunk.startswith("event: final_answer"):
+                if chunk.startswith("event: metadata"):
+                    # Extract sources from pipeline's metadata event
+                    try:
+                        data_str = chunk.split("data: ", 1)[1].strip()
+                        data = json.loads(data_str)
+                        if "sources" in data:
+                            sources = data["sources"]
+                    except Exception:
+                        pass
+                    yield chunk
+                elif chunk.startswith("event: final_answer"):
                     # Extract final answer to save it to DB
                     data_str = chunk.split("data: ", 1)[1].strip()
                     data = json.loads(data_str)
                     full_answer = data.get("answer", "")
-                    sources = data.get("sources", [])
                 else:
                     yield chunk
             
@@ -81,7 +90,15 @@ async def chat(request: ChatRequest, raw_request: Request, user: dict = Depends(
             conv_store.increment_question_count(user["id"])
             
         except asyncio.CancelledError:
-            logger.info("Client disconnected during stream.")
+            logger.info("Client disconnected during stream. Saving partial answer...")
+            # Save partial answer to db so it doesn't freeze or disappear
+            if full_answer or sources:
+                conv_store.add_message(
+                    conversation_id, 
+                    "assistant", 
+                    full_answer + "\n\n*(Generation interrupted)*", 
+                    json.dumps(sources)
+                )
             raise
         except Exception as e:
             logger.error(f"[Chat] Stream error: {e}", exc_info=True)

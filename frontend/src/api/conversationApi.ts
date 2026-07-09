@@ -17,6 +17,7 @@ export interface Message {
   content: string;
   feedback_type?: 'like' | 'dislike' | 'none';
   feedback_comment?: string;
+  sources?: any[];
   created_at: string;
 }
 
@@ -35,12 +36,12 @@ export const conversationApi = {
   },
 
   renameConversation: async (id: string, title: string) => {
-    const response = await axiosClient.put<Conversation>(`/api/conversations/${id}`, { title });
+    const response = await axiosClient.put<boolean>(`/api/conversations/${id}`, { title });
     return response.data;
   },
 
   pinConversation: async (id: string, isPinned: boolean) => {
-    const response = await axiosClient.put<Conversation>(`/api/conversations/${id}/pin`, { is_pinned: isPinned });
+    const response = await axiosClient.put<boolean>(`/api/conversations/${id}`, { is_pinned: isPinned });
     return response.data;
   },
 
