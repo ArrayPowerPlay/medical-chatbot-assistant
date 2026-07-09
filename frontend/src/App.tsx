@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 // Layouts
@@ -10,8 +9,9 @@ import ProtectedRoute from './components/layout/ProtectedRoute';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 
+import ChatLayout from './components/chat/ChatLayout';
+
 // Placeholders for future phases
-const ChatPlaceholder = () => <div className="flex-1 flex items-center justify-center text-2xl text-slate-400">Chat UI goes here</div>;
 const AdminDashboard = () => <div>Admin Dashboard Content</div>;
 
 function App() {
@@ -25,7 +25,7 @@ function App() {
         {/* Protected Routes (User & Guest) */}
         <Route element={<ProtectedRoute allowedRoles={['user', 'guest', 'admin']} />}>
           <Route path="/" element={<MainLayout />}>
-            <Route index element={<ChatPlaceholder />} />
+            <Route index element={<ChatLayout />} />
             {/* Future route: <Route path="/c/:id" element={<ChatPlaceholder />} /> */}
           </Route>
         </Route>
