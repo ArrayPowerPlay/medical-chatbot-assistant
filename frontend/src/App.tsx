@@ -26,7 +26,7 @@ function App() {
         <Route element={<ProtectedRoute allowedRoles={['user', 'guest', 'admin']} />}>
           <Route path="/" element={<MainLayout />}>
             <Route index element={<ChatLayout />} />
-            {/* Future route: <Route path="/c/:id" element={<ChatPlaceholder />} /> */}
+            <Route path="/c/:id" element={<ChatLayout />} />
           </Route>
         </Route>
 

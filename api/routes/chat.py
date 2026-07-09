@@ -44,6 +44,9 @@ async def chat(request: ChatRequest, raw_request: Request, user: dict = Depends(
             from src.pipeline.rag_pipeline import RunConfig
             run_config = RunConfig()
             
+            # Yield conversation ID first for frontend redirection
+            yield f"event: metadata\ndata: {json.dumps({'conversation_id': conversation_id})}\n\n"
+            
             full_answer = ""
             async for chunk in pipeline.run_stream(
                 query=request.question,

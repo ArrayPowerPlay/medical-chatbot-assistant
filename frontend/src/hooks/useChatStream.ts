@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 import { useAuthStore } from '../stores/authStore';
 
@@ -6,6 +7,8 @@ export interface ChatMessageData {
   id: string; // temporary id for ui
   role: 'user' | 'assistant';
   content: string;
+  feedback_type?: 'like' | 'dislike' | 'none';
+  feedback_comment?: string;
 }
 
 export const useChatStream = () => {
@@ -13,6 +16,7 @@ export const useChatStream = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isThinking, setIsThinking] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(null);
+  const navigate = useNavigate();
   
   const token = useAuthStore((state: any) => state.token);
   const logout = useAuthStore((state: any) => state.logout);
@@ -83,6 +87,16 @@ export const useChatStream = () => {
           onmessage(msg) {
             if (msg.event === 'error') {
               throw new Error(msg.data);
+            }
+            if (msg.event === 'metadata') {
+              try {
+                const parsed = JSON.parse(msg.data);
+                if (parsed.conversation_id && !conversationId) {
+                  // Navigate to the new conversation URL without reloading the page
+                  navigate(`/c/${parsed.conversation_id}`, { replace: true });
+                }
+              } catch (e) {}
+              return;
             }
             if (msg.data) {
               // Parse stream chunk

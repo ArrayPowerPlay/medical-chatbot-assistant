@@ -1,8 +1,6 @@
 # 🧠 OVERVIEW — MedKG-RAG Chatbot
 
 > **MANDATORY RULE**: CẬP NHẬT FILE `CONTEXT.MD` NÀY MỖI KHI CÓ THAY ĐỔI VỀ KIẾN TRÚC/TÍNH NĂNG Ở CÁC FILE KHÁC (NẾU CẦN THIẾT). TUYỆT ĐỐI KHÔNG ĐƯỢC CODE NẾU CHƯA RÕ NỘI DUNG HOẶC YÊU CẦU. NẾU CÓ BẤT KỲ ĐIỀU GÌ CHƯA RÕ RÀNG HOẶC MƠ HỒ, PHẢI HỎI LẠI NGƯỜI DÙNG ĐỂ XÁC NHẬN TRƯỚC KHI BẮT ĐẦU CODE.
->
-> **Purpose**: This file contains ALL essential context for the project. Reading this single file should be sufficient to fully understand the project's scope, architecture, and implementation details.
 
 ---
 
