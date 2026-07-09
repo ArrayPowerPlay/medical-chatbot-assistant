@@ -5,7 +5,7 @@ Orchestrates 3 parallel retrieval streams:
 3. Knowledge Graph Search
 """
 import asyncio
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, cast
 import numpy as np
 
 from config.settings import settings
@@ -107,9 +107,9 @@ class ParallelRetriever:
         # Still return results if exception occurs
         results = await asyncio.gather(task_vector, task_keyword, task_kg, return_exceptions=True)
         
-        vector_results = results[0] if not isinstance(results[0], Exception) else []
-        keyword_results = results[1] if not isinstance(results[1], Exception) else []
-        kg_results = results[2] if not isinstance(results[2], Exception) else []
+        vector_results = cast(List[Dict], results[0]) if not isinstance(results[0], Exception) else []
+        keyword_results = cast(List[Dict], results[1]) if not isinstance(results[1], Exception) else []
+        kg_results = cast(List[Dict], results[2]) if not isinstance(results[2], Exception) else []
 
         if isinstance(results[0], Exception):
             logger.error(f"[Parallel Retrieval]: Error in Vector Search: {results[0]}")

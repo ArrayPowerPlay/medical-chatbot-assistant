@@ -80,7 +80,7 @@ def guest_login(db: ConversationStore = Depends(get_db)):
     """Access web without login, can only ask for maximum 10 questions"""
     import uuid
     # Create a random guest username
-    guest_username = f"guest_{uuid.uuid4().hex[:8]}"
+    guest_username = f"guest_{uuid.uuid4().hex[:8]}"   # .hex() returns hexadecimal type
     hashed_password = pwd_context.hash(uuid.uuid4().hex)
     
     user_id = db.create_user_with_username(guest_username, hashed_password, role="guest")

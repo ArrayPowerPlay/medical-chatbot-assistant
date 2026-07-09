@@ -93,7 +93,7 @@ def compute_citation_metrics(
     }
 
 
-def evaluate_split(
+async def evaluate_split(
     data_path: Path,
     output_dir: Path,
     split_name: str,
@@ -174,7 +174,7 @@ def evaluate_split(
                 )
 
                 try:
-                    result = pipeline.run(
+                    result = await pipeline.run(
                         query=body,
                         history=None,
                         kg_top_k=kg_top_k,
@@ -274,7 +274,7 @@ def evaluate_split(
         )
 
     finally:
-        bioasq_common._close_pipeline(pipeline)
+        await bioasq_common._close_pipeline(pipeline)
 
 
 def _build_summary(

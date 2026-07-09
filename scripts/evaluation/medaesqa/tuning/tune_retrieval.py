@@ -29,7 +29,7 @@ from src.query.query_analyzer import QueryAnalyzer
 from src.reranking.cross_encoder import CrossEncoderReranker
 from src.reranking.rrf import RRFManager
 from src.storage.parent_store import ParentStore
-from src.storage.weaviate_client import WeaviateChildStore
+from src.storage.weaviate_client import AsyncWeaviateChildStore
 
 TEST_PATH = settings.DATA_PATH / "test" / "test_medaesqa.jsonl"
 OUTPUT_DIR = settings.EVAL_RESULTS_PATH / "medaesqa" / "retrieval"
@@ -80,11 +80,11 @@ def apply_retrieval_settings(params: Dict[str, int]) -> None:
     settings.RERANK_TEXT_TOP_M = params["rerank_text_top_m"]
 
 
-def evaluate_config(
+async def evaluate_config(
     questions: List[Dict[str, Any]],
     query_analyzer: QueryAnalyzer,
     query_embedder: MedCPTEmbedder,
-    weaviate_store: WeaviateChildStore,
+    weaviate_store: AsyncWeaviateChildStore,
     parent_store: ParentStore,
     rrf_manager: RRFManager,
     cross_encoder: CrossEncoderReranker,
@@ -102,7 +102,7 @@ def evaluate_config(
             continue
 
         try:
-            ranked_text, _ = er.run_retrieval_pipeline(
+            ranked_text, _ = await er.run_retrieval_pipeline(
                 query=body,
                 query_analyzer=query_analyzer,
                 query_embedder=query_embedder,
@@ -146,7 +146,7 @@ def evaluate_config(
     return mean_metrics
 
 
-def run_tuning(limit: int) -> None:
+async def run_tuning(limit: int) -> None:
     """Run OFAT tuning and print results."""
     logger.info(f"Starting MedAESQA retrieval OFAT tuning on first {limit} questions...")
     questions = load_questions(limit)
@@ -164,7 +164,7 @@ def run_tuning(limit: int) -> None:
     query_analyzer = QueryAnalyzer()
     query_analyzer.temperature = 0.0
     query_embedder = MedCPTEmbedder(mode="query")
-    weaviate_store = WeaviateChildStore()
+    weaviate_store = AsyncWeaviateChildStore()
     parent_store = ParentStore(settings.SQLITE_PARENT_DB_PATH)
     cross_encoder = CrossEncoderReranker()
 
@@ -200,7 +200,7 @@ def run_tuning(limit: int) -> None:
             # Re-create RRFManager to ensure the current K_RRF is respected
             rrf_manager = RRFManager(k=settings.K_RRF)
 
-            metrics = evaluate_config(
+            metrics = await evaluate_config(
                 questions=questions,
                 query_analyzer=query_analyzer,
                 query_embedder=query_embedder,
@@ -256,11 +256,11 @@ def run_tuning(limit: int) -> None:
         # Restore original settings
         apply_retrieval_settings(original_settings)
 
-        query_analyzer.close()
+        await query_analyzer.close()
         query_embedder.close()
         if hasattr(cross_encoder, "close"):
             cross_encoder.close()
-        weaviate_store.close()
+        await weaviate_store.close()
         parent_store.close()
 
 
@@ -270,4 +270,5 @@ if __name__ == "__main__":
     parser.add_argument("--limit", type=int, default=15, help="Number of questions to evaluate (default: 15).")
     args = parser.parse_args()
 
-    run_tuning(args.limit)
+    import asyncio
+    asyncio.run(run_tuning(args.limit))

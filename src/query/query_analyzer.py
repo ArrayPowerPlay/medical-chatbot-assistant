@@ -134,10 +134,10 @@ class QueryAnalyzer(IQueryAnalyzer):
             "question_type": "summary",  # safest fallback: comprehensive answer
         }
 
-    def close(self) -> None:
+    async def close(self) -> None:
         """Close the underlying Groq client to avoid leaking transports."""
         if hasattr(self.client, "is_closed") and self.client.is_closed():
             return
-        self.client.close()
+        await self.client.close()
 
 

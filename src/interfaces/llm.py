@@ -3,6 +3,8 @@ from typing import Dict, List, Optional, Any
 
 class ILLMGenerator(ABC):
     """Abstract interface for LLM Answer Generation."""
+    temperature: float
+    max_tokens: int
     
     @abstractmethod
     async def generate_answer(

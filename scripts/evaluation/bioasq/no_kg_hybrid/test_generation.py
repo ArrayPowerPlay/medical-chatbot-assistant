@@ -41,7 +41,7 @@ def evaluate(
     generation_max_tokens: int = settings.GENERATION_MAX_TOKENS,
 ) -> None:
     """Run generation evaluation on the BioASQ test split."""
-    common.evaluate_split(
+    await common.evaluate_split(
         data_path=TEST_PATH,
         output_dir=OUTPUT_DIR,
         split_name="test",
@@ -101,7 +101,7 @@ if __name__ == "__main__":
     
     parser = build_arg_parser()
     args = parser.parse_args()
-    evaluate(
+    asyncio.run(evaluate(
         limit=args.limit,
         use_ragas=args.use_ragas,
         kg_top_k=args.kg_top_k,

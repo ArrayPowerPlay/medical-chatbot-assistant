@@ -179,20 +179,20 @@ class RAGPipeline:
 
         # Embeddings
         query_vectors = await self.query_embedder.embed_texts(rewritten_query)
-        query_vector = query_vectors[0]
+        query_vector = query_vectors[0].tolist()
         
         entity_texts = self._build_entity_texts(analysis)
-        entity_artical_embeddings: List[List[float]] = []
+        entity_article_embeddings: List[List[float]] = []
         if entity_texts:
             entity_embs = await self.entity_embedder.embed_texts(entity_texts)
-            entity_artical_embeddings = entity_embs.tolist()
+            entity_article_embeddings = entity_embs.tolist()
 
         ### 2. Start parallel retrieval
         logger.info("[RAG Pipeline]: Starting parallel retrieval...")
         vector_results, bm25_results, kg_results = await self.parallel_retriever.retrieve(
             query_text=rewritten_query,
             query_vector=query_vector,
-            entity_article_embeddings=entity_artical_embeddings,
+            entity_article_embeddings=entity_article_embeddings,
             intents=intents,
             vector_top_k=vector_top_k,
             keyword_top_k=keyword_top_k,
@@ -227,6 +227,7 @@ class RAGPipeline:
             query=rewritten_query,
             rrf_results=rrf_results,
             kg_results=kg_results,
+            top_m=vector_top_k,
             top_n=rerank_kg_top_n,
         )
         logger.info(f"[RAG Pipeline]: Cross-Encoder returned {len(ranked_text)} texts and {len(ranked_kg)} KG paths.")

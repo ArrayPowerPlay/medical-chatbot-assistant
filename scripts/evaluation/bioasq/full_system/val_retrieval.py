@@ -23,9 +23,9 @@ VAL_PATH = settings.DATA_PATH / "val" / "val_bioasq.jsonl"
 OUTPUT_DIR = project_root / "results" / "val_results" / "bioasq" / "full_system"
 
 
-def evaluate(limit: int | None = None) -> None:
+async def evaluate(limit: int | None = None) -> None:
     """Run retrieval evaluation on the BioASQ validation split."""
-    common.evaluate_split(
+    await common.evaluate_split(
         data_path=VAL_PATH,
         output_dir=OUTPUT_DIR,
         split_name="validation",
@@ -47,4 +47,5 @@ if __name__ == "__main__":
     
     parser = build_arg_parser()
     args = parser.parse_args()
-    evaluate(limit=args.limit)
+    import asyncio
+    asyncio.run(evaluate(limit=args.limit))

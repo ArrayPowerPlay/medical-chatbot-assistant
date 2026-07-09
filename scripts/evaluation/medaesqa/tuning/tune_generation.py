@@ -52,7 +52,7 @@ CANDIDATE_VARY: Dict[str, List[Any]] = {
 }
 
 
-def run_tuning(limit: int) -> None:
+async def run_tuning(limit: int) -> None:
     """Run generation evaluation across OFAT candidates and summarize results."""
     logger.info(f"Starting MedAESQA generation OFAT tuning on first {limit} questions...")
     
@@ -90,8 +90,7 @@ def run_tuning(limit: int) -> None:
         logger.info(f"============================================================")
         
         try:
-            # Run the standard evaluation split with current parameters
-            common.evaluate_split(
+            await common.evaluate_split(
                 data_path=TEST_PATH,
                 output_dir=run_output_dir,
                 split_name=f"tune_ofat_{limit}_{safe_name}",
@@ -166,4 +165,5 @@ if __name__ == "__main__":
     parser.add_argument("--limit", type=int, default=15, help="Number of questions to evaluate (default: 15).")
     args = parser.parse_args()
 
-    run_tuning(args.limit)
+    import asyncio
+    asyncio.run(run_tuning(args.limit))

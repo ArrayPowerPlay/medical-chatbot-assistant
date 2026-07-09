@@ -39,7 +39,7 @@ def evaluate(
     generation_max_tokens: int = settings.GENERATION_MAX_TOKENS,
 ) -> None:
     """Run generation evaluation on the BioASQ test split."""
-    common.evaluate_split(
+    await common.evaluate_split(
         data_path=TEST_PATH,
         output_dir=OUTPUT_DIR,
         split_name="test",
@@ -94,12 +94,13 @@ def build_arg_parser() -> argparse.ArgumentParser:
 
 if __name__ == "__main__":
     setup_logging()
+    import asyncio
     from scripts.evaluation.shared.config_helper import load_and_apply_config
     load_and_apply_config("bioasq", "generation")
     
     parser = build_arg_parser()
     args = parser.parse_args()
-    evaluate(
+    asyncio.run(evaluate(
         limit=args.limit,
         use_ragas=args.use_ragas,
         kg_top_k=args.kg_top_k,

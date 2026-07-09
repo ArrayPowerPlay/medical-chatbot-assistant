@@ -325,13 +325,13 @@ def _print_run_config(config: Dict[str, Any]) -> None:
     print("-" * 60)
 
 
-def _close_pipeline(pipeline: Optional[Any]) -> None:
+async def _close_pipeline(pipeline: Optional[Any]) -> None:
     """Best-effort cleanup for all long-lived clients inside the pipeline."""
     if pipeline is None:
         return
 
     if hasattr(pipeline, "query_analyzer"):
-        pipeline.query_analyzer.close()
+        await pipeline.query_analyzer.close()
     if hasattr(pipeline, "query_embedder"):
         pipeline.query_embedder.close()
     if hasattr(pipeline, "entity_embedder"):
@@ -341,16 +341,16 @@ def _close_pipeline(pipeline: Optional[Any]) -> None:
     ):
         pipeline.cross_encoder_reranker.close()
     if hasattr(pipeline, "weaviate_store"):
-        pipeline.weaviate_store.close()
+        await pipeline.weaviate_store.close()
     if hasattr(pipeline, "parent_store"):
         pipeline.parent_store.close()
     if hasattr(pipeline, "kg_searcher") and hasattr(pipeline.kg_searcher, "cleanup"):
         pipeline.kg_searcher.cleanup()
     if hasattr(pipeline, "llm_generator") and hasattr(pipeline.llm_generator, "client"):
-        pipeline.llm_generator.client.close()
+        await pipeline.llm_generator.client.close()
 
 
-def evaluate_split(
+async def evaluate_split(
     data_path: Path,
     output_dir: Path,
     split_name: str,
@@ -454,10 +454,6 @@ def evaluate_split(
             use_citations=False
         )
 
-        import asyncio
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-
         with open(predictions_path, "w", encoding="utf-8") as predictions_file:
             for i, question in enumerate(questions):
                 question_id = question["id"]
@@ -470,7 +466,7 @@ def evaluate_split(
                 )
 
                 try:
-                    result = loop.run_until_complete(pipeline.run(
+                    result = await pipeline.run(
                         query=body,
                         history=None,
                         config=run_config,
@@ -718,8 +714,7 @@ def evaluate_split(
     finally:
         if pipeline is not None and hasattr(pipeline.kg_searcher, "close"):
             try:
-                loop = asyncio.get_event_loop()
-                loop.run_until_complete(pipeline.kg_searcher.close())
+                await pipeline.kg_searcher.close()
             except Exception:
                 pass
 

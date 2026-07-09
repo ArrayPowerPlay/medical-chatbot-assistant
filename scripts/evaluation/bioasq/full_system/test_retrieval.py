@@ -23,9 +23,9 @@ TEST_PATH = settings.DATA_PATH / "test" / "test_bioasq.jsonl"
 OUTPUT_DIR = settings.TEST_RESULTS_PATH / "bioasq" / "full_system"
 
 
-def evaluate(limit: int | None = None) -> None:
+async def evaluate(limit: int | None = None) -> None:
     """Run retrieval evaluation on the BioASQ test split."""
-    common.evaluate_split(
+    await common.evaluate_split(
         data_path=TEST_PATH,
         output_dir=OUTPUT_DIR,
         split_name="test",
@@ -47,4 +47,5 @@ if __name__ == "__main__":
     
     parser = build_arg_parser()
     args = parser.parse_args()
-    evaluate(limit=args.limit)
+    import asyncio
+    asyncio.run(evaluate(limit=args.limit))

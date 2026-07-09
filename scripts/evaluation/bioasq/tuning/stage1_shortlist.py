@@ -23,7 +23,7 @@ from scripts.evaluation.bioasq.tuning import tuning_common
 VAL_PATH = settings.DATA_PATH / "val" / "val_bioasq.jsonl"
 
 
-def run_stage1(limit: int = tuning_common.STAGE1_LIMIT) -> None:
+async def run_stage1(limit: int = tuning_common.STAGE1_LIMIT) -> None:
     """Run Stage 1 tuning and save the top-5 shortlist."""
     output_root = tuning_common.stage1_output_root()
     output_root.mkdir(parents=True, exist_ok=True)
@@ -35,7 +35,7 @@ def run_stage1(limit: int = tuning_common.STAGE1_LIMIT) -> None:
         run_name = tuning_common.candidate_run_name(index, config)
         run_output_dir = output_root / run_name
 
-        common.evaluate_split(
+        await common.evaluate_split(
             data_path=VAL_PATH,
             output_dir=run_output_dir,
             split_name="validation",
@@ -84,4 +84,5 @@ def build_arg_parser() -> argparse.ArgumentParser:
 if __name__ == "__main__":
     setup_logging()
     args = build_arg_parser().parse_args()
-    run_stage1(limit=args.limit)
+    import asyncio
+    asyncio.run(run_stage1(limit=args.limit))

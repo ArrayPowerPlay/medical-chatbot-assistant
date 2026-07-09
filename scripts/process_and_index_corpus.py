@@ -18,7 +18,7 @@ if str(parent_root) not in sys.path:
 from config.logging_config import logger, setup_logging
 from src.dataset_builder.parent_child_chunker import AdaptiveChunker
 from src.storage.parent_store import ParentStore
-from src.storage.weaviate_client import WeaviateChildStore
+from src.storage.weaviate_client import AsyncWeaviateChildStore
 from src.embeddings.medcpt_embedder import MedCPTEmbedder
 
 
@@ -29,7 +29,7 @@ class CorpusIndexer:
     """Class used for loading, chunking, embedding and saving data in batches."""
     def __init__(self, data_path: str, db_path: str):
         self.data_path = data_path
-        self.weaviate = WeaviateChildStore()
+        self.weaviate = AsyncWeaviateChildStore()
         self.parent_store = ParentStore(db_path)
 
         logger.info("Loading MedCPT-Article-Encoder...")

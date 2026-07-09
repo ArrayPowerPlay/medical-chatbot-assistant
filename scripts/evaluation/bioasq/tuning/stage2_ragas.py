@@ -24,7 +24,7 @@ from scripts.evaluation.bioasq.tuning import tuning_common
 VAL_PATH = settings.DATA_PATH / "val" / "val_bioasq.jsonl"
 
 
-def run_stage2(
+async def run_stage2(
     limit: int = tuning_common.STAGE2_LIMIT,
     shortlist_path: Path | None = None,
 ) -> None:
@@ -43,7 +43,7 @@ def run_stage2(
         run_name = tuning_common.candidate_run_name(index, config)
         run_output_dir = output_root / run_name
 
-        common.evaluate_split(
+        await common.evaluate_split(
             data_path=VAL_PATH,
             output_dir=run_output_dir,
             split_name="validation",
@@ -97,4 +97,5 @@ def build_arg_parser() -> argparse.ArgumentParser:
 if __name__ == "__main__":
     setup_logging()
     args = build_arg_parser().parse_args()
-    run_stage2(limit=args.limit, shortlist_path=args.shortlist_path)
+    import asyncio
+    asyncio.run(run_stage2(limit=args.limit, shortlist_path=args.shortlist_path))

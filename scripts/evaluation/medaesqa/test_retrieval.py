@@ -39,7 +39,7 @@ from src.query.query_analyzer import QueryAnalyzer
 from src.reranking.cross_encoder import CrossEncoderReranker
 from src.reranking.rrf import RRFManager
 from src.storage.parent_store import ParentStore
-from src.storage.weaviate_client import WeaviateChildStore
+from src.storage.weaviate_client import AsyncWeaviateChildStore
 
 TEST_PATH = settings.DATA_PATH / "test" / "test_medaesqa.jsonl"
 OUTPUT_DIR = settings.TEST_RESULTS_PATH / "medaesqa" / "retrieval"
@@ -62,7 +62,7 @@ def compute_prf_metrics(retrieved_pmids: List[str], gold_pmids: Set[str]) -> Dic
 
 # Main evaluation
 
-def evaluate(limit: Optional[int] = None) -> None:
+async def evaluate(limit: Optional[int] = None) -> None:
     """Run PMID-level retrieval evaluation on the full MedAESQA test set."""
     if not TEST_PATH.exists():
         logger.error(f"Evaluation file not found: {TEST_PATH}")
@@ -96,7 +96,7 @@ def evaluate(limit: Optional[int] = None) -> None:
     query_analyzer = QueryAnalyzer()
     query_analyzer.temperature = 0.0  # deterministic rewriting
     query_embedder = MedCPTEmbedder(mode="query")
-    weaviate_store = WeaviateChildStore()
+    weaviate_store = AsyncWeaviateChildStore()
     parent_store = ParentStore(settings.SQLITE_PARENT_DB_PATH)
     rrf_manager = RRFManager()
     cross_encoder = CrossEncoderReranker()
@@ -125,7 +125,7 @@ def evaluate(limit: Optional[int] = None) -> None:
                     continue
 
                 try:
-                    ranked_text, rewritten_query = run_retrieval_pipeline(
+                    ranked_text, rewritten_query = await run_retrieval_pipeline(
                         query=body,
                         query_analyzer=query_analyzer,
                         query_embedder=query_embedder,
@@ -183,11 +183,11 @@ def evaluate(limit: Optional[int] = None) -> None:
         logger.info(f"Results saved → {detail_path}  |  {summary_path}")
 
     finally:
-        query_analyzer.close()
+        await query_analyzer.close()
         query_embedder.close()
         if hasattr(cross_encoder, "close"):
             cross_encoder.close()
-        weaviate_store.close()
+        await weaviate_store.close()
         parent_store.close()
 
 
@@ -266,4 +266,5 @@ if __name__ == "__main__":
         "(PMID-level Precision, Recall, F1)."
     )
     args = parser.parse_args()
-    evaluate(limit=args.limit)
+    import asyncio
+    asyncio.run(evaluate(limit=args.limit))

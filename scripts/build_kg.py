@@ -13,6 +13,7 @@ Pipeline:
 """
 
 import sys
+import asyncio
 import pandas as pd
 from pathlib import Path
 import numpy as np
@@ -158,7 +159,9 @@ def embed_and_store(driver: Driver, nodes_df: pd.DataFrame) -> None:
     logger.info(f"Encoding {len(texts):,} nodes with MedCPT-Article-Encoder...")
 
     # Generate embeddings 
-    embeddings: np.ndarray = embedder.embed_texts(texts, batch_size=EMBED_BATCH_SIZE)
+    embeddings: np.ndarray = asyncio.run(
+        embedder.embed_texts(texts, batch_size=EMBED_BATCH_SIZE)
+    )
     
     logger.info("Writing embedding to Neo4j nodes using :KGNode label...")
 

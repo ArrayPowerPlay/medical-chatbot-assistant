@@ -12,7 +12,7 @@ class KGSearch:
     def __init__(self):
         self.client = Neo4jClient()
 
-    def search(
+    async def search(
         self,
         entity_article_embeddings: list[list[float]],
         rewritten_query_vec: list[float],
@@ -42,7 +42,7 @@ class KGSearch:
         Returns:
             List of linearized triple dictionaries with metadata, or [] if nothing found.
         """
-        result = self.client.retrieve_subgraph(
+        result = await self.client.search(
             entity_article_embeddings=entity_article_embeddings,
             rewritten_query_vec=rewritten_query_vec,
             intents=intents,
@@ -68,5 +68,5 @@ class KGSearch:
         # Return list of dictionaries directly
         return paths
 
-    def cleanup(self) -> None:
-        self.client.close()
+    async def cleanup(self) -> None:
+        await self.client.close()

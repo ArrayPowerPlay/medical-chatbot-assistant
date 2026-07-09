@@ -23,7 +23,7 @@ from src.reranking.rrf import RRFManager
 from src.retrieval.keyword_search import keyword_search
 from src.retrieval.vector_search import vector_search
 from src.storage.parent_store import ParentStore
-from src.storage.weaviate_client import WeaviateChildStore
+from src.storage.weaviate_client import AsyncWeaviateChildStore
 
 
 K_VALUES = settings.K_VALUES
@@ -171,11 +171,11 @@ def compute_snippet_metrics(
     return metrics
 
 
-def run_retrieval_pipeline(
+async def run_retrieval_pipeline(
     query: str,
     query_analyzer: QueryAnalyzer,
     query_embedder: MedCPTEmbedder,
-    weaviate_store: WeaviateChildStore,
+    weaviate_store: AsyncWeaviateChildStore,
     parent_store: ParentStore,
     rrf_manager: RRFManager,
     cross_encoder: CrossEncoderReranker,
@@ -190,12 +190,13 @@ def run_retrieval_pipeline(
     label = f"[{debug_label}] " if debug_label else ""
 
     logger.info(f"{label}QueryAnalyzer starting")
-    analysis = query_analyzer.analyze(query=query, history=None)
+    analysis = await query_analyzer.analyze(query=query, history=None)
     rewritten_query = analysis.get("rewritten_query", query)
     logger.info(f"{label}QueryAnalyzer done. rewritten_query={rewritten_query!r}")
 
     logger.info(f"{label}Embedding query")
-    query_vector = query_embedder.embed_texts(rewritten_query)[0]
+    query_vectors = await query_embedder.embed_texts(rewritten_query)
+    query_vector = query_vectors[0]
 
     vec_results = []
     if use_vector:
@@ -203,9 +204,9 @@ def run_retrieval_pipeline(
             f"{label}Vector search starting with top_k={settings.VECTOR_TOP_K}, "
             f"child_fetch_limit={settings.CHILD_FETCH_LIMIT}"
         )
-        vec_results = vector_search(
+        vec_results = await vector_search(
             query_vector=query_vector,
-            weaviate_store=weaviate_store,
+            search_engine=weaviate_store,
             parent_store=parent_store,
             top_k=settings.VECTOR_TOP_K,
             child_fetch_limit=settings.CHILD_FETCH_LIMIT,
@@ -218,9 +219,9 @@ def run_retrieval_pipeline(
             f"{label}BM25 search starting with top_k={settings.KEYWORD_TOP_K}, "
             f"child_fetch_limit={settings.CHILD_FETCH_LIMIT}"
         )
-        bm25_results = keyword_search(
+        bm25_results = await keyword_search(
             query_text=rewritten_query,
-            weaviate_store=weaviate_store,
+            search_engine=weaviate_store,
             parent_store=parent_store,
             top_k=settings.KEYWORD_TOP_K,
             child_fetch_limit=settings.CHILD_FETCH_LIMIT,
@@ -236,7 +237,7 @@ def run_retrieval_pipeline(
     logger.info(f"{label}RRF fusion returned {len(rrf_results)} fused results")
 
     logger.info(f"{label}Cross-encoder rerank starting")
-    ranked_text, _ = cross_encoder.rerank(
+    ranked_text, _ = await cross_encoder.rerank(
         query=rewritten_query,
         rrf_results=rrf_results,
         kg_results=[],
@@ -248,7 +249,7 @@ def run_retrieval_pipeline(
     return ranked_text, rewritten_query
 
 
-def evaluate_split(
+async def evaluate_split(
     data_path: Path,
     output_dir: Path,
     split_name: str,
@@ -262,7 +263,7 @@ def evaluate_split(
         for name, value in [
             ("QueryAnalyzer", QueryAnalyzer),
             ("MedCPTEmbedder", MedCPTEmbedder),
-            ("WeaviateChildStore", WeaviateChildStore),
+            ("AsyncWeaviateChildStore", AsyncWeaviateChildStore),
             ("ParentStore", ParentStore),
             ("RRFManager", RRFManager),
             ("CrossEncoderReranker", CrossEncoderReranker)
@@ -302,7 +303,7 @@ def evaluate_split(
     query_analyzer = QueryAnalyzer()
     query_analyzer.temperature = 0.0
     query_embedder = MedCPTEmbedder(mode='query')
-    weaviate_store = WeaviateChildStore()
+    weaviate_store = AsyncWeaviateChildStore()
     parent_store = ParentStore(settings.SQLITE_PARENT_DB_PATH)
     rrf_manager = RRFManager()
     cross_encoder = CrossEncoderReranker()
@@ -326,7 +327,7 @@ def evaluate_split(
                 logger.info(f"[{i+1}/{len(questions)}] Evaluating: {body[:80]}...")
 
                 try:
-                    ranked_text, rewritten_query = run_retrieval_pipeline(
+                    ranked_text, rewritten_query = await run_retrieval_pipeline(
                         query=body,
                         query_analyzer=query_analyzer,
                         query_embedder=query_embedder,
@@ -403,11 +404,11 @@ def evaluate_split(
         _print_summary(summary)
         logger.info(f"Results saved to {detail_path} and {summary_path}")
     finally:
-        query_analyzer.close()
+        await query_analyzer.close()
         query_embedder.close()
         if hasattr(cross_encoder, "close"):
             cross_encoder.close()
-        weaviate_store.close()
+        await weaviate_store.close()
         parent_store.close()
 
 

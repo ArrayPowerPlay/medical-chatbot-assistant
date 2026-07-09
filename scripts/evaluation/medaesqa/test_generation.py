@@ -42,7 +42,7 @@ def evaluate(
     use_citations: bool = True,  # Always on for MedAESQA citation benchmark
 ) -> None:
     """Run generation evaluation on the MedAESQA test split."""
-    common.evaluate_split(
+    await common.evaluate_split(
         data_path=TEST_PATH,
         output_dir=OUTPUT_DIR,
         split_name="test",
@@ -108,7 +108,8 @@ if __name__ == "__main__":
     
     parser = build_arg_parser()
     args = parser.parse_args()
-    evaluate(
+    import asyncio
+    asyncio.run(evaluate(
         limit=args.limit,
         kg_top_k=args.kg_top_k,
         kg_hop1_m=args.kg_hop1_m,
@@ -120,4 +121,4 @@ if __name__ == "__main__":
         use_head_tail_placement=args.use_head_tail_placement,
         generation_max_tokens=args.generation_max_tokens,
         use_citations=args.use_citations,
-    )
+    ))

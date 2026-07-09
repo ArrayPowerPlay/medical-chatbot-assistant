@@ -14,6 +14,7 @@ Output:
 """
 
 import sys
+import asyncio
 import json
 import argparse
 import time
@@ -28,7 +29,7 @@ if str(project_root) not in sys.path:
 from config.settings import settings
 from config.logging_config import logger, setup_logging
 from src.embeddings.medcpt_embedder import MedCPTEmbedder
-from src.storage.weaviate_client import WeaviateChildStore
+from src.storage.weaviate_client import AsyncWeaviateChildStore
 from src.storage.parent_store import ParentStore
 from src.reranking.rrf import RRFManager
 from src.reranking.cross_encoder import CrossEncoderReranker
@@ -71,11 +72,11 @@ def load_questions(limit: int) -> List[Dict[str, Any]]:
     return questions[:limit]
 
 
-def evaluate_questions(
+async def evaluate_questions(
     questions: List[Dict[str, Any]],
     query_analyzer: QueryAnalyzer,
     query_embedder: MedCPTEmbedder,
-    weaviate_store: WeaviateChildStore,
+    weaviate_store: AsyncWeaviateChildStore,
     parent_store: ParentStore,
     rrf_manager: RRFManager,
     cross_encoder: CrossEncoderReranker,
@@ -98,7 +99,7 @@ def evaluate_questions(
         )
 
         try:
-            ranked_text, rewritten_query = er.run_retrieval_pipeline(
+            ranked_text, rewritten_query = await er.run_retrieval_pipeline(
                 query=body,
                 query_analyzer=query_analyzer,
                 query_embedder=query_embedder,
@@ -214,7 +215,7 @@ def apply_run_settings(
     settings.RERANK_TEXT_TOP_M = rerank_text_top_m
 
 
-def run_grid_search(
+async def run_grid_search(
     child_fetch_limit: int,
     top_k_rrf: int,
     k_rrf: int,
@@ -237,7 +238,7 @@ def run_grid_search(
     query_analyzer = QueryAnalyzer()
     query_analyzer.temperature = 0.0
     query_embedder = MedCPTEmbedder(mode="query")
-    weaviate_store = WeaviateChildStore()
+    weaviate_store = AsyncWeaviateChildStore()
     parent_store = ParentStore(settings.SQLITE_PARENT_DB_PATH)
     cross_encoder = CrossEncoderReranker()
 
@@ -265,7 +266,7 @@ def run_grid_search(
                 f"RERANK_TEXT_TOP_M={settings.RERANK_TEXT_TOP_M}"
             )
 
-            summary, detail_records = evaluate_questions(
+            summary, detail_records = await evaluate_questions(
                 questions=questions,
                 query_analyzer=query_analyzer,
                 query_embedder=query_embedder,
@@ -347,7 +348,7 @@ def run_grid_search(
             k_rrf=original_settings["k_rrf"],
             rerank_text_top_m=original_settings["rerank_text_top_m"],
         )
-        query_analyzer.close()
+        await query_analyzer.close()
         query_embedder.close()
         if hasattr(cross_encoder, "close"):
             cross_encoder.close()
@@ -392,9 +393,9 @@ if __name__ == "__main__":
     parser = build_arg_parser()
     args = parser.parse_args()
 
-    run_grid_search(
+    asyncio.run(run_grid_search(
         child_fetch_limit=args.child_fetch_limit,
         top_k_rrf=args.top_k_rrf,
         k_rrf=args.k_rrf,
         rerank_text_top_m=args.rerank_text_top_m,
-    )
+    ))
