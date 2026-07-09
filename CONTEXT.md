@@ -1,8 +1,8 @@
 # 🧠 OVERVIEW — MedKG-RAG Chatbot
 
-> **Purpose**: This file contains ALL essential context for the project.
-> Reading this single file should be sufficient to fully understand the project's scope, architecture, and implementation details when starting a new session.
-> Auto-update this file when appying a new change that need to be documented.
+> **MANDATORY RULE**: CẬP NHẬT FILE `CONTEXT.MD` NÀY MỖI KHI CÓ THAY ĐỔI VỀ KIẾN TRÚC/TÍNH NĂNG Ở CÁC FILE KHÁC (NẾU CẦN THIẾT). TUYỆT ĐỐI KHÔNG ĐƯỢC CODE NẾU CHƯA RÕ NỘI DUNG HOẶC YÊU CẦU. NẾU CÓ BẤT KỲ ĐIỀU GÌ CHƯA RÕ RÀNG HOẶC MƠ HỒ, PHẢI HỎI LẠI NGƯỜI DÙNG ĐỂ XÁC NHẬN TRƯỚC KHI BẮT ĐẦU CODE.
+>
+> **Purpose**: This file contains ALL essential context for the project. Reading this single file should be sufficient to fully understand the project's scope, architecture, and implementation details.
 
 ---
 
@@ -430,6 +430,12 @@ ragas                     — RAG evaluation framework
 | `PUT` | `/api/conversations/{id}/pin` | Pin/Unpin conversation |
 | `GET` | `/api/conversations/search` | Search conversations by title or message content |
 | `POST` | `/api/conversations/{id}/messages/{msg_id}/feedback` | Submit like/dislike feedback and optional comment |
+| `GET` | `/api/admin/stats` | Get system statistics (Admin only) |
+| `GET` | `/api/admin/users` | List all users (Admin only) |
+| `DELETE` | `/api/admin/users/{id}` | Delete a user (Admin only) |
+| `PUT` | `/api/admin/users/{id}/password` | Reset user password (Admin only) |
+| `GET` | `/api/admin/feedback/bad` | List disliked messages with comments (Admin only) |
+| `GET` | `/api/admin/feedback/good` | List liked messages with comments (Admin only) |
 | `GET` | `/` | Serve frontend (static files) |
 
 ### POST /api/chat — Request
@@ -486,25 +492,13 @@ ragas                     — RAG evaluation framework
 
 ---
 
-## 8. Frontend Design
+## 8. Frontend Stack & Architecture
 
-> **Status**: The frontend architecture is being migrated to **React.js (Vite) + Tailwind CSS**.
-
-- **Type**: Single Page Application (React)
-- **State Management**: Zustand (Global state for User, JWT Token, Theme, Conversations)
-- **Data Fetching**: Axios with JWT interceptors.
-- **Theme**: Dark/Light toggle using Tailwind's `dark:class`
-- **Layout**: Chat-centric with message bubbles (user vs. bot). Includes a collapsible sidebar.
-- **Chat History UX**: Reverse-scroll infinite loading — newest messages displayed first, scrolling up loads older messages via cursor-based pagination (`GET /api/conversations/{id}/messages?before_id=X`), matching the UX of ChatGPT/Gemini.
-- **Features**:
-  - User Authentication (Login, Register, Guest limit of 10 questions)
-  - Conversation Management (Pin, Edit, Delete, Search)
-  - Message Feedback (Like/Dislike + comment)
-  - Markdown rendering for bot responses
-  - Source citation display (expandable)
-  - Typing effect via Server-Sent Events (SSE) streaming and "Thinking..." spinner
-  - Stop generation functionality via `AbortController`
-  - Responsive design (mobile-friendly)
+- **Core**: React.js (Vite) + TypeScript
+- **Styling**: Tailwind CSS v4 (Dark/Light mode via `dark:` classes)
+- **State & API**: Zustand (Auth/Theme), Axios (JWT Interceptors)
+- **Routing**: React Router (Protected routes for user/admin)
+- **Key Features**: JWT Auth, Admin Dashboard, SSE Streaming (Typing effect), Reverse-scroll infinite chat history, Markdown rendering.
 
 ---
 
@@ -551,61 +545,15 @@ User Question
 
 ---
 
-## 10. Environment Variables Reference
+## 10. Environment Variables
 
-```env
-# Database
-NEO4J_URI=bolt://localhost:7687
-NEO4J_USER=neo4j
-NEO4J_PASSWORD=
+> **Note**: For the full list of configuration parameters, refer to `config/settings.py` or `.env.example`. 
 
-# Weaviate
-WEAVIATE_URL=http://localhost:8080
-WEAVIATE_GRPC_PORT=50051
-
-# Paths
-SQLITE_PARENT_DB_PATH=./vectorstore/parent_chunks.db
-RAW_DATA_PATH=./data/raw/
-
-# Pipeline Params
-VECTOR_TOP_K=20
-KEYWORD_TOP_K=20
-CHILD_FETCH_LIMIT=60
-RERANK_TEXT_TOP_M=20
-RERANK_KG_TOP_N=20
-TOP_K_RRF=80
-K_RRF=60
-PARENT_CHUNK_SIZE=1200
-PARENT_CHUNK_OVERLAP=200
-CHILD_CHUNK_SIZE=256
-CHILD_CHUNK_OVERLAP=64
-KG_HOP_DEPTH=2
-
-# LLM Config
-LLM_MODEL=meta-llama/Llama-3.3-70B-Versatile
-LLM_MAX_TOKENS=2048
-LLM_TEMPERATURE=0.3
-HISTORY_TURNS_FOR_LLM=5           # Number of recent turns (1 turn = user + assistant) fed to LLM
-
-# Chat History Pagination
-MESSAGE_PAGE_SIZE=20               # Messages per page for infinite scroll loading
-
-# Embedding
-EMBEDDING_MODEL=ncbi/MedCPT-Article-Encoder
-QUERY_MODEL=ncbi/MedCPT-Query-Encoder
-CROSS_ENCODER_MODEL=ncbi/MedCPT-Cross-Encoder
-
-# PostgreSQL (Conversation History & Auth)
-POSTGRES_HOST=localhost
-POSTGRES_PORT=5432
-POSTGRES_USER=medrag
-POSTGRES_PASSWORD=medrag_secret
-POSTGRES_DB=chat_history
-
-# JWT Auth
-JWT_ALGORITHM=HS256
-JWT_EXPIRATION_MINUTES=10080 # 7 days
-```
+The system relies on `.env` for:
+- Database connections (Neo4j, Weaviate, PostgreSQL)
+- LLM and Embedding config (Model names, API keys)
+- RAG Hyperparameters (Top-K limits, Chunk sizes, Context window sizes)
+- JWT Auth (Algorithm, Expiration)
 
 ---
 
@@ -628,8 +576,9 @@ JWT_EXPIRATION_MINUTES=10080 # 7 days
 - **API Layer**: FastAPI app (`api/main.py`) with `/api/chat`, `/api/conversations`, `/api/conversations/{id}/messages`, and `/api/health` endpoints. Static frontend served at `/`.
 - **LLM History Window**: Controlled by `HISTORY_TURNS_FOR_LLM` (default 5 turns = 10 messages). This is a global server-side constant, not per-user. Applied uniformly in `QueryAnalyzer` and `LLMGenerator`.
 - **Chat Pagination**: `MESSAGE_PAGE_SIZE` (default 20) controls the number of messages loaded per scroll batch in the frontend. Cursor-based pagination using message `id` as cursor.
-- **Frontend Status**: Frontend files exist but are **not yet implemented**. Backend API is developed first.
-- **Future: User Authentication**: The system is designed to support per-user authentication in a future phase. Current settings like `HISTORY_TURNS_FOR_LLM` are global constants; once auth is implemented, some settings may become per-user configurable.
+- **Frontend Status**: Frontend foundation is built (React + Vite + Tailwind v4 + Zustand). Authentication UI (Login/Register) is implemented.
+- **User Authentication**: Fully implemented with JWT. Supports three roles: `user`, `guest` (limited questions), and `admin`.
+- **Admin Dashboard**: Backend APIs are implemented for managing users, viewing system stats, and auditing good/bad feedback.
 
 ### Retrieval Implementation Notes
 

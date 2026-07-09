@@ -374,3 +374,96 @@ class ConversationStore:
     def increment_question_count(self, user_id: int) -> None:
         with self.conn.cursor() as cur:
             cur.execute("UPDATE users SET question_count = question_count + 1 WHERE id = %s;", (user_id,))
+
+    # --- ADMIN METHODS ---
+    def get_admin_stats(self) -> Dict[str, Any]:
+        with self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
+            cur.execute("SELECT COUNT(*) FROM users;")
+            total_users = cur.fetchone()[0]
+
+            cur.execute("SELECT COUNT(*) FROM users WHERE role = 'guest';")
+            total_guests = cur.fetchone()[0]
+            
+            cur.execute("SELECT COUNT(*) FROM users WHERE created_at >= NOW() - INTERVAL '7 days';")
+            new_users_week = cur.fetchone()[0]
+            
+            cur.execute("SELECT COUNT(*) FROM messages WHERE role = 'user';")
+            total_questions = cur.fetchone()[0]
+            
+            cur.execute("SELECT COUNT(*) FROM messages WHERE role = 'user' AND created_at >= NOW() - INTERVAL '1 day';")
+            questions_24h = cur.fetchone()[0]
+            
+            cur.execute("SELECT COUNT(*) FROM messages WHERE feedback_type = 'like';")
+            total_likes = cur.fetchone()[0]
+            
+            cur.execute("SELECT COUNT(*) FROM messages WHERE feedback_type = 'dislike';")
+            total_dislikes = cur.fetchone()[0]
+            
+            return {
+                "total_users": total_users,
+                "total_guests": total_guests,
+                "new_users_week": new_users_week,
+                "total_questions": total_questions,
+                "questions_24h": questions_24h,
+                "total_likes": total_likes,
+                "total_dislikes": total_dislikes
+            }
+            
+    def get_all_users(self) -> List[Dict[str, Any]]:
+        with self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
+            cur.execute("SELECT id, username, email, role, question_count, created_at FROM users ORDER BY created_at DESC;")
+            return [dict(r) for r in cur.fetchall()]
+            
+    def delete_user(self, user_id: int) -> bool:
+        with self.conn.cursor() as cur:
+            cur.execute("DELETE FROM users WHERE id = %s;", (user_id,))
+            return cur.rowcount > 0
+            
+    def update_user_password(self, user_id: int, password_hash: str) -> bool:
+        with self.conn.cursor() as cur:
+            cur.execute("UPDATE users SET password_hash = %s WHERE id = %s;", (password_hash, user_id))
+            return cur.rowcount > 0
+            
+    def get_bad_feedback_messages(self, limit: int = 20, offset: int = 0) -> List[Dict[str, Any]]:
+        with self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
+            cur.execute("""
+                SELECT m.id, m.conversation_id, m.content, m.feedback_comment, m.created_at, c.title
+                FROM messages m
+                JOIN conversations c ON m.conversation_id = c.id
+                WHERE m.feedback_type = 'dislike'
+                ORDER BY m.created_at DESC
+                LIMIT %s OFFSET %s;
+            """, (limit, offset))
+            return [
+                {
+                    "id": r["id"],
+                    "conversation_id": r["conversation_id"],
+                    "content": r["content"],
+                    "feedback_comment": r["feedback_comment"],
+                    "created_at": r["created_at"].isoformat(),
+                    "conversation_title": r["title"]
+                }
+                for r in cur.fetchall()
+            ]
+
+    def get_good_feedback_messages(self, limit: int = 20, offset: int = 0) -> List[Dict[str, Any]]:
+        with self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
+            cur.execute("""
+                SELECT m.id, m.conversation_id, m.content, m.feedback_comment, m.created_at, c.title
+                FROM messages m
+                JOIN conversations c ON m.conversation_id = c.id
+                WHERE m.feedback_type = 'like'
+                ORDER BY m.created_at DESC
+                LIMIT %s OFFSET %s;
+            """, (limit, offset))
+            return [
+                {
+                    "id": r["id"],
+                    "conversation_id": r["conversation_id"],
+                    "content": r["content"],
+                    "feedback_comment": r["feedback_comment"],
+                    "created_at": r["created_at"].isoformat(),
+                    "conversation_title": r["title"]
+                }
+                for r in cur.fetchall()
+            ]

@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand: #2563eb;
+  --color-brand-dark: #3b82f6;
+  --color-bg-light: #ffffff;
+  --color-bg-dark: #0f172a;
+}
+
+@layer base {
+  body {
+    @apply bg-white text-slate-800 antialiased selection:bg-blue-200 selection:text-blue-900;
+  }
+
+  /* Dark mode is enabled by adding 'dark' class to html element */
+  .dark body {
+    @apply bg-slate-900 text-slate-50 selection:bg-blue-800 selection:text-blue-50;
+  }
+
+  /* Scrollbar Styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 rounded-full;
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    @apply bg-slate-700;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-400;
+  }
+  .dark ::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-600;
+  }
+}

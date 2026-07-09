@@ -125,6 +125,7 @@ rag-project/
 │   │   ├── __init__.py
 │   │   ├── chat.py                   # POST /chat - main Q&A endpoint (Streaming SSE)
 │   │   ├── auth.py                   # Auth endpoints (Login, Register, Guest)
+│   │   ├── admin.py                  # Admin endpoints (Stats, User Management, Feedback)
 │   │   ├── health.py                 # GET /health - health check
 │   │   └── conversation.py           # Conversation & Feedback management
 │   ├── schemas/
@@ -136,13 +137,12 @@ rag-project/
 ├── frontend/
 │   ├── src/
 │   │   ├── components/               # React components (ChatBubble, Sidebar, Auth)
-│   │   ├── stores/                   # Zustand global state (authStore, chatStore)
+│   │   ├── stores/                   # Zustand global state (authStore, themeStore)
 │   │   ├── api/                      # Axios client and interceptors
-│   │   ├── App.jsx                   # Main application logic
-│   │   └── main.jsx                  # React entry point
+│   │   ├── App.tsx                   # Main application logic
+│   │   └── main.tsx                  # React entry point
 │   ├── index.html                    # HTML entry
-│   ├── tailwind.config.js            # Tailwind CSS configuration
-│   ├── vite.config.js                # Vite build configuration
+│   ├── vite.config.ts                # Vite build configuration
 │   └── package.json                  # NPM dependencies
 │
 ├── models/

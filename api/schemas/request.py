@@ -59,3 +59,7 @@ class ConversationUpdateRequest(BaseModel):
 class FeedbackRequest(BaseModel):
     feedback_type: str = Field(..., description="Must be 'like', 'dislike', or 'none'")
     feedback_comment: Optional[str] = Field(None, description="Optional text comment")
+
+
+class PasswordUpdateRequest(BaseModel):
+    new_password: str
