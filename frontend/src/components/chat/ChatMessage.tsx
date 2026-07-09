@@ -4,7 +4,8 @@ import remarkGfm from 'remark-gfm';
 import { User, Bot, ThumbsUp, ThumbsDown, Check, X, BookOpen, ChevronUp, ChevronDown } from 'lucide-react';
 import type { ChatMessageData } from '../../hooks/useChatStream';
 import { conversationApi } from '../../api/conversationApi';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
+import rehypeRaw from 'rehype-raw';
 
 interface ChatMessageProps {
   message: ChatMessageData;
@@ -60,12 +61,20 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message, isThinking, isHighli
 
   // Base styling for user vs assistant
   const baseBg = isUser ? 'bg-white dark:bg-slate-900' : 'bg-slate-50 dark:bg-slate-900/50';
-  // Highlight styling
-  const highlightBg = isActiveMatch 
-    ? 'bg-amber-100/80 dark:bg-amber-900/40 ring-2 ring-amber-400 dark:ring-amber-600' 
-    : isHighlighted 
+  // Highlight styling (User specifically asked to NOT highlight the whole message, just the text)
+  const highlightBg = isHighlighted 
       ? 'bg-amber-50/50 dark:bg-amber-900/20' 
       : baseBg;
+
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const searchQ = searchParams.get('search_q');
+  
+  let contentToRender = message.content;
+  if (isActiveMatch && searchQ) {
+      const regex = new RegExp(`(${searchQ})`, 'gi');
+      contentToRender = contentToRender.replace(regex, '<mark class="bg-amber-200 dark:bg-amber-900/60 text-amber-900 dark:text-amber-100 font-medium px-0.5 rounded bg-transparent">$1</mark>');
+  }
 
   return (
     <div 
@@ -99,8 +108,11 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message, isThinking, isHighli
             prose-p:leading-relaxed prose-pre:bg-slate-100 dark:prose-pre:bg-slate-800 
             prose-pre:text-slate-800 dark:prose-pre:text-slate-200"
           >
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {message.content}
+            <ReactMarkdown 
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeRaw]}
+            >
+              {contentToRender}
             </ReactMarkdown>
           </div>
         )}

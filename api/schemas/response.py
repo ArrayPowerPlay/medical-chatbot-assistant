@@ -41,6 +41,7 @@ class MessageItem(BaseModel):
     content: str
     feedback_type: Optional[str] = None
     feedback_comment: Optional[str] = None
+    sources: Optional[List[SourceItem]] = Field(default_factory=list)
     created_at: str
 
 

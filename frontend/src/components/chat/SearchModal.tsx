@@ -58,6 +58,19 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
     }
   };
 
+  const renderHighlighted = (text: string, highlight: string) => {
+    if (!highlight.trim()) return text;
+    const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
+    return (
+      <>
+        {parts.map((part, i) => 
+          part.toLowerCase() === highlight.toLowerCase() ? 
+            <mark key={i} className="bg-amber-200 dark:bg-amber-900/60 text-amber-900 dark:text-amber-100 font-medium px-0.5 rounded bg-transparent">{part}</mark> : part
+        )}
+      </>
+    );
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 bg-slate-900/50 backdrop-blur-sm px-4">
       <div 
@@ -112,7 +125,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1">
                       <h4 className="text-sm font-semibold text-slate-900 dark:text-slate-100 truncate pr-4">
-                        {conv.title}
+                        {renderHighlighted(conv.title, query)}
                       </h4>
                       <span className="text-xs text-slate-500 whitespace-nowrap">
                         {new Date(conv.updated_at).toLocaleDateString()}
@@ -120,7 +133,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
                     </div>
                     {conv.snippet && (
                       <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2">
-                        {conv.snippet}
+                        {renderHighlighted(conv.snippet, query)}
                       </p>
                     )}
                   </div>

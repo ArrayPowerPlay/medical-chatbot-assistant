@@ -68,8 +68,6 @@ class ConversationStore:
             #     cur.execute("ALTER TABLE conversations ADD COLUMN IF NOT EXISTS is_pinned BOOLEAN NOT NULL DEFAULT false;")
             # except Exception as e:
             #     logger.warning(f"Failed to alter conversations table: {e}")
-            # SERIAL = auto incremented number
-            # ON DELETE CASCADE = messages deleted if corresponding conversation is being deleted
             cur.execute("""
                 CREATE TABLE IF NOT EXISTS messages (
                     id               SERIAL PRIMARY KEY,
@@ -78,15 +76,16 @@ class ConversationStore:
                     content          TEXT NOT NULL,
                     feedback_type    VARCHAR(16) CHECK (feedback_type IN ('like', 'dislike', 'none')),
                     feedback_comment TEXT,
+                    sources          JSONB,
                     created_at       TIMESTAMPTZ NOT NULL DEFAULT NOW()
                 );
             """)
             
-            # try:
-            #     cur.execute("ALTER TABLE messages ADD COLUMN IF NOT EXISTS feedback_type VARCHAR(16) CHECK (feedback_type IN ('like', 'dislike', 'none'));")
-            #     cur.execute("ALTER TABLE messages ADD COLUMN IF NOT EXISTS feedback_comment TEXT;")
-            # except Exception as e:
-            #     logger.warning(f"Failed to alter messages table: {e}")
+            # Ensure existing tables are updated with sources column
+            try:
+                cur.execute("ALTER TABLE messages ADD COLUMN IF NOT EXISTS sources JSONB;")
+            except Exception as e:
+                logger.warning(f"Failed to add sources column to messages: {e}")
             cur.execute("""
                 CREATE INDEX IF NOT EXISTS idx_messages_conv_id
                 ON messages(conversation_id, created_at);
@@ -138,15 +137,15 @@ class ConversationStore:
         with self.conn.cursor() as cur:
             cur.execute(query, tuple(params))
 
-    def add_message(self, conversation_id: str, role: str, content: str) -> int:
+    def add_message(self, conversation_id: str, role: str, content: str, sources: Optional[str] = None) -> int:
         """Append a message to an existing conversation."""
         if role not in ('assistant', 'user'):
             raise ValueError(f"Invalid role: '{role}'. Must be 'user' or 'assistant'!")
         
         with self.conn.cursor() as cur:
             cur.execute(
-                "INSERT INTO messages (conversation_id, role, content) VALUES (%s, %s, %s) RETURNING id;",
-                (conversation_id, role, content),
+                "INSERT INTO messages (conversation_id, role, content, sources) VALUES (%s, %s, %s, %s) RETURNING id;",
+                (conversation_id, role, content, sources),
             )
             msg_id = cur.fetchone()[0]
             cur.execute(
@@ -319,7 +318,7 @@ class ConversationStore:
             if before_id is not None:
                 # Scroll-up: load messages older than the cursor
                 query = """
-                    SELECT id, role, content, feedback_type, feedback_comment, created_at FROM messages
+                    SELECT id, role, content, feedback_type, feedback_comment, sources, created_at FROM messages
                     WHERE conversation_id = %s AND id < %s
                     ORDER BY id DESC
                     LIMIT %s
@@ -328,7 +327,7 @@ class ConversationStore:
             else: 
                 # First load: get the newest messages
                 query = """
-                    SELECT id, role, content, feedback_type, feedback_comment, created_at FROM messages
+                    SELECT id, role, content, feedback_type, feedback_comment, sources, created_at FROM messages
                     WHERE conversation_id = %s 
                     ORDER BY id DESC
                     LIMIT %s
@@ -349,6 +348,7 @@ class ConversationStore:
                     "content": r["content"],
                     "feedback_type": r["feedback_type"],
                     "feedback_comment": r["feedback_comment"],
+                    "sources": r["sources"] if r["sources"] else [],
                     "created_at": r["created_at"].isoformat()
                 }
                 for r in reversed(rows)

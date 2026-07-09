@@ -52,6 +52,7 @@ async def chat(request: ChatRequest, raw_request: Request, user: dict = Depends(
             yield f"event: metadata\ndata: {json.dumps({'conversation_id': conversation_id})}\n\n"
             
             full_answer = ""
+            sources = []
             async for chunk in pipeline.run_stream(
                 query=request.question,
                 history=history,
@@ -63,11 +64,12 @@ async def chat(request: ChatRequest, raw_request: Request, user: dict = Depends(
                     data_str = chunk.split("data: ", 1)[1].strip()
                     data = json.loads(data_str)
                     full_answer = data.get("answer", "")
+                    sources = data.get("sources", [])
                 else:
                     yield chunk
             
             # Save to db after successful generation
-            msg_id = conv_store.add_message(conversation_id, "assistant", full_answer)
+            msg_id = conv_store.add_message(conversation_id, "assistant", full_answer, json.dumps(sources))
             yield f"event: message_id\ndata: {json.dumps({'message_id': msg_id})}\n\n"
             
             ### 5. Auto-set title for a conversation

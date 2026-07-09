@@ -190,46 +190,47 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
                     ) : (
                       <>
                         <div className="flex-1 min-w-0 pr-6 flex items-center gap-2">
-                          {conv.is_pinned && <Pin className="w-3.5 h-3.5 shrink-0 text-blue-500 fill-current" />}
                           <span className="truncate text-sm font-medium">{conv.title}</span>
                         </div>
                         
-                        {/* Action Icons (Visible on Hover or Active) */}
-                        <div className={`absolute right-2 flex items-center gap-1 bg-gradient-to-l from-slate-200 via-slate-200 to-transparent dark:from-slate-800 dark:via-slate-800 pl-4 ${isActive ? 'from-blue-100 via-blue-100 dark:from-blue-900/40 dark:via-blue-900/40' : 'opacity-0 group-hover:opacity-100'}`}>
+                        {/* Action Icons (Visible on Hover or Active or Pinned) */}
+                        <div className={`absolute right-2 flex items-center gap-0.5 bg-gradient-to-l from-slate-200 via-slate-200 to-transparent dark:from-slate-800 dark:via-slate-800 pl-4 ${isActive ? 'from-blue-100 via-blue-100 dark:from-blue-900/40 dark:via-blue-900/40' : ''}`}>
                           
                           <button 
                             onClick={(e) => {
                               e.stopPropagation();
                               pinConversation(conv.id, !conv.is_pinned);
                             }}
-                            className={`p-1 rounded hover:bg-black/5 dark:hover:bg-white/10 ${conv.is_pinned ? 'text-blue-500' : 'text-slate-400'}`}
+                            className={`p-1 rounded hover:bg-black/5 dark:hover:bg-white/10 transition-opacity ${conv.is_pinned ? 'opacity-100 text-amber-500' : 'opacity-0 group-hover:opacity-100 text-slate-400'}`}
                             title={conv.is_pinned ? "Unpin" : "Pin"}
                           >
-                            <Pin className="w-3.5 h-3.5" />
+                            <Pin className={`w-3.5 h-3.5 ${conv.is_pinned ? 'fill-amber-500 text-amber-500' : ''}`} />
                           </button>
                           
-                          <button 
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setEditTitle(conv.title);
-                              setEditingId(conv.id);
-                            }}
-                            className="p-1 text-slate-400 hover:text-blue-500 hover:bg-black/5 dark:hover:bg-white/10 rounded"
-                            title="Rename"
-                          >
-                            <Edit2 className="w-3.5 h-3.5" />
-                          </button>
+                          <div className={`flex items-center gap-0.5 transition-opacity ${isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+                            <button 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setEditTitle(conv.title);
+                                setEditingId(conv.id);
+                              }}
+                              className="p-1 text-slate-400 hover:text-blue-500 hover:bg-black/5 dark:hover:bg-white/10 rounded"
+                              title="Rename"
+                            >
+                              <Edit2 className="w-3.5 h-3.5" />
+                            </button>
 
-                          <button 
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setDeletingId(conv.id);
-                            }}
-                            className="p-1 text-slate-400 hover:text-red-500 hover:bg-black/5 dark:hover:bg-white/10 rounded"
-                            title="Delete"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
+                            <button 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setDeletingId(conv.id);
+                              }}
+                              className="p-1 text-slate-400 hover:text-red-500 hover:bg-black/5 dark:hover:bg-white/10 rounded"
+                              title="Delete"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
 
                         </div>
                       </>
