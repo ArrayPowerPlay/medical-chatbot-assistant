@@ -24,7 +24,7 @@ from scripts.evaluation.shared import generation_bioasq_common as common
 
 
 TEST_PATH = settings.DATA_PATH / "test" / "test_bioasq.jsonl"
-OUTPUT_DIR = project_root / "results" / "test_results" / "bioasq" / "no_kg_hybrid"
+OUTPUT_DIR = project_root / "results" / "test_results" / "bioasq" / "no_kg_hybrid" / "generation"
 
 
 async def evaluate(

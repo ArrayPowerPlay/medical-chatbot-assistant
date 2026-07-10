@@ -16,7 +16,7 @@ from scripts.evaluation.shared import retrieval_common as common
 
 
 TEST_PATH = settings.DATA_PATH / "test" / "test_bioasq.jsonl"
-OUTPUT_DIR = project_root / "results" / "test_results" / "bioasq" / "no_kg_hybrid"
+OUTPUT_DIR = project_root / "results" / "test_results" / "bioasq" / "no_kg_hybrid" / "retrieval"
 
 
 async def evaluate(limit: int | None = None) -> None:

@@ -1,111 +1,178 @@
-# 🏥 KNOWLEDGE BASE CHUYÊN SÂU: MED-ASSISTANT (MEDICAL KG-RAG CHATBOT)
+# 🏥 KNOWLEDGE BASE TỔNG HỢP: MED-ASSISTANT (MEDICAL KG-RAG CHATBOT)
 
-Tài liệu này đi sâu vào **chi tiết kỹ thuật, thuật toán và cách thức triển khai (implementation details)** của dự án **Med Assistant**. Mục tiêu là cung cấp các giải thích rành mạch nhất về "cách hệ thống vận hành bên dưới" (under the hood) để sử dụng cho các báo cáo kỹ thuật chuyên sâu, bảo vệ luận văn hoặc bàn giao mã nguồn.
-
----
-
-## 1. KIẾN TRÚC LUỒNG XỬ LÝ (PIPELINE ARCHITECTURE)
-
-Dự án áp dụng thiết kế **Clean Architecture (Dependency Inversion)**. Tầng nghiệp vụ không phụ thuộc vào tầng dữ liệu mà giao tiếp qua Interface.
-
-- **Interfaces (Contracts)**: Hệ thống định nghĩa sẵn các interface trừu tượng tại `src/interfaces/`: `ISearchEngine`, `IKGSearcher`, `ILLMGenerator`, `IQueryAnalyzer`.
-- **Thực thi Bất đồng bộ (Async Execution)**: Trong file orchestrator `rag_pipeline.py`, truy vấn tìm kiếm Vector, Keyword và KG được thực thi **hoàn toàn song song** thông qua `asyncio.gather()` hoặc các Thread Pool (`ThreadPoolExecutor`). Việc này giúp triệt tiêu độ trễ thắt cổ chai, thời gian lấy dữ liệu chỉ bằng thời gian của luồng chậm nhất.
+Tài liệu này là "bách khoa toàn thư" về dự án **Med Assistant**. Nó chứa toàn bộ mọi thông tin từ tổng quan đến chi tiết kỹ thuật sâu nhất, thiết kế kiến trúc, công nghệ, cách thu thập dữ liệu và toàn bộ các bộ chỉ số đánh giá (metrics). Bất cứ ai đọc tài liệu này đều có thể hiểu tường tận 100% về dự án và trả lời được mọi câu hỏi liên quan.
 
 ---
 
-## 2. KỸ THUẬT TIỀN XỬ LÝ & TÌM KIẾM VĂN BẢN (TEXT RETRIEVAL)
+## 1. TỔNG QUAN DỰ ÁN (OVERVIEW & DOMAIN)
 
-### 2.1. Phân mảnh văn bản thích ứng (Adaptive 3-Tier Chunking)
-Để giải quyết bài toán tài liệu y khoa có nhiều từ viết tắt và khái niệm dính liền, hệ thống **không** dùng Text Splitter thông thường của LangChain. Thay vào đó, áp dụng **SciSpaCy** để ngắt câu y khoa mà không làm vỡ cụm từ học thuật.
-Hệ thống sử dụng cơ chế **Parent-Child Chunking**:
-- **Tiêu chí**: Tìm kiếm ngữ nghĩa cần đoạn ngắn (Child) để đạt độ chính xác cao. LLM sinh câu trả lời cần đoạn dài (Parent) để hiểu bối cảnh.
-- **Tier 1 (Dưới 500 ký tự)**: Parent và Child bằng nhau, lấy nguyên bài Abstract.
-- **Tier 2 (Từ 500 - 2000 ký tự)**: Parent là toàn bộ Abstract. Child cắt nhỏ ~500 ký tự. Đặc biệt, **Title Injection** (ghép Tiêu đề bài báo vào từng Child) được áp dụng để giữ ngữ cảnh độc lập cho đoạn văn.
-- **Tier 3 (Trên 2000 ký tự)**: Parent cắt thành 1500 ký tự (có overlap 256 ký tự). Child cắt ~500 ký tự (Title Injected).
-
-### 2.2. Tìm kiếm Vector (Dual-Encoder) & BM25
-- Sử dụng mô hình bất đối xứng (Asymmetric): Câu hỏi đầu vào đi qua `ncbi/MedCPT-Query-Encoder`. Dữ liệu tĩnh đi qua `ncbi/MedCPT-Article-Encoder`.
-- **Weaviate + SQLite**: Child chunks cùng Vector của chúng được nạp vào Weaviate để chạy Cosine Similarity (Vector Search) và BM25 (Keyword Search). Mỗi Child chứa một trường `parent_id`.
-- **Tra cứu ngược O(log n)**: Khi Weaviate trả về Child, hệ thống lấy `parent_id` query vào SQLite (file `parent_chunks.db`) để bốc Parent text ra. Chỉ những Parent có điểm số cao nhất từ các Child của nó mới được giữ lại.
+- **Tên dự án**: Med Assistant (MedKG-RAG Chatbot).
+- **Mục tiêu**: Xây dựng một hệ thống AI Chatbot chuyên ngành y tế tiên tiến, có khả năng trả lời chính xác, tin cậy dựa trên các bằng chứng y khoa xác thực (Evidence-based) nhằm chống lại hiện tượng ảo giác (hallucination) của LLM.
+- **Lĩnh vực (Domain)**: Dự án tập trung ranh giới chuyên môn hẹp và sâu: **Bệnh tật - Thuốc - Đích tác dụng (Disease-Drug-Target)**.
+- **Công nghệ cốt lõi**: Kết hợp song song Kỹ thuật tìm kiếm lai (Hybrid Retrieval: Vector + BM25) với Hệ thống Đồ thị tri thức (Knowledge Graph - PrimeKG) và mô hình LLM Llama 3.3 70B.
 
 ---
 
-## 3. TRIỂN KHAI ĐỒ THỊ TRI THỨC Y KHOA (KNOWLEDGE GRAPH IMPLEMENTATION)
+## 2. PHÂN HỆ NGƯỜI DÙNG & TÍNH NĂNG WEB (USER ROLES & WEB FEATURES)
 
-Sự kết hợp KG là thành tựu lớn nhất trong kiến trúc này để xử lý Multi-hop Reasoning (Tư duy đa bước).
+Hệ thống web được thiết kế như một Single Page Application (SPA) hiện đại, hỗ trợ Dark/Light mode và trả lời theo thời gian thực (Streaming SSE). 
 
-### 3.1. Kỹ thuật nhúng Offline (Node Embedding)
-Hệ thống dùng PrimeKG nhưng phải làm giàu ngữ nghĩa trước khi nhúng.
-- **Chuẩn bị Text**: Tên Node đơn độc ("Metformin") sẽ thiếu vắng thông tin. Hệ thống tự ghép chuỗi theo template `"{NodeType}: {name}"` (VD: `"Drug: Metformin"`).
-- **Nhúng**: Chạy qua `MedCPT-Article-Encoder` thu được vector 768 chiều. Lưu trực tiếp vào thuộc tính `embedding_medcpt` trên Neo4j. Tạo Vector Index `medcpt_node_embeddings` trong Neo4j (chuẩn Cosine).
+**Hệ thống phân thành 3 vai trò:**
 
-### 3.2. Thuật toán tìm kiếm KG Online (2-Stage KG Search)
-Việc tìm kiếm KG chia làm 2 giai đoạn (Inference):
-- **Giai đoạn 1 (Anchor Search - Tìm Node Neo)**:
-  - Llama 70B trích xuất các Entities từ câu hỏi (VD: "Bệnh tiểu đường").
-  - Đem Entities mã hóa bằng `Article-Encoder` (So khớp A-E với A-E, cùng không gian không bị lệch).
-  - Truy xuất top-k=3 Node có Vector gần nhất trong Neo4j làm "Node Neo".
-- **Giai đoạn 2 (Neighbour Ranking - Khám phá đồ thị)**:
-  - Câu hỏi đã được LLM viết lại (Rewritten Query) được nhúng qua `Query-Encoder`.
-  - Mở rộng 1-hop và 2-hop từ các Node Neo. Khi đi qua các cạnh, bộ lọc Intent của LLM sẽ quyết định có được đi tiếp không (VD: câu hỏi tìm thuốc sẽ chỉ duyệt các cạnh `TREATS`, `TARGETS`).
-  - Điểm số của mỗi Neighbour node được tính bằng **Cosine Similarity(Query Vector, Neighbour Vector)** (So khớp Q-E với A-E).
-  - Cắt tỉa: Lấy Top-M=10 cho 1-hop, Top-N=5 cho 2-hop. Max 50 paths để tránh bùng nổ đồ thị.
-
-### 3.3. Tuyến tính hóa Đồ thị (KG Linearization)
-Đồ thị 2-hop được xuất ra dưới dạng Triples (A -> B -> C). Hệ thống dùng mã Python (Rule-based templates) chuyển cụm này thành ngôn ngữ tự nhiên. 
-- *VD: `"[Drug] Metformin TARGETS [Gene] AMPK which is ASSOCIATED_WITH [Disease] Diabetes"`*.
-- **Tối ưu nhánh cụt (Dead-end Optimization)**: Nếu đường 1-hop trùng với đoạn đầu của đường 2-hop, nhánh 1-hop sẽ bị loại bỏ để nhường chỗ trống cho context khác.
+1. **Guest User (Khách vãng lai)**
+   - Chỉ được hỏi tối đa **10 câu hỏi miễn phí**.
+   - Cảnh báo giới hạn lượt hỏi hiển thị linh hoạt dưới cùng của tin nhắn AI mới nhất.
+   - Không lưu lại lịch sử hội thoại vĩnh viễn (xóa sau khi tải lại trang).
+2. **Registered User (Thành viên đăng ký)**
+   - Không giới hạn số lượng câu hỏi.
+   - **Lịch sử chat**: Lưu trữ vĩnh viễn, cho phép người dùng đổi tên, ghim (pin) hoặc xóa luồng chat. Cung cấp tính năng **Tìm kiếm hội thoại** (theo tiêu đề hoặc nội dung tin nhắn thông qua `/api/conversations/search`). Giao diện dùng pagination cuộn ngược (Reverse-scroll infinite chat history).
+   - **Tính minh bạch (Verifiability)**: Nút bật/tắt để người dùng xem được các "Bằng chứng y khoa" (Sources) mà AI đã trích xuất, bao gồm các đoạn text từ PubMed, số PMID, đường dẫn Knowledge Graph và điểm số tương đồng (Similarity score).
+   - **Hệ thống Feedback**: Người dùng có thể Like/Dislike cho câu trả lời và để lại bình luận văn bản giúp hệ thống cải thiện.
+3. **Administrator (Quản trị viên)**
+   - **Dashboard Phân tích**: Xem thống kê hệ thống, lượng user, lượng khách, số đăng ký mới, số câu hỏi trong ngày.
+   - **Quản lý Users**: Tìm kiếm (theo Email/Username dạng `ILIKE` realtime), xóa user, buộc reset mật khẩu.
+   - **Giám sát Chat**: Đọc được toàn bộ (Read-only) lịch sử chat của user nào đó để đánh giá tỷ lệ ảo giác của AI.
+   - **Giám sát Feedback**: Quản lý Feedback Xấu/Tốt bên cạnh câu trả lời để đánh giá lại luồng RAG.
 
 ---
 
-## 4. CÔNG NGHỆ XẾP HẠNG KÉP (TWO-STAGE RERANKING & FUSION)
+## 3. CÔNG NGHỆ ÁP DỤNG (TECH STACK & ARCHITECTURE)
 
-Hệ thống sở hữu 3 nguồn tài liệu thô (Vector, BM25, KG). Phải kết hợp chúng cực kỳ cẩn thận.
+Dự án áp dụng **Kiến trúc phân tầng (Layered Architecture) kết hợp Clean Architecture (Dependency Inversion)**, giúp hệ thống module hóa, dễ bảo trì và bóc tách hoàn toàn logic nghiệp vụ khỏi tầng dữ liệu. Hệ thống có 5 phân tầng chính:
+1. **Tầng Trình diễn (Presentation Layer - Frontend)**: Ứng dụng SPA React (Vite, Tailwind v4) xử lý UI/UX phức tạp, phân quyền, và nhận stream chat.
+2. **Tầng API & Routing (Backend)**: FastAPI cung cấp RESTful Endpoints, JWT Authentication, phân quyền (User/Admin/Guest) và đẩy dữ liệu SSE.
+3. **Tầng Điều phối (Orchestration Layer - Use Case)**: Lớp `RAGPipeline` điều phối toàn bộ thuật toán: Query Analyzer, các bộ Retriever (Vector/BM25/KG), RRF, Reranker, và Generator. Lớp này độc lập với Database.
+4. **Tầng Giao tiếp Dữ liệu (Data Access / Infrastructure)**: Các lớp Repositories triển khai theo Hợp đồng (`src/interfaces`) giao tiếp trực tiếp với PostgreSQL, Neo4j, Weaviate và SQLite.
+5. **Tầng Dữ liệu ngoại tuyến (Data Pipeline - Offline)**: Tập hợp các kịch bản cào dữ liệu, chia nhỏ (chunking), nhúng vector và hydrate Database.
 
-### 4.1. Fusion bằng RRF (Reciprocal Rank Fusion)
-- Gộp Vector Search và BM25 lại với nhau.
-- **Công thức Toán học**: `Score_RRF = Σ (1 / (k + rank))` với hệ số `k=60` tiêu chuẩn. 
-- **Lưu ý kỹ thuật**: KG tuyệt đối KHÔNG được gộp ở khâu này vì đường đi KG (Path) có tính cấu trúc, đưa vào RRF sẽ gây sai lệch phân phối toán học. Kết quả bước này gọi là **Text Retrieval**.
-
-### 4.2. Rerank bằng Cross-Encoder
-- Triển khai `ncbi/MedCPT-Cross-Encoder` trên **Modal GPU Cloud**.
-- Đưa cặp (Query, Text Retrieval) và (Query, KG Paths) vào cùng một Batch để inference nhằm tối ưu tốc độ.
-- **Quy tắc Vàng (OOD Bias Prevention)**: Dù tính chung batch, đầu ra phải được **tách riêng rẽ** và sắp xếp thành 2 list độc lập: Top-M Text và Top-N KG. Nếu trộn chung để sort, Text tự do thường có logic mượt mà hơn nên Cross-Encoder sẽ chấm điểm text cao hơn, dập tắt các bằng chứng KG.
-- Giữ nguyên các Logits âm (`score <= 0`) thay vì cắt bỏ, vì bản chất MedCPT trả về raw logits, việc cắt bỏ sẽ làm mất Recall và Snippet Coverage.
-
----
-
-## 5. THỦ THUẬT PROMPT & GENERATION (LLM GENERATION DETAILS)
-
-Trước khi đưa context vào Llama 3.3 70B, một loạt các tiểu xảo (heuristics) được áp dụng ở `prompt_builder.py` và `kg_merger.py`:
-
-### 5.1. Nén đồ thị (Post-Rerank KG Merging)
-- Nhóm các đường đi có chung Prefix. Thay vì nạp vào LLM 2 câu: "A tác động B gây ra C" và "A tác động B gây ra D", thuật toán gộp thành "A tác động B gây ra C và D".
-- **Density Bonus**: Khi gộp N path, điểm số của path tổng sẽ được cộng thưởng `Agg_Score = MAX(scores) + 0.05 * (N - 1)`. Đường nào càng nhiều nhánh con sẽ càng được đẩy lên ưu tiên.
-
-### 5.2. Trộn đan xen 1-1 (Manual Interleaving)
-Vì Text và KG xếp hạng độc lập, ta trộn ngữ cảnh theo kiểu "Zipper" (Khóa kéo): `Text 1, KG 1, Text 2, KG 2, Text 3...`. Điều này đảm bảo LLM nhìn thấy mật độ bằng chứng ở hai định dạng là tương đương.
-
-### 5.3. Trị liệu "Lost-in-the-Middle" (Head-Tail Placement)
-LLM thường chỉ nhớ phần đầu và phần cuối ngữ cảnh (U-shape Attention). Do đó:
-- Top 1, 3, 5... đặt ở vị trí **HEAD** (Đầu prompt).
-- Top 2, 4, 6... đặt ở vị trí **TAIL** (Cuối prompt).
-- Các ngữ cảnh điểm thấp nhất bị nhồi vào **GIỮA** prompt.
-
-### 5.4. Query Analyzer (Lịch sử & Anti-Preamble)
-- **Cửa sổ Lịch sử (History Window)**: Hệ thống lấy đúng 5 lượt (5 turns = 10 messages, biến `HISTORY_TURNS_FOR_LLM`) đẩy vào Llama 70B (Groq) để phân tích đại từ nhân xưng và trích xuất Intent một lần duy nhất trước khi Retrieval. Lịch sử đầy đủ lưu trong PostgreSQL.
-- **Type-conditional Prompting**: Llama xác định luôn loại câu hỏi (factoid, yes/no, list, summary) và tiêm thẳng format đầu ra vào System Prompt.
-- **Anti-Preamble**: Chỉ thị cứng cấm LLM sinh mào đầu ("Based on the provided context..."). Code Python thực hiện hàm `strip_preamble()` loại bỏ triệt để trước khi tính điểm Evaluation (ROUGE-SU4) để không bị loãng điểm do trùng lặp từ vựng dư thừa.
+**Bộ Công nghệ (Tech Stack) đầy đủ:**
+- **Frontend**: React, TypeScript, Vite, Tailwind CSS v4. Quản lý state bằng Zustand, call API bằng Axios (JWT Interceptor).
+- **Backend**: Python 3.11+, FastAPI (RESTful & SSE Streaming), Pydantic (Validate dữ liệu).
+- **LLM & API**:
+  - LLM Sinh đáp án & Phân tích câu hỏi: `meta-llama/Llama-3.3-70B-Versatile` (Chạy qua nền tảng **Groq API** cho tốc độ siêu nhanh).
+  - Cross-Encoder: Chạy trên Cloud GPU của nền tảng **Modal**.
+- **Cơ sở dữ liệu (Storage & Infrastructure)**:
+  - **PostgreSQL**: Lưu User, Lịch sử Chat, Feedback (Chạy Docker, mount volume).
+  - **Weaviate**: Vector DB dùng để chứa Text Embeddings và chạy BM25 Search (Chạy Docker).
+  - **Neo4j**: Graph DB lưu trữ Đồ thị PrimeKG (Chạy Docker).
+  - **SQLite**: Lưu Parent Chunks để tra cứu với tốc độ siêu tốc (O(log n)).
+- **Mô hình Nhúng (Embedding & Reranker)**: 
+  - `ncbi/MedCPT-Article-Encoder`, `ncbi/MedCPT-Query-Encoder`, `ncbi/MedCPT-Cross-Encoder`.
+- **Môi trường Đánh giá (Evaluation)**: Thư viện `ragas`. Dùng `gpt-4o-mini` và `text-embedding-3-small` làm giám khảo.
 
 ---
 
-## 6. CHI TIẾT VỀ MÔI TRƯỜNG ĐÁNH GIÁ (EVALUATION SPECS)
+## 4. DỮ LIỆU & CÁCH THỨC THU THẬP (DATA SOURCES & COLLECTION)
 
-Khung đánh giá được thiết kế cứng (Deterministic) với `temperature=0` cho QueryAnalyzer.
-- **Grid Search Framework**: Có hẳn module tự động quét qua ma trận Hyperparameters (`VECTOR_TOP_K`, `KEYWORD_TOP_K`, `RERANK_TEXT_TOP_M`...) trên 20 câu mẫu để chốt cấu hình Retrieval mạnh nhất.
-- **Proxy Snippet Coverage**: Do không dùng chunk chữ làm dự đoán Snippet, hệ thống đánh giá xem văn bản của "Gold Snippet" có tồn tại (substring match) bên trong Parent Chunk được lấy về hay không.
-- **MedAESQA Citation Pipeline**: Riêng MedAESQA được dùng riêng để đo đếm khả năng Trích dẫn (Citation-Precision, Citation-Recall, Citation-F1) của thuật toán. Luôn bật `use_citations=True` để kiểm tra Hallucination. Thêm toàn bộ PMID của MedAESQA vào corpus để tính coverage trọn vẹn, không coi đó là Data Leakage.
+Hệ thống kết hợp tài liệu văn bản phi cấu trúc (Unstructured Text) và Đồ thị có cấu trúc (Structured Graph).
+
+### 4.1. Text Corpus (BioASQ PubMed)
+- **Nguồn**: Lấy từ BioASQ PubMed Annual Baseline Corpus. Kích thước khoảng 300,000 bài báo y khoa (Title + Abstract).
+- **Cách thu thập & Chọn lọc**: Dữ liệu thô được filter dựa trên **MeSH Tree Numbers**, chỉ giữ lại các bài báo thuộc nhánh C (Diseases - Bệnh tật) và D (Chemicals and Drugs - Thuốc & Hóa chất).
+- **Bổ sung PMIDs**: Để phục vụ cho cả việc đánh giá tập MedAESQA, toàn bộ các mã PMID tham chiếu của BioASQ Test Set và MedAESQA Test Set đều được kịch bản gọi trực tiếp vào **NCBI E-utilities API** tải về chuẩn xác (Title, Abstract) và nạp bổ sung vào Corpus.
+- **Tiền xử lý & Chunking (Adaptive 3-Tier Chunking)**: 
+  Không dùng Text Splitter thông thường, hệ thống dùng **SciSpaCy** để ngắt câu y khoa mà không làm vỡ các từ viết tắt chuyên ngành.
+  - **Parent-Child Logic**: LLM cần ngữ cảnh dài (Parent), nhưng Weaviate Vector/BM25 cần mảnh nhỏ để tìm cho chuẩn (Child).
+  - **Tier 1 (<= 500 ký tự)**: Parent = Child = Full Article.
+  - **Tier 2 (<= 2000 ký tự)**: Parent = Full Article. Child = cắt nhỏ ~500 ký tự. Có nhồi thêm Tiêu đề bài báo vào đầu Child (**Title Injection**).
+  - **Tier 3 (> 2000 ký tự)**: Parent = 1500 chars (overlap 256). Child = cắt ~500 chars (+ Title Injection).
+  - Sau khi chunk, Child chunks đẩy lên Weaviate (mang theo `parent_id`), Parent chunks lưu vào SQLite (`parent_chunks.db`).
+
+### 4.2. Knowledge Graph (PrimeKG)
+- **Nguồn**: PrimeKG của Đại học Harvard.
+- **Cách thu thập & Tối ưu**: Đồ thị thô chứa mọi thứ. Hệ thống chạy script `build_kg.py` để quét và giữ lại ĐÚNG các loại Node: `Disease`, `Drug`, `GeneProtein`, `EffectPhenotype`.
+- Giữ lại các Edge cốt lõi như: `TREATS`, `CONTRAINDICATES`, `TARGETS`, `HAS_SIDE_EFFECT`, `ASSOCIATED_WITH`, v.v...
+- **Tạo Node Embeddings (Offline)**: Để tìm kiếm được trên KG bằng Vector, hệ thống dán nhãn Node bằng template `"{NodeType}: {name}"` (VD: "Drug: Metformin"). Sau đó nhúng qua mô hình `MedCPT-Article-Encoder` thu được vector 768 chiều. Lưu thẳng vector này vào thuộc tính `embedding_medcpt` trên Neo4j.
 
 ---
-**Lời kết (Conclusion):** 
-Bằng cách phân tách tinh tế các giai đoạn chunking, ứng dụng Dual-Encoder với không gian vector bất đối xứng, tìm kiếm lai Text + KG, và xử lý Prompt thông minh (Head-Tail, RRF, Interleaving), Med Assistant đạt hiệu năng Truy xuất (MRR ~0.86) và Sinh văn bản chuyên ngành vượt xa các giải pháp RAG mã nguồn mở hiện hành. Toàn bộ tính toán tốn kém nhất được san sẻ song song và dùng Cloud API để đạt độ trễ real-time thấp nhất.
+
+## 5. CHI TIẾT LUỒNG THỰC THI (END-TO-END RAG PIPELINE)
+
+Quy trình RAG (Retrieval-Augmented Generation) được thực thi hoàn toàn bất đồng bộ (Async) ở các bước truy vấn.
+
+### Giai đoạn 1: Query Analyzer (Phân tích câu hỏi bằng LLM)
+- Lấy 5 lượt chat gần nhất từ PostgreSQL (config: `HISTORY_TURNS_FOR_LLM = 5`).
+- Gửi Prompt cho Llama 70B để thực hiện 4 tác vụ:
+  1. Gộp ngữ cảnh/sửa lỗi chính tả (Rewriting).
+  2. Xác định Loại câu hỏi (Question Type): factoid, summary, list, yesno.
+  3. Phân loại Ý định (Intent): `treatment_lookup`, `symptom_lookup`, `no_rag_needed` (nếu chat ngoài lề y khoa, hệ thống báo bypass RAG để trả lời luôn).
+  4. Trích xuất Thực thể (NER): Bệnh, Thuốc, Gen...
+
+### Giai đoạn 2: Tìm kiếm Song song (Parallel Retrieval)
+Thực thi bằng `asyncio.gather` qua 3 luồng:
+1. **Vector Search (Weaviate)**: Câu hỏi được nhúng qua `MedCPT-Query-Encoder`. Query vào Weaviate bằng Cosine Similarity để lấy ra Top Child Chunks. Lấy `parent_id` quét vào SQLite để lôi Parent text ra.
+2. **Keyword Search (Weaviate - BM25)**: Bắt đúng từ khóa chính xác trên Weaviate. Cắt nghĩa bù cho Vector. Cũng lấy Parent text tương tự.
+3. **Knowledge Graph Search (Neo4j)**:
+   - *Bước Neo (Anchor)*: Các Entities trích xuất từ Bước 1 được nhúng bằng `MedCPT-Article-Encoder`. So sánh Vector (A-E vs A-E) trên Neo4j để tìm top 3 Node Neo (Anchor nodes).
+   - *Bước Mở rộng (Ranking)*: Từ Node Neo, lan truyền 1-hop và 2-hop (chỉ đi qua các cạnh mà LLM Intent cho phép). Điểm số các node lân cận được tính bằng Cosine Similarity giữa Vector câu hỏi (`Query-Encoder`) và Vector Node (`Article-Encoder`).
+   - *Bước Tuyến tính hóa (Linearization)*: Biến cấu trúc A->B->C của đồ thị thành câu văn tiếng Anh (Template rule-based). Bỏ các đường nhánh 1-hop cụt nếu nó là chặng đầu của một nhánh 2-hop (Dead-end optimization).
+
+### Giai đoạn 3: Hệ thống Xếp hạng Kép (Two-Stage Reranking)
+1. **RRF (Reciprocal Rank Fusion)**: Dùng công thức toán `Σ (1 / (k + rank))` (k=60) để gộp Text Vector + Text BM25 lại thành một list duy nhất gọi là **Text Search**.
+2. **Cross-Encoder (Reranking)**: Bắn cả Text Search và KG Paths lên API Modal Cloud chạy `MedCPT-Cross-Encoder`. 
+   - *Quy tắc Chống Bias*: Dù tính điểm chung batch, đầu ra được SẮP XẾP RIÊNG RẼ thành Top-M Text và Top-N KG. Nếu sort chung, Text mạch lạc sẽ nuốt chửng điểm của KG Paths (OOD Bias). Hệ thống giữ lại cả các điểm logits âm (`score <= 0`) để giữ tính tuần tự.
+
+### Giai đoạn 4: Hậu xử lý & Sinh đáp án (Prompt Builder & Generator)
+- **KG Merging**: Nén ngữ cảnh KG. Nếu có 2 dòng "A targets B" và "A targets C", sẽ gộp thành "A targets B and C". Thưởng điểm Density Bonus (`+0.05` điểm cho mỗi nhánh ghép).
+- **Interleaving**: Trộn đan xen ngữ cảnh dạng Khóa kéo: 1 Text, 1 KG, 1 Text, 1 KG.
+- **Head-Tail Placement (Chống "Lost-in-the-Middle")**: Các đoạn Text điểm cao nhất được đặt ở Đầu và Cuối Prompt, đoạn điểm thấp nhét vào Giữa.
+- **Anti-Preamble**: Ép Llama 70B không được sinh mào đầu ("Based on context...").
+- Cuối cùng, Llama 70B sinh câu trả lời và stream (SSE) kết quả về Web.
+
+---
+
+## 6. MÔI TRƯỜNG ĐÁNH GIÁ & CÁC METRICS (EVALUATION SPECS)
+
+Đánh giá học thuật khắt khe, chạy qua scripts tại `scripts/evaluation/`. Nhiệt độ của QueryAnalyzer luôn khóa ở `0` (Deterministic).
+
+### 6.1. Tập Dữ Liệu Đánh Giá (Datasets)
+- **BioASQ Task B**: 500 câu Validation (để tinh chỉnh Hyperparameters), 500 câu Test (để chốt kết quả). Tập trung đánh giá Text Retrieval và Answer Generation.
+- **MedAESQA**: 42 câu Test chuyên biệt có tính đa bước cao. Chỉ dùng để test khâu Generation (đặc biệt là khả năng sinh Trích dẫn).
+
+### 6.2. Các Chỉ số Tìm kiếm (Retrieval Metrics) - Chạy trên BioASQ
+Tính toán tại K=5, 10, 20. Khung Grid Search chạy quét ma trận tham số cấu hình.
+- **Document-Level Metrics (So khớp PMID)**:
+  - `Precision@K`: Tỷ lệ tài liệu lấy về là đúng.
+  - `Recall@K`: Tỷ lệ tài liệu chuẩn (Gold) đã tìm thấy trong top K.
+  - `F1@K`: Trung bình điều hòa của Precision và Recall.
+  - `MAP@K` (Mean Average Precision): Điểm AP trung bình cắt tại K.
+  - `GMAP@K` (Geometric MAP): Trung bình nhân, phạt nặng các câu hỏi điểm quá thấp.
+  - `MRR` (Mean Reciprocal Rank): Nghịch đảo vị trí của tài liệu chuẩn đầu tiên xuất hiện.
+- **Snippet-Level Proxy Metrics**: Do không dùng chunk làm dự báo Snippet, dự án dùng Proxy: Một "Gold Snippet" được coi là tìm thấy nếu chuỗi của nó nằm lọt bên trong Parent Chunk đã tải về. Tính ra các chỉ số: `Snippet Precision@K`, `Snippet Recall@K`, `Snippet F1@K`.
+
+### 6.3. Các Chỉ số Sinh văn bản (Generation Metrics)
+- **Trên tập BioASQ**:
+  - `ROUGE-SU4-F1`: So khớp từ vựng chuẩn BioASQ (Chạy qua hàm `strip_preamble` cắt mào đầu trước khi tính).
+  - Khung **RAGAS** (Sử dụng LLM GPT-4o-mini làm giám khảo): 
+    - `Context Precision` & `Context Recall` (Chất lượng ngữ cảnh).
+    - `Faithfulness` (Đáp án có trung thành với ngữ cảnh không).
+    - `Answer Correctness` (Đáp án có đúng nghĩa không).
+    - `Answer Relevancy` (Đáp án có sát câu hỏi không).
+- **Trên tập MedAESQA (Đánh giá khả năng trích dẫn - Citation Pipeline)**:
+  - Bật mode `use_citations=True`. Không dùng RAGAS vì không cần thiết.
+  - Tính `ROUGE-SU4-F1`.
+  - Tính Citation Metrics: `Citation-Precision` (Trích dẫn có khớp tài liệu không), `Citation-Recall` (Có dẫn đủ tài liệu chuẩn không), `Citation-F1`.
+
+*(Kết quả mạnh nhất cấu hình hiện tại đạt MRR Retrieval ~0.86, bỏ xa các Baseline thuần Text).*
+
+---
+
+## 7. HƯỚNG DẪN TRIỂN KHAI (QUICK START)
+
+1. Yêu cầu: Python 3.11+, Node.js >= 18, Docker & Docker Compose.
+2. Chuẩn bị file `.env` chứa API Keys: Groq, OpenAI, Modal Token, URL DB.
+3. Chạy cơ sở hạ tầng (PostgreSQL, Neo4j, Weaviate):
+   ```bash
+   docker-compose up -d
+   ```
+4. Khởi chạy Backend API (FastAPI):
+   ```bash
+   uvicorn api.main:app --reload --port 8000
+   ```
+5. Khởi chạy Frontend (Vite/React):
+   ```bash
+   cd frontend
+   npm run dev
+   ```
+Truy cập `http://localhost:5173`.
+Hệ thống cũng đi kèm một loạt notebooks trong `notebooks/` và scripts build dữ liệu offline trong `src/dataset_builder/` dành cho Dev thao tác.

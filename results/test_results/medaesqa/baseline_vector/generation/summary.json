@@ -4,31 +4,31 @@
     "total_questions": 40,
     "evaluated_questions": 40,
     "failed_questions": 0,
-    "timestamp": "2026-06-23T22:49:09",
+    "timestamp": "2026-07-10T16:13:56",
     "split_name": "test",
     "limit": null,
     "requested_ragas": false,
     "ragas_evaluator_llm_model": "gpt-4o-mini",
     "ragas_evaluator_embedding_model": "text-embedding-3-small",
     "kg_top_k": 2,
-    "kg_hop1_m": 5,
+    "kg_hop1_m": 3,
     "kg_hop2_n": 3,
     "kg_hop2_cap": 30,
     "rerank_kg_top_n": 10,
     "generation_temperature": 0.0,
     "use_kg_merger": true,
     "use_head_tail_placement": true,
-    "generation_max_tokens": 2048,
+    "generation_max_tokens": 512,
     "use_citations": true
   },
   "generation_metrics": {
-    "ROUGE-SU4-Precision": 0.1045,
-    "ROUGE-SU4-Recall": 0.1314,
-    "ROUGE-SU4-F1": 0.1039
+    "ROUGE-SU4-Precision": 0.0999,
+    "ROUGE-SU4-Recall": 0.1326,
+    "ROUGE-SU4-F1": 0.1001
   },
   "citation_metrics": {
-    "Citation-Precision": 0.4293,
-    "Citation-Recall": 0.6755,
-    "Citation-F1": 0.4991
+    "Citation-Precision": 0.383,
+    "Citation-Recall": 0.5911,
+    "Citation-F1": 0.4113
   }
 }

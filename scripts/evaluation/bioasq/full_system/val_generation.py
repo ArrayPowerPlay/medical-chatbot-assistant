@@ -17,7 +17,7 @@ from scripts.evaluation.shared import generation_bioasq_common as common
 
 
 VAL_PATH = settings.DATA_PATH / "val" / "val_bioasq.jsonl"
-OUTPUT_DIR = project_root / "results" / "val_results" / "bioasq" / "full_system"
+OUTPUT_DIR = project_root / "results" / "val_results" / "bioasq" / "full_system" / "generation"
 
 
 async def evaluate(

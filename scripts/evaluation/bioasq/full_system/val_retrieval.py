@@ -20,7 +20,7 @@ from scripts.evaluation.shared import retrieval_common as common
 
 
 VAL_PATH = settings.DATA_PATH / "val" / "val_bioasq.jsonl"
-OUTPUT_DIR = project_root / "results" / "val_results" / "bioasq" / "full_system"
+OUTPUT_DIR = project_root / "results" / "val_results" / "bioasq" / "full_system" / "retrieval"
 
 
 async def evaluate(limit: int | None = None) -> None:
