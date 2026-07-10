@@ -1,5 +1,5 @@
 <p align="center">
-  <h1 align="center">🏥 Med Assistant</h1>
+  <h1 align="center"><img src="frontend/src/assets/logo.png" width="45" alt="Logo" /> Med Assistant</h1>
   <p align="center">
     <strong>Advanced Medical Q&A Chatbot powered by KG-Augmented RAG</strong>
   </p>
@@ -48,8 +48,6 @@ The web platform provides customized, role-based experiences with a modern, resp
 - **Feedback Management:** Dedicated UI panels to review Good and Bad feedback side-by-side with the AI's response, enabling continuous manual review and improvement of the RAG pipeline.
 
 ---
-
-## 🗄️ Data Sources
 
 ## 🗂️ Data Sources & Collection
 
