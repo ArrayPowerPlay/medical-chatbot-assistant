@@ -305,7 +305,7 @@ class _PMCBodyHTMLParser(HTMLParser):
         attrs_dict = dict(attrs)
         class_value = attrs_dict.get("class", "")
 
-        if tag == "section" and "main-article-body" in class_value:
+        if tag == "section" and isinstance(class_value, str) and "main-article-body" in class_value:
             self.in_body_section = True
             self.body_section_depth = 1
             return
@@ -313,7 +313,7 @@ class _PMCBodyHTMLParser(HTMLParser):
         if self.in_body_section and tag == "section":
             self.body_section_depth += 1
 
-        if not self.in_body_section and tag == "h1" and "content-title" in class_value:
+        if not self.in_body_section and tag == "h1" and isinstance(class_value, str) and "content-title" in class_value:
             self.capture_title = True
 
         if self.in_body_section and tag == "p":

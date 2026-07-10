@@ -1,4 +1,6 @@
 import unittest
+import asyncio
+from typing import Any
 
 from src.pipeline.rag_pipeline import RAGPipeline
 from src.reranking.cross_encoder import CrossEncoderReranker
@@ -24,7 +26,7 @@ class CrossEncoderRerankerTests(unittest.TestCase):
     def test_rerank_keeps_negative_scores_and_sorts_all_passages(self):
         reranker = CrossEncoderReranker.__new__(CrossEncoderReranker)
         reranker.is_available = True
-        reranker.model = _DummyModel(scores=[-0.2, 1.5, -1.0])
+        reranker.model = _DummyModel(scores=[-0.2, 1.5, -1.0])  # type: ignore
 
         rrf_results = [
             {"parent_id": "a", "pmid": "1", "text": "doc a"},
@@ -32,13 +34,13 @@ class CrossEncoderRerankerTests(unittest.TestCase):
             {"parent_id": "c", "pmid": "3", "text": "doc c"},
         ]
 
-        ranked_text, ranked_kg = reranker.rerank(
+        ranked_text, ranked_kg = asyncio.run(reranker.rerank(
             query="test query",
             rrf_results=rrf_results,
             kg_results=[],
             top_m=3,
             top_n=0,
-        )
+        ))
 
         self.assertEqual([item["parent_id"] for item in ranked_text], ["b", "a", "c"])
         self.assertEqual([item["cross_encoder_score"] for item in ranked_text], [1.5, -0.2, -1.0])
@@ -47,9 +49,9 @@ class CrossEncoderRerankerTests(unittest.TestCase):
     def test_rerank_exception_uses_structured_fallback_for_text_and_kg(self):
         reranker = CrossEncoderReranker.__new__(CrossEncoderReranker)
         reranker.is_available = True
-        reranker.model = _DummyModel(error=RuntimeError("boom"))
+        reranker.model = _DummyModel(error=RuntimeError("boom"))  # type: ignore[assignment]
 
-        ranked_text, ranked_kg = reranker.rerank(
+        ranked_text, ranked_kg = asyncio.run(reranker.rerank(
             query="test query",
             rrf_results=[
                 {"parent_id": "a", "pmid": "1", "text": "doc a"},
@@ -60,7 +62,7 @@ class CrossEncoderRerankerTests(unittest.TestCase):
             ],
             top_m=1,
             top_n=1,
-        )
+        ))
 
         self.assertEqual(len(ranked_text), 1)
         self.assertEqual(ranked_text[0]["parent_id"], "a")

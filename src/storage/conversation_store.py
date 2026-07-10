@@ -148,7 +148,10 @@ class ConversationStore:
                 "INSERT INTO messages (conversation_id, role, content, sources) VALUES (%s, %s, %s, %s) RETURNING id;",
                 (conversation_id, role, content, sources),
             )
-            msg_id = cur.fetchone()[0]
+            result = cur.fetchone()
+            if result is None:
+                raise RuntimeError("Failed to insert message")
+            msg_id = result[0]
             cur.execute(
                 "UPDATE conversations SET updated_at = NOW() WHERE id = %s;",
                 (conversation_id,),
@@ -240,7 +243,7 @@ class ConversationStore:
                 LEFT JOIN messages m ON c.id = m.conversation_id AND m.content ILIKE %s
                 WHERE (c.title ILIKE %s OR m.content ILIKE %s)
             """
-            params = [pattern, pattern, pattern]
+            params: List[Any] = [pattern, pattern, pattern]
             
             if user_id is not None:
                 query += " AND c.user_id = %s"
@@ -408,25 +411,32 @@ class ConversationStore:
     def get_admin_stats(self) -> Dict[str, Any]:
         with self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
             cur.execute("SELECT COUNT(*) FROM users;")
-            total_users = cur.fetchone()[0]
+            row = cur.fetchone()
+            total_users = row[0] if row else 0
 
             cur.execute("SELECT COUNT(*) FROM users WHERE role = 'guest';")
-            total_guests = cur.fetchone()[0]
+            row = cur.fetchone()
+            total_guests = row[0] if row else 0
             
             cur.execute("SELECT COUNT(*) FROM users WHERE created_at >= NOW() - INTERVAL '7 days';")
-            new_users_week = cur.fetchone()[0]
+            row = cur.fetchone()
+            new_users_week = row[0] if row else 0
             
             cur.execute("SELECT COUNT(*) FROM messages WHERE role = 'user';")
-            total_questions = cur.fetchone()[0]
+            row = cur.fetchone()
+            total_questions = row[0] if row else 0
             
             cur.execute("SELECT COUNT(*) FROM messages WHERE role = 'user' AND created_at >= NOW() - INTERVAL '1 day';")
-            questions_24h = cur.fetchone()[0]
+            row = cur.fetchone()
+            questions_24h = row[0] if row else 0
             
             cur.execute("SELECT COUNT(*) FROM messages WHERE feedback_type = 'like';")
-            total_likes = cur.fetchone()[0]
+            row = cur.fetchone()
+            total_likes = row[0] if row else 0
             
             cur.execute("SELECT COUNT(*) FROM messages WHERE feedback_type = 'dislike';")
-            total_dislikes = cur.fetchone()[0]
+            row = cur.fetchone()
+            total_dislikes = row[0] if row else 0
             
             return {
                 "total_users": total_users,
@@ -438,7 +448,7 @@ class ConversationStore:
                 "total_dislikes": total_dislikes
             }
             
-    def get_all_users(self, limit: int = 20, offset: int = 0, search: str = None, role: str = None) -> Dict[str, Any]:
+    def get_all_users(self, limit: int = 20, offset: int = 0, search: Optional[str] = None, role: Optional[str] = None) -> Dict[str, Any]:
         with self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
             query_conditions = []
             params = []
@@ -456,7 +466,8 @@ class ConversationStore:
                 where_clause = "WHERE " + " AND ".join(query_conditions)
                 
             cur.execute(f"SELECT COUNT(*) FROM users {where_clause};", tuple(params))
-            total = cur.fetchone()[0]
+            row = cur.fetchone()
+            total = row[0] if row else 0
             
             query = f"SELECT id, username, email, role, question_count, created_at FROM users {where_clause} ORDER BY created_at DESC LIMIT %s OFFSET %s;"
             query_params = params + [limit, offset]

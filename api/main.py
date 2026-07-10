@@ -62,8 +62,6 @@ async def lifespan(app: FastAPI):
 
     logger.info("[Shutdown]: Releasing resources...")
     app.state.conv_store.close()
-    if hasattr(app.state.pipeline.kg_searcher, "close"):
-        await app.state.pipeline.kg_searcher.close()
     logger.info("[Shutdown]: Cleanup complete.")
 
 

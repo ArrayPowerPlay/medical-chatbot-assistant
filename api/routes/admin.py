@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from passlib.context import CryptContext
 from api.schemas.request import PasswordUpdateRequest
 
@@ -17,9 +17,9 @@ def get_stats(db: ConversationStore = Depends(get_db), _: dict = Depends(verify_
 
 
 @router.get("/users", response_model=Dict[str, Any])
-def get_users(search: str = None, role: str = None, limit: int = 20, offset: int = 0, db: ConversationStore = Depends(get_db), _: dict = Depends(verify_admin)):
+def get_users(search: Optional[str] = None, role: Optional[str] = None, limit: int = 20, offset: int = 0, db: ConversationStore = Depends(get_db), _: dict = Depends(verify_admin)):
     """Get all users for Admin Dashboard with pagination, search, and filtering"""
-    return db.get_all_users(limit=limit, offset=offset, search=search, role=role)
+    return db.get_all_users(limit=limit, offset=offset, search=search or "", role=role or "")
 
 @router.get("/users/{user_id}/conversations", response_model=List[Dict[str, Any]])
 def get_user_conversations(user_id: int, db: ConversationStore = Depends(get_db), _: dict = Depends(verify_admin)):
@@ -34,7 +34,7 @@ def get_user_conversations(user_id: int, db: ConversationStore = Depends(get_db)
 def get_conversation_messages(
     conv_id: str, 
     limit: int = 50, 
-    before_id: int = None, 
+    before_id: Optional[int] = None, 
     db: ConversationStore = Depends(get_db), 
     _: dict = Depends(verify_admin)
 ):
