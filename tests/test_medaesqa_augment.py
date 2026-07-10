@@ -109,12 +109,13 @@ class MedAESQAAugmentTests(unittest.TestCase):
 
         record = _parse_pmc_xml(xml_content, pmid="222", pmcid="PMC222")
         self.assertIsNotNone(record)
-        self.assertEqual(record["pmid"], "222")
-        self.assertEqual(record["pmcid"], "PMC222")
-        self.assertEqual(record["title"], "PMC Title")
-        self.assertIn("Abstract paragraph.", record["abstractText"])
-        self.assertIn("Body paragraph one.", record["abstractText"])
-        self.assertEqual(record["content_source"], "pmc_fulltext_fallback")
+        if record:
+            self.assertEqual(record["pmid"], "222")
+            self.assertEqual(record["pmcid"], "PMC222")
+            self.assertEqual(record["title"], "PMC Title")
+            self.assertIn("Abstract paragraph.", record["abstractText"])
+            self.assertIn("Body paragraph one.", record["abstractText"])
+            self.assertEqual(record["content_source"], "pmc_fulltext_fallback")
 
     def test_parse_pmc_html_returns_plain_text_fallback(self):
         html_content = """
@@ -137,9 +138,10 @@ class MedAESQAAugmentTests(unittest.TestCase):
 
         record = _parse_pmc_html(html_content, pmid="333", pmcid="PMC333")
         self.assertIsNotNone(record)
-        self.assertEqual(record["title"], "PMC HTML Title")
-        self.assertIn("Paragraph one.", record["abstractText"])
-        self.assertIn("Paragraph two with markup.", record["abstractText"])
+        if record:
+            self.assertEqual(record["title"], "PMC HTML Title")
+            self.assertIn("Paragraph one.", record["abstractText"])
+            self.assertIn("Paragraph two with markup.", record["abstractText"])
 
 
 if __name__ == "__main__":

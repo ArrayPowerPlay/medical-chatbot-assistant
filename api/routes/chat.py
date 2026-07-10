@@ -44,15 +44,15 @@ async def chat(request: ChatRequest, raw_request: Request, user: dict = Depends(
 
     ### 3. Run streaming generation
     async def stream_generator():
+        # define here so they exist in exception handlers too
+        full_answer = ""
+        sources = []
         try:
             from src.pipeline.rag_pipeline import RunConfig
             run_config = RunConfig()
-            
+
             # Yield conversation ID first for frontend redirection
             yield f"event: metadata\ndata: {json.dumps({'conversation_id': conversation_id})}\n\n"
-            
-            full_answer = ""
-            sources = []
             async for chunk in pipeline.run_stream(
                 query=request.question,
                 history=history,
@@ -96,7 +96,7 @@ async def chat(request: ChatRequest, raw_request: Request, user: dict = Depends(
                 conv_store.add_message(
                     conversation_id, 
                     "assistant", 
-                    full_answer + "\n\n*(Generation interrupted)*", 
+                    f"{full_answer}\n\n*(Generation interrupted)*",
                     json.dumps(sources)
                 )
             raise

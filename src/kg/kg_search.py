@@ -21,7 +21,7 @@ class KGSearch:
         hop1_m: int = settings.KG_HOP1_M,
         hop2_n: int = settings.KG_HOP2_N,
         hop2_cap: int = settings.KG_HOP2_CAP,
-    ) -> list[dict]:
+    ) -> list[dict] | list:
         """Full KG retrieval pipeline: 2-stage retrieval → KG linearization.
 
         Args:
@@ -52,8 +52,8 @@ class KGSearch:
             hop2_cap=hop2_cap
         )
 
-        hop1_triples = result.get("hop1", [])
-        hop2_triples = result.get("hop2", [])
+        hop1_triples = result.get("hop1", []) if isinstance(result, dict) else []
+        hop2_triples = result.get("hop2", []) if isinstance(result, dict) else []
 
         if not hop1_triples and not hop2_triples:
             logger.info("[KG Search] No triples returned")

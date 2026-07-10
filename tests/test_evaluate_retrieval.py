@@ -205,7 +205,7 @@ class EvaluateRetrievalTests(unittest.TestCase):
                      patch.object(er, "RRFManager", return_value=rrf_manager), \
                      patch.object(er, "CrossEncoderReranker", return_value=cross_encoder), \
                      patch.object(er, "run_retrieval_pipeline", side_effect=fake_run_retrieval_pipeline):
-                    er.evaluate_split(
+                    await er.evaluate_split(
                         data_path=val_path,
                         output_dir=output_dir,
                         split_name="validation",

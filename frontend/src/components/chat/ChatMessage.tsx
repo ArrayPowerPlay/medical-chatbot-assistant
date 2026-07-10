@@ -13,9 +13,10 @@ interface ChatMessageProps {
   isThinking?: boolean;
   isHighlighted?: boolean;
   isActiveMatch?: boolean;
+  isLatestAssistant?: boolean;
 }
 
-const ChatMessage: React.FC<ChatMessageProps> = ({ message, isThinking, isHighlighted, isActiveMatch }) => {
+const ChatMessage: React.FC<ChatMessageProps> = ({ message, isThinking, isHighlighted, isActiveMatch, isLatestAssistant }) => {
   const isUser = message.role === 'user';
   const { id: conversationId } = useParams<{ id: string }>();
   const messageRef = useRef<HTMLDivElement>(null);
@@ -161,7 +162,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message, isThinking, isHighli
         )}
 
         {/* Guest Limit Warning */}
-        {user?.role === 'guest' && !isUser && !isThinking && (
+        {user?.role === 'guest' && isLatestAssistant && !isThinking && (
           <div className="mt-4 text-xs text-amber-600 dark:text-amber-500 font-medium bg-amber-50 dark:bg-amber-900/20 p-2 rounded border border-amber-100 dark:border-amber-800">
             You have asked {user.question_count || 0}/10 free questions. ({Math.max(0, 10 - (user.question_count || 0))} questions left)
           </div>

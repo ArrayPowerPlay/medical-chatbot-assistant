@@ -159,6 +159,9 @@ const ChatLayout: React.FC = () => {
               const isLast = idx === messages.length - 1;
               const currentMsgIsThinking = isLast && msg.role === 'assistant' && isThinking;
               
+              // Find if this is the last assistant message in the entire list
+              const isLatestAssistant = msg.role === 'assistant' && !messages.slice(idx + 1).some(m => m.role === 'assistant');
+              
               const isMatch = matchIds.includes(msg.id);
               const isActiveMatch = isMatch && msg.id === matchIds[currentMatchIndex];
 
@@ -169,6 +172,7 @@ const ChatLayout: React.FC = () => {
                   isThinking={currentMsgIsThinking} 
                   isHighlighted={isMatch}
                   isActiveMatch={isActiveMatch}
+                  isLatestAssistant={isLatestAssistant}
                 />
               );
             })}

@@ -343,7 +343,7 @@ class RAGPipeline:
             user_prompt = query
             
             full_answer = ""
-            async for chunk in self.llm_generator.generate_answer_stream(
+            async for chunk in self.llm_generator.generate_answer_stream(    # type: ignore
                 system_prompt=system_prompt,
                 user_prompt=user_prompt,
                 history=normalized_history
@@ -443,7 +443,7 @@ class RAGPipeline:
         self.llm_generator.max_tokens = generation_max_tokens
         
         full_answer = ""
-        async for chunk in self.llm_generator.generate_answer_stream(
+        async for chunk in self.llm_generator.generate_answer_stream(   # type: ignore
             system_prompt=system_prompt,
             user_prompt=user_prompt,
             history=normalized_history
