@@ -444,8 +444,9 @@ class ConversationStore:
             params = []
             
             if search:
-                query_conditions.append("(username = %s OR email = %s)")
-                params.extend([search, search])
+                query_conditions.append("(username ILIKE %s OR email ILIKE %s)")
+                search_pattern = f"%{search}%"
+                params.extend([search_pattern, search_pattern])
             if role:
                 query_conditions.append("role = %s")
                 params.append(role)

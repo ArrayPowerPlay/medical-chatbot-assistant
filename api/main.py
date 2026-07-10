@@ -6,6 +6,10 @@ Responsibilities:
     - Initialize shared resources (RAG pipeline, conversation store) at startup.
     - Mount API routes.
 """
+import os
+# Fix for "The paging file is too small for this operation to complete" (os error 1455) on Windows
+os.environ["HF_HUB_DISABLE_MMAP"] = "1"
+
 from contextlib import asynccontextmanager    # Initialize/clean up resources
 from pathlib import Path
 
