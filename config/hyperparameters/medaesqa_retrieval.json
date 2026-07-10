@@ -1,8 +1,0 @@
-{
-  "vector_top_k": 40,
-  "keyword_top_k": 80,
-  "child_fetch_limit": 120,
-  "top_k_rrf": 80,
-  "k_rrf": 60,
-  "rerank_text_top_m": 20
-}

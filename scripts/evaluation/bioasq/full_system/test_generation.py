@@ -25,7 +25,7 @@ TEST_PATH = settings.DATA_PATH / "test" / "test_bioasq.jsonl"
 OUTPUT_DIR = project_root / "results" / "test_results" / "bioasq" / "full_system"
 
 
-def evaluate(
+async def evaluate(
     limit: int | None = None,
     use_ragas: bool = True,
     kg_top_k: int = settings.KG_TOP_K,
@@ -96,7 +96,7 @@ if __name__ == "__main__":
     setup_logging()
     import asyncio
     from scripts.evaluation.shared.config_helper import load_and_apply_config
-    load_and_apply_config("bioasq", "generation")
+    load_and_apply_config("generation")
     
     parser = build_arg_parser()
     args = parser.parse_args()
@@ -112,4 +112,4 @@ if __name__ == "__main__":
         use_kg_merger=args.use_kg_merger,
         use_head_tail_placement=args.use_head_tail_placement,
         generation_max_tokens=args.generation_max_tokens,
-    )
+    ))

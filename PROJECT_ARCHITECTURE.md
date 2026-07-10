@@ -15,11 +15,9 @@ rag-project/
 │   ├── __init__.py
 │   ├── settings.py                   # Pydantic Settings: load .env, constants
 │   ├── logging_config.py            # Logging configuration
-│   └── hyperparameters/              # Dataset-specific parameter configurations
-│       ├── bioasq_retrieval.json
-│       ├── bioasq_generation.json
-│       ├── medaesqa_retrieval.json
-│       └── medaesqa_generation.json
+│   └── hyperparameters/              # General parameter configurations
+│       ├── retrieval.json
+│       └── generation.json
 │
 ├── data/
 │   ├── raw/                          # BioASQ PubMed articles (200-300K)

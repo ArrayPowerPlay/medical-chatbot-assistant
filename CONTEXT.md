@@ -228,8 +228,8 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 #### Q&A Dataset Split
 | Dataset | Split | File | Size | Notes |
 |---|---|---|---|---|
-| **BioASQ Task B** | **Validation** | `data/val/val_bioasq.jsonl` | ~277 questions | Hyperparameter tuning |
-| **BioASQ Task B** | **Test** | `data/test/test_bioasq.jsonl` | ~283 questions | Final evaluation |
+| **BioASQ Task B** | **Validation** | `data/val/val_bioasq.jsonl` | 500 questions | Hyperparameter tuning |
+| **BioASQ Task B** | **Test** | `data/test/test_bioasq.jsonl` | 500 questions | Final evaluation |
 
 > **Snippet Coverage Filter**: Only questions where **every** relevant PMID has at least one corresponding gold snippet are retained. This ensures snippet-level evaluation is valid. Filtered by `_has_full_snippet_coverage()` in `preprocess_bioasq_taskB.py`.
 
@@ -247,8 +247,7 @@ The system has **two main phases**: **Retrieval** and **Generation**.
 #### External Evaluation
 | Dataset | Split | Size | Phase |
 |---|---|---|---|
-| MedAESQA | Validation | 12 questions | Generation |
-| MedAESQA | Test | 28 questions | Generation |
+| MedAESQA | Test | ~42 questions | Generation (external test set) |
 | PubMedQA (`PQA-L`) | Optional | Labeled subset | Oracle-context generation |
 
 > **MedAESQA policy**: used as a small external **generation benchmark**, not as the main retrieval benchmark.

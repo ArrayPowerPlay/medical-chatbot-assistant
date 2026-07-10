@@ -1,5 +1,14 @@
 """
-BioASQ val generation evaluation entrypoint for FULL SYSTEM.
+MedAESQA test generation evaluation entrypoint.
+
+Metrics: ROUGE-SU4-F1, Citation Precision / Recall / F1.
+RAGAS is intentionally disabled for MedAESQA (secondary dataset).
+use_citations defaults to True — citation quality IS the primary signal here.
+
+Outputs:
+    results/test_results/medaesqa/generation/detail.jsonl
+    results/test_results/medaesqa/generation/summary.json
+    results/test_results/medaesqa/generation/predictions.jsonl
 """
 
 import argparse
@@ -13,16 +22,14 @@ if str(project_root) not in sys.path:
 
 from config.logging_config import setup_logging
 from config.settings import settings
-from scripts.evaluation.shared import generation_bioasq_common as common
+from scripts.evaluation.shared import generation_medaesqa_common as common
 
-
-VAL_PATH = settings.DATA_PATH / "val" / "val_bioasq.jsonl"
-OUTPUT_DIR = project_root / "results" / "val_results" / "bioasq" / "full_system"
+TEST_PATH = settings.DATA_PATH / "test" / "test_medaesqa.jsonl"
+OUTPUT_DIR = settings.TEST_RESULTS_PATH / "medaesqa" / "baseline_vector" / "generation"
 
 
 async def evaluate(
     limit: int | None = None,
-    use_ragas: bool = True,
     kg_top_k: int = settings.KG_TOP_K,
     kg_hop1_m: int = settings.KG_HOP1_M,
     kg_hop2_n: int = settings.KG_HOP2_N,
@@ -32,17 +39,17 @@ async def evaluate(
     use_kg_merger: bool = settings.USE_KG_MERGER,
     use_head_tail_placement: bool = settings.USE_HEAD_TAIL_PLACEMENT,
     generation_max_tokens: int = settings.GENERATION_MAX_TOKENS,
+    use_citations: bool = True,  # Always on for MedAESQA citation benchmark
 ) -> None:
-    """Run generation evaluation on the BioASQ val split."""
+    """Run generation evaluation on the MedAESQA test split."""
     await common.evaluate_split(
-        data_path=VAL_PATH,
-        output_dir=OUTPUT_DIR,
-        split_name="validation",
-        limit=limit,
-        use_ragas=use_ragas,
-        use_kg=True,
         use_vector=True,
-        use_bm25=True,
+        use_bm25=False,
+        use_kg=False,
+        data_path=TEST_PATH,
+        output_dir=OUTPUT_DIR,
+        split_name="test",
+        limit=limit,
         kg_top_k=kg_top_k,
         kg_hop1_m=kg_hop1_m,
         kg_hop2_n=kg_hop2_n,
@@ -52,6 +59,7 @@ async def evaluate(
         use_kg_merger=use_kg_merger,
         use_head_tail_placement=use_head_tail_placement,
         generation_max_tokens=generation_max_tokens,
+        use_citations=use_citations,
     )
 
 
@@ -65,39 +73,47 @@ def _str_to_bool(value: str) -> bool:
 
 
 def build_arg_parser() -> argparse.ArgumentParser:
-    """Build CLI parser for BioASQ val generation evaluation."""
+    """Build CLI parser for MedAESQA test generation evaluation."""
     parser = argparse.ArgumentParser(
-        description="Evaluate the BioASQ FULL SYSTEM on the val split."
+        description="Evaluate the MedAESQA generation pipeline on the test split."
     )
     parser.add_argument("--limit", type=int, default=None)
-    parser.add_argument("--use-ragas", type=_str_to_bool, default=True)
     parser.add_argument("--kg-top-k", type=int, default=settings.KG_TOP_K)
     parser.add_argument("--kg-hop1-m", type=int, default=settings.KG_HOP1_M)
     parser.add_argument("--kg-hop2-n", type=int, default=settings.KG_HOP2_N)
     parser.add_argument("--kg-hop2-cap", type=int, default=settings.KG_HOP2_CAP)
     parser.add_argument("--rerank-kg-top-n", type=int, default=settings.RERANK_KG_TOP_N)
-    parser.add_argument("--generation-temperature", type=float, default=settings.GENERATION_TEMPERATURE)
+    parser.add_argument(
+        "--generation-temperature", type=float, default=settings.GENERATION_TEMPERATURE
+    )
     parser.add_argument("--use-kg-merger", type=_str_to_bool, default=settings.USE_KG_MERGER)
     parser.add_argument(
         "--use-head-tail-placement",
         type=_str_to_bool,
         default=settings.USE_HEAD_TAIL_PLACEMENT,
     )
-    parser.add_argument("--generation-max-tokens", type=int, default=settings.GENERATION_MAX_TOKENS)
+    parser.add_argument(
+        "--generation-max-tokens", type=int, default=settings.GENERATION_MAX_TOKENS
+    )
+    parser.add_argument(
+        "--use-citations",
+        type=_str_to_bool,
+        default=True,
+        help="Cite PMIDs in generated answers (default: True for citation benchmark).",
+    )
     return parser
 
 
 if __name__ == "__main__":
-    import asyncio
     setup_logging()
     from scripts.evaluation.shared.config_helper import load_and_apply_config
     load_and_apply_config("generation")
     
     parser = build_arg_parser()
     args = parser.parse_args()
+    import asyncio
     asyncio.run(evaluate(
         limit=args.limit,
-        use_ragas=args.use_ragas,
         kg_top_k=args.kg_top_k,
         kg_hop1_m=args.kg_hop1_m,
         kg_hop2_n=args.kg_hop2_n,
@@ -107,4 +123,5 @@ if __name__ == "__main__":
         use_kg_merger=args.use_kg_merger,
         use_head_tail_placement=args.use_head_tail_placement,
         generation_max_tokens=args.generation_max_tokens,
+        use_citations=args.use_citations,
     ))

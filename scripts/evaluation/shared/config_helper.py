@@ -8,20 +8,19 @@ from pathlib import Path
 from config.settings import settings
 from config.logging_config import logger
 
-def load_and_apply_config(dataset_name: str, config_type: str) -> dict:
+def load_and_apply_config(config_type: str) -> dict:
     """
-    Load dataset-specific JSON configuration from the config/ directory
+    Load JSON configuration from the config/ directory
     and apply the values to the global settings object.
     
     Args:
-        dataset_name: 'bioasq' or 'medaesqa'
         config_type: 'retrieval' or 'generation'
         
     Returns:
         dict: The loaded configuration dictionary (empty if file does not exist)
     """
     project_root = Path(__file__).resolve().parent.parent.parent.parent
-    config_filename = f"{dataset_name.lower()}_{config_type.lower()}.json"
+    config_filename = f"{config_type.lower()}.json"
     config_path = project_root / "config" / "hyperparameters" / config_filename
     
     if not config_path.exists():

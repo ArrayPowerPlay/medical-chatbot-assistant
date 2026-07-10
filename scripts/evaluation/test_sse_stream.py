@@ -25,8 +25,9 @@ def test_sse():
     }
     
     response = requests.post("http://127.0.0.1:8000/api/chat", headers=headers, json=data, stream=True)
-    
-    client = sseclient.SSEClient(response)
+
+    # sseclient expects an iterator of bytes/lines; use Response.iter_lines()
+    client = sseclient.SSEClient(response.iter_lines())
     
     full_text = ""
     for event in client.events():

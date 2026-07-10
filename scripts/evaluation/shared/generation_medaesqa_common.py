@@ -98,6 +98,9 @@ async def evaluate_split(
     output_dir: Path,
     split_name: str,
     limit: Optional[int] = None,
+    use_vector: bool = True,
+    use_bm25: bool = True,
+    use_kg: bool = True,
     kg_top_k: int = settings.KG_TOP_K,
     kg_hop1_m: int = settings.KG_HOP1_M,
     kg_hop2_n: int = settings.KG_HOP2_N,
@@ -154,10 +157,39 @@ async def evaluate_split(
 
     try:
         logger.info("Initializing RAG pipeline...")
-        from src.pipeline.rag_pipeline import RAGPipeline
+        from src.pipeline.rag_pipeline import RAGPipeline, RunConfig
+        from src.query.query_analyzer import QueryAnalyzer
+        from src.embeddings.medcpt_embedder import MedCPTEmbedder
+        from src.storage.weaviate_client import AsyncWeaviateChildStore
+        from src.storage.parent_store import ParentStore
+        from src.kg.neo4j_client import Neo4jClient
+        from src.generation.llm_generator import LLMGenerator
+        from src.reranking.rrf import RRFManager
+        from src.reranking.cross_encoder import CrossEncoderReranker
+        from src.generation.kg_merger import KGPathMerger
 
-        pipeline = RAGPipeline()
+        pipeline = RAGPipeline(
+            query_analyzer=QueryAnalyzer(),
+            query_embedder=MedCPTEmbedder(mode='query'),
+            entity_embedder=MedCPTEmbedder(mode='article'),
+            search_engine=AsyncWeaviateChildStore(),
+            parent_store=ParentStore(settings.SQLITE_PARENT_DB_PATH),
+            kg_searcher=Neo4jClient(),
+            rrf_manager=RRFManager(),
+            cross_encoder_reranker=CrossEncoderReranker(),
+            kg_merger=KGPathMerger(),
+            llm_generator=LLMGenerator()
+        )
         pipeline.query_analyzer.temperature = 0.0
+        
+        run_config = RunConfig(
+            use_vector=use_vector,
+            use_bm25=use_bm25,
+            use_kg=use_kg,
+            use_kg_merger=use_kg_merger,
+            use_head_tail_placement=use_head_tail_placement,
+            use_citations=use_citations
+        )
 
         with (
             open(detail_path, "w", encoding="utf-8") as detail_file,
@@ -177,6 +209,7 @@ async def evaluate_split(
                     result = await pipeline.run(
                         query=body,
                         history=None,
+                        config=run_config,
                         kg_top_k=kg_top_k,
                         kg_hop1_m=kg_hop1_m,
                         kg_hop2_n=kg_hop2_n,
@@ -184,9 +217,6 @@ async def evaluate_split(
                         rerank_kg_top_n=rerank_kg_top_n,
                         generation_temperature=generation_temperature,
                         generation_max_tokens=generation_max_tokens,
-                        use_kg_merger=use_kg_merger,
-                        use_head_tail_placement=use_head_tail_placement,
-                        use_citations=use_citations,
                     )
                     generated_answer = result.get("answer", "").strip()
                     rewritten_query = result.get("rewritten_query", body)

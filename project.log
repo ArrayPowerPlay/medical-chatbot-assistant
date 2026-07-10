@@ -91176,3 +91176,1273 @@ TypeError: string indices must be integers, not 'str'
 2026-07-10 13:17:52,134 - MedKG-RAG - INFO - [Conversation Store]: Connected to PostgreSQL successfully!
 2026-07-10 13:17:52,650 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
 2026-07-10 13:17:52,946 - MedKG-RAG - INFO - [Conversation Store]: Connection closed.
+2026-07-10 14:50:44,356 - MedKG-RAG - INFO - Loaded config from D:\workspace\Repo\medical-chatbot-assistant\config\hyperparameters\generation.json: {'generation_temperature': 0.0, 'generation_max_tokens': 512, 'use_kg_merger': True, 'use_head_tail_placement': True, 'use_citations': False, 'kg_top_k': 2, 'kg_hop1_m': 3, 'kg_hop2_n': 3, 'kg_hop2_cap': 30, 'rerank_kg_top_n': 10}
+2026-07-10 14:50:44,426 - MedKG-RAG - INFO - Loaded 40 questions for MedAESQA test generation evaluation.
+2026-07-10 14:50:44,427 - MedKG-RAG - INFO - Generation eval config: {"split_name": "test", "limit": null, "requested_ragas": false, "ragas_evaluator_llm_model": "gpt-4o-mini", "ragas_evaluator_embedding_model": "text-embedding-3-small", "kg_top_k": 2, "kg_hop1_m": 3, "kg_hop2_n": 3, "kg_hop2_cap": 30, "rerank_kg_top_n": 10, "generation_temperature": 0.0, "use_kg_merger": true, "use_head_tail_placement": true, "generation_max_tokens": 512, "use_citations": true}
+2026-07-10 14:50:44,428 - MedKG-RAG - INFO - Initializing RAG pipeline...
+2026-07-10 14:51:54,188 - MedKG-RAG - INFO - Loaded config from D:\workspace\Repo\medical-chatbot-assistant\config\hyperparameters\generation.json: {'generation_temperature': 0.0, 'generation_max_tokens': 512, 'use_kg_merger': True, 'use_head_tail_placement': True, 'use_citations': False, 'kg_top_k': 2, 'kg_hop1_m': 3, 'kg_hop2_n': 3, 'kg_hop2_cap': 30, 'rerank_kg_top_n': 10}
+2026-07-10 14:51:54,191 - MedKG-RAG - INFO - Loaded 40 questions for MedAESQA test generation evaluation.
+2026-07-10 14:51:54,191 - MedKG-RAG - INFO - Generation eval config: {"split_name": "test", "limit": null, "requested_ragas": false, "ragas_evaluator_llm_model": "gpt-4o-mini", "ragas_evaluator_embedding_model": "text-embedding-3-small", "kg_top_k": 2, "kg_hop1_m": 3, "kg_hop2_n": 3, "kg_hop2_cap": 30, "rerank_kg_top_n": 10, "generation_temperature": 0.0, "use_kg_merger": true, "use_head_tail_placement": true, "generation_max_tokens": 512, "use_citations": true}
+2026-07-10 14:51:54,192 - MedKG-RAG - INFO - Initializing RAG pipeline...
+2026-07-10 14:53:41,230 - MedKG-RAG - INFO - Loaded config from D:\workspace\Repo\medical-chatbot-assistant\config\hyperparameters\generation.json: {'generation_temperature': 0.0, 'generation_max_tokens': 512, 'use_kg_merger': True, 'use_head_tail_placement': True, 'use_citations': False, 'kg_top_k': 2, 'kg_hop1_m': 3, 'kg_hop2_n': 3, 'kg_hop2_cap': 30, 'rerank_kg_top_n': 10}
+2026-07-10 14:53:41,291 - MedKG-RAG - INFO - Loaded 1 questions for MedAESQA test generation evaluation.
+2026-07-10 14:53:41,291 - MedKG-RAG - INFO - Generation eval config: {"split_name": "test", "limit": 1, "requested_ragas": false, "ragas_evaluator_llm_model": "gpt-4o-mini", "ragas_evaluator_embedding_model": "text-embedding-3-small", "kg_top_k": 2, "kg_hop1_m": 3, "kg_hop2_n": 3, "kg_hop2_cap": 30, "rerank_kg_top_n": 10, "generation_temperature": 0.0, "use_kg_merger": true, "use_head_tail_placement": true, "generation_max_tokens": 512, "use_citations": true}
+2026-07-10 14:53:41,292 - MedKG-RAG - INFO - Initializing RAG pipeline...
+2026-07-10 14:54:30,749 - MedKG-RAG - INFO - Loaded config from D:\workspace\Repo\medical-chatbot-assistant\config\hyperparameters\generation.json: {'generation_temperature': 0.0, 'generation_max_tokens': 512, 'use_kg_merger': True, 'use_head_tail_placement': True, 'use_citations': False, 'kg_top_k': 2, 'kg_hop1_m': 3, 'kg_hop2_n': 3, 'kg_hop2_cap': 30, 'rerank_kg_top_n': 10}
+2026-07-10 14:54:30,792 - MedKG-RAG - INFO - Loaded 1 questions for MedAESQA test generation evaluation.
+2026-07-10 14:54:30,793 - MedKG-RAG - INFO - Generation eval config: {"split_name": "test", "limit": 1, "requested_ragas": false, "ragas_evaluator_llm_model": "gpt-4o-mini", "ragas_evaluator_embedding_model": "text-embedding-3-small", "kg_top_k": 2, "kg_hop1_m": 3, "kg_hop2_n": 3, "kg_hop2_cap": 30, "rerank_kg_top_n": 10, "generation_temperature": 0.0, "use_kg_merger": true, "use_head_tail_placement": true, "generation_max_tokens": 512, "use_citations": true}
+2026-07-10 14:54:30,793 - MedKG-RAG - INFO - Initializing RAG pipeline...
+2026-07-10 14:56:08,135 - MedKG-RAG - INFO - Loaded config from D:\workspace\Repo\medical-chatbot-assistant\config\hyperparameters\generation.json: {'generation_temperature': 0.0, 'generation_max_tokens': 512, 'use_kg_merger': True, 'use_head_tail_placement': True, 'use_citations': False, 'kg_top_k': 2, 'kg_hop1_m': 3, 'kg_hop2_n': 3, 'kg_hop2_cap': 30, 'rerank_kg_top_n': 10}
+2026-07-10 14:56:08,176 - MedKG-RAG - INFO - Loaded 1 questions for MedAESQA test generation evaluation.
+2026-07-10 14:56:08,177 - MedKG-RAG - INFO - Generation eval config: {"split_name": "test", "limit": 1, "requested_ragas": false, "ragas_evaluator_llm_model": "gpt-4o-mini", "ragas_evaluator_embedding_model": "text-embedding-3-small", "kg_top_k": 2, "kg_hop1_m": 3, "kg_hop2_n": 3, "kg_hop2_cap": 30, "rerank_kg_top_n": 10, "generation_temperature": 0.0, "use_kg_merger": true, "use_head_tail_placement": true, "generation_max_tokens": 512, "use_citations": true}
+2026-07-10 14:56:08,177 - MedKG-RAG - INFO - Initializing RAG pipeline...
+2026-07-10 15:06:34,758 - MedKG-RAG - INFO - Loaded config from D:\workspace\Repo\medical-chatbot-assistant\config\hyperparameters\generation.json: {'generation_temperature': 0.0, 'generation_max_tokens': 512, 'use_kg_merger': True, 'use_head_tail_placement': True, 'use_citations': False, 'kg_top_k': 2, 'kg_hop1_m': 3, 'kg_hop2_n': 3, 'kg_hop2_cap': 30, 'rerank_kg_top_n': 10}
+2026-07-10 15:06:34,765 - MedKG-RAG - INFO - Loaded 1 questions for MedAESQA test generation evaluation.
+2026-07-10 15:06:34,765 - MedKG-RAG - INFO - Generation eval config: {"split_name": "test", "limit": 1, "requested_ragas": false, "ragas_evaluator_llm_model": "gpt-4o-mini", "ragas_evaluator_embedding_model": "text-embedding-3-small", "kg_top_k": 2, "kg_hop1_m": 3, "kg_hop2_n": 3, "kg_hop2_cap": 30, "rerank_kg_top_n": 10, "generation_temperature": 0.0, "use_kg_merger": true, "use_head_tail_placement": true, "generation_max_tokens": 512, "use_citations": true}
+2026-07-10 15:06:34,765 - MedKG-RAG - INFO - Initializing RAG pipeline...
+2026-07-10 15:07:07,050 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-10 15:07:13,065 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-10 15:07:18,654 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-10 15:07:18,678 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-10 15:07:18,680 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-10 15:07:19,476 - MedKG-RAG - INFO - [1/1] Generating answer for question 116
+2026-07-10 15:07:19,476 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:07:21,686 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:07:21,687 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'Natural treatments and prevention methods for sleep apnea'...
+2026-07-10 15:07:23,426 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['obstructive sleep apnea syndrome', 'primary central sleep apnea syndrome']
+2026-07-10 15:07:24,243 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 3 triples
+2026-07-10 15:07:24,372 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 6 triples
+2026-07-10 15:07:24,372 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:07:24,373 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:07:24,373 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 9 paths.
+2026-07-10 15:07:24,373 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:07:24,373 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 9 KG paths.
+2026-07-10 15:07:24,373 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:07:24,373 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:07:24,373 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:08:07,126 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 9 KG paths.
+2026-07-10 15:08:07,127 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:08:07,127 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:08:08,854 - MedKG-RAG - INFO - Results saved to D:\workspace\Repo\medical-chatbot-assistant\results\test_results\medaesqa\full_system\generation\detail.jsonl, D:\workspace\Repo\medical-chatbot-assistant\results\test_results\medaesqa\full_system\generation\summary.json, and D:\workspace\Repo\medical-chatbot-assistant\results\test_results\medaesqa\full_system\generation\predictions.jsonl
+2026-07-10 15:09:08,053 - MedKG-RAG - INFO - Loaded config from D:\workspace\Repo\medical-chatbot-assistant\config\hyperparameters\generation.json: {'generation_temperature': 0.0, 'generation_max_tokens': 512, 'use_kg_merger': True, 'use_head_tail_placement': True, 'use_citations': False, 'kg_top_k': 2, 'kg_hop1_m': 3, 'kg_hop2_n': 3, 'kg_hop2_cap': 30, 'rerank_kg_top_n': 10}
+2026-07-10 15:09:08,056 - MedKG-RAG - INFO - Loaded 40 questions for MedAESQA test generation evaluation.
+2026-07-10 15:09:08,056 - MedKG-RAG - INFO - Generation eval config: {"split_name": "test", "limit": null, "requested_ragas": false, "ragas_evaluator_llm_model": "gpt-4o-mini", "ragas_evaluator_embedding_model": "text-embedding-3-small", "kg_top_k": 2, "kg_hop1_m": 3, "kg_hop2_n": 3, "kg_hop2_cap": 30, "rerank_kg_top_n": 10, "generation_temperature": 0.0, "use_kg_merger": true, "use_head_tail_placement": true, "generation_max_tokens": 512, "use_citations": true}
+2026-07-10 15:09:08,057 - MedKG-RAG - INFO - Initializing RAG pipeline...
+2026-07-10 15:09:54,385 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-10 15:09:57,839 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-10 15:17:37,966 - MedKG-RAG - INFO - Loaded config from D:\workspace\Repo\medical-chatbot-assistant\config\hyperparameters\generation.json: {'generation_temperature': 0.0, 'generation_max_tokens': 512, 'use_kg_merger': True, 'use_head_tail_placement': True, 'use_citations': False, 'kg_top_k': 2, 'kg_hop1_m': 3, 'kg_hop2_n': 3, 'kg_hop2_cap': 30, 'rerank_kg_top_n': 10}
+2026-07-10 15:17:37,984 - MedKG-RAG - INFO - Loaded 40 questions for MedAESQA test generation evaluation.
+2026-07-10 15:17:37,984 - MedKG-RAG - INFO - Generation eval config: {"split_name": "test", "limit": null, "requested_ragas": false, "ragas_evaluator_llm_model": "gpt-4o-mini", "ragas_evaluator_embedding_model": "text-embedding-3-small", "kg_top_k": 2, "kg_hop1_m": 3, "kg_hop2_n": 3, "kg_hop2_cap": 30, "rerank_kg_top_n": 10, "generation_temperature": 0.0, "use_kg_merger": true, "use_head_tail_placement": true, "generation_max_tokens": 512, "use_citations": true}
+2026-07-10 15:17:37,985 - MedKG-RAG - INFO - Initializing RAG pipeline...
+2026-07-10 15:18:56,591 - numexpr.utils - INFO - NumExpr defaulting to 16 threads.
+2026-07-10 15:19:04,013 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-10 15:19:06,449 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Article-Encoder on cpu
+2026-07-10 15:19:08,703 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-10 15:19:08,716 - MedKG-RAG - INFO - Connecting to Neo4j at bolt://127.0.0.1:7687...
+2026-07-10 15:19:08,717 - MedKG-RAG - INFO - Neo4j driver initialized (async).
+2026-07-10 15:19:08,829 - MedKG-RAG - INFO - [1/40] Generating answer for question 116
+2026-07-10 15:19:08,829 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:19:12,390 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:19:12,391 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'sleep apnea prevention and treatment'...
+2026-07-10 15:19:26,153 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['obstructive sleep apnea syndrome', 'primary central sleep apnea syndrome']
+2026-07-10 15:19:30,527 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 3 triples
+2026-07-10 15:19:30,652 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 6 triples
+2026-07-10 15:19:38,949 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:19:38,949 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:19:38,950 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 9 paths.
+2026-07-10 15:19:38,950 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:19:38,950 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 9 KG paths.
+2026-07-10 15:19:38,950 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:19:38,950 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:19:38,950 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:20:03,012 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 9 KG paths.
+2026-07-10 15:20:03,013 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:20:03,014 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:20:05,496 - MedKG-RAG - INFO - [2/40] Generating answer for question 117
+2026-07-10 15:20:05,498 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:20:06,417 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:20:06,419 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What will a mutation in the RUNX2 gene affect?'...
+2026-07-10 15:20:11,635 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['CBFA2T3', 'PITX1']
+2026-07-10 15:20:11,952 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-10 15:20:23,498 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 12 triples
+2026-07-10 15:20:36,459 - MedKG-RAG - ERROR - [Parallel Retrieval]: Error in Vector Search: Query call with protocol GRPC search failed with message Deadline Exceeded.
+2026-07-10 15:20:36,460 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:20:36,460 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 18 paths.
+2026-07-10 15:20:36,461 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:20:36,461 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 0 vectors, 80 bm25, 18 KG paths.
+2026-07-10 15:20:36,461 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:20:36,461 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:20:36,462 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:20:38,946 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:20:38,946 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:20:38,946 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:20:40,959 - MedKG-RAG - INFO - [3/40] Generating answer for question 118
+2026-07-10 15:20:40,959 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:20:41,584 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:20:41,584 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'corneal injury healing time without treatment'...
+2026-07-10 15:20:44,547 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['Corneal ulceration', 'Corneal scarring']
+2026-07-10 15:20:45,733 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-10 15:20:47,592 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 12 triples
+2026-07-10 15:21:11,601 - MedKG-RAG - ERROR - [Parallel Retrieval]: Error in Vector Search: Query call with protocol GRPC search failed with message Deadline Exceeded.
+2026-07-10 15:21:11,602 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:21:11,603 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 18 paths.
+2026-07-10 15:21:11,604 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:21:11,604 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 0 vectors, 80 bm25, 18 KG paths.
+2026-07-10 15:21:11,604 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:21:11,605 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:21:11,605 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:21:14,090 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:21:14,090 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:21:14,092 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:21:15,566 - MedKG-RAG - INFO - [4/40] Generating answer for question 119
+2026-07-10 15:21:15,567 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:21:16,615 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:21:16,615 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What are the most commonly used medications for stage 4 chronic obstructive pulmonary disease?'...
+2026-07-10 15:21:18,216 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['chronic obstructive pulmonary disease', 'COPD, severe early onset']
+2026-07-10 15:21:20,466 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-10 15:21:21,998 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 6 triples
+2026-07-10 15:21:43,327 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:21:43,328 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:21:43,329 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 12 paths.
+2026-07-10 15:21:43,329 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:21:43,330 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 12 KG paths.
+2026-07-10 15:21:43,330 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:21:43,330 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:21:43,330 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:21:46,192 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:21:46,193 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:21:46,229 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:21:48,672 - MedKG-RAG - INFO - [5/40] Generating answer for question 120
+2026-07-10 15:21:48,672 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:21:49,271 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:21:49,271 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What causes left-sided facial numbness?'...
+2026-07-10 15:21:50,310 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['Facial erythema', 'Paresthesia']
+2026-07-10 15:21:54,225 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-10 15:21:54,627 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 12 triples
+2026-07-10 15:22:19,289 - MedKG-RAG - ERROR - [Parallel Retrieval]: Error in Vector Search: Query call with protocol GRPC search failed with message Deadline Exceeded.
+2026-07-10 15:22:19,289 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:22:19,289 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 18 paths.
+2026-07-10 15:22:19,290 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:22:19,290 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 0 vectors, 80 bm25, 18 KG paths.
+2026-07-10 15:22:19,290 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:22:19,290 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:22:19,290 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:22:22,294 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:22:22,294 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:22:22,294 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:22:24,560 - MedKG-RAG - INFO - [6/40] Generating answer for question 121
+2026-07-10 15:22:24,560 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:22:25,551 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:22:25,551 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'How to lower cortisol levels'...
+2026-07-10 15:22:27,036 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['Decreased circulating cortisol level', 'Increased urinary cortisol level']
+2026-07-10 15:22:28,148 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 0 triples
+2026-07-10 15:22:28,148 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 0 triples
+2026-07-10 15:22:48,372 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:22:48,372 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:22:48,373 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 0 paths.
+2026-07-10 15:22:48,373 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:22:48,374 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 0 KG paths.
+2026-07-10 15:22:48,374 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:22:48,375 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:22:48,375 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:22:50,552 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 0 KG paths.
+2026-07-10 15:22:50,553 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:22:50,553 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:22:52,661 - MedKG-RAG - INFO - [7/40] Generating answer for question 122
+2026-07-10 15:22:52,662 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:22:53,390 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:22:53,391 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'T wave abnormality'...
+2026-07-10 15:22:54,321 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['Abnormal P wave', 'Abnormal U wave']
+2026-07-10 15:22:54,453 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-10 15:22:54,679 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 11 triples
+2026-07-10 15:23:11,338 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:23:11,338 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:23:11,339 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 17 paths.
+2026-07-10 15:23:11,339 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:23:11,339 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 17 KG paths.
+2026-07-10 15:23:11,339 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:23:11,339 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:23:11,339 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:23:14,183 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:23:14,183 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:23:14,189 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:23:16,611 - MedKG-RAG - INFO - [8/40] Generating answer for question 123
+2026-07-10 15:23:16,611 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:23:17,128 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:23:17,129 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What is FBN1 mutation?'...
+2026-07-10 15:23:17,525 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['FBN1', 'FBRSL1']
+2026-07-10 15:23:17,711 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-10 15:23:18,647 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 12 triples
+2026-07-10 15:23:28,302 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:23:28,303 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:23:28,303 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 18 paths.
+2026-07-10 15:23:28,303 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:23:28,304 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 18 KG paths.
+2026-07-10 15:23:28,304 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:23:28,304 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:23:28,305 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:23:30,916 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:23:30,916 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:23:30,917 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:23:32,637 - MedKG-RAG - INFO - [9/40] Generating answer for question 124
+2026-07-10 15:23:32,638 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:23:33,182 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:23:33,183 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What does coronary artery disease without angina mean?'...
+2026-07-10 15:23:33,840 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (4 unique anchors): ['coronary artery disease', 'coronary atherosclerosis', 'Angina pectoris', 'Chest pain']
+2026-07-10 15:23:35,244 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 12 triples
+2026-07-10 15:23:36,946 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 24 triples
+2026-07-10 15:23:48,849 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:23:48,850 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:23:48,850 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 36 paths.
+2026-07-10 15:23:48,850 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:23:48,850 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 36 KG paths.
+2026-07-10 15:23:48,851 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:23:48,851 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:23:48,851 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:23:52,259 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:23:52,259 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:23:52,260 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:23:54,325 - MedKG-RAG - INFO - [10/40] Generating answer for question 125
+2026-07-10 15:23:54,325 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:23:54,929 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:23:54,930 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What is tamsulosin used for?'...
+2026-07-10 15:23:55,738 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['Tamsulosin', 'Prazosin']
+2026-07-10 15:23:56,095 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-10 15:23:58,726 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 9 triples
+2026-07-10 15:24:03,912 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:24:03,912 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 74 results.
+2026-07-10 15:24:03,912 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 15 paths.
+2026-07-10 15:24:03,912 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:24:03,913 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 74 bm25, 15 KG paths.
+2026-07-10 15:24:03,913 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:24:03,913 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:24:03,913 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:24:06,595 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:24:06,596 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:24:06,596 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:24:08,131 - MedKG-RAG - INFO - [11/40] Generating answer for question 126
+2026-07-10 15:24:08,132 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:24:08,800 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:24:08,800 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What is nondisjunction and its causes?'...
+2026-07-10 15:24:08,801 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (0 unique anchors): []
+2026-07-10 15:24:23,533 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:24:23,533 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:24:23,533 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 0 paths.
+2026-07-10 15:24:23,534 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:24:23,534 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 0 KG paths.
+2026-07-10 15:24:23,534 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:24:23,534 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:24:23,534 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:24:25,538 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 0 KG paths.
+2026-07-10 15:24:25,538 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:24:25,538 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:24:27,423 - MedKG-RAG - INFO - [12/40] Generating answer for question 127
+2026-07-10 15:24:27,423 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:24:28,029 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:24:28,029 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What are the effects of gene therapy on an organism?'...
+2026-07-10 15:24:28,484 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (4 unique anchors): ['Moderate', 'Right', 'WAS', 'GAL']
+2026-07-10 15:24:28,755 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-10 15:24:29,942 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 12 triples
+2026-07-10 15:24:44,940 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:24:44,941 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:24:44,941 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 18 paths.
+2026-07-10 15:24:44,941 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:24:44,941 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 18 KG paths.
+2026-07-10 15:24:44,941 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:24:44,942 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:24:44,942 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:24:47,389 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:24:47,389 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:24:47,479 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:24:50,017 - MedKG-RAG - INFO - [13/40] Generating answer for question 128
+2026-07-10 15:24:50,018 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:24:53,063 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:24:53,064 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What is the effect of cannabidiol on liver enzymes?'...
+2026-07-10 15:24:54,146 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (4 unique anchors): ['Cannabidiol', 'Medical Cannabis', 'Elevated hepatic transaminase', 'Abnormal liver physiology']
+2026-07-10 15:24:57,776 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 9 triples
+2026-07-10 15:24:59,024 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 12 triples
+2026-07-10 15:25:16,774 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:25:16,774 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:25:16,774 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 21 paths.
+2026-07-10 15:25:16,774 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:25:16,774 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 21 KG paths.
+2026-07-10 15:25:16,774 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:25:16,775 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:25:16,775 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:25:19,959 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:25:19,960 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:25:19,960 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:25:22,314 - MedKG-RAG - INFO - [14/40] Generating answer for question 129
+2026-07-10 15:25:22,314 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:25:22,916 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:25:22,916 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What are the side effects of abruptly discontinuing metoprolol?'...
+2026-07-10 15:25:23,497 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (4 unique anchors): ['Metoprolol', 'Bisoprolol', 'Mild', 'Affected']
+2026-07-10 15:25:24,494 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-10 15:25:26,200 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 6 triples
+2026-07-10 15:25:35,719 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:25:35,719 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:25:35,719 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 12 paths.
+2026-07-10 15:25:35,720 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:25:35,720 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 12 KG paths.
+2026-07-10 15:25:35,720 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:25:35,720 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:25:35,720 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:25:38,424 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:25:38,425 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:25:38,425 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:25:40,620 - MedKG-RAG - INFO - [15/40] Generating answer for question 130
+2026-07-10 15:25:40,620 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:25:41,389 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:25:41,389 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'Is Polycystic Ovary Syndrome linked to oxidative stress?'...
+2026-07-10 15:25:41,880 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (4 unique anchors): ['polycystic ovary syndrome', 'polycystic kidney disease', 'Impaired oxidative burst', 'Increased superoxide dismutase level']
+2026-07-10 15:25:42,980 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 11 triples
+2026-07-10 15:25:44,421 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 21 triples
+2026-07-10 15:26:00,487 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:26:00,488 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:26:00,489 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 32 paths.
+2026-07-10 15:26:00,489 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:26:00,489 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 32 KG paths.
+2026-07-10 15:26:00,489 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:26:00,489 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:26:00,489 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:26:03,636 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:26:03,637 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:26:03,638 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:26:05,836 - MedKG-RAG - INFO - [16/40] Generating answer for question 131
+2026-07-10 15:26:05,836 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:26:06,486 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:26:06,487 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What are the side effects of formoterol?'...
+2026-07-10 15:26:06,669 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['Formoterol', 'Fenoterol']
+2026-07-10 15:26:07,021 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 3 triples
+2026-07-10 15:26:09,730 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 6 triples
+2026-07-10 15:26:11,849 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:26:11,849 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:26:11,849 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 9 paths.
+2026-07-10 15:26:11,849 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:26:11,850 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 9 KG paths.
+2026-07-10 15:26:11,850 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:26:11,850 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:26:11,850 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:26:14,475 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 9 KG paths.
+2026-07-10 15:26:14,475 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:26:14,486 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:26:16,469 - MedKG-RAG - INFO - [17/40] Generating answer for question 132
+2026-07-10 15:26:16,469 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:26:17,095 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:26:17,095 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What are the effects of vitamin D deficiency?'...
+2026-07-10 15:26:17,844 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (8 unique anchors): ['Pain', 'Reduced bone mineral density', 'Distal muscle weakness', 'Generalized muscle weakness', 'Severe generalized osteoporosis', 'Increased susceptibility to fractures', 'Fatigue', 'Episodic fatigue']
+2026-07-10 15:26:20,321 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 24 triples
+2026-07-10 15:26:25,981 - MedKG-RAG - INFO - [Stage 2b]: Capped 2-hop at 30 triples
+2026-07-10 15:26:30,979 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:26:30,980 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:26:30,980 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 54 paths.
+2026-07-10 15:26:30,980 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:26:30,980 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 54 KG paths.
+2026-07-10 15:26:30,980 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:26:30,981 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:26:30,981 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:26:34,614 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:26:34,614 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:26:34,619 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:26:36,412 - MedKG-RAG - INFO - [18/40] Generating answer for question 133
+2026-07-10 15:26:36,413 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:26:37,071 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:26:37,071 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What are the short and long term effects of surgical intervention and its complexity for women with ovarian cysts?'...
+2026-07-10 15:26:37,695 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['ovarian cyst (disease)', 'neonatal ovarian cyst']
+2026-07-10 15:26:37,745 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 3 triples
+2026-07-10 15:26:38,838 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 6 triples
+2026-07-10 15:26:54,814 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:26:54,815 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:26:54,815 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 9 paths.
+2026-07-10 15:26:54,815 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:26:54,815 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 9 KG paths.
+2026-07-10 15:26:54,815 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:26:54,815 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:26:54,816 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:26:57,585 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 9 KG paths.
+2026-07-10 15:26:57,586 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:26:57,611 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:26:59,934 - MedKG-RAG - INFO - [19/40] Generating answer for question 134
+2026-07-10 15:26:59,935 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:27:00,537 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:27:00,537 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What are the symptoms and treatments for Irritable Bowel Syndrome?'...
+2026-07-10 15:27:01,257 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (4 unique anchors): ['short bowel syndrome', 'primary short bowel syndrome', 'Intrusion symptom', 'Mild']
+2026-07-10 15:27:01,358 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 11 triples
+2026-07-10 15:27:01,619 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 20 triples
+2026-07-10 15:27:10,481 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:27:10,481 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:27:10,481 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 31 paths.
+2026-07-10 15:27:10,482 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:27:10,482 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 31 KG paths.
+2026-07-10 15:27:10,482 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:27:10,482 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:27:10,482 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:27:13,452 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:27:13,452 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:27:13,464 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:27:15,478 - MedKG-RAG - INFO - [20/40] Generating answer for question 135
+2026-07-10 15:27:15,478 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:27:16,147 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:27:16,148 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'Consequences of not taking prescribed thyroid medication'...
+2026-07-10 15:27:16,891 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (12 unique anchors): ['hypothyroidism', 'congenital hypothyroidism', 'Salsalate', 'Naproxen', 'Fatigue', 'Episodic fatigue', 'Weight loss', 'Overweight', 'Metopic depression', 'PR segment depression', 'Impaired thermal sensitivity', 'Triggered by cold']
+2026-07-10 15:27:22,257 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 28 triples
+2026-07-10 15:27:32,881 - MedKG-RAG - INFO - [Stage 2b]: Capped 2-hop at 30 triples
+2026-07-10 15:27:43,046 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:27:43,046 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:27:43,046 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 58 paths.
+2026-07-10 15:27:43,047 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:27:43,047 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 58 KG paths.
+2026-07-10 15:27:43,047 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:27:43,047 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:27:43,048 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:27:46,690 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:27:46,691 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:27:46,692 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:27:48,547 - MedKG-RAG - INFO - [21/40] Generating answer for question 136
+2026-07-10 15:27:48,547 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:27:49,246 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:27:49,246 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'Treatment options for severe elbow pain'...
+2026-07-10 15:27:49,747 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['Elbow pain', 'Shoulder pain']
+2026-07-10 15:27:49,777 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 0 triples
+2026-07-10 15:27:49,778 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 0 triples
+2026-07-10 15:28:02,880 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:28:02,880 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:28:02,880 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 0 paths.
+2026-07-10 15:28:02,880 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:28:02,881 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 0 KG paths.
+2026-07-10 15:28:02,881 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:28:02,882 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:28:02,883 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:28:05,237 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 0 KG paths.
+2026-07-10 15:28:05,237 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:28:05,239 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:28:07,427 - MedKG-RAG - INFO - [22/40] Generating answer for question 137
+2026-07-10 15:28:07,427 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:28:08,274 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:28:08,275 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'In an adult with Type 2 Diabetes, which is more effective for lowering A1C levels: Metformin or a ketogenic diet?'...
+2026-07-10 15:28:08,833 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (6 unique anchors): ['diabetes mellitus (disease)', 'type 1 diabetes mellitus', 'Troglitazone', 'Pioglitazone', 'Elevated hemoglobin A1c', 'Hyperapobetalipoproteinemia']
+2026-07-10 15:28:12,346 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 17 triples
+2026-07-10 15:28:20,232 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 27 triples
+2026-07-10 15:28:25,203 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:28:25,204 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:28:25,204 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 44 paths.
+2026-07-10 15:28:25,204 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:28:25,204 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 44 KG paths.
+2026-07-10 15:28:25,204 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:28:25,204 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:28:25,205 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:28:28,721 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:28:28,722 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:28:28,722 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:28:30,633 - MedKG-RAG - INFO - [23/40] Generating answer for question 138
+2026-07-10 15:28:30,633 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:28:31,254 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:28:31,254 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'Can Sudafed be used after Afrin for nasal congestion?'...
+2026-07-10 15:28:31,994 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (6 unique anchors): ['Harmine', 'Naldemedine', 'Vayarin', 'Flunisolide', 'Nasal dryness', 'Nasal ulcer']
+2026-07-10 15:28:32,206 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 8 triples
+2026-07-10 15:28:33,423 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 15 triples
+2026-07-10 15:28:44,568 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:28:44,568 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:28:44,568 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 23 paths.
+2026-07-10 15:28:44,569 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:28:44,569 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 23 KG paths.
+2026-07-10 15:28:44,569 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:28:44,570 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:28:44,570 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:28:47,493 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:28:47,494 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:28:47,507 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:28:49,438 - MedKG-RAG - INFO - [24/40] Generating answer for question 139
+2026-07-10 15:28:49,438 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:28:50,445 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:28:50,446 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What are the long-term consequences of untreated anorexia nervosa?'...
+2026-07-10 15:28:51,291 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (4 unique anchors): ['anorexia nervosa', 'obesity disorder', 'Prolonged', 'Long ear']
+2026-07-10 15:28:53,545 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 11 triples
+2026-07-10 15:29:05,449 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 20 triples
+2026-07-10 15:29:07,485 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:29:07,485 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:29:07,486 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 31 paths.
+2026-07-10 15:29:07,487 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:29:07,488 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 31 KG paths.
+2026-07-10 15:29:07,489 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:29:07,496 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:29:07,497 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:29:10,667 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:29:10,667 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:29:10,668 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:29:12,716 - MedKG-RAG - INFO - [25/40] Generating answer for question 140
+2026-07-10 15:29:12,716 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:29:13,514 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:29:13,514 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What can cause acute fractures in both hands without injury or trauma?'...
+2026-07-10 15:29:13,999 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (6 unique anchors): ['idiopathic juvenile osteoporosis', 'X-linked osteoporosis with fractures', 'osteogenesis imperfecta', 'high bone mass osteogenesis imperfecta', 'Bone fracture', 'Pseudo-fractures']
+2026-07-10 15:29:16,348 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 17 triples
+2026-07-10 15:29:20,087 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 29 triples
+2026-07-10 15:29:30,099 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:29:30,100 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:29:30,100 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 46 paths.
+2026-07-10 15:29:30,102 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:29:30,103 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 46 KG paths.
+2026-07-10 15:29:30,104 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:29:30,105 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:29:30,112 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:29:33,436 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:29:33,437 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:29:33,437 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:29:34,984 - MedKG-RAG - INFO - [26/40] Generating answer for question 141
+2026-07-10 15:29:34,987 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:29:35,889 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:29:35,890 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'Yellow fever complications'...
+2026-07-10 15:29:36,631 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (4 unique anchors): ['yellow fever', 'blackwater fever', 'Severity', 'Severe']
+2026-07-10 15:29:36,959 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 8 triples
+2026-07-10 15:29:37,296 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 14 triples
+2026-07-10 15:29:49,019 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:29:49,019 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:29:49,019 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 22 paths.
+2026-07-10 15:29:49,019 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:29:49,021 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 22 KG paths.
+2026-07-10 15:29:49,021 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:29:49,021 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:29:49,021 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:29:51,567 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:29:51,567 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:29:51,576 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:29:53,861 - MedKG-RAG - INFO - [27/40] Generating answer for question 142
+2026-07-10 15:29:53,863 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:29:54,591 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:29:54,592 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What medications have a drug interaction with hypertension?'...
+2026-07-10 15:29:54,899 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['hypertension', 'hypertensive disorder']
+2026-07-10 15:30:04,014 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-10 15:30:06,123 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 6 triples
+2026-07-10 15:30:09,217 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:30:09,217 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:30:09,217 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 12 paths.
+2026-07-10 15:30:09,218 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:30:09,218 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 12 KG paths.
+2026-07-10 15:30:09,219 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:30:09,220 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:30:09,220 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:30:11,912 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:30:11,915 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:30:11,916 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:30:14,663 - MedKG-RAG - INFO - [28/40] Generating answer for question 143
+2026-07-10 15:30:14,664 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:30:15,400 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:30:15,401 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'Living with Huntington's disease'...
+2026-07-10 15:30:16,694 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['Huntington disease', 'Huntington disease and related disorders']
+2026-07-10 15:30:18,082 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-10 15:30:20,320 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 12 triples
+2026-07-10 15:30:33,442 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:30:33,445 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:30:33,447 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 18 paths.
+2026-07-10 15:30:33,449 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:30:33,449 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 18 KG paths.
+2026-07-10 15:30:33,450 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:30:33,453 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:30:33,456 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:30:35,867 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:30:35,872 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:30:35,875 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:30:38,241 - MedKG-RAG - INFO - [29/40] Generating answer for question 144
+2026-07-10 15:30:38,249 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:30:40,235 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:30:40,236 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'When to treat hypertension'...
+2026-07-10 15:30:40,357 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['hypertension', 'hypertensive disorder']
+2026-07-10 15:30:50,330 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-10 15:30:52,798 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 6 triples
+2026-07-10 15:30:52,800 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:30:52,800 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:30:52,800 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 12 paths.
+2026-07-10 15:30:52,801 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:30:52,801 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 12 KG paths.
+2026-07-10 15:30:52,801 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:30:52,802 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:30:52,802 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:30:55,261 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:30:55,264 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:30:55,272 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:30:56,797 - MedKG-RAG - INFO - [30/40] Generating answer for question 145
+2026-07-10 15:30:56,798 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:30:57,720 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:30:57,721 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What are the side effects of Nivolumab treatment for Melanoma?'...
+2026-07-10 15:30:58,537 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (4 unique anchors): ['melanoma', 'metastatic melanoma', 'Nivolumab', 'PD-0325901']
+2026-07-10 15:30:59,077 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 11 triples
+2026-07-10 15:31:01,975 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 21 triples
+2026-07-10 15:31:20,537 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:31:20,539 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:31:20,539 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 32 paths.
+2026-07-10 15:31:20,540 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:31:20,540 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 32 KG paths.
+2026-07-10 15:31:20,542 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:31:20,544 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:31:20,545 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:31:23,716 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:31:23,718 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:31:23,719 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:31:25,881 - MedKG-RAG - INFO - [31/40] Generating answer for question 146
+2026-07-10 15:31:25,882 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:31:26,941 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:31:26,942 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What are the treatments and management options for Post-Traumatic Stress Disorder?'...
+2026-07-10 15:31:27,761 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['disorder involving pain', 'anxiety']
+2026-07-10 15:31:28,210 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 3 triples
+2026-07-10 15:31:30,467 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 6 triples
+2026-07-10 15:31:39,669 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:31:39,672 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:31:39,673 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 9 paths.
+2026-07-10 15:31:39,673 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:31:39,674 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 9 KG paths.
+2026-07-10 15:31:39,674 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:31:39,675 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:31:39,677 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:31:41,995 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 9 KG paths.
+2026-07-10 15:31:41,996 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:31:41,997 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:31:44,123 - MedKG-RAG - INFO - [32/40] Generating answer for question 147
+2026-07-10 15:31:44,127 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:31:44,978 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:31:44,978 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What are the treatment options for atherosclerosis?'...
+2026-07-10 15:31:45,929 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['atherosclerosis', 'atherosclerosis susceptibility']
+2026-07-10 15:31:49,340 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 3 triples
+2026-07-10 15:31:51,351 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 6 triples
+2026-07-10 15:32:02,894 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:32:02,895 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:32:02,896 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 9 paths.
+2026-07-10 15:32:02,897 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:32:02,897 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 9 KG paths.
+2026-07-10 15:32:02,898 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:32:02,899 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:32:02,906 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:32:05,012 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 9 KG paths.
+2026-07-10 15:32:05,014 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:32:05,018 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:32:07,806 - MedKG-RAG - INFO - [33/40] Generating answer for question 148
+2026-07-10 15:32:07,807 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:32:08,719 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:32:08,719 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What are the causes of easy bruising?'...
+2026-07-10 15:32:09,418 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['Tender', 'Abnormal onset of bleeding']
+2026-07-10 15:32:09,622 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 5 triples
+2026-07-10 15:32:09,916 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 9 triples
+2026-07-10 15:32:26,368 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:32:26,369 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:32:26,369 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 14 paths.
+2026-07-10 15:32:26,373 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:32:26,373 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 14 KG paths.
+2026-07-10 15:32:26,373 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:32:26,374 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:32:26,374 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:32:28,516 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:32:28,516 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:32:28,517 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:32:30,414 - MedKG-RAG - INFO - [34/40] Generating answer for question 149
+2026-07-10 15:32:30,414 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:32:31,117 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:32:31,117 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'Best diagnostic test for lumbar disc herniation'...
+2026-07-10 15:32:32,123 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['lumbar disc degenerative disorder', 'cervical disc degenerative disorder']
+2026-07-10 15:32:32,155 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 0 triples
+2026-07-10 15:32:32,156 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 0 triples
+2026-07-10 15:32:44,340 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:32:44,341 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:32:44,342 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 0 paths.
+2026-07-10 15:32:44,342 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:32:44,342 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 0 KG paths.
+2026-07-10 15:32:44,343 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:32:44,343 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:32:44,344 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:32:46,691 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 0 KG paths.
+2026-07-10 15:32:46,692 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:32:46,693 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:32:48,581 - MedKG-RAG - INFO - [35/40] Generating answer for question 150
+2026-07-10 15:32:48,582 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:32:49,737 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:32:49,739 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'Effectiveness of physical therapy in reducing pain in lumbar disc herniation patients'...
+2026-07-10 15:32:50,055 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (4 unique anchors): ['lumbar disc degenerative disorder', 'cervical disc degenerative disorder', 'Pain', 'Chronic pain']
+2026-07-10 15:33:00,642 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 12 triples
+2026-07-10 15:33:10,640 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 21 triples
+2026-07-10 15:33:10,642 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:33:10,643 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:33:10,644 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 33 paths.
+2026-07-10 15:33:10,645 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:33:10,647 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 33 KG paths.
+2026-07-10 15:33:10,648 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:33:10,649 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:33:10,650 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:33:13,465 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:33:13,466 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:33:13,467 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:33:16,315 - MedKG-RAG - INFO - [36/40] Generating answer for question 151
+2026-07-10 15:33:16,315 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:33:17,413 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:33:17,413 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What causes gray and scaly skin?'...
+2026-07-10 15:33:18,055 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (3 unique anchors): ['Soft skin', 'Thin skin', 'Scaling skin']
+2026-07-10 15:33:19,489 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 9 triples
+2026-07-10 15:33:21,147 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 18 triples
+2026-07-10 15:33:32,603 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:33:32,603 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:33:32,604 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 27 paths.
+2026-07-10 15:33:32,604 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:33:32,604 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 27 KG paths.
+2026-07-10 15:33:32,604 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:33:32,605 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:33:32,605 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:33:35,139 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:33:35,149 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:33:35,150 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:33:37,268 - MedKG-RAG - INFO - [37/40] Generating answer for question 152
+2026-07-10 15:33:37,270 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:33:38,229 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:33:38,230 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'Can amlodipine be discontinued after long-term use?'...
+2026-07-10 15:33:39,073 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['Amlodipine', 'Darodipine']
+2026-07-10 15:33:40,513 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 3 triples
+2026-07-10 15:33:45,656 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 6 triples
+2026-07-10 15:33:47,821 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:33:47,822 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:33:47,823 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 9 paths.
+2026-07-10 15:33:47,823 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:33:47,824 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 9 KG paths.
+2026-07-10 15:33:47,824 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:33:47,825 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:33:47,825 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:33:50,211 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 9 KG paths.
+2026-07-10 15:33:50,212 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:33:50,215 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:33:52,013 - MedKG-RAG - INFO - [38/40] Generating answer for question 153
+2026-07-10 15:33:52,013 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:33:53,363 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:33:53,363 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'Does a patient with a hematocrit of 34 need a blood transfusion?'...
+2026-07-10 15:33:54,305 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['Iron deficiency anemia', 'Hemolytic anemia']
+2026-07-10 15:33:56,699 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-10 15:34:00,519 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 12 triples
+2026-07-10 15:34:08,732 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:34:08,733 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:34:08,734 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 18 paths.
+2026-07-10 15:34:08,734 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:34:08,734 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 18 KG paths.
+2026-07-10 15:34:08,735 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:34:08,736 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:34:08,736 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:34:11,451 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:34:11,452 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:34:11,467 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:34:13,260 - MedKG-RAG - INFO - [39/40] Generating answer for question 154
+2026-07-10 15:34:13,261 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:34:13,947 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:34:13,948 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'Management of shortness of breath'...
+2026-07-10 15:34:14,503 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (2 unique anchors): ['Abnormal breath sound', 'Decreased forced expiratory flow 25-75%']
+2026-07-10 15:34:15,037 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 6 triples
+2026-07-10 15:34:15,711 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 10 triples
+2026-07-10 15:34:26,535 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:34:26,536 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:34:26,537 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 16 paths.
+2026-07-10 15:34:26,537 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:34:26,539 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 16 KG paths.
+2026-07-10 15:34:26,540 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:34:26,541 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:34:26,546 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:34:29,216 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:34:29,217 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:34:29,219 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:34:31,411 - MedKG-RAG - INFO - [40/40] Generating answer for question 155
+2026-07-10 15:34:31,412 - MedKG-RAG - INFO - [RAG Pipeline]: Starting query analysis...
+2026-07-10 15:34:32,426 - MedKG-RAG - INFO - [RAG Pipeline]: Starting parallel retrieval...
+2026-07-10 15:34:32,428 - MedKG-RAG - INFO - [Parallel Retrieval]: Starting streams for query: 'What is the duration of post-cataract surgery eye drop use?'...
+2026-07-10 15:34:33,023 - MedKG-RAG - INFO - [Stage 1]: Merged anchors (4 unique anchors): ['cataract', 'diabetic cataract', 'Gatifloxacin', 'Tolevamer']
+2026-07-10 15:34:34,076 - MedKG-RAG - INFO - [Stage 2a]: 1-hop expansion → 9 triples
+2026-07-10 15:34:48,984 - MedKG-RAG - INFO - [Stage 2b]: 2-hop → 18 triples
+2026-07-10 15:34:48,986 - MedKG-RAG - INFO - [Parallel Retrieval]: Vector Search returned 40 results.
+2026-07-10 15:34:48,987 - MedKG-RAG - INFO - [Parallel Retrieval]: Keyword Search returned 80 results.
+2026-07-10 15:34:48,987 - MedKG-RAG - INFO - [Parallel Retrieval]: KG Search returned 27 paths.
+2026-07-10 15:34:48,989 - MedKG-RAG - INFO - [Parallel Retrieval]: Completed all streams!
+2026-07-10 15:34:48,989 - MedKG-RAG - INFO - [RAG Pipeline]: Parallel retrieval completed! 40 vectors, 80 bm25, 27 KG paths.
+2026-07-10 15:34:48,989 - MedKG-RAG - INFO - [RAG Pipeline] Running RRF on text retrieval stream...
+2026-07-10 15:34:48,991 - MedKG-RAG - INFO - [RAG Pipeline]: RRF produced 80 fused candidates.
+2026-07-10 15:34:48,992 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder reranking...
+2026-07-10 15:34:51,933 - MedKG-RAG - INFO - [RAG Pipeline]: Cross-Encoder returned 40 texts and 10 KG paths.
+2026-07-10 15:34:51,933 - MedKG-RAG - INFO - [RAG Pipeline]: Merging KG paths and preparing prompt context...
+2026-07-10 15:34:51,933 - MedKG-RAG - INFO - [RAG Pipeline]: Generating final answer...
+2026-07-10 15:34:53,330 - MedKG-RAG - INFO - Results saved to D:\workspace\Repo\medical-chatbot-assistant\results\test_results\medaesqa\full_system\generation\detail.jsonl, D:\workspace\Repo\medical-chatbot-assistant\results\test_results\medaesqa\full_system\generation\summary.json, and D:\workspace\Repo\medical-chatbot-assistant\results\test_results\medaesqa\full_system\generation\predictions.jsonl
+2026-07-10 15:36:20,720 - MedKG-RAG - INFO - Loaded config from D:\workspace\Repo\medical-chatbot-assistant\config\hyperparameters\retrieval.json: {'vector_top_k': 40, 'keyword_top_k': 80, 'child_fetch_limit': 120, 'top_k_rrf': 80, 'k_rrf': 60, 'rerank_text_top_m': 20}
+2026-07-10 15:36:20,735 - MedKG-RAG - INFO - Loaded 40 questions for MedAESQA retrieval evaluation (limit=None).
+2026-07-10 15:36:20,735 - MedKG-RAG - INFO - Runtime settings: VECTOR_TOP_K=40, KEYWORD_TOP_K=80, CHILD_FETCH_LIMIT=120, K_RRF=60, TOP_K_RRF=80, RERANK_TEXT_TOP_M=20
+2026-07-10 15:36:20,735 - MedKG-RAG - INFO - Initialising pipeline components...
+2026-07-10 15:36:20,994 - MedKG-RAG - INFO - Initializing MedCPT model ncbi/MedCPT-Query-Encoder on cpu
+2026-07-10 15:36:25,768 - MedKG-RAG - INFO - Connected to Weaviate True
+2026-07-10 15:36:25,791 - MedKG-RAG - INFO - [1/40] Evaluating Q-116: Are there ways to prevent sleep apnea or treat it naturally?...
+2026-07-10 15:36:25,791 - MedKG-RAG - INFO - [116] QueryAnalyzer starting
+2026-07-10 15:36:26,723 - MedKG-RAG - INFO - [116] QueryAnalyzer done. rewritten_query='Natural treatments and prevention methods for sleep apnea'
+2026-07-10 15:36:26,724 - MedKG-RAG - INFO - [116] Embedding query
+2026-07-10 15:36:27,715 - MedKG-RAG - INFO - [116] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:36:34,682 - MedKG-RAG - INFO - [116] Vector search returned 40 parent results
+2026-07-10 15:36:34,683 - MedKG-RAG - INFO - [116] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:36:35,229 - MedKG-RAG - INFO - [116] BM25 search returned 80 parent results
+2026-07-10 15:36:35,230 - MedKG-RAG - INFO - [116] RRF fusion starting with k=60
+2026-07-10 15:36:35,231 - MedKG-RAG - INFO - [116] RRF fusion returned 80 fused results
+2026-07-10 15:36:35,231 - MedKG-RAG - INFO - [116] Cross-encoder rerank starting
+2026-07-10 15:37:17,352 - MedKG-RAG - INFO - [116] Cross-encoder rerank returned 20 text results
+2026-07-10 15:37:17,352 - MedKG-RAG - INFO - [2/40] Evaluating Q-117: What will mutation in runx2 affect in the future?...
+2026-07-10 15:37:17,353 - MedKG-RAG - INFO - [117] QueryAnalyzer starting
+2026-07-10 15:37:17,823 - MedKG-RAG - INFO - [117] QueryAnalyzer done. rewritten_query='What are the effects of a mutation in the RUNX2 gene?'
+2026-07-10 15:37:17,824 - MedKG-RAG - INFO - [117] Embedding query
+2026-07-10 15:37:17,951 - MedKG-RAG - INFO - [117] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:37:28,396 - MedKG-RAG - INFO - [117] Vector search returned 40 parent results
+2026-07-10 15:37:28,402 - MedKG-RAG - INFO - [117] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:37:29,781 - MedKG-RAG - INFO - [117] BM25 search returned 80 parent results
+2026-07-10 15:37:29,782 - MedKG-RAG - INFO - [117] RRF fusion starting with k=60
+2026-07-10 15:37:29,782 - MedKG-RAG - INFO - [117] RRF fusion returned 80 fused results
+2026-07-10 15:37:29,782 - MedKG-RAG - INFO - [117] Cross-encoder rerank starting
+2026-07-10 15:37:31,895 - MedKG-RAG - INFO - [117] Cross-encoder rerank returned 20 text results
+2026-07-10 15:37:31,896 - MedKG-RAG - INFO - [3/40] Evaluating Q-118: how long does a minor cornea injury take to heal without medical attention?...
+2026-07-10 15:37:31,896 - MedKG-RAG - INFO - [118] QueryAnalyzer starting
+2026-07-10 15:37:32,398 - MedKG-RAG - INFO - [118] QueryAnalyzer done. rewritten_query='corneal injury healing time without treatment'
+2026-07-10 15:37:32,400 - MedKG-RAG - INFO - [118] Embedding query
+2026-07-10 15:37:32,527 - MedKG-RAG - INFO - [118] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:37:36,307 - MedKG-RAG - INFO - [118] Vector search returned 40 parent results
+2026-07-10 15:37:36,307 - MedKG-RAG - INFO - [118] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:37:38,551 - MedKG-RAG - INFO - [118] BM25 search returned 80 parent results
+2026-07-10 15:37:38,551 - MedKG-RAG - INFO - [118] RRF fusion starting with k=60
+2026-07-10 15:37:38,551 - MedKG-RAG - INFO - [118] RRF fusion returned 80 fused results
+2026-07-10 15:37:38,551 - MedKG-RAG - INFO - [118] Cross-encoder rerank starting
+2026-07-10 15:37:40,863 - MedKG-RAG - INFO - [118] Cross-encoder rerank returned 20 text results
+2026-07-10 15:37:40,864 - MedKG-RAG - INFO - [4/40] Evaluating Q-119: what drug or combination of drugs is most popular for treating stage 4 copd?...
+2026-07-10 15:37:40,864 - MedKG-RAG - INFO - [119] QueryAnalyzer starting
+2026-07-10 15:37:41,372 - MedKG-RAG - INFO - [119] QueryAnalyzer done. rewritten_query='What are the most commonly used medications for stage 4 chronic obstructive pulmonary disease?'
+2026-07-10 15:37:41,372 - MedKG-RAG - INFO - [119] Embedding query
+2026-07-10 15:37:41,426 - MedKG-RAG - INFO - [119] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:37:44,499 - MedKG-RAG - INFO - [119] Vector search returned 40 parent results
+2026-07-10 15:37:44,499 - MedKG-RAG - INFO - [119] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:37:45,721 - MedKG-RAG - INFO - [119] BM25 search returned 80 parent results
+2026-07-10 15:37:45,721 - MedKG-RAG - INFO - [119] RRF fusion starting with k=60
+2026-07-10 15:37:45,721 - MedKG-RAG - INFO - [119] RRF fusion returned 80 fused results
+2026-07-10 15:37:45,721 - MedKG-RAG - INFO - [119] Cross-encoder rerank starting
+2026-07-10 15:37:48,251 - MedKG-RAG - INFO - [119] Cross-encoder rerank returned 20 text results
+2026-07-10 15:37:48,252 - MedKG-RAG - INFO - [5/40] Evaluating Q-120: what causes left sided facial numbness?...
+2026-07-10 15:37:48,252 - MedKG-RAG - INFO - [120] QueryAnalyzer starting
+2026-07-10 15:37:49,018 - MedKG-RAG - INFO - [120] QueryAnalyzer done. rewritten_query='causes of left sided facial numbness'
+2026-07-10 15:37:49,018 - MedKG-RAG - INFO - [120] Embedding query
+2026-07-10 15:37:49,051 - MedKG-RAG - INFO - [120] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:37:53,947 - MedKG-RAG - INFO - [120] Vector search returned 40 parent results
+2026-07-10 15:37:53,948 - MedKG-RAG - INFO - [120] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:37:54,400 - MedKG-RAG - INFO - [120] BM25 search returned 80 parent results
+2026-07-10 15:37:54,400 - MedKG-RAG - INFO - [120] RRF fusion starting with k=60
+2026-07-10 15:37:54,400 - MedKG-RAG - INFO - [120] RRF fusion returned 80 fused results
+2026-07-10 15:37:54,401 - MedKG-RAG - INFO - [120] Cross-encoder rerank starting
+2026-07-10 15:37:56,712 - MedKG-RAG - INFO - [120] Cross-encoder rerank returned 20 text results
+2026-07-10 15:37:56,713 - MedKG-RAG - INFO - [6/40] Evaluating Q-121: how can i lower my cortisol level?...
+2026-07-10 15:37:56,713 - MedKG-RAG - INFO - [121] QueryAnalyzer starting
+2026-07-10 15:37:57,135 - MedKG-RAG - INFO - [121] QueryAnalyzer done. rewritten_query='How to lower cortisol levels'
+2026-07-10 15:37:57,135 - MedKG-RAG - INFO - [121] Embedding query
+2026-07-10 15:37:57,171 - MedKG-RAG - INFO - [121] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:38:01,049 - MedKG-RAG - INFO - [121] Vector search returned 40 parent results
+2026-07-10 15:38:01,049 - MedKG-RAG - INFO - [121] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:38:01,557 - MedKG-RAG - INFO - [121] BM25 search returned 80 parent results
+2026-07-10 15:38:01,558 - MedKG-RAG - INFO - [121] RRF fusion starting with k=60
+2026-07-10 15:38:01,558 - MedKG-RAG - INFO - [121] RRF fusion returned 80 fused results
+2026-07-10 15:38:01,558 - MedKG-RAG - INFO - [121] Cross-encoder rerank starting
+2026-07-10 15:38:03,651 - MedKG-RAG - INFO - [121] Cross-encoder rerank returned 20 text results
+2026-07-10 15:38:03,651 - MedKG-RAG - INFO - [7/40] Evaluating Q-122: what is a t wave abnormality?...
+2026-07-10 15:38:03,652 - MedKG-RAG - INFO - [122] QueryAnalyzer starting
+2026-07-10 15:38:04,071 - MedKG-RAG - INFO - [122] QueryAnalyzer done. rewritten_query='T wave abnormality'
+2026-07-10 15:38:04,071 - MedKG-RAG - INFO - [122] Embedding query
+2026-07-10 15:38:04,119 - MedKG-RAG - INFO - [122] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:38:08,020 - MedKG-RAG - INFO - [122] Vector search returned 40 parent results
+2026-07-10 15:38:08,020 - MedKG-RAG - INFO - [122] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:38:08,657 - MedKG-RAG - INFO - [122] BM25 search returned 77 parent results
+2026-07-10 15:38:08,658 - MedKG-RAG - INFO - [122] RRF fusion starting with k=60
+2026-07-10 15:38:08,659 - MedKG-RAG - INFO - [122] RRF fusion returned 80 fused results
+2026-07-10 15:38:08,661 - MedKG-RAG - INFO - [122] Cross-encoder rerank starting
+2026-07-10 15:38:10,989 - MedKG-RAG - INFO - [122] Cross-encoder rerank returned 20 text results
+2026-07-10 15:38:10,991 - MedKG-RAG - INFO - [8/40] Evaluating Q-123: what is fbn1 mutation?...
+2026-07-10 15:38:10,992 - MedKG-RAG - INFO - [123] QueryAnalyzer starting
+2026-07-10 15:38:11,570 - MedKG-RAG - INFO - [123] QueryAnalyzer done. rewritten_query='What is FBN1 mutation?'
+2026-07-10 15:38:11,572 - MedKG-RAG - INFO - [123] Embedding query
+2026-07-10 15:38:11,700 - MedKG-RAG - INFO - [123] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:38:15,015 - MedKG-RAG - INFO - [123] Vector search returned 40 parent results
+2026-07-10 15:38:15,016 - MedKG-RAG - INFO - [123] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:38:15,165 - MedKG-RAG - INFO - [123] BM25 search returned 80 parent results
+2026-07-10 15:38:15,165 - MedKG-RAG - INFO - [123] RRF fusion starting with k=60
+2026-07-10 15:38:15,166 - MedKG-RAG - INFO - [123] RRF fusion returned 80 fused results
+2026-07-10 15:38:15,166 - MedKG-RAG - INFO - [123] Cross-encoder rerank starting
+2026-07-10 15:38:17,197 - MedKG-RAG - INFO - [123] Cross-encoder rerank returned 20 text results
+2026-07-10 15:38:17,198 - MedKG-RAG - INFO - [9/40] Evaluating Q-124: what does cad without angina mean?...
+2026-07-10 15:38:17,198 - MedKG-RAG - INFO - [124] QueryAnalyzer starting
+2026-07-10 15:38:17,663 - MedKG-RAG - INFO - [124] QueryAnalyzer done. rewritten_query='What does coronary artery disease without angina mean?'
+2026-07-10 15:38:17,664 - MedKG-RAG - INFO - [124] Embedding query
+2026-07-10 15:38:17,702 - MedKG-RAG - INFO - [124] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:38:22,793 - MedKG-RAG - INFO - [124] Vector search returned 40 parent results
+2026-07-10 15:38:22,793 - MedKG-RAG - INFO - [124] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:38:23,587 - MedKG-RAG - INFO - [124] BM25 search returned 80 parent results
+2026-07-10 15:38:23,588 - MedKG-RAG - INFO - [124] RRF fusion starting with k=60
+2026-07-10 15:38:23,589 - MedKG-RAG - INFO - [124] RRF fusion returned 80 fused results
+2026-07-10 15:38:23,589 - MedKG-RAG - INFO - [124] Cross-encoder rerank starting
+2026-07-10 15:38:25,857 - MedKG-RAG - INFO - [124] Cross-encoder rerank returned 20 text results
+2026-07-10 15:38:25,859 - MedKG-RAG - INFO - [10/40] Evaluating Q-125: what is tamsulosin used for?...
+2026-07-10 15:38:25,859 - MedKG-RAG - INFO - [125] QueryAnalyzer starting
+2026-07-10 15:38:26,292 - MedKG-RAG - INFO - [125] QueryAnalyzer done. rewritten_query='What is tamsulosin used for?'
+2026-07-10 15:38:26,293 - MedKG-RAG - INFO - [125] Embedding query
+2026-07-10 15:38:26,344 - MedKG-RAG - INFO - [125] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:38:29,827 - MedKG-RAG - INFO - [125] Vector search returned 40 parent results
+2026-07-10 15:38:29,827 - MedKG-RAG - INFO - [125] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:38:30,019 - MedKG-RAG - INFO - [125] BM25 search returned 74 parent results
+2026-07-10 15:38:30,020 - MedKG-RAG - INFO - [125] RRF fusion starting with k=60
+2026-07-10 15:38:30,020 - MedKG-RAG - INFO - [125] RRF fusion returned 80 fused results
+2026-07-10 15:38:30,021 - MedKG-RAG - INFO - [125] Cross-encoder rerank starting
+2026-07-10 15:38:32,328 - MedKG-RAG - INFO - [125] Cross-encoder rerank returned 20 text results
+2026-07-10 15:38:32,329 - MedKG-RAG - INFO - [11/40] Evaluating Q-126: what is nondisjunction and what causes it?...
+2026-07-10 15:38:32,329 - MedKG-RAG - INFO - [126] QueryAnalyzer starting
+2026-07-10 15:38:32,755 - MedKG-RAG - INFO - [126] QueryAnalyzer done. rewritten_query='What is nondisjunction and its causes?'
+2026-07-10 15:38:32,755 - MedKG-RAG - INFO - [126] Embedding query
+2026-07-10 15:38:32,782 - MedKG-RAG - INFO - [126] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:38:40,358 - MedKG-RAG - INFO - [126] Vector search returned 40 parent results
+2026-07-10 15:38:40,358 - MedKG-RAG - INFO - [126] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:38:42,074 - MedKG-RAG - INFO - [126] BM25 search returned 80 parent results
+2026-07-10 15:38:42,074 - MedKG-RAG - INFO - [126] RRF fusion starting with k=60
+2026-07-10 15:38:42,075 - MedKG-RAG - INFO - [126] RRF fusion returned 80 fused results
+2026-07-10 15:38:42,075 - MedKG-RAG - INFO - [126] Cross-encoder rerank starting
+2026-07-10 15:38:44,261 - MedKG-RAG - INFO - [126] Cross-encoder rerank returned 20 text results
+2026-07-10 15:38:44,261 - MedKG-RAG - INFO - [12/40] Evaluating Q-127: what effects does gene therapy have on an organism?...
+2026-07-10 15:38:44,261 - MedKG-RAG - INFO - [127] QueryAnalyzer starting
+2026-07-10 15:38:44,739 - MedKG-RAG - INFO - [127] QueryAnalyzer done. rewritten_query='What are the effects of gene therapy on an organism?'
+2026-07-10 15:38:44,740 - MedKG-RAG - INFO - [127] Embedding query
+2026-07-10 15:38:44,825 - MedKG-RAG - INFO - [127] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:38:48,816 - MedKG-RAG - INFO - [127] Vector search returned 40 parent results
+2026-07-10 15:38:48,816 - MedKG-RAG - INFO - [127] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:38:49,639 - MedKG-RAG - INFO - [127] BM25 search returned 80 parent results
+2026-07-10 15:38:49,640 - MedKG-RAG - INFO - [127] RRF fusion starting with k=60
+2026-07-10 15:38:49,641 - MedKG-RAG - INFO - [127] RRF fusion returned 80 fused results
+2026-07-10 15:38:49,641 - MedKG-RAG - INFO - [127] Cross-encoder rerank starting
+2026-07-10 15:38:51,646 - MedKG-RAG - INFO - [127] Cross-encoder rerank returned 20 text results
+2026-07-10 15:38:51,647 - MedKG-RAG - INFO - [13/40] Evaluating Q-128: how does cbd effect liver enzymes?...
+2026-07-10 15:38:51,647 - MedKG-RAG - INFO - [128] QueryAnalyzer starting
+2026-07-10 15:38:52,138 - MedKG-RAG - INFO - [128] QueryAnalyzer done. rewritten_query='What is the effect of Cannabidiol on liver enzymes?'
+2026-07-10 15:38:52,139 - MedKG-RAG - INFO - [128] Embedding query
+2026-07-10 15:38:52,163 - MedKG-RAG - INFO - [128] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:38:55,464 - MedKG-RAG - INFO - [128] Vector search returned 40 parent results
+2026-07-10 15:38:55,464 - MedKG-RAG - INFO - [128] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:38:56,986 - MedKG-RAG - INFO - [128] BM25 search returned 80 parent results
+2026-07-10 15:38:56,986 - MedKG-RAG - INFO - [128] RRF fusion starting with k=60
+2026-07-10 15:38:56,987 - MedKG-RAG - INFO - [128] RRF fusion returned 80 fused results
+2026-07-10 15:38:56,987 - MedKG-RAG - INFO - [128] Cross-encoder rerank starting
+2026-07-10 15:38:59,285 - MedKG-RAG - INFO - [128] Cross-encoder rerank returned 20 text results
+2026-07-10 15:38:59,286 - MedKG-RAG - INFO - [14/40] Evaluating Q-129: what are side effects for suddenly stopping metoprolol?...
+2026-07-10 15:38:59,286 - MedKG-RAG - INFO - [129] QueryAnalyzer starting
+2026-07-10 15:38:59,882 - MedKG-RAG - INFO - [129] QueryAnalyzer done. rewritten_query='What are the side effects of abruptly discontinuing metoprolol?'
+2026-07-10 15:38:59,883 - MedKG-RAG - INFO - [129] Embedding query
+2026-07-10 15:38:59,959 - MedKG-RAG - INFO - [129] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:39:01,952 - MedKG-RAG - INFO - [129] Vector search returned 40 parent results
+2026-07-10 15:39:01,952 - MedKG-RAG - INFO - [129] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:39:02,873 - MedKG-RAG - INFO - [129] BM25 search returned 80 parent results
+2026-07-10 15:39:02,873 - MedKG-RAG - INFO - [129] RRF fusion starting with k=60
+2026-07-10 15:39:02,875 - MedKG-RAG - INFO - [129] RRF fusion returned 80 fused results
+2026-07-10 15:39:02,875 - MedKG-RAG - INFO - [129] Cross-encoder rerank starting
+2026-07-10 15:39:05,174 - MedKG-RAG - INFO - [129] Cross-encoder rerank returned 20 text results
+2026-07-10 15:39:05,174 - MedKG-RAG - INFO - [15/40] Evaluating Q-130: is pcos linked to oxidative stress?...
+2026-07-10 15:39:05,174 - MedKG-RAG - INFO - [130] QueryAnalyzer starting
+2026-07-10 15:39:05,737 - MedKG-RAG - INFO - [130] QueryAnalyzer done. rewritten_query='Is Polycystic Ovary Syndrome linked to oxidative stress?'
+2026-07-10 15:39:05,738 - MedKG-RAG - INFO - [130] Embedding query
+2026-07-10 15:39:05,813 - MedKG-RAG - INFO - [130] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:39:08,647 - MedKG-RAG - INFO - [130] Vector search returned 40 parent results
+2026-07-10 15:39:08,648 - MedKG-RAG - INFO - [130] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:39:09,259 - MedKG-RAG - INFO - [130] BM25 search returned 80 parent results
+2026-07-10 15:39:09,259 - MedKG-RAG - INFO - [130] RRF fusion starting with k=60
+2026-07-10 15:39:09,259 - MedKG-RAG - INFO - [130] RRF fusion returned 80 fused results
+2026-07-10 15:39:09,259 - MedKG-RAG - INFO - [130] Cross-encoder rerank starting
+2026-07-10 15:39:11,529 - MedKG-RAG - INFO - [130] Cross-encoder rerank returned 20 text results
+2026-07-10 15:39:11,530 - MedKG-RAG - INFO - [16/40] Evaluating Q-131: what are side effects of using formoterol?...
+2026-07-10 15:39:11,530 - MedKG-RAG - INFO - [131] QueryAnalyzer starting
+2026-07-10 15:39:12,084 - MedKG-RAG - INFO - [131] QueryAnalyzer done. rewritten_query='What are the side effects of formoterol?'
+2026-07-10 15:39:12,085 - MedKG-RAG - INFO - [131] Embedding query
+2026-07-10 15:39:12,110 - MedKG-RAG - INFO - [131] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:39:13,044 - MedKG-RAG - INFO - [131] Vector search returned 40 parent results
+2026-07-10 15:39:13,044 - MedKG-RAG - INFO - [131] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:39:13,593 - MedKG-RAG - INFO - [131] BM25 search returned 80 parent results
+2026-07-10 15:39:13,593 - MedKG-RAG - INFO - [131] RRF fusion starting with k=60
+2026-07-10 15:39:13,593 - MedKG-RAG - INFO - [131] RRF fusion returned 80 fused results
+2026-07-10 15:39:13,593 - MedKG-RAG - INFO - [131] Cross-encoder rerank starting
+2026-07-10 15:39:15,800 - MedKG-RAG - INFO - [131] Cross-encoder rerank returned 20 text results
+2026-07-10 15:39:15,801 - MedKG-RAG - INFO - [17/40] Evaluating Q-132: what is the effect of low vitamin D?...
+2026-07-10 15:39:15,801 - MedKG-RAG - INFO - [132] QueryAnalyzer starting
+2026-07-10 15:39:16,329 - MedKG-RAG - INFO - [132] QueryAnalyzer done. rewritten_query='What are the effects of vitamin D deficiency?'
+2026-07-10 15:39:16,329 - MedKG-RAG - INFO - [132] Embedding query
+2026-07-10 15:39:16,399 - MedKG-RAG - INFO - [132] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:39:18,854 - MedKG-RAG - INFO - [132] Vector search returned 40 parent results
+2026-07-10 15:39:18,855 - MedKG-RAG - INFO - [132] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:39:19,697 - MedKG-RAG - INFO - [132] BM25 search returned 80 parent results
+2026-07-10 15:39:19,697 - MedKG-RAG - INFO - [132] RRF fusion starting with k=60
+2026-07-10 15:39:19,697 - MedKG-RAG - INFO - [132] RRF fusion returned 80 fused results
+2026-07-10 15:39:19,697 - MedKG-RAG - INFO - [132] Cross-encoder rerank starting
+2026-07-10 15:39:22,282 - MedKG-RAG - INFO - [132] Cross-encoder rerank returned 20 text results
+2026-07-10 15:39:22,282 - MedKG-RAG - INFO - [18/40] Evaluating Q-133: What are the short and long term effects of surgery and its complexity for women...
+2026-07-10 15:39:22,282 - MedKG-RAG - INFO - [133] QueryAnalyzer starting
+2026-07-10 15:39:22,763 - MedKG-RAG - INFO - [133] QueryAnalyzer done. rewritten_query='What are the short and long term effects of surgical intervention and its complexity for women with ovarian cysts?'
+2026-07-10 15:39:22,765 - MedKG-RAG - INFO - [133] Embedding query
+2026-07-10 15:39:22,816 - MedKG-RAG - INFO - [133] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:39:25,776 - MedKG-RAG - INFO - [133] Vector search returned 40 parent results
+2026-07-10 15:39:25,776 - MedKG-RAG - INFO - [133] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:39:27,018 - MedKG-RAG - INFO - [133] BM25 search returned 80 parent results
+2026-07-10 15:39:27,019 - MedKG-RAG - INFO - [133] RRF fusion starting with k=60
+2026-07-10 15:39:27,020 - MedKG-RAG - INFO - [133] RRF fusion returned 80 fused results
+2026-07-10 15:39:27,021 - MedKG-RAG - INFO - [133] Cross-encoder rerank starting
+2026-07-10 15:39:29,334 - MedKG-RAG - INFO - [133] Cross-encoder rerank returned 20 text results
+2026-07-10 15:39:29,335 - MedKG-RAG - INFO - [19/40] Evaluating Q-134: what are the symptoms and treatments for ibs?...
+2026-07-10 15:39:29,335 - MedKG-RAG - INFO - [134] QueryAnalyzer starting
+2026-07-10 15:39:29,861 - MedKG-RAG - INFO - [134] QueryAnalyzer done. rewritten_query='What are the symptoms and treatments for Irritable Bowel Syndrome?'
+2026-07-10 15:39:29,861 - MedKG-RAG - INFO - [134] Embedding query
+2026-07-10 15:39:29,889 - MedKG-RAG - INFO - [134] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:39:31,479 - MedKG-RAG - INFO - [134] Vector search returned 40 parent results
+2026-07-10 15:39:31,479 - MedKG-RAG - INFO - [134] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:39:32,020 - MedKG-RAG - INFO - [134] BM25 search returned 80 parent results
+2026-07-10 15:39:32,020 - MedKG-RAG - INFO - [134] RRF fusion starting with k=60
+2026-07-10 15:39:32,020 - MedKG-RAG - INFO - [134] RRF fusion returned 80 fused results
+2026-07-10 15:39:32,020 - MedKG-RAG - INFO - [134] Cross-encoder rerank starting
+2026-07-10 15:39:34,027 - MedKG-RAG - INFO - [134] Cross-encoder rerank returned 20 text results
+2026-07-10 15:39:34,028 - MedKG-RAG - INFO - [20/40] Evaluating Q-135: what can happen if you are prescribed thyroid meds but don't take them?...
+2026-07-10 15:39:34,028 - MedKG-RAG - INFO - [135] QueryAnalyzer starting
+2026-07-10 15:39:34,525 - MedKG-RAG - INFO - [135] QueryAnalyzer done. rewritten_query='Consequences of not taking prescribed thyroid medication'
+2026-07-10 15:39:34,525 - MedKG-RAG - INFO - [135] Embedding query
+2026-07-10 15:39:34,563 - MedKG-RAG - INFO - [135] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:39:38,590 - MedKG-RAG - INFO - [135] Vector search returned 40 parent results
+2026-07-10 15:39:38,590 - MedKG-RAG - INFO - [135] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:39:38,932 - MedKG-RAG - INFO - [135] BM25 search returned 80 parent results
+2026-07-10 15:39:38,932 - MedKG-RAG - INFO - [135] RRF fusion starting with k=60
+2026-07-10 15:39:38,932 - MedKG-RAG - INFO - [135] RRF fusion returned 80 fused results
+2026-07-10 15:39:38,932 - MedKG-RAG - INFO - [135] Cross-encoder rerank starting
+2026-07-10 15:39:40,981 - MedKG-RAG - INFO - [135] Cross-encoder rerank returned 20 text results
+2026-07-10 15:39:40,981 - MedKG-RAG - INFO - [21/40] Evaluating Q-136: what can be done for severe elbow pain?...
+2026-07-10 15:39:40,981 - MedKG-RAG - INFO - [136] QueryAnalyzer starting
+2026-07-10 15:39:41,386 - MedKG-RAG - INFO - [136] QueryAnalyzer done. rewritten_query='Treatment options for severe elbow pain'
+2026-07-10 15:39:41,386 - MedKG-RAG - INFO - [136] Embedding query
+2026-07-10 15:39:41,418 - MedKG-RAG - INFO - [136] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:39:43,972 - MedKG-RAG - INFO - [136] Vector search returned 40 parent results
+2026-07-10 15:39:43,972 - MedKG-RAG - INFO - [136] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:39:44,448 - MedKG-RAG - INFO - [136] BM25 search returned 80 parent results
+2026-07-10 15:39:44,449 - MedKG-RAG - INFO - [136] RRF fusion starting with k=60
+2026-07-10 15:39:44,449 - MedKG-RAG - INFO - [136] RRF fusion returned 80 fused results
+2026-07-10 15:39:44,449 - MedKG-RAG - INFO - [136] Cross-encoder rerank starting
+2026-07-10 15:39:46,671 - MedKG-RAG - INFO - [136] Cross-encoder rerank returned 20 text results
+2026-07-10 15:39:46,671 - MedKG-RAG - INFO - [22/40] Evaluating Q-137: in an adult with type 2 diabetes would metformin or ketogenic diet be the most e...
+2026-07-10 15:39:46,671 - MedKG-RAG - INFO - [137] QueryAnalyzer starting
+2026-07-10 15:39:47,305 - MedKG-RAG - INFO - [137] QueryAnalyzer done. rewritten_query='In adults with Type 2 Diabetes, which is more effective for lowering A1C levels: Metformin or a Ketogenic Diet?'
+2026-07-10 15:39:47,306 - MedKG-RAG - INFO - [137] Embedding query
+2026-07-10 15:39:47,374 - MedKG-RAG - INFO - [137] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:39:50,650 - MedKG-RAG - INFO - [137] Vector search returned 40 parent results
+2026-07-10 15:39:50,650 - MedKG-RAG - INFO - [137] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:39:51,730 - MedKG-RAG - INFO - [137] BM25 search returned 80 parent results
+2026-07-10 15:39:51,730 - MedKG-RAG - INFO - [137] RRF fusion starting with k=60
+2026-07-10 15:39:51,731 - MedKG-RAG - INFO - [137] RRF fusion returned 80 fused results
+2026-07-10 15:39:51,731 - MedKG-RAG - INFO - [137] Cross-encoder rerank starting
+2026-07-10 15:39:54,250 - MedKG-RAG - INFO - [137] Cross-encoder rerank returned 20 text results
+2026-07-10 15:39:54,251 - MedKG-RAG - INFO - [23/40] Evaluating Q-138: can i use Sudafed after using Afrin for nasal congestion?...
+2026-07-10 15:39:54,251 - MedKG-RAG - INFO - [138] QueryAnalyzer starting
+2026-07-10 15:39:54,801 - MedKG-RAG - INFO - [138] QueryAnalyzer done. rewritten_query='Can Sudafed be used after Afrin for nasal congestion?'
+2026-07-10 15:39:54,801 - MedKG-RAG - INFO - [138] Embedding query
+2026-07-10 15:39:54,833 - MedKG-RAG - INFO - [138] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:39:56,895 - MedKG-RAG - INFO - [138] Vector search returned 40 parent results
+2026-07-10 15:39:56,896 - MedKG-RAG - INFO - [138] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:39:57,583 - MedKG-RAG - INFO - [138] BM25 search returned 80 parent results
+2026-07-10 15:39:57,583 - MedKG-RAG - INFO - [138] RRF fusion starting with k=60
+2026-07-10 15:39:57,583 - MedKG-RAG - INFO - [138] RRF fusion returned 80 fused results
+2026-07-10 15:39:57,584 - MedKG-RAG - INFO - [138] Cross-encoder rerank starting
+2026-07-10 15:39:59,775 - MedKG-RAG - INFO - [138] Cross-encoder rerank returned 20 text results
+2026-07-10 15:39:59,775 - MedKG-RAG - INFO - [24/40] Evaluating Q-139: what are possible long-term outcomes of not treating anorexia?...
+2026-07-10 15:39:59,775 - MedKG-RAG - INFO - [139] QueryAnalyzer starting
+2026-07-10 15:40:00,340 - MedKG-RAG - INFO - [139] QueryAnalyzer done. rewritten_query='What are the long-term consequences of not treating anorexia nervosa?'
+2026-07-10 15:40:00,340 - MedKG-RAG - INFO - [139] Embedding query
+2026-07-10 15:40:00,409 - MedKG-RAG - INFO - [139] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:40:16,829 - MedKG-RAG - INFO - [139] Vector search returned 40 parent results
+2026-07-10 15:40:16,829 - MedKG-RAG - INFO - [139] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:40:17,199 - MedKG-RAG - INFO - [139] BM25 search returned 80 parent results
+2026-07-10 15:40:17,199 - MedKG-RAG - INFO - [139] RRF fusion starting with k=60
+2026-07-10 15:40:17,200 - MedKG-RAG - INFO - [139] RRF fusion returned 80 fused results
+2026-07-10 15:40:17,201 - MedKG-RAG - INFO - [139] Cross-encoder rerank starting
+2026-07-10 15:40:19,560 - MedKG-RAG - INFO - [139] Cross-encoder rerank returned 20 text results
+2026-07-10 15:40:19,572 - MedKG-RAG - INFO - [25/40] Evaluating Q-140: what can cause acute fractures in both of your hands when there hasn’t been inju...
+2026-07-10 15:40:19,573 - MedKG-RAG - INFO - [140] QueryAnalyzer starting
+2026-07-10 15:40:20,158 - MedKG-RAG - INFO - [140] QueryAnalyzer done. rewritten_query='What can cause acute fractures in both hands without injury or trauma?'
+2026-07-10 15:40:20,158 - MedKG-RAG - INFO - [140] Embedding query
+2026-07-10 15:40:20,214 - MedKG-RAG - INFO - [140] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:40:22,916 - MedKG-RAG - INFO - [140] Vector search returned 40 parent results
+2026-07-10 15:40:22,916 - MedKG-RAG - INFO - [140] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:40:23,618 - MedKG-RAG - INFO - [140] BM25 search returned 80 parent results
+2026-07-10 15:40:23,618 - MedKG-RAG - INFO - [140] RRF fusion starting with k=60
+2026-07-10 15:40:23,619 - MedKG-RAG - INFO - [140] RRF fusion returned 80 fused results
+2026-07-10 15:40:23,619 - MedKG-RAG - INFO - [140] Cross-encoder rerank starting
+2026-07-10 15:40:25,793 - MedKG-RAG - INFO - [140] Cross-encoder rerank returned 20 text results
+2026-07-10 15:40:25,794 - MedKG-RAG - INFO - [26/40] Evaluating Q-141: what are the possible complications for a person that has yellow fever?...
+2026-07-10 15:40:25,794 - MedKG-RAG - INFO - [141] QueryAnalyzer starting
+2026-07-10 15:40:26,306 - MedKG-RAG - INFO - [141] QueryAnalyzer done. rewritten_query='Yellow fever complications'
+2026-07-10 15:40:26,307 - MedKG-RAG - INFO - [141] Embedding query
+2026-07-10 15:40:26,343 - MedKG-RAG - INFO - [141] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:40:28,890 - MedKG-RAG - INFO - [141] Vector search returned 40 parent results
+2026-07-10 15:40:28,890 - MedKG-RAG - INFO - [141] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:40:29,088 - MedKG-RAG - INFO - [141] BM25 search returned 80 parent results
+2026-07-10 15:40:29,088 - MedKG-RAG - INFO - [141] RRF fusion starting with k=60
+2026-07-10 15:40:29,088 - MedKG-RAG - INFO - [141] RRF fusion returned 80 fused results
+2026-07-10 15:40:29,088 - MedKG-RAG - INFO - [141] Cross-encoder rerank starting
+2026-07-10 15:40:31,038 - MedKG-RAG - INFO - [141] Cross-encoder rerank returned 20 text results
+2026-07-10 15:40:31,038 - MedKG-RAG - INFO - [27/40] Evaluating Q-142: what medication has a drug interaction with high blood pressure?...
+2026-07-10 15:40:31,039 - MedKG-RAG - INFO - [142] QueryAnalyzer starting
+2026-07-10 15:40:31,415 - MedKG-RAG - INFO - [142] QueryAnalyzer done. rewritten_query='What medications have a drug interaction with hypertension?'
+2026-07-10 15:40:31,416 - MedKG-RAG - INFO - [142] Embedding query
+2026-07-10 15:40:31,443 - MedKG-RAG - INFO - [142] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:40:33,381 - MedKG-RAG - INFO - [142] Vector search returned 40 parent results
+2026-07-10 15:40:33,381 - MedKG-RAG - INFO - [142] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:40:34,181 - MedKG-RAG - INFO - [142] BM25 search returned 80 parent results
+2026-07-10 15:40:34,181 - MedKG-RAG - INFO - [142] RRF fusion starting with k=60
+2026-07-10 15:40:34,182 - MedKG-RAG - INFO - [142] RRF fusion returned 80 fused results
+2026-07-10 15:40:34,182 - MedKG-RAG - INFO - [142] Cross-encoder rerank starting
+2026-07-10 15:40:36,556 - MedKG-RAG - INFO - [142] Cross-encoder rerank returned 20 text results
+2026-07-10 15:40:36,557 - MedKG-RAG - INFO - [28/40] Evaluating Q-143: how to live with huntington's disease?...
+2026-07-10 15:40:36,558 - MedKG-RAG - INFO - [143] QueryAnalyzer starting
+2026-07-10 15:40:37,003 - MedKG-RAG - INFO - [143] QueryAnalyzer done. rewritten_query="Living with Huntington's disease"
+2026-07-10 15:40:37,003 - MedKG-RAG - INFO - [143] Embedding query
+2026-07-10 15:40:37,057 - MedKG-RAG - INFO - [143] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:40:39,409 - MedKG-RAG - INFO - [143] Vector search returned 40 parent results
+2026-07-10 15:40:39,409 - MedKG-RAG - INFO - [143] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:40:40,093 - MedKG-RAG - INFO - [143] BM25 search returned 80 parent results
+2026-07-10 15:40:40,093 - MedKG-RAG - INFO - [143] RRF fusion starting with k=60
+2026-07-10 15:40:40,093 - MedKG-RAG - INFO - [143] RRF fusion returned 80 fused results
+2026-07-10 15:40:40,094 - MedKG-RAG - INFO - [143] Cross-encoder rerank starting
+2026-07-10 15:40:41,976 - MedKG-RAG - INFO - [143] Cross-encoder rerank returned 20 text results
+2026-07-10 15:40:41,977 - MedKG-RAG - INFO - [29/40] Evaluating Q-144: when should i treat high blood pressure?...
+2026-07-10 15:40:41,977 - MedKG-RAG - INFO - [144] QueryAnalyzer starting
+2026-07-10 15:40:42,336 - MedKG-RAG - INFO - [144] QueryAnalyzer done. rewritten_query='When to treat hypertension'
+2026-07-10 15:40:42,336 - MedKG-RAG - INFO - [144] Embedding query
+2026-07-10 15:40:42,393 - MedKG-RAG - INFO - [144] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:40:43,225 - MedKG-RAG - INFO - [144] Vector search returned 40 parent results
+2026-07-10 15:40:43,226 - MedKG-RAG - INFO - [144] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:40:43,539 - MedKG-RAG - INFO - [144] BM25 search returned 80 parent results
+2026-07-10 15:40:43,539 - MedKG-RAG - INFO - [144] RRF fusion starting with k=60
+2026-07-10 15:40:43,539 - MedKG-RAG - INFO - [144] RRF fusion returned 80 fused results
+2026-07-10 15:40:43,539 - MedKG-RAG - INFO - [144] Cross-encoder rerank starting
+2026-07-10 15:40:45,792 - MedKG-RAG - INFO - [144] Cross-encoder rerank returned 20 text results
+2026-07-10 15:40:45,792 - MedKG-RAG - INFO - [30/40] Evaluating Q-145: What are the side effects of opdivo treatment for melanoma?...
+2026-07-10 15:40:45,792 - MedKG-RAG - INFO - [145] QueryAnalyzer starting
+2026-07-10 15:40:46,122 - MedKG-RAG - INFO - [145] QueryAnalyzer done. rewritten_query='What are the side effects of nivolumab treatment for melanoma?'
+2026-07-10 15:40:46,122 - MedKG-RAG - INFO - [145] Embedding query
+2026-07-10 15:40:46,176 - MedKG-RAG - INFO - [145] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:40:48,356 - MedKG-RAG - INFO - [145] Vector search returned 40 parent results
+2026-07-10 15:40:48,356 - MedKG-RAG - INFO - [145] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:40:49,256 - MedKG-RAG - INFO - [145] BM25 search returned 80 parent results
+2026-07-10 15:40:49,256 - MedKG-RAG - INFO - [145] RRF fusion starting with k=60
+2026-07-10 15:40:49,257 - MedKG-RAG - INFO - [145] RRF fusion returned 80 fused results
+2026-07-10 15:40:49,257 - MedKG-RAG - INFO - [145] Cross-encoder rerank starting
+2026-07-10 15:40:51,537 - MedKG-RAG - INFO - [145] Cross-encoder rerank returned 20 text results
+2026-07-10 15:40:51,539 - MedKG-RAG - INFO - [31/40] Evaluating Q-146: how can ptsd be treated/managed?...
+2026-07-10 15:40:51,539 - MedKG-RAG - INFO - [146] QueryAnalyzer starting
+2026-07-10 15:40:52,082 - MedKG-RAG - INFO - [146] QueryAnalyzer done. rewritten_query='What are the treatments and management options for Post-Traumatic Stress Disorder?'
+2026-07-10 15:40:52,083 - MedKG-RAG - INFO - [146] Embedding query
+2026-07-10 15:40:52,147 - MedKG-RAG - INFO - [146] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:40:54,703 - MedKG-RAG - INFO - [146] Vector search returned 40 parent results
+2026-07-10 15:40:54,704 - MedKG-RAG - INFO - [146] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:40:55,339 - MedKG-RAG - INFO - [146] BM25 search returned 80 parent results
+2026-07-10 15:40:55,339 - MedKG-RAG - INFO - [146] RRF fusion starting with k=60
+2026-07-10 15:40:55,339 - MedKG-RAG - INFO - [146] RRF fusion returned 80 fused results
+2026-07-10 15:40:55,339 - MedKG-RAG - INFO - [146] Cross-encoder rerank starting
+2026-07-10 15:40:57,529 - MedKG-RAG - INFO - [146] Cross-encoder rerank returned 20 text results
+2026-07-10 15:40:57,530 - MedKG-RAG - INFO - [32/40] Evaluating Q-147: what treatments options are available for atherosclerosis?...
+2026-07-10 15:40:57,530 - MedKG-RAG - INFO - [147] QueryAnalyzer starting
+2026-07-10 15:40:58,104 - MedKG-RAG - INFO - [147] QueryAnalyzer done. rewritten_query='What are the treatment options for atherosclerosis?'
+2026-07-10 15:40:58,104 - MedKG-RAG - INFO - [147] Embedding query
+2026-07-10 15:40:58,161 - MedKG-RAG - INFO - [147] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:41:00,565 - MedKG-RAG - INFO - [147] Vector search returned 40 parent results
+2026-07-10 15:41:00,565 - MedKG-RAG - INFO - [147] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:41:01,682 - MedKG-RAG - INFO - [147] BM25 search returned 80 parent results
+2026-07-10 15:41:01,682 - MedKG-RAG - INFO - [147] RRF fusion starting with k=60
+2026-07-10 15:41:01,682 - MedKG-RAG - INFO - [147] RRF fusion returned 80 fused results
+2026-07-10 15:41:01,683 - MedKG-RAG - INFO - [147] Cross-encoder rerank starting
+2026-07-10 15:41:03,639 - MedKG-RAG - INFO - [147] Cross-encoder rerank returned 20 text results
+2026-07-10 15:41:03,640 - MedKG-RAG - INFO - [33/40] Evaluating Q-148: why do i bruise so easily?...
+2026-07-10 15:41:03,640 - MedKG-RAG - INFO - [148] QueryAnalyzer starting
+2026-07-10 15:41:04,042 - MedKG-RAG - INFO - [148] QueryAnalyzer done. rewritten_query='What are the causes of easy bruising?'
+2026-07-10 15:41:04,042 - MedKG-RAG - INFO - [148] Embedding query
+2026-07-10 15:41:04,076 - MedKG-RAG - INFO - [148] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:41:06,083 - MedKG-RAG - INFO - [148] Vector search returned 40 parent results
+2026-07-10 15:41:06,083 - MedKG-RAG - INFO - [148] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:41:06,381 - MedKG-RAG - INFO - [148] BM25 search returned 80 parent results
+2026-07-10 15:41:06,382 - MedKG-RAG - INFO - [148] RRF fusion starting with k=60
+2026-07-10 15:41:06,382 - MedKG-RAG - INFO - [148] RRF fusion returned 80 fused results
+2026-07-10 15:41:06,382 - MedKG-RAG - INFO - [148] Cross-encoder rerank starting
+2026-07-10 15:41:08,627 - MedKG-RAG - INFO - [148] Cross-encoder rerank returned 20 text results
+2026-07-10 15:41:08,628 - MedKG-RAG - INFO - [34/40] Evaluating Q-149: what is the best test to rule out a lumbar disc herniation?...
+2026-07-10 15:41:08,628 - MedKG-RAG - INFO - [149] QueryAnalyzer starting
+2026-07-10 15:41:09,004 - MedKG-RAG - INFO - [149] QueryAnalyzer done. rewritten_query='Best diagnostic test for lumbar disc herniation'
+2026-07-10 15:41:09,005 - MedKG-RAG - INFO - [149] Embedding query
+2026-07-10 15:41:09,057 - MedKG-RAG - INFO - [149] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:41:10,682 - MedKG-RAG - INFO - [149] Vector search returned 40 parent results
+2026-07-10 15:41:10,683 - MedKG-RAG - INFO - [149] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:41:11,322 - MedKG-RAG - INFO - [149] BM25 search returned 80 parent results
+2026-07-10 15:41:11,323 - MedKG-RAG - INFO - [149] RRF fusion starting with k=60
+2026-07-10 15:41:11,324 - MedKG-RAG - INFO - [149] RRF fusion returned 80 fused results
+2026-07-10 15:41:11,325 - MedKG-RAG - INFO - [149] Cross-encoder rerank starting
+2026-07-10 15:41:13,718 - MedKG-RAG - INFO - [149] Cross-encoder rerank returned 20 text results
+2026-07-10 15:41:13,720 - MedKG-RAG - INFO - [35/40] Evaluating Q-150: what are the effectiveness of physical therapy interventions in reducing pain in...
+2026-07-10 15:41:13,720 - MedKG-RAG - INFO - [150] QueryAnalyzer starting
+2026-07-10 15:41:14,110 - MedKG-RAG - INFO - [150] QueryAnalyzer done. rewritten_query='Effectiveness of physical therapy in reducing pain for lumbar disc herniation patients'
+2026-07-10 15:41:14,111 - MedKG-RAG - INFO - [150] Embedding query
+2026-07-10 15:41:14,143 - MedKG-RAG - INFO - [150] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:41:15,211 - MedKG-RAG - INFO - [150] Vector search returned 40 parent results
+2026-07-10 15:41:15,211 - MedKG-RAG - INFO - [150] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:41:18,721 - MedKG-RAG - INFO - [150] BM25 search returned 80 parent results
+2026-07-10 15:41:18,721 - MedKG-RAG - INFO - [150] RRF fusion starting with k=60
+2026-07-10 15:41:18,722 - MedKG-RAG - INFO - [150] RRF fusion returned 80 fused results
+2026-07-10 15:41:18,722 - MedKG-RAG - INFO - [150] Cross-encoder rerank starting
+2026-07-10 15:41:20,876 - MedKG-RAG - INFO - [150] Cross-encoder rerank returned 20 text results
+2026-07-10 15:41:20,877 - MedKG-RAG - INFO - [36/40] Evaluating Q-151: what has turned my skin gray and scaly?...
+2026-07-10 15:41:20,877 - MedKG-RAG - INFO - [151] QueryAnalyzer starting
+2026-07-10 15:41:21,340 - MedKG-RAG - INFO - [151] QueryAnalyzer done. rewritten_query='What causes gray and scaly skin?'
+2026-07-10 15:41:21,340 - MedKG-RAG - INFO - [151] Embedding query
+2026-07-10 15:41:21,419 - MedKG-RAG - INFO - [151] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:41:23,029 - MedKG-RAG - INFO - [151] Vector search returned 40 parent results
+2026-07-10 15:41:23,029 - MedKG-RAG - INFO - [151] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:41:23,367 - MedKG-RAG - INFO - [151] BM25 search returned 80 parent results
+2026-07-10 15:41:23,367 - MedKG-RAG - INFO - [151] RRF fusion starting with k=60
+2026-07-10 15:41:23,367 - MedKG-RAG - INFO - [151] RRF fusion returned 80 fused results
+2026-07-10 15:41:23,367 - MedKG-RAG - INFO - [151] Cross-encoder rerank starting
+2026-07-10 15:41:25,374 - MedKG-RAG - INFO - [151] Cross-encoder rerank returned 20 text results
+2026-07-10 15:41:25,375 - MedKG-RAG - INFO - [37/40] Evaluating Q-152: is it possible to quit taking amlodipine after taking for many years?...
+2026-07-10 15:41:25,375 - MedKG-RAG - INFO - [152] QueryAnalyzer starting
+2026-07-10 15:41:25,808 - MedKG-RAG - INFO - [152] QueryAnalyzer done. rewritten_query='Can amlodipine be discontinued after long-term use?'
+2026-07-10 15:41:25,808 - MedKG-RAG - INFO - [152] Embedding query
+2026-07-10 15:41:25,850 - MedKG-RAG - INFO - [152] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:41:26,759 - MedKG-RAG - INFO - [152] Vector search returned 40 parent results
+2026-07-10 15:41:26,759 - MedKG-RAG - INFO - [152] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:41:28,043 - MedKG-RAG - INFO - [152] BM25 search returned 80 parent results
+2026-07-10 15:41:28,044 - MedKG-RAG - INFO - [152] RRF fusion starting with k=60
+2026-07-10 15:41:28,044 - MedKG-RAG - INFO - [152] RRF fusion returned 80 fused results
+2026-07-10 15:41:28,044 - MedKG-RAG - INFO - [152] Cross-encoder rerank starting
+2026-07-10 15:41:30,340 - MedKG-RAG - INFO - [152] Cross-encoder rerank returned 20 text results
+2026-07-10 15:41:30,341 - MedKG-RAG - INFO - [38/40] Evaluating Q-153: if hct is 34, does pt need blood transfusion?...
+2026-07-10 15:41:30,341 - MedKG-RAG - INFO - [153] QueryAnalyzer starting
+2026-07-10 15:41:30,742 - MedKG-RAG - INFO - [153] QueryAnalyzer done. rewritten_query='Does a patient with a hematocrit of 34 need a blood transfusion?'
+2026-07-10 15:41:30,742 - MedKG-RAG - INFO - [153] Embedding query
+2026-07-10 15:41:30,771 - MedKG-RAG - INFO - [153] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:41:32,840 - MedKG-RAG - INFO - [153] Vector search returned 40 parent results
+2026-07-10 15:41:32,840 - MedKG-RAG - INFO - [153] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:41:33,589 - MedKG-RAG - INFO - [153] BM25 search returned 80 parent results
+2026-07-10 15:41:33,589 - MedKG-RAG - INFO - [153] RRF fusion starting with k=60
+2026-07-10 15:41:33,589 - MedKG-RAG - INFO - [153] RRF fusion returned 80 fused results
+2026-07-10 15:41:33,589 - MedKG-RAG - INFO - [153] Cross-encoder rerank starting
+2026-07-10 15:41:35,935 - MedKG-RAG - INFO - [153] Cross-encoder rerank returned 20 text results
+2026-07-10 15:41:35,935 - MedKG-RAG - INFO - [39/40] Evaluating Q-154: how to breathe when you are short of breath?...
+2026-07-10 15:41:35,936 - MedKG-RAG - INFO - [154] QueryAnalyzer starting
+2026-07-10 15:41:36,330 - MedKG-RAG - INFO - [154] QueryAnalyzer done. rewritten_query='Management of shortness of breath'
+2026-07-10 15:41:36,330 - MedKG-RAG - INFO - [154] Embedding query
+2026-07-10 15:41:36,366 - MedKG-RAG - INFO - [154] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:41:37,597 - MedKG-RAG - INFO - [154] Vector search returned 40 parent results
+2026-07-10 15:41:37,597 - MedKG-RAG - INFO - [154] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:41:38,030 - MedKG-RAG - INFO - [154] BM25 search returned 80 parent results
+2026-07-10 15:41:38,030 - MedKG-RAG - INFO - [154] RRF fusion starting with k=60
+2026-07-10 15:41:38,030 - MedKG-RAG - INFO - [154] RRF fusion returned 80 fused results
+2026-07-10 15:41:38,030 - MedKG-RAG - INFO - [154] Cross-encoder rerank starting
+2026-07-10 15:41:40,376 - MedKG-RAG - INFO - [154] Cross-encoder rerank returned 20 text results
+2026-07-10 15:41:40,377 - MedKG-RAG - INFO - [40/40] Evaluating Q-155: for how long after cataract surgery do i keep dropping eye drops?...
+2026-07-10 15:41:40,377 - MedKG-RAG - INFO - [155] QueryAnalyzer starting
+2026-07-10 15:41:40,784 - MedKG-RAG - INFO - [155] QueryAnalyzer done. rewritten_query='How long after cataract surgery should eye drops be used?'
+2026-07-10 15:41:40,784 - MedKG-RAG - INFO - [155] Embedding query
+2026-07-10 15:41:40,828 - MedKG-RAG - INFO - [155] Vector search starting with top_k=40, child_fetch_limit=120
+2026-07-10 15:41:43,925 - MedKG-RAG - INFO - [155] Vector search returned 40 parent results
+2026-07-10 15:41:43,926 - MedKG-RAG - INFO - [155] BM25 search starting with top_k=80, child_fetch_limit=120
+2026-07-10 15:41:44,080 - MedKG-RAG - INFO - [155] BM25 search returned 80 parent results
+2026-07-10 15:41:44,081 - MedKG-RAG - INFO - [155] RRF fusion starting with k=60
+2026-07-10 15:41:44,081 - MedKG-RAG - INFO - [155] RRF fusion returned 80 fused results
+2026-07-10 15:41:44,082 - MedKG-RAG - INFO - [155] Cross-encoder rerank starting
+2026-07-10 15:41:46,405 - MedKG-RAG - INFO - [155] Cross-encoder rerank returned 20 text results
+2026-07-10 15:41:46,433 - MedKG-RAG - INFO - Results saved → D:\workspace\Repo\medical-chatbot-assistant\results\test_results\medaesqa\full_system\retrieval\detail.jsonl  |  D:\workspace\Repo\medical-chatbot-assistant\results\test_results\medaesqa\full_system\retrieval\summary.json

@@ -49,6 +49,6 @@ tqdm>=4.66.0
 prettytable>=3.8.0
 
 # NLP & Bio NLP
-spacy>=3.8.14
-scispacy==0.5.4
+# spacy<3.8.0,>=3.7.0
+# scispacy==0.5.4
 # Install manually this package: pip install https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.5.4/en_core_sci_sm-0.5.4.tar.gz
