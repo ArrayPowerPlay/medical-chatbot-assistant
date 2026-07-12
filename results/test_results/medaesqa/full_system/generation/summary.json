@@ -3,7 +3,7 @@
     "data_file": "D:\\workspace\\Repo\\medical-chatbot-assistant\\data\\test\\test_medaesqa.jsonl",
     "total_questions": 40,
     "evaluated_questions": 40,
-    "failed_questions": 0,
+    "failed_questions": 0, 
     "timestamp": "2026-07-10T15:34:53",
     "split_name": "test",
     "limit": null,
