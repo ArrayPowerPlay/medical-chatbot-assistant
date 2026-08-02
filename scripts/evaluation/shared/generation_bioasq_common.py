@@ -194,6 +194,240 @@ def get_ragas_metric_keys() -> List[str]:
     ]
 
 
+def _load_ragas_checkpoint(checkpoint_path: Path) -> Dict[str, Dict[str, float]]:
+    """Load RAGAS checkpoint from disk.
+
+    Returns a dict mapping question_id -> combined_scores.
+    Returns an empty dict if the checkpoint file does not exist or is corrupted.
+    """
+    if not checkpoint_path.exists():
+        return {}
+    try:
+        with open(checkpoint_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        if isinstance(data, dict):
+            logger.info(
+                f"Loaded RAGAS checkpoint from {checkpoint_path} "
+                f"({len(data)} questions already scored)."
+            )
+            return data
+    except Exception as exc:
+        logger.warning(f"Could not read RAGAS checkpoint ({checkpoint_path}): {exc}. Starting fresh.")
+    return {}
+
+
+def _save_ragas_checkpoint(
+    checkpoint_path: Path,
+    scores_by_qid: Dict[str, Dict[str, float]],
+) -> None:
+    """Atomically save the RAGAS checkpoint to disk (write-then-rename)."""
+    tmp_path = checkpoint_path.with_suffix(".tmp")
+    try:
+        with open(tmp_path, "w", encoding="utf-8") as f:
+            json.dump(scores_by_qid, f, ensure_ascii=False)
+        tmp_path.replace(checkpoint_path)
+    except Exception as exc:
+        logger.error(f"Failed to save RAGAS checkpoint: {exc}")
+
+
+def run_ragas_chunked_with_checkpoint(
+    ragas_inputs: List[Dict[str, Any]],
+    ragas_evaluator: Dict[str, Any],
+    checkpoint_path: Path,
+    chunk_size: int = 10,
+) -> Dict[str, Dict[str, float]]:
+    """Run RAGAS evaluation in small chunks with crash-resume support.
+
+    Each ``ragas_inputs`` item must have at minimum:
+        - ``question_id`` (str)
+        - ``question_index`` (int)
+        - ``question`` (str)
+        - ``answer`` (str)
+        - ``contexts`` (List[str])
+        - ``references`` (List[str])
+
+    After each chunk the per-question scores are written to
+    ``checkpoint_path`` (JSON, question_id → scores dict).  On the next
+    run the checkpoint is loaded first and any already-scored questions
+    are skipped, so the evaluation resumes exactly where it left off.
+
+    Returns
+    -------
+    Dict[str, Dict[str, float]]
+        Mapping question_id -> combined RAGAS scores for all questions.
+    """
+    indep_metric_names = ["faithfulness", "answer_relevancy"]
+    dep_metric_names = ["context_precision", "context_recall", "answer_correctness"]
+
+    indep_metrics = [m for m in ragas_evaluator["metrics"] if m.name in indep_metric_names]
+    dep_metrics = [m for m in ragas_evaluator["metrics"] if m.name in dep_metric_names]
+
+    from ragas.run_config import RunConfig as RagasRunConfig
+    ragas_run_config = RagasRunConfig(
+        max_workers=1,
+        max_retries=10,
+        max_wait=60,
+        timeout=1800,
+    )
+
+    # --- Load existing checkpoint ---
+    scores_by_qid: Dict[str, Dict[str, float]] = _load_ragas_checkpoint(checkpoint_path)
+
+    # --- Filter out already-scored questions ---
+    pending = [item for item in ragas_inputs if item["question_id"] not in scores_by_qid]
+    already_done = len(ragas_inputs) - len(pending)
+    if already_done:
+        logger.info(
+            f"RAGAS checkpoint: {already_done}/{len(ragas_inputs)} questions already scored, "
+            f"resuming with {len(pending)} remaining."
+        )
+    else:
+        logger.info(f"RAGAS checkpoint: no prior results, evaluating all {len(pending)} questions.")
+
+    # --- Process in chunks ---
+    total_chunks = (len(pending) + chunk_size - 1) // chunk_size if pending else 0
+    for chunk_idx in range(total_chunks):
+        chunk = pending[chunk_idx * chunk_size : (chunk_idx + 1) * chunk_size]
+        chunk_start = chunk_idx * chunk_size
+        chunk_end = min(chunk_start + chunk_size, len(pending))
+        logger.info(
+            f"RAGAS chunk {chunk_idx + 1}/{total_chunks}: "
+            f"questions {chunk_start + 1}–{chunk_end} of {len(pending)} pending "
+            f"(total done so far: {len(scores_by_qid)})"
+        )
+
+        # --- Build indep rows for this chunk ---
+        indep_rows: List[Dict[str, Any]] = []
+        for item in chunk:
+            cleaned_refs = [
+                ref.strip() for ref in item["references"]
+                if isinstance(ref, str) and ref.strip()
+            ]
+            first_ref = cleaned_refs[0] if cleaned_refs else ""
+            indep_rows.append({
+                "question_id": item["question_id"],
+                "question": item["question"],
+                "answer": item["answer"],
+                "contexts": item["contexts"],
+                "ground_truth": first_ref,
+            })
+
+        # --- Build dep rows for this chunk (one row per reference) ---
+        dep_rows: List[Dict[str, Any]] = []
+        for item in chunk:
+            cleaned_refs = [
+                ref.strip() for ref in item["references"]
+                if isinstance(ref, str) and ref.strip()
+            ]
+            for ref in cleaned_refs:
+                dep_rows.append({
+                    "question_id": item["question_id"],
+                    "question": item["question"],
+                    "answer": item["answer"],
+                    "contexts": item["contexts"],
+                    "ground_truth": ref,
+                })
+
+        # --- Run indep metrics for this chunk ---
+        df_indep_chunk = None
+        if indep_rows and indep_metrics:
+            try:
+                dataset_indep = ragas_evaluator["dataset_cls"].from_dict({
+                    "question": [r["question"] for r in indep_rows],
+                    "answer": [r["answer"] for r in indep_rows],
+                    "contexts": [r["contexts"] for r in indep_rows],
+                    "ground_truth": [r["ground_truth"] for r in indep_rows],
+                })
+                result = ragas_evaluator["evaluate_fn"](
+                    dataset_indep,
+                    metrics=indep_metrics,
+                    llm=ragas_evaluator["llm"],
+                    embeddings=ragas_evaluator["embeddings"],
+                    run_config=ragas_run_config,
+                    raise_exceptions=False,
+                )
+                df_indep_chunk = result.to_pandas()
+            except Exception as exc:
+                logger.error(f"RAGAS chunk {chunk_idx + 1} indep metrics failed: {exc}")
+
+        # --- Run dep metrics for this chunk ---
+        df_dep_chunk = None
+        if dep_rows and dep_metrics:
+            try:
+                dataset_dep = ragas_evaluator["dataset_cls"].from_dict({
+                    "question": [r["question"] for r in dep_rows],
+                    "answer": [r["answer"] for r in dep_rows],
+                    "contexts": [r["contexts"] for r in dep_rows],
+                    "ground_truth": [r["ground_truth"] for r in dep_rows],
+                })
+                result = ragas_evaluator["evaluate_fn"](
+                    dataset_dep,
+                    metrics=dep_metrics,
+                    llm=ragas_evaluator["llm"],
+                    embeddings=ragas_evaluator["embeddings"],
+                    run_config=ragas_run_config,
+                    raise_exceptions=False,
+                )
+                df_dep_chunk = result.to_pandas()
+            except Exception as exc:
+                logger.error(f"RAGAS chunk {chunk_idx + 1} dep metrics failed: {exc}")
+
+        # --- Map indep results → per question_id ---
+        indep_by_qid: Dict[str, Dict[str, float]] = {}
+        if df_indep_chunk is not None:
+            for i, row in enumerate(indep_rows):
+                qid = row["question_id"]
+                scores: Dict[str, float] = {}
+                for key in indep_metric_names:
+                    if key in df_indep_chunk.columns:
+                        val = df_indep_chunk.iloc[i].get(key)
+                        if isinstance(val, (int, float)):
+                            scores[key] = float(val)
+                indep_by_qid[qid] = scores
+
+        # --- Map dep results → per question_id (average over references) ---
+        dep_by_qid: Dict[str, List[Dict[str, float]]] = {}
+        if df_dep_chunk is not None:
+            for i, row in enumerate(dep_rows):
+                qid = row["question_id"]
+                scores = {}
+                for key in dep_metric_names:
+                    if key in df_dep_chunk.columns:
+                        val = df_dep_chunk.iloc[i].get(key)
+                        if isinstance(val, (int, float)):
+                            scores[key] = float(val)
+                dep_by_qid.setdefault(qid, []).append(scores)
+
+        dep_avg_by_qid: Dict[str, Dict[str, float]] = {}
+        for qid, scores_list in dep_by_qid.items():
+            avg: Dict[str, float] = {}
+            for key in dep_metric_names:
+                vals = [s[key] for s in scores_list if key in s]
+                if vals:
+                    avg[key] = round(sum(vals) / len(vals), 4)
+            dep_avg_by_qid[qid] = avg
+
+        # --- Merge and store results for this chunk ---
+        for item in chunk:
+            qid = item["question_id"]
+            combined: Dict[str, float] = {}
+            for key in get_ragas_metric_keys():
+                if key in indep_by_qid.get(qid, {}):
+                    combined[key] = indep_by_qid[qid][key]
+                elif key in dep_avg_by_qid.get(qid, {}):
+                    combined[key] = dep_avg_by_qid[qid][key]
+            if combined:
+                scores_by_qid[qid] = combined
+
+        # --- Save checkpoint after each chunk ---
+        _save_ragas_checkpoint(checkpoint_path, scores_by_qid)
+        logger.info(
+            f"RAGAS checkpoint saved: {len(scores_by_qid)}/{len(ragas_inputs)} questions scored total."
+        )
+
+    return scores_by_qid
+
+
 def initialize_ragas_evaluator(enabled: bool) -> Optional[Dict[str, Any]]:
     """Initialize RAGAS runtime components, or log an error and disable it."""
     if not enabled:
@@ -418,271 +652,231 @@ async def evaluate_split(
     ragas_inputs = []
     detail_records = []
 
+    # -----------------------------------------------------------------------
+    # RESUME MODE: if predictions.jsonl already exists from a previous run,
+    # skip the expensive generation phase entirely and go straight to RAGAS.
+    # -----------------------------------------------------------------------
+    predictions_exist = predictions_path.exists()
+    if predictions_exist:
+        logger.info(
+            f"predictions.jsonl found at {predictions_path}. "
+            "Skipping generation phase — loading existing predictions and running RAGAS only."
+        )
+
     try:
-        logger.info("Initializing RAG pipeline...")
-        from src.pipeline.rag_pipeline import RAGPipeline, RunConfig
-        from src.query.query_analyzer import QueryAnalyzer
-        from src.embeddings.medcpt_embedder import MedCPTEmbedder
-        from src.storage.weaviate_client import AsyncWeaviateChildStore
-        from src.storage.parent_store import ParentStore
-        from src.kg.neo4j_client import Neo4jClient
-        from src.generation.llm_generator import LLMGenerator
-        from src.reranking.rrf import RRFManager
-        from src.reranking.cross_encoder import CrossEncoderReranker
-        from src.generation.kg_merger import KGPathMerger
+        if predictions_exist:
+            # --- Load existing predictions ---
+            saved_predictions: Dict[str, Dict[str, Any]] = {}
+            with open(predictions_path, "r", encoding="utf-8") as f:
+                for line in f:
+                    rec = json.loads(line)
+                    saved_predictions[rec["question_id"]] = rec
 
-        pipeline = RAGPipeline(
-            query_analyzer=QueryAnalyzer(),
-            query_embedder=MedCPTEmbedder(mode='query'),
-            entity_embedder=MedCPTEmbedder(mode='article'),
-            search_engine=AsyncWeaviateChildStore(),
-            parent_store=ParentStore(settings.SQLITE_PARENT_DB_PATH),
-            kg_searcher=Neo4jClient(),
-            rrf_manager=RRFManager(),
-            cross_encoder_reranker=CrossEncoderReranker(),
-            kg_merger=KGPathMerger(),
-            llm_generator=LLMGenerator()
-        )
-        pipeline.query_analyzer.temperature = 0.0
-
-        run_config = RunConfig(
-            use_kg=use_kg,
-            use_vector=use_vector,
-            use_bm25=use_bm25,
-            use_kg_merger=use_kg_merger,
-            use_head_tail_placement=use_head_tail_placement,
-            use_citations=False
-        )
-
-        with open(predictions_path, "w", encoding="utf-8") as predictions_file:
             for i, question in enumerate(questions):
                 question_id = question["id"]
                 body = question["body"]
                 gold_pmids = set(question.get("relevant_pmid", []))
                 gold_answers = question.get("ideal_answer", [])
 
-                logger.info(
-                    f"[{i + 1}/{len(questions)}] Generating answer for question {question_id}"
-                )
-
-                try:
-                    result = await pipeline.run(
-                        query=body,
-                        history=None,
-                        config=run_config,
-                        kg_top_k=kg_top_k,
-                        kg_hop1_m=kg_hop1_m,
-                        kg_hop2_n=kg_hop2_n,
-                        kg_hop2_cap=kg_hop2_cap,
-                        rerank_kg_top_n=rerank_kg_top_n,
-                        generation_temperature=generation_temperature,
-                        generation_max_tokens=generation_max_tokens,
+                pred_rec = saved_predictions.get(question_id)
+                if pred_rec is None:
+                    logger.warning(
+                        f"[{i + 1}/{len(questions)}] Question {question_id} not found in "
+                        "predictions.jsonl — skipping."
                     )
-                    generated_answer = result.get("answer", "").strip()
-                    rewritten_query = result.get("rewritten_query", body)
-                    analysis = result.get("analysis", {})
-                    sources = result.get("sources", [])
-                    question_type = result.get("question_type", "unknown")
-
-                    # Strip preamble before ROUGE to remove noise tokens absent
-                    # from gold references (e.g. 'Based on the provided context...')
-                    answer_for_rouge = strip_preamble(generated_answer)
-                    generation_metrics = compute_rouge_su4_multi_ref(
-                        prediction=answer_for_rouge,
-                        references=gold_answers,
-                    )
-                    all_generation_metrics.append(generation_metrics)
-
-                    contexts = [
-                        text.strip()
-                        for item in sources
-                        for text in [item.get("text", item.get("content", ""))]
-                        if isinstance(text, str) and text.strip()
-                    ]
-
-                    if ragas_evaluator is not None:
-                        ragas_inputs.append({
-                            "question_index": len(all_generation_metrics) - 1,    # Use for mapping from ragas results
-                            "question_id": question_id,
-                            "question": body,
-                            "answer": generated_answer,
-                            "contexts": contexts,
-                            "references": gold_answers,
-                        })
-
-                    prediction_record = {
-                        "question_id": question_id,
-                        "body": body,
-                        "rewritten_query": rewritten_query,
-                        "generated_answer": generated_answer,
-                        "ideal_answer": gold_answers,
-                    }
-                    predictions_file.write(
-                        json.dumps(prediction_record, ensure_ascii=False) + "\n"
-                    )
-                    predictions_file.flush()
-
-                    detail_record = {
-                        "question_id": question_id,
-                        "body": body,
-                        "question_type": question_type,
-                        "rewritten_query": rewritten_query,
-                        "analysis": analysis,
-                        "generated_answer": generated_answer,
-                        "answer_for_rouge": answer_for_rouge,
-                        "ideal_answer": gold_answers,
-                        "gold_pmids": sorted(gold_pmids),
-                        "retrieved_sources": _summarize_sources(sources),
-                        "generation_metrics": generation_metrics,
-                        "ragas_metrics": {},
-                    }
-                    detail_records.append(detail_record)
-
-                except Exception:
-                    logger.exception(f"Failed on question {question_id}:")
                     failed_questions += 1
+                    continue
 
-        if ragas_evaluator is not None and ragas_inputs:
-            logger.info("Starting batch RAGAS evaluation...")
-
-            indep_metric_names = ["faithfulness", "answer_relevancy"]
-            dep_metric_names = ["context_precision", "context_recall", "answer_correctness"]
-
-            indep_metrics = [m for m in ragas_evaluator["metrics"] if m.name in indep_metric_names]
-            dep_metrics = [m for m in ragas_evaluator["metrics"] if m.name in dep_metric_names]
-
-            from ragas.run_config import RunConfig
-            run_config = RunConfig(
-                max_workers=1,
-                max_retries=10,
-                max_wait=60,
-                timeout=1800,
-            )
-
-            # Group 1: Reference-independent evaluation (one row per question)
-            indep_dataset_rows = []
-            for item in ragas_inputs:
-                first_ref = ""
-                cleaned_refs = [ref.strip() for ref in item["references"] if isinstance(ref, str) and ref.strip()]
-                if cleaned_refs:
-                    first_ref = cleaned_refs[0]
-                indep_dataset_rows.append({
-                    "question_index": item["question_index"],
-                    "question_id": item["question_id"],
-                    "question": item["question"],
-                    "answer": item["answer"],
-                    "contexts": item["contexts"],
-                    "ground_truth": first_ref,
-                })
-
-            df_indep = None
-            if indep_dataset_rows and indep_metrics:
-                dataset_indep = ragas_evaluator["dataset_cls"].from_dict(
-                    {
-                        "question": [r["question"] for r in indep_dataset_rows],
-                        "answer": [r["answer"] for r in indep_dataset_rows],
-                        "contexts": [r["contexts"] for r in indep_dataset_rows],
-                        "ground_truth": [r["ground_truth"] for r in indep_dataset_rows],
-                    }
+                logger.info(
+                    f"[{i + 1}/{len(questions)}] Loading cached prediction for {question_id}"
                 )
-                try:
-                    logger.info(f"Sending {len(indep_dataset_rows)} unique questions to RAGAS (Reference-Independent)...")
-                    result_indep = ragas_evaluator["evaluate_fn"](
-                        dataset_indep,
-                        metrics=indep_metrics,
-                        llm=ragas_evaluator["llm"],
-                        embeddings=ragas_evaluator["embeddings"],
-                        run_config=run_config,
-                        raise_exceptions=False,
-                    )
-                    df_indep = result_indep.to_pandas()
-                except Exception as exc:
-                    logger.error(f"Reference-Independent RAGAS evaluation failed: {exc}")
 
-            # Group 2: Reference-dependent evaluation (one row per reference)
-            dep_dataset_rows = []
-            for item in ragas_inputs:
-                cleaned_refs = [ref.strip() for ref in item["references"] if isinstance(ref, str) and ref.strip()]
-                for ref in cleaned_refs:
-                    dep_dataset_rows.append({
-                        "question_index": item["question_index"],
-                        "question_id": item["question_id"],
-                        "question": item["question"],
-                        "answer": item["answer"],
-                        "contexts": item["contexts"],
-                        "ground_truth": ref,
+                generated_answer = pred_rec.get("generated_answer", "")
+                rewritten_query = pred_rec.get("rewritten_query", body)
+
+                answer_for_rouge = strip_preamble(generated_answer)
+                generation_metrics = compute_rouge_su4_multi_ref(
+                    prediction=answer_for_rouge,
+                    references=gold_answers,
+                )
+                all_generation_metrics.append(generation_metrics)
+
+                # Load contexts from cached prediction if available
+                contexts: List[str] = pred_rec.get("contexts", [])
+                if not contexts:
+                    logger.warning(
+                        f"[{i + 1}/{len(questions)}] No contexts found in predictions.jsonl for {question_id}. "
+                        "RAGAS context metrics will be NaN/0."
+                    )
+
+                if ragas_evaluator is not None:
+                    ragas_inputs.append({
+                        "question_index": len(all_generation_metrics) - 1,
+                        "question_id": question_id,
+                        "question": body,
+                        "answer": generated_answer,
+                        "contexts": contexts,
+                        "references": gold_answers,
                     })
 
-            df_dep = None
-            if dep_dataset_rows and dep_metrics:
-                dataset_dep = ragas_evaluator["dataset_cls"].from_dict(
-                    {
-                        "question": [r["question"] for r in dep_dataset_rows],
-                        "answer": [r["answer"] for r in dep_dataset_rows],
-                        "contexts": [r["contexts"] for r in dep_dataset_rows],
-                        "ground_truth": [r["ground_truth"] for r in dep_dataset_rows],
-                    }
-                )
-                try:
-                    logger.info(f"Sending {len(dep_dataset_rows)} rows to RAGAS (Reference-Dependent)...")
-                    result_dep = ragas_evaluator["evaluate_fn"](
-                        dataset_dep,
-                        metrics=dep_metrics,
-                        llm=ragas_evaluator["llm"],
-                        embeddings=ragas_evaluator["embeddings"],
-                        run_config=run_config,
-                        raise_exceptions=False,
+                detail_record = {
+                    "question_id": question_id,
+                    "body": body,
+                    "question_type": "unknown",
+                    "rewritten_query": rewritten_query,
+                    "analysis": {},
+                    "generated_answer": generated_answer,
+                    "answer_for_rouge": answer_for_rouge,
+                    "ideal_answer": gold_answers,
+                    "gold_pmids": sorted(gold_pmids),
+                    "retrieved_sources": [],
+                    "generation_metrics": generation_metrics,
+                    "ragas_metrics": {},
+                }
+                detail_records.append(detail_record)
+
+        else:
+            # --- NORMAL MODE: run full pipeline and generate predictions ---
+            logger.info("Initializing RAG pipeline...")
+            from src.pipeline.rag_pipeline import RAGPipeline, RunConfig
+            from src.query.query_analyzer import QueryAnalyzer
+            from src.embeddings.medcpt_embedder import MedCPTEmbedder
+            from src.storage.weaviate_client import AsyncWeaviateChildStore
+            from src.storage.parent_store import ParentStore
+            from src.kg.neo4j_client import Neo4jClient
+            from src.generation.llm_generator import LLMGenerator
+            from src.reranking.rrf import RRFManager
+            from src.reranking.cross_encoder import CrossEncoderReranker
+            from src.generation.kg_merger import KGPathMerger
+
+            pipeline = RAGPipeline(
+                query_analyzer=QueryAnalyzer(),
+                query_embedder=MedCPTEmbedder(mode='query'),
+                entity_embedder=MedCPTEmbedder(mode='article'),
+                search_engine=AsyncWeaviateChildStore(),
+                parent_store=ParentStore(settings.SQLITE_PARENT_DB_PATH),
+                kg_searcher=Neo4jClient(),
+                rrf_manager=RRFManager(),
+                cross_encoder_reranker=CrossEncoderReranker(),
+                kg_merger=KGPathMerger(),
+                llm_generator=LLMGenerator()
+            )
+            pipeline.query_analyzer.temperature = 0.0
+
+            run_config = RunConfig(
+                use_kg=use_kg,
+                use_vector=use_vector,
+                use_bm25=use_bm25,
+                use_kg_merger=use_kg_merger,
+                use_head_tail_placement=use_head_tail_placement,
+                use_citations=False
+            )
+
+            with open(predictions_path, "w", encoding="utf-8") as predictions_file:
+                for i, question in enumerate(questions):
+                    question_id = question["id"]
+                    body = question["body"]
+                    gold_pmids = set(question.get("relevant_pmid", []))
+                    gold_answers = question.get("ideal_answer", [])
+
+                    logger.info(
+                        f"[{i + 1}/{len(questions)}] Generating answer for question {question_id}"
                     )
-                    df_dep = result_dep.to_pandas()
-                except Exception as exc:
-                    logger.error(f"Reference-Dependent RAGAS evaluation failed: {exc}")
 
-            # Map independent results back
-            indep_scores_by_q_idx = {}
-            if df_indep is not None:
-                for idx, r in enumerate(indep_dataset_rows):
-                    q_idx = r["question_index"]
-                    scores = {}
-                    for key in indep_metric_names:
-                        if key in df_indep.columns:
-                            val = df_indep.iloc[idx].get(key)
-                            if isinstance(val, (int, float)):
-                                scores[key] = float(val)
-                    indep_scores_by_q_idx[q_idx] = scores
+                    try:
+                        result = await pipeline.run(
+                            query=body,
+                            history=None,
+                            config=run_config,
+                            kg_top_k=kg_top_k,
+                            kg_hop1_m=kg_hop1_m,
+                            kg_hop2_n=kg_hop2_n,
+                            kg_hop2_cap=kg_hop2_cap,
+                            rerank_kg_top_n=rerank_kg_top_n,
+                            generation_temperature=generation_temperature,
+                            generation_max_tokens=generation_max_tokens,
+                        )
+                        generated_answer = result.get("answer", "").strip()
+                        rewritten_query = result.get("rewritten_query", body)
+                        analysis = result.get("analysis", {})
+                        sources = result.get("sources", [])
+                        question_type = result.get("question_type", "unknown")
 
-            # Map dependent results back (group by question index)
-            q_dep_scores_list = {}
-            if df_dep is not None:
-                for idx, r in enumerate(dep_dataset_rows):
-                    q_idx = r["question_index"]
-                    scores = {}
-                    for key in dep_metric_names:
-                        if key in df_dep.columns:
-                            val = df_dep.iloc[idx].get(key)
-                            if isinstance(val, (int, float)):
-                                scores[key] = float(val)
-                    q_dep_scores_list.setdefault(q_idx, []).append(scores)
+                        # Strip preamble before ROUGE to remove noise tokens absent
+                        # from gold references (e.g. 'Based on the provided context...')
+                        answer_for_rouge = strip_preamble(generated_answer)
+                        generation_metrics = compute_rouge_su4_multi_ref(
+                            prediction=answer_for_rouge,
+                            references=gold_answers,
+                        )
+                        all_generation_metrics.append(generation_metrics)
 
-            # Map results back to each question index, average dependent scores, and merge
+                        contexts = [
+                            text.strip()
+                            for item in sources
+                            for text in [item.get("text", item.get("content", ""))]
+                            if isinstance(text, str) and text.strip()
+                        ]
+
+                        if ragas_evaluator is not None:
+                            ragas_inputs.append({
+                                "question_index": len(all_generation_metrics) - 1,
+                                "question_id": question_id,
+                                "question": body,
+                                "answer": generated_answer,
+                                "contexts": contexts,
+                                "references": gold_answers,
+                            })
+
+                        prediction_record = {
+                            "question_id": question_id,
+                            "body": body,
+                            "rewritten_query": rewritten_query,
+                            "generated_answer": generated_answer,
+                            "ideal_answer": gold_answers,
+                            "contexts": contexts,
+                        }
+                        predictions_file.write(
+                            json.dumps(prediction_record, ensure_ascii=False) + "\n"
+                        )
+                        predictions_file.flush()
+
+                        detail_record = {
+                            "question_id": question_id,
+                            "body": body,
+                            "question_type": question_type,
+                            "rewritten_query": rewritten_query,
+                            "analysis": analysis,
+                            "generated_answer": generated_answer,
+                            "answer_for_rouge": answer_for_rouge,
+                            "ideal_answer": gold_answers,
+                            "gold_pmids": sorted(gold_pmids),
+                            "retrieved_sources": _summarize_sources(sources),
+                            "generation_metrics": generation_metrics,
+                            "ragas_metrics": {},
+                        }
+                        detail_records.append(detail_record)
+
+                    except Exception:
+                        logger.exception(f"Failed on question {question_id}:")
+                        failed_questions += 1
+
+        if ragas_evaluator is not None and ragas_inputs:
+            logger.info("Starting RAGAS evaluation (chunked with crash-resume checkpoint)...")
+
+            ragas_checkpoint_path = output_dir / "ragas_checkpoint.json"
+            scores_by_qid = run_ragas_chunked_with_checkpoint(
+                ragas_inputs=ragas_inputs,
+                ragas_evaluator=ragas_evaluator,
+                checkpoint_path=ragas_checkpoint_path,
+                chunk_size=10,
+            )
+
+            # Map final scores back to detail_records and all_ragas_metrics
             for item in ragas_inputs:
+                qid = item["question_id"]
                 q_idx = item["question_index"]
-                
-                q_indep_scores = indep_scores_by_q_idx.get(q_idx, {})
-                dep_scores_list = q_dep_scores_list.get(q_idx, [])
-                
-                q_dep_avg_scores = {}
-                for key in dep_metric_names:
-                    vals = [s[key] for s in dep_scores_list if key in s]
-                    if vals:
-                        q_dep_avg_scores[key] = round(sum(vals) / len(vals), 4)
-
-                combined_scores = {}
-                for key in get_ragas_metric_keys():
-                    if key in q_indep_scores:
-                        combined_scores[key] = q_indep_scores[key]
-                    elif key in q_dep_avg_scores:
-                        combined_scores[key] = q_dep_avg_scores[key]
-
+                combined_scores = scores_by_qid.get(qid, {})
                 if combined_scores:
                     all_ragas_metrics.append(combined_scores)
                     detail_records[q_idx]["ragas_metrics"] = combined_scores

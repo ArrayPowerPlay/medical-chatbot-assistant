@@ -1,4 +1,4 @@
-version: '3.8'
+cversion: '3.8'
 
 services:
   # Weaviate: Vector DB + BM25 weaviate:
