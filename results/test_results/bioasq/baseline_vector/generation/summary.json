@@ -4,7 +4,7 @@
     "total_questions": 500,
     "evaluated_questions": 500,
     "failed_questions": 0,
-    "timestamp": "2026-08-02T09:21:21",
+    "timestamp": "2026-08-02T10:20:18",
     "split_name": "test",
     "limit": null,
     "requested_ragas": true,
@@ -26,11 +26,11 @@
     "ROUGE-SU4-F1": 0.1298
   },
   "ragas_metrics": {
-    "context_precision": 0.7851,
-    "context_recall": 0.9358,
-    "faithfulness": 0.8539,
-    "answer_correctness": 0.5341,
-    "answer_relevancy": 0.6741
+    "context_precision": 0.7816,
+    "context_recall": 0.9357,
+    "faithfulness": 0.8558,
+    "answer_correctness": 0.5346,
+    "answer_relevancy": 0.6764
   },
   "ragas_enabled": true
 }
